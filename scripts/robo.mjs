@@ -70,10 +70,21 @@ const sem = all.slice(0,220).filter(i => !i.img);
 await Promise.all(sem.map(async i => { i.img = await ogImage(i.link); }));
 // descarta imagens que o navegador bloquearia (CORP same-origin, erro, não-imagem)
 await Promise.all(all.slice(0,220).filter(i => i.img).map(async i => { try { const r = await fetch(i.img,{headers:{...UA,referer:B,range:'bytes=0-1023'},redirect:'manual',signal:AbortSignal.timeout(8000)}); const corp = (r.headers.get('cross-origin-resource-policy')||'').toLowerCase(); if ((r.status !== 200 && r.status !== 206) || corp === 'same-origin' || corp === 'same-site' || !/^image\//.test(r.headers.get('content-type')||'')) i.img = ''; try { await r.body?.cancel(); } catch {} } catch { i.img = ''; } }));
+// ===== tradução gratuita (gtx do Google, depois MyMemory), com cache em traducoes.json =====
+const LC = { 'inglês': 'en', 'francês': 'fr', 'espanhol': 'es' };
+const TF = 'traducoes.json'; let cache = {}; try { cache = JSON.parse(fs.readFileSync(TF, 'utf8')); } catch {}
+async function gtx(q, sl) { const r = await fetch('https://translate.googleapis.com/translate_a/single?client=gtx&sl=' + sl + '&tl=pt&dt=t&q=' + encodeURIComponent(q), { headers: UA, signal: AbortSignal.timeout(10000) }); if (!r.ok) throw new Error('gtx ' + r.status); const j = await r.json(); return j[0].map(x => x[0]).join(''); }
+async function mym(q, sl) { const r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(q) + '&langpair=' + sl + '|pt-BR', { signal: AbortSignal.timeout(12000) }); const j = await r.json(); if (j.responseStatus != 200 || j.quotaFinished) throw new Error('mymemory ' + j.responseStatus); return ent(j.responseData.translatedText); }
+async function traduz(q, sl) { const k = sl + ':' + q; if (cache[k]) return cache[k]; let out = ''; for (const f of [gtx, mym]) { try { out = (await f(q, sl)).trim(); if (out && out.toLowerCase() !== q.toLowerCase() && !/MYMEMORY WARNING|QUERY LENGTH/i.test(out)) break; out = ''; } catch (e) { out = ''; } } if (out) cache[k] = out; return out; }
+let okT = 0, failT = 0; const fila = all.slice(0,220).filter(i => i.lang);
+for (let x = 0; x < fila.length; x += 4) await Promise.all(fila.slice(x, x + 4).map(async i => { const tr = await traduz(i.title, LC[i.lang]); if (tr) { i.orig = i.title; i.title = tr; i.tr = 'Traduzido do ' + i.lang; okT++; } else failT++; }));
+const keep = new Set(fila.map(i => LC[i.lang] + ':' + (i.orig || i.title)));
+fs.writeFileSync(TF, JSON.stringify(Object.fromEntries(Object.entries(cache).filter(([k]) => keep.has(k)))));
+console.log('tradução ok', okT, 'falhou', failT);
 const ids = new Set();
 const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
-  if (i.img) s.img = i.img; if (i.lang) s.lang = i.lang; if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } return s; });
+  if (i.img) s.img = i.img; if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } return s; });
 if (stories.length < 20) { console.log('poucas notícias lidas (' + stories.length + '), mantendo edição anterior'); process.exit(0); }
 
 // ===== site: só grava se o conteúdo mudou =====
@@ -98,10 +109,10 @@ const STATE = 'notificadas.json';
 const seed = !fs.existsSync(STATE);
 const st = seed ? { vistos: [] } : JSON.parse(fs.readFileSync(STATE,'utf8'));
 const vistos = new Set(st.vistos);
-const novos = all.filter(i => !vistos.has(i.key) && now - i.ts < 3*3600e3).sort((a,b) => (b.urg - a.urg) || (b.ts - a.ts));
+const novos = all.filter(i => !vistos.has(i.key) && now - i.ts < 3*3600e3 && (!i.lang || i.tr)).sort((a,b) => (b.urg - a.urg) || (b.ts - a.ts));
 const post = m => fetch('https://ntfy.sh/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:TOPIC,...m})}).then(r => { if (!r.ok) throw new Error('ntfy ' + r.status); });
 if (!seed) {
-  for (const i of novos.slice(0,5)) await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')] });
+  for (const i of novos.slice(0,5)) await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')] });
   const extra = novos.slice(5);
   if (extra.length) await post({ title: '+' + extra.length + ' notícias novas no Jornal', message: extra.slice(0,12).map(i => '• ' + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')').join('\n'), click: B, priority: 2, tags: ['newspaper'] });
 }
