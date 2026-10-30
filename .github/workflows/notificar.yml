@@ -1,0 +1,24 @@
+name: Notificar notícias novas
+on:
+  schedule:
+    - cron: '*/15 10-23 * * *'   # 07:00-20:45 Brasília
+    - cron: '*/15 0-1 * * *'     # 21:00-22:45 Brasília
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: notificar, cancel-in-progress: false }
+jobs:
+  notificar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: node scripts/notificar.mjs
+        env: { NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}' }
+      - name: Salvar estado
+        run: |
+          git config user.name "jornal-bot"; git config user.email "actions@users.noreply.github.com"
+          git add notificadas.json
+          git diff --cached --quiet || (git commit -m "estado de notificações" && git pull --rebase -q && git push)
