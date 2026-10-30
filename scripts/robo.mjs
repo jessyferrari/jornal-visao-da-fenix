@@ -10,7 +10,9 @@ const FEEDS = [
  ['Agência Brasil','https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml','br',''],['DW Brasil','https://rss.dw.com/rdf/rss-br-all','mundo',''],
  ['Le Monde','https://www.lemonde.fr/rss/une.xml','mundo','francês'],['El País','https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada','mundo','espanhol'],
  ['Al Jazeera','https://www.aljazeera.com/xml/rss/all.xml','mundo','inglês'],['The Verge','https://www.theverge.com/rss/index.xml','tech','inglês'],
- ['TechCrunch','https://techcrunch.com/feed/','tech','inglês'],['Tecnoblog','https://tecnoblog.net/feed/','tech','']];
+ ['TechCrunch','https://techcrunch.com/feed/','tech','inglês'],['Tecnoblog','https://tecnoblog.net/feed/','tech',''],
+ ['BBC News','https://feeds.bbci.co.uk/news/world/rss.xml','mundo','inglês'],['BBC News','https://feeds.bbci.co.uk/news/technology/rss.xml','tech','inglês'],
+ ['Wired','https://www.wired.com/feed/rss','tech','inglês'],['Ars Technica','https://feeds.arstechnica.com/arstechnica/index','tech','inglês'],['Canaltech','https://canaltech.com.br/rss/','tech','']];
 const canon = u => u.trim().split('#')[0].split('?')[0].replace(/\/$/, '');
 const ent = s => s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#0?39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(+n)).replace(/&#x([0-9a-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16)));
 const dec = s => ent(s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1')).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
@@ -64,12 +66,12 @@ for (const i of all) {
 // variedade: no máximo 14 por fonte por seção
 const cnt = {}; all = all.filter(i => { const k = i.src + i.sec; cnt[k] = (cnt[k] || 0) + 1; return cnt[k] <= 14; });
 // imagens: og:image para os mais recentes sem imagem do RSS
-const sem = all.slice(0, 160).filter(i => !i.img);
+const sem = all.slice(0,220).filter(i => !i.img);
 await Promise.all(sem.map(async i => { i.img = await ogImage(i.link); }));
 // descarta imagens que o navegador bloquearia (CORP same-origin, erro, não-imagem)
-await Promise.all(all.slice(0,160).filter(i => i.img).map(async i => { try { const r = await fetch(i.img,{headers:{...UA,referer:B,range:'bytes=0-1023'},redirect:'manual',signal:AbortSignal.timeout(8000)}); const corp = (r.headers.get('cross-origin-resource-policy')||'').toLowerCase(); if ((r.status !== 200 && r.status !== 206) || corp === 'same-origin' || corp === 'same-site' || !/^image\//.test(r.headers.get('content-type')||'')) i.img = ''; try { await r.body?.cancel(); } catch {} } catch { i.img = ''; } }));
+await Promise.all(all.slice(0,220).filter(i => i.img).map(async i => { try { const r = await fetch(i.img,{headers:{...UA,referer:B,range:'bytes=0-1023'},redirect:'manual',signal:AbortSignal.timeout(8000)}); const corp = (r.headers.get('cross-origin-resource-policy')||'').toLowerCase(); if ((r.status !== 200 && r.status !== 206) || corp === 'same-origin' || corp === 'same-site' || !/^image\//.test(r.headers.get('content-type')||'')) i.img = ''; try { await r.body?.cancel(); } catch {} } catch { i.img = ''; } }));
 const ids = new Set();
-const stories = all.slice(0, 160).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
+const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
   if (i.img) s.img = i.img; if (i.lang) s.lang = i.lang; if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } return s; });
 if (stories.length < 20) { console.log('poucas notícias lidas (' + stories.length + '), mantendo edição anterior'); process.exit(0); }
