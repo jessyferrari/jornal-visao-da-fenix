@@ -31,10 +31,10 @@ jobs:
           gh api -X POST repos/${{ github.repository }}/pages/builds >/dev/null || echo "build do Pages será disparado pelo push"
 
   # Reserva: o agendamento (schedule) do GitHub pode atrasar ou nem disparar em repositório novo.
-  # Cada rodada manual encadeia a próxima ~15 min depois, sem duplicar (só se não houver outra na fila).
+  # Cada rodada (manual ou agendada) encadeia a próxima ~15 min depois, sem duplicar (só se não houver outra na fila).
   proxima:
     needs: robo
-    if: always() && github.event_name == 'workflow_dispatch'
+    if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
