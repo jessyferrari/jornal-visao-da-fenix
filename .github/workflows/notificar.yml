@@ -6,6 +6,7 @@ on:
 permissions:
   contents: write
   pages: write
+  actions: write
 concurrency: { group: robo-jornal, cancel-in-progress: false }
 jobs:
   robo:
@@ -28,3 +29,19 @@ jobs:
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"
           git pull --rebase -q && git push -q
           gh api -X POST repos/${{ github.repository }}/pages/builds >/dev/null || echo "build do Pages será disparado pelo push"
+
+  # Reserva: o agendamento (schedule) do GitHub pode atrasar ou nem disparar em repositório novo.
+  # Cada rodada manual encadeia a próxima ~15 min depois, sem duplicar (só se não houver outra na fila).
+  proxima:
+    needs: robo
+    if: always() && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Agendar a próxima edição (~15 min)
+        env: { GH_TOKEN: '${{ github.token }}' }
+        run: |
+          sleep 780
+          outras=$(gh api "repos/${{ github.repository }}/actions/workflows/notificar.yml/runs?per_page=20" --jq '[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.status=="queued" or .status=="in_progress" or .status=="waiting" or .status=="pending")] | length')
+          if [ "$outras" != "0" ]; then echo "já há rodada na fila ($outras), não encadeia"; exit 0; fi
+          gh workflow run notificar.yml --repo ${{ github.repository }} --ref main
