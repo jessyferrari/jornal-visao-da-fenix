@@ -23,6 +23,8 @@ Fonte: `+p.src+", publicado em "+zu(p.pub)+`
 .jf .ticker:hover .ticker-track, .jf .ticker:focus-within .ticker-track, .jf .ticker.paused .ticker-track { animation-play-state: paused }
 .jf .pane { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: ${J} transparent }
 .jf .fig { margin: 0; position: relative }
+.jf a, .jf img { -webkit-user-drag: none }
+.jf main { user-select: none; -webkit-user-select: none }
 .jf .fig figcaption { font-family: ${he}; font-size: 12px; color: ${jn}; margin-top: 4px }
 .jf .fig.off { display: none }
 @media (prefers-reduced-motion: reduce) {
