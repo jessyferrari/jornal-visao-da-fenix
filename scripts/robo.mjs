@@ -59,11 +59,48 @@ for (const i of itens) { const o = map.get(i.key); if (!o || i.ts < o.ts) map.se
 let all = [...map.values()].filter(i => now - i.ts < 36*3600e3).sort((a,b) => b.ts - a.ts);
 // variedade: no máximo 14 por fonte por seção
 const cnt = {}; all = all.filter(i => { const k = i.src + i.sec; cnt[k] = (cnt[k] || 0) + 1; return cnt[k] <= 14; });
-// imagens: og:image para os mais recentes sem imagem do RSS
-const sem = all.slice(0,220).filter(i => !i.img);
-await Promise.all(sem.map(async i => { i.img = await ogImage(i.link); }));
-// descarta imagens que o navegador bloquearia (CORP same-origin, erro, não-imagem)
-await Promise.all(all.slice(0,220).filter(i => i.img).map(async i => { try { const r = await fetch(i.img,{headers:{...UA,referer:B,range:'bytes=0-1023'},redirect:'manual',signal:AbortSignal.timeout(8000)}); const corp = (r.headers.get('cross-origin-resource-policy')||'').toLowerCase(); if ((r.status !== 200 && r.status !== 206) || corp === 'same-origin' || corp === 'same-site' || !/^image\//.test(r.headers.get('content-type')||'')) i.img = ''; try { await r.body?.cancel(); } catch {} } catch { i.img = ''; } }));
+// ===== imagens em alta resolução: og:image/twitter:image da página + CDN no maior tamanho + largura real medida =====
+const IF = 'imagens.json'; let IC = { og: {}, dim: {} }; try { IC = { og: {}, dim: {}, ...JSON.parse(fs.readFileSync(IF, 'utf8')) }; } catch {}
+async function metaImgs(url) {
+  if (url in IC.og) return IC.og[url];
+  let out = [];
+  try { const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(10000) }); const t = (await r.text()).slice(0, 400000);
+    for (const k of ['og:image:secure_url', 'og:image', 'twitter:image', 'twitter:image:src']) { const re1 = new RegExp('<meta[^>]+(?:property|name)=["\']' + k + '["\'][^>]*content=["\']([^"\']+)', 'i'), re2 = new RegExp('<meta[^>]+content=["\']([^"\']+)["\'][^>]*(?:property|name)=["\']' + k + '["\']', 'i'); const m = t.match(re1) || t.match(re2); if (m) out.push(ent(m[1])); }
+    out = [...new Set(out)].filter(u => /^https:\/\//.test(u)); IC.og[url] = out; } catch {}
+  return out;
+}
+const up = u => !u ? '' : u.replace(/ichef\.bbci\.co\.uk\/(?:ace\/(?:standard|ws)|news)\/\d+\//, 'ichef.bbci.co.uk/ace/standard/1536/').replace(/-\d{2,4}x\d{2,4}(\.(?:jpe?g|png|webp))(\?|$)/i, '$1$2')
+  .replace(/(static\.dw\.com\/image\/\d+)_\d+\.(jpe?g)/i, '$1_605.$2')
+  .replace(/(img\.lemde\.fr\/\d{4}\/\d\d\/\d\d\/\d+\/\d+\/\d+\/\d+\/)(\d+)\/(\d+)\//, (m, a, w, h) => a + '1600/' + Math.round(1600 * h / w) + '/');
+function dims(b) { // largura/altura pelos cabeçalhos (JPEG, PNG, GIF, WebP, AVIF)
+  if (b[0] === 0x89 && b[1] === 0x50) return [b.readUInt32BE(16), b.readUInt32BE(20)];
+  if (b[0] === 0x47 && b[1] === 0x49) return [b.readUInt16LE(6), b.readUInt16LE(8)];
+  if (b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP') { const c = b.toString('ascii', 12, 16);
+    if (c === 'VP8X') return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)]; if (c === 'VP8 ') return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff]; if (c === 'VP8L') { const v = b.readUInt32LE(21); return [(v & 0x3fff) + 1, ((v >> 14) & 0x3fff) + 1]; } }
+  if (b[0] === 0xff && b[1] === 0xd8) { let o = 2; while (o + 9 < b.length) { if (b[o] !== 0xff) { o++; continue; } const m = b[o + 1]; if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return [b.readUInt16BE(o + 7), b.readUInt16BE(o + 5)]; o += 2 + b.readUInt16BE(o + 2); } }
+  const i = b.indexOf('ispe'); if (i > 0) return [b.readUInt32BE(i + 8), b.readUInt32BE(i + 12)];
+  return null;
+}
+async function probe(u) {
+  if (u in IC.dim) return IC.dim[u];
+  let w = 0;
+  try { const r = await fetch(u, { headers: { ...UA, referer: B, range: 'bytes=0-131071' }, redirect: 'manual', signal: AbortSignal.timeout(10000) });
+    const corp = (r.headers.get('cross-origin-resource-policy') || '').toLowerCase();
+    if ((r.status === 200 || r.status === 206) && corp !== 'same-origin' && corp !== 'same-site' && /^image\//.test(r.headers.get('content-type') || '')) {
+      const rd = r.body.getReader(); const ch = []; let n = 0; while (n < 131072) { const { done, value } = await rd.read(); if (done) break; ch.push(value); n += value.length; } try { await rd.cancel(); } catch {}
+      const d = dims(Buffer.concat(ch)); if (d && d[0] > 0) w = d[0]; } else { try { await r.body?.cancel(); } catch {} }
+  } catch {}
+  IC.dim[u] = w; return w;
+}
+const MINW = 600; const fila0 = all.slice(0, 220);
+for (let x = 0; x < fila0.length; x += 12) await Promise.all(fila0.slice(x, x + 12).map(async i => {
+  const cands = [...new Set([up(i.img), ...(await metaImgs(i.link)).map(up), i.img].filter(Boolean))];
+  let best = '', bw = 0; for (const c of cands) { const w = await probe(c); if (w > bw) { best = c; bw = w; } if (bw >= 1500) break; }
+  if (bw >= MINW) { i.img = best; i.imgW = bw; if (/ichef\.bbci\.co\.uk\/ace\/standard\/1536\//.test(best)) i.srcset = [800, 1024, 1536, 2048].map(z => best.replace('/1536/', '/' + z + '/') + ' ' + z + 'w').join(', '); } else { i.img = ''; }
+}));
+const usedL = new Set(fila0.map(i => i.link)), usedI = new Set(fila0.flatMap(i => [i.img, ...(IC.og[i.link] || []).map(up)]));
+fs.writeFileSync(IF, JSON.stringify({ og: Object.fromEntries(Object.entries(IC.og).filter(([k]) => usedL.has(k))), dim: Object.fromEntries(Object.entries(IC.dim).filter(([k, v]) => usedI.has(k))) }));
+console.log('imagens', fila0.filter(i => i.img).length, 'de', fila0.length, 'min', Math.min(...fila0.filter(i => i.img).map(i => i.imgW)));
 // ===== tradução gratuita (gtx do Google, depois MyMemory), com cache em traducoes.json =====
 const LC = { 'inglês': 'en', 'francês': 'fr', 'espanhol': 'es' };
 const eng = {}; const TF = 'traducoes.json'; let cache = {}; try { cache = JSON.parse(fs.readFileSync(TF, 'utf8')); } catch {}
@@ -94,7 +131,7 @@ const PQc = Object.fromEntries(Object.entries(PQ).filter(([k, v]) => typeof v ==
 const ids = new Set();
 const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
-  if (i.img) s.img = i.img; if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; if (PQc[i.key]) s.pq = PQc[i.key]; i.sid = id; return s; });
+  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; if (PQc[i.key]) s.pq = PQc[i.key]; i.sid = id; return s; });
 // Como o mundo viu: notícia de veículo brasileiro com o mesmo fato em veículos estrangeiros (traduzido)
 const _mvSeen = new Set();
 const mundoViu = all.filter(i => i.sid && i.reg === 'br').map(i => ({ id: i.sid, ext: i.grp.filter(j => j.reg === 'ext' && (!j.lang || j.tr) && (j.tr || j.title).toLowerCase().replace(/\W+/g, '') !== i.title.toLowerCase().replace(/\W+/g, '')).map(j => ({ src: j.src, title: j.title, orig: j.orig || '', tr: j.tr || '', link: j.link, pub: j.pub })) })).filter(x => x.ext.length).filter((x, _i, _a, k = x.ext.map(e => e.link).sort().join('|')) => _mvSeen.has(k) ? false : (_mvSeen.add(k), true)).slice(0, 24);
