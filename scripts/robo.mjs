@@ -23,7 +23,10 @@ const brIso = d => { const p = brParts(d); return `${p.year}-${p.month}-${p.day}
 const fmtB = iso => iso.slice(8,10)+'/'+iso.slice(5,7)+', '+iso.slice(11,16)+' (Brasília)';
 const secOf = (link, def) => /\/(economia|mercado|negocios|financas|poder-economia|seu-dinheiro|agronegocios)\//i.test(link) || /c-level\.folha/.test(link) ? 'neg' : /\/(tecnologia|tec|inovacao)\//i.test(link) ? 'tech' : def;
 const UA = {'user-agent':'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +'+B+')'};
+const FEEDST = [];
+const BR_OUT = new Set(['g1','Folha de S.Paulo','Poder360','Agência Brasil','Canaltech','Tecnoblog']);
 async function ler([src,url,sec,lang]) {
+  const stt = { src, url, ok: false, itens: 0, lido: brIso(new Date()) }; FEEDST.push(stt);
   try {
     const r = await fetch(url,{headers:UA,signal:AbortSignal.timeout(20000)}); if (!r.ok) throw new Error('HTTP '+r.status);
     const buf = Buffer.from(await r.arrayBuffer()); const head = buf.subarray(0, 300).toString('latin1'); const cs = (/encoding=["']([^"']+)/i.exec(head) || (r.headers.get('content-type') || '').match(/charset=([^;]+)/i) || [])[1] || 'utf-8';
@@ -38,8 +41,8 @@ async function ler([src,url,sec,lang]) {
       let sum = tag(b,'description'); if (sum.startsWith(title)) sum = sum.slice(title.length).trim(); if (sum.length > 220) sum = sum.slice(0,217).replace(/\s\S*$/,'') + '…';
       out.push({src,title,link:link.replace(/\?(utm_|traffic_source|maca)[^#]*$/,''),key:canon(link),ts,pub:brIso(new Date(ts)),sec:secOf(link,sec),lang,img:ent(img),sum});
     }
-    return out;
-  } catch (e) { console.log('feed falhou:', src, url, e.message); return []; }
+    stt.ok = true; stt.itens = out.length; return out;
+  } catch (e) { stt.erro = e.message; console.log('feed falhou:', src, url, e.message); return []; }
 }
 async function ogImage(url) {
   try { const r = await fetch(url,{headers:UA,signal:AbortSignal.timeout(8000)}); const t = (await r.text()).slice(0,200000);
@@ -54,15 +57,6 @@ const itens = (await Promise.all(FEEDS.map(ler))).flat().filter(i => i.ts <= now
 const map = new Map();
 for (const i of itens) { const o = map.get(i.key); if (!o || i.ts < o.ts) map.set(i.key, o ? {...i, img: i.img || o.img} : i); }
 let all = [...map.values()].filter(i => now - i.ts < 36*3600e3).sort((a,b) => b.ts - a.ts);
-// corroboração: mesmo assunto em outras fontes em até 3h => heat; última hora => urgente
-for (const i of all) i.w = words(i.title);
-for (const i of all) {
-  const outros = new Set();
-  for (const j of all) if (j.src !== i.src && Math.abs(j.ts - i.ts) < 3*3600e3) { let c = 0; for (const w of i.w) if (j.w.has(w)) c++; if (c >= 3) outros.add(j.src); }
-  i.outros = [...outros];
-  i.urg = /urgente|última hora|ultima hora|breaking|^ao vivo/i.test(i.title) || (i.outros.length >= 1 && now - i.ts < 3600e3);
-  i.heat = Math.min(3, i.outros.length + (i.urg ? 1 : 0));
-}
 // variedade: no máximo 14 por fonte por seção
 const cnt = {}; all = all.filter(i => { const k = i.src + i.sec; cnt[k] = (cnt[k] || 0) + 1; return cnt[k] <= 14; });
 // imagens: og:image para os mais recentes sem imagem do RSS
@@ -77,23 +71,42 @@ async function gtx(q, sl) { const r = await fetch('https://translate.googleapis.
 async function mym(q, sl) { const r = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(q) + '&langpair=' + sl + '|pt-BR', { signal: AbortSignal.timeout(12000) }); const j = await r.json(); if (j.responseStatus != 200 || j.quotaFinished) throw new Error('mymemory ' + j.responseStatus); return ent(j.responseData.translatedText); }
 async function traduz(q, sl) { const k = sl + ':' + q; if (cache[k]) return cache[k]; let out = ''; for (const f of [gtx, mym]) { try { out = (await f(q, sl)).trim(); if (out && out.toLowerCase() !== q.toLowerCase() && !/MYMEMORY WARNING|QUERY LENGTH/i.test(out)) { eng[f.name] = (eng[f.name] || 0) + 1; break; } out = ''; } catch (e) { out = ''; } } if (out) cache[k] = out; return out; }
 let okT = 0, failT = 0; const fila = all.slice(0,220).filter(i => i.lang);
-for (let x = 0; x < fila.length; x += 4) await Promise.all(fila.slice(x, x + 4).map(async i => { const tr = await traduz(i.title, LC[i.lang]); if (tr) { i.orig = i.title; i.title = tr; i.tr = 'Traduzido do ' + i.lang; okT++; } else failT++; }));
-const keep = new Set(fila.map(i => LC[i.lang] + ':' + (i.orig || i.title)));
+for (let x = 0; x < fila.length; x += 4) await Promise.all(fila.slice(x, x + 4).map(async i => { const tr = await traduz(i.title, LC[i.lang]); if (tr) { i.orig = i.title; i.title = tr; i.tr = 'Traduzido do ' + i.lang; okT++; } else failT++; if (i.sum) { const ts2 = await traduz(i.sum, LC[i.lang]); i.osum = i.sum; i.sum = ts2 || ''; } }));
+const keep = new Set(fila.flatMap(i => [LC[i.lang] + ':' + (i.orig || i.title), LC[i.lang] + ':' + (i.osum || '')]));
 fs.writeFileSync(TF, JSON.stringify(Object.fromEntries(Object.entries(cache).filter(([k]) => keep.has(k)))));
 console.log('tradução ok', okT, 'falhou', failT, 'novas por serviço', JSON.stringify(eng));
+
+// ===== agrupamento estrito do mesmo fato (títulos já traduzidos) =====
+const ents = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')));
+for (const i of all) { i.w = words(i.title); i.e = ents(i.title); i.reg = BR_OUT.has(i.src) ? 'br' : 'ext'; }
+const same = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 12*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; for (const e of a.e) if (b.e.has(e)) return true; return false; };
+for (const i of all) { i.grp = all.filter(j => same(i, j)); const m = new Map(); for (const j of i.grp) if (!m.has(j.src)) m.set(j.src, j); i.grp = [...m.values()]; i.outros = i.grp.map(j => j.src); }
+for (const i of all) {
+  const ageH = Math.max(0, (now - i.ts) / 3600e3);
+  i.score = +((1 + i.outros.length) * Math.pow(0.5, ageH / 6)).toFixed(3);   // corroboração com meia-vida de 6h
+  i.urg = /urgente|última hora|ultima hora|breaking|^ao vivo/i.test(i.title) || (i.outros.length >= 1 && ageH < 1);
+  i.heat = Math.min(3, i.outros.length + (i.urg ? 1 : 0));
+  const srcs = [i, ...i.grp]; const br = [...new Set(srcs.filter(x => x.reg === 'br').map(x => x.src))], ext = [...new Set(srcs.filter(x => x.reg === 'ext').map(x => x.src))];
+  i.cov = { n: br.length + ext.length, br, ext }; if (i.cov.n >= 2 && (!br.length || !ext.length)) i.cov.cego = !br.length ? 'Ponto cego: só a imprensa estrangeira cobriu' : 'Ponto cego: só a imprensa brasileira cobriu';
+}
+let PQ = {}; try { PQ = JSON.parse(fs.readFileSync('porque-importa.json', 'utf8')); } catch {}
+const PQc = Object.fromEntries(Object.entries(PQ).filter(([k, v]) => typeof v === 'string' && v.trim()).map(([k, v]) => [canon(k), v.trim()]));
 const ids = new Set();
 const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
-  if (i.img) s.img = i.img; if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } return s; });
+  if (i.img) s.img = i.img; if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; if (PQc[i.key]) s.pq = PQc[i.key]; i.sid = id; return s; });
+// Como o mundo viu: notícia de veículo brasileiro com o mesmo fato em veículos estrangeiros (traduzido)
+const _mvSeen = new Set();
+const mundoViu = all.filter(i => i.sid && i.reg === 'br').map(i => ({ id: i.sid, ext: i.grp.filter(j => j.reg === 'ext' && (!j.lang || j.tr) && (j.tr || j.title).toLowerCase().replace(/\W+/g, '') !== i.title.toLowerCase().replace(/\W+/g, '')).map(j => ({ src: j.src, title: j.title, orig: j.orig || '', tr: j.tr || '', link: j.link, pub: j.pub })) })).filter(x => x.ext.length).filter((x, _i, _a, k = x.ext.map(e => e.link).sort().join('|')) => _mvSeen.has(k) ? false : (_mvSeen.add(k), true)).slice(0, 24);
 if (stories.length < 20) { console.log('poucas notícias lidas (' + stories.length + '), mantendo edição anterior'); process.exit(0); }
 
 // ===== site: só grava se o conteúdo mudou =====
-const sig = JSON.stringify(stories);
+const sig = JSON.stringify(stories);  // muda score com o tempo; feeds só gravados junto
 let prev = null; try { prev = JSON.parse(fs.readFileSync('edicao.json','utf8')); } catch {}
 const changed = !prev || JSON.stringify(prev.stories) !== sig;
 if (changed) {
   const updated = brIso(new Date(now));
-  fs.writeFileSync('edicao.json', JSON.stringify({ updated, fontes: [...new Set(FEEDS.map(f => f[0]))], stories }));
+  fs.writeFileSync('edicao.json', JSON.stringify({ updated, fontes: [...new Set(FEEDS.map(f => f[0]))], feeds: FEEDST.map(f => ({ ...f, regiao: BR_OUT.has(f.src) ? 'Brasil' : 'exterior' })), mundoViu, stories }));
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const rfc = iso => new Date(iso + ':00-03:00').toUTCString();
   fs.writeFileSync('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jornal Visão da Fênix</title><link>${B}</link><atom:link href="${B}feed.xml" rel="self" type="application/rss+xml"/><description>Curadoria de Brasil, mundo, negócios e tecnologia, com fonte e horário de publicação (Brasília).</description><language>pt-br</language><lastBuildDate>${rfc(updated)}</lastBuildDate>\n` +
@@ -111,10 +124,16 @@ const st = seed ? { vistos: [] } : JSON.parse(fs.readFileSync(STATE,'utf8'));
 const vistos = new Set(st.vistos);
 const novos = all.filter(i => !vistos.has(i.key) && now - i.ts < 3*3600e3 && (!i.lang || i.tr)).sort((a,b) => (b.urg - a.urg) || (b.ts - a.ts));
 const post = m => fetch('https://ntfy.sh/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:TOPIC,...m})}).then(r => { if (!r.ok) throw new Error('ntfy ' + r.status); });
+const hojeBR = brIso(new Date(now)).slice(0, 10), horaBR = +brIso(new Date(now)).slice(11, 13);
+if (!seed && horaBR === 7 && st.edicao1min !== hojeBR) {
+  const top = [...all].filter(i => (!i.lang || i.tr) && now - i.ts < 18*3600e3).sort((a, b) => b.score - a.score); const vis = new Set(); const t5 = [];
+  for (const i of top) { if (t5.length >= 5) break; if (vis.has(i.key) || i.grp.some(g => vis.has(g.key))) continue; vis.add(i.key); t5.push(i); }
+  if (t5.length) { await post({ title: 'Edição de 1 minuto · ' + hojeBR.slice(8, 10) + '/' + hojeBR.slice(5, 7), message: t5.map((i, n) => (n + 1) + '. ' + i.title + ' (' + i.src + (i.cov.n > 1 ? ', ' + i.cov.n + ' veículos' : '') + ')').join('\n'), click: B, priority: 4, tags: ['sunrise', 'newspaper'] }); st.edicao1min = hojeBR; console.log('edição de 1 minuto enviada'); }
+}
 if (!seed) {
   for (const i of novos.slice(0,5)) await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')] });
   const extra = novos.slice(5);
   if (extra.length) await post({ title: '+' + extra.length + ' notícias novas no Jornal', message: extra.slice(0,12).map(i => '• ' + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')').join('\n'), click: B, priority: 2, tags: ['newspaper'] });
 }
 console.log('push enviados', seed ? 0 : Math.min(novos.length,5) + (novos.length > 5 ? 1 : 0), 'novos', novos.length);
-fs.writeFileSync(STATE, JSON.stringify({ atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k)), ...st.vistos].slice(0,6000) }));
+fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k)), ...st.vistos].slice(0,6000) }));
