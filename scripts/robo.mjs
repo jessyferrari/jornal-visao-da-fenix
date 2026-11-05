@@ -6,8 +6,16 @@ const TOPIC = process.env.NTFY_TOPIC || '';
 const FEEDS = [
  ['g1','https://g1.globo.com/rss/g1/','br',''],['g1','https://g1.globo.com/rss/g1/economia/','neg',''],['g1','https://g1.globo.com/rss/g1/tecnologia/','tech',''],
  ['Folha de S.Paulo','https://feeds.folha.uol.com.br/emcimadahora/rss091.xml','br',''],['Folha de S.Paulo','https://feeds.folha.uol.com.br/mercado/rss091.xml','neg',''],['Folha de S.Paulo','https://feeds.folha.uol.com.br/mundo/rss091.xml','mundo',''],
+ ['Estadão','https://www.estadao.com.br/arc/outboundfeeds/rss/?outputType=xml','br',''],
+ ['CNN Brasil','https://www.cnnbrasil.com.br/feed/','br',''],
+ ['UOL','https://rss.uol.com.br/feed/noticias.xml','br',''],['UOL','https://rss.uol.com.br/feed/economia.xml','neg',''],
  ['BBC News Brasil','https://feeds.bbci.co.uk/portuguese/rss.xml','mundo',''],['Poder360','https://www.poder360.com.br/feed/','br',''],
  ['Agência Brasil','https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml','br',''],['DW Brasil','https://rss.dw.com/rdf/rss-br-all','mundo',''],
+ ['The New York Times','https://rss.nytimes.com/services/xml/rss/nyt/HomePage.xml','mundo','inglês'],['The New York Times','https://rss.nytimes.com/services/xml/rss/nyt/World.xml','mundo','inglês'],
+ ['The Guardian','https://www.theguardian.com/world/rss','mundo','inglês'],
+ ['Financial Times','https://www.ft.com/?format=rss','neg','inglês'],
+ ['The Economist','https://www.economist.com/finance-and-economics/rss.xml','neg','inglês'],
+ ['Bloomberg','https://feeds.bloomberg.com/markets/news.rss','neg','inglês'],
  ['Le Monde','https://www.lemonde.fr/rss/une.xml','mundo','francês'],['El País','https://feeds.elpais.com/mrss-s/pages/ep/site/elpais.com/portada','mundo','espanhol'],
  ['Al Jazeera','https://www.aljazeera.com/xml/rss/all.xml','mundo','inglês'],['The Verge','https://www.theverge.com/rss/index.xml','tech','inglês'],
  ['TechCrunch','https://techcrunch.com/feed/','tech','inglês'],['Tecnoblog','https://tecnoblog.net/feed/','tech',''],
@@ -24,7 +32,7 @@ const fmtB = iso => iso.slice(8,10)+'/'+iso.slice(5,7)+', '+iso.slice(11,16)+' (
 const secOf = (link, def) => /\/(economia|mercado|negocios|financas|poder-economia|seu-dinheiro|agronegocios)\//i.test(link) || /c-level\.folha/.test(link) ? 'neg' : /\/(tecnologia|tec|inovacao)\//i.test(link) ? 'tech' : def;
 const UA = {'user-agent':'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +'+B+')'};
 const FEEDST = [];
-const BR_OUT = new Set(['g1','Folha de S.Paulo','Poder360','Agência Brasil','Canaltech','Tecnoblog']);
+const BR_OUT = new Set(['g1','Folha de S.Paulo','Estadão','CNN Brasil','UOL','Poder360','Agência Brasil','Canaltech','Tecnoblog']);
 async function ler([src,url,sec,lang]) {
   const stt = { src, url, ok: false, itens: 0, lido: brIso(new Date()) }; FEEDST.push(stt);
   try {
@@ -153,7 +161,8 @@ let prev = null; try { prev = JSON.parse(fs.readFileSync('edicao.json','utf8'));
 const changed = !prev || JSON.stringify(prev.stories) !== sig;
 if (changed) {
   const updated = brIso(new Date(now));
-  fs.writeFileSync('edicao.json', JSON.stringify({ updated, fontes: [...new Set(FEEDS.map(f => f[0]))], feeds: FEEDST.map(f => ({ ...f, regiao: BR_OUT.has(f.src) ? 'Brasil' : 'exterior' })), mundoViu, stories }));
+  // feeds ficam só no relatório privado (status-privado.md), fora do edicao.json público
+  fs.writeFileSync('edicao.json', JSON.stringify({ updated, fontes: [...new Set(FEEDS.map(f => f[0]))], mundoViu, stories }));
   const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   const rfc = iso => new Date(iso + ':00-03:00').toUTCString();
   fs.writeFileSync('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jornal Visão da Fênix</title><link>${B}</link><atom:link href="${B}feed.xml" rel="self" type="application/rss+xml"/><description>Curadoria de Brasil, mundo, negócios e tecnologia, com fonte e horário de publicação (Brasília).</description><language>pt-br</language><lastBuildDate>${rfc(updated)}</lastBuildDate>\n` +
@@ -182,6 +191,34 @@ if (changed) {
       return '<script type="application/ld+json">' + JSON.stringify(ld) + '</script>';
     });
     fs.writeFileSync('index.html', html);
+  }
+}
+// Relatório privado de status dos feeds (não vai para o Pages; o workflow sobe como artifact + Step Summary)
+{
+  const ok = FEEDST.filter(f => f.ok).length;
+  const lines = [
+    '# Status privado · Jornal Visão da Fênix',
+    '',
+    'Gerado em ' + brIso(new Date(now)) + ' (Brasília). Uso interno. Não publicar.',
+    '',
+    'Feeds lidos: **' + ok + ' de ' + FEEDST.length + '**. Notícias na edição: **' + stories.length + '**.',
+    '',
+    '| Fonte | Região | Itens | Status | Lido | URL |',
+    '|---|---|---:|---|---|---|',
+    ...FEEDST.map(f => {
+      const reg = BR_OUT.has(f.src) ? 'Brasil' : 'exterior';
+      const st = f.ok ? 'ok' : ('falhou' + (f.erro ? ': ' + String(f.erro).replace(/\|/g, '/') : ''));
+      return '| ' + f.src + ' | ' + reg + ' | ' + (f.ok ? f.itens : 0) + ' | ' + st + ' | ' + f.lido + ' | `' + f.url + '` |';
+    }),
+    '',
+    '## Observações',
+    '- Washington Post, Reuters, AP e Valor Econômico: sem feed RSS público estável no teste de 05/11/2026.',
+    '- Ranking e metodologia não são expostos no site público.',
+    ''
+  ];
+  fs.writeFileSync('status-privado.md', lines.join('\n'));
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    try { fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join('\n') + '\n'); } catch {}
   }
 }
 console.log('lidas', itens.length, 'na edição', stories.length, changed ? 'edição atualizada' : 'sem mudança');
