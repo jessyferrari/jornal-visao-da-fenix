@@ -191,6 +191,13 @@ if (changed) {
       return '<script type="application/ld+json">' + JSON.stringify(ld) + '</script>';
     });
     fs.writeFileSync('index.html', html);
+    // nova versão do service worker a cada edição → bust do cache no cliente
+    if (fs.existsSync('sw.js')) {
+      const build = String(updated).replace(/\D+/g, '') || String(Date.now());
+      let sw = fs.readFileSync('sw.js', 'utf8');
+      sw = sw.replace(/const CACHE = 'jvf-[^']*'/, "const CACHE = 'jvf-" + build + "'");
+      fs.writeFileSync('sw.js', sw);
+    }
   }
 }
 // Relatório privado de status dos feeds (não vai para o Pages; o workflow sobe como artifact + Step Summary)
