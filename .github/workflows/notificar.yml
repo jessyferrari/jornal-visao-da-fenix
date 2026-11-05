@@ -32,6 +32,7 @@ jobs:
 
   # Reserva: o agendamento (schedule) do GitHub pode atrasar ou nem disparar em repositório novo.
   # Cada rodada (manual ou agendada) encadeia a próxima ~15 min depois, sem duplicar (só se não houver outra na fila).
+  # Se a API do GitHub falhar ao encadear, tenta de novo até 5 vezes com espera crescente.
   proxima:
     needs: robo
     if: always()
@@ -42,6 +43,16 @@ jobs:
         env: { GH_TOKEN: '${{ github.token }}' }
         run: |
           sleep 780
-          outras=$(gh api "repos/${{ github.repository }}/actions/workflows/notificar.yml/runs?per_page=20" --jq '[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.status=="queued" or .status=="in_progress" or .status=="waiting" or .status=="pending")] | length')
-          if [ "$outras" != "0" ]; then echo "já há rodada na fila ($outras), não encadeia"; exit 0; fi
-          gh workflow run notificar.yml --repo ${{ github.repository }} --ref main
+          outras=$(gh api "repos/${{ github.repository }}/actions/workflows/notificar.yml/runs?per_page=20" --jq '[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.status=="queued" or .status=="in_progress" or .status=="waiting" or .status=="pending")] | length' || echo "ERR")
+          if [ "$outras" != "0" ] && [ "$outras" != "ERR" ]; then echo "já há rodada na fila ($outras), não encadeia"; exit 0; fi
+          ok=0
+          for i in 1 2 3 4 5; do
+            if gh workflow run notificar.yml --repo ${{ github.repository }} --ref main; then
+              echo "próxima rodada agendada (tentativa $i)"
+              ok=1
+              break
+            fi
+            echo "falha ao agendar (tentativa $i), nova tentativa em $((i*20))s"
+            sleep $((i*20))
+          done
+          if [ "$ok" != "1" ]; then echo "não foi possível agendar a próxima após 5 tentativas"; exit 1; fi

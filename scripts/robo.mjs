@@ -59,6 +59,16 @@ for (const i of itens) { const o = map.get(i.key); if (!o || i.ts < o.ts) map.se
 let all = [...map.values()].filter(i => now - i.ts < 36*3600e3).sort((a,b) => b.ts - a.ts);
 // variedade: no máximo 14 por fonte por seção
 const cnt = {}; all = all.filter(i => { const k = i.src + i.sec; cnt[k] = (cnt[k] || 0) + 1; return cnt[k] <= 14; });
+// filtra publieditorial / especial publicitário / ofertas comerciais óbvias
+const isSponsored = i => {
+  const blob = (i.title + ' ' + i.link + ' ' + (i.sum || '')).toLowerCase();
+  return /especial[- ]publicit|conte[uú]do[- ]de[- ]marca|publieditorial|\bbranded content\b|\bsponsored\b|\bpubli\b/.test(blob)
+    || /\/especial-publicitario\//i.test(i.link)
+    || (/black[- ]?friday/i.test(blob) && /\b(oferta|desconto|promo|cupom|compre)\b/i.test(blob))
+    || /\/guia-de-compras\/.*\/(oferta|promo)/i.test(i.link);
+};
+const antesSp = all.length; all = all.filter(i => !isSponsored(i));
+if (antesSp !== all.length) console.log('filtrados patrocinados/ofertas', antesSp - all.length);
 // ===== imagens em alta resolução: og:image/twitter:image da página + CDN no maior tamanho + largura real medida =====
 const IF = 'imagens.json'; let IC = { og: {}, dim: {} }; try { IC = { og: {}, dim: {}, ...JSON.parse(fs.readFileSync(IF, 'utf8')) }; } catch {}
 async function metaImgs(url) {
@@ -131,7 +141,7 @@ const PQc = Object.fromEntries(Object.entries(PQ).filter(([k, v]) => typeof v ==
 const ids = new Set();
 const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
-  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; if (PQc[i.key]) s.pq = PQc[i.key]; i.sid = id; return s; });
+  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; s.eid = [i.key, ...i.grp.map(g => g.key)].sort()[0]; if (PQc[i.key]) s.pq = PQc[i.key]; i.sid = id; return s; });
 // Como o mundo viu: notícia de veículo brasileiro com o mesmo fato em veículos estrangeiros (traduzido)
 const _mvSeen = new Set();
 const mundoViu = all.filter(i => i.sid && i.reg === 'br').map(i => ({ id: i.sid, ext: i.grp.filter(j => j.reg === 'ext' && (!j.lang || j.tr) && (j.tr || j.title).toLowerCase().replace(/\W+/g, '') !== i.title.toLowerCase().replace(/\W+/g, '')).map(j => ({ src: j.src, title: j.title, orig: j.orig || '', tr: j.tr || '', link: j.link, pub: j.pub })) })).filter(x => x.ext.length).filter((x, _i, _a, k = x.ext.map(e => e.link).sort().join('|')) => _mvSeen.has(k) ? false : (_mvSeen.add(k), true)).slice(0, 24);
@@ -149,7 +159,30 @@ if (changed) {
   fs.writeFileSync('feed.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Jornal Visão da Fênix</title><link>${B}</link><atom:link href="${B}feed.xml" rel="self" type="application/rss+xml"/><description>Curadoria de Brasil, mundo, negócios e tecnologia, com fonte e horário de publicação (Brasília).</description><language>pt-br</language><lastBuildDate>${rfc(updated)}</lastBuildDate>\n` +
     stories.slice(0,60).map(s => `<item><title>${esc(s.title)}</title><link>${esc(s.link)}</link><guid isPermaLink="true">${esc(s.link)}</guid><pubDate>${rfc(s.pub)}</pubDate><source url="${B}feed.xml">${esc(s.src)}</source><description>${esc(s.sum + ' Fonte: ' + s.src + ', ' + fmtB(s.pub) + '.')}</description></item>`).join('\n') + '\n</channel></rss>\n');
   fs.writeFileSync('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>${B}</loc><lastmod>${updated}:00-03:00</lastmod><changefreq>always</changefreq></url>\n<url><loc>${B}feed.xml</loc><lastmod>${updated}:00-03:00</lastmod></url>\n</urlset>\n`);
-  if (fs.existsSync('index.html')) fs.writeFileSync('index.html', fs.readFileSync('index.html','utf8').replace(/"dateModified": ?"[^"]*"/, `"dateModified": "${updated}:00-03:00"`));
+  if (fs.existsSync('index.html')) {
+    const escH = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const ptStories = stories.filter(s => !s.lang || s.tr);
+    const dataCurta = updated.slice(8,10) + '/' + updated.slice(5,7) + '/' + updated.slice(0,4);
+    const noscriptLis = ptStories.slice(0, 40).map(s => `<li><a href="${escH(s.link)}" rel="noopener noreferrer">${escH(s.title)}</a> (${escH(s.src)}, ${s.pub.slice(8,10)}/${s.pub.slice(5,7)}, ${s.pub.slice(11,16)} Brasília)</li>`).join('');
+    const noscriptBlock = `<noscript><h1>Jornal Visão da Fênix, edição de ${dataCurta}</h1><p>Edição de ${dataCurta}, ${updated.slice(11,16)} (Brasília). Lista das notícias desta edição (sem JavaScript).</p><ul>${noscriptLis}</ul></noscript>`;
+    const itemList = ptStories.slice(0, 20).map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: s.link, name: s.title }));
+    let html = fs.readFileSync('index.html', 'utf8');
+    html = html.replace(/<noscript>[\s\S]*?<\/noscript>/, noscriptBlock);
+    if (!html.includes('<noscript>')) html = html.replace(/(<div id="root">)/, '$1' + noscriptBlock);
+    html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, (m) => {
+      let ld; try { ld = JSON.parse(m.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, '')); } catch { return m; }
+      const graph = Array.isArray(ld['@graph']) ? ld['@graph'] : [];
+      for (const node of graph) {
+        if (node['@type'] === 'WebPage') {
+          node.name = 'Jornal Visão da Fênix, edição de ' + dataCurta;
+          node.dateModified = updated + ':00-03:00';
+        }
+        if (node['@type'] === 'ItemList') node.itemListElement = itemList;
+      }
+      return '<script type="application/ld+json">' + JSON.stringify(ld) + '</script>';
+    });
+    fs.writeFileSync('index.html', html);
+  }
 }
 console.log('lidas', itens.length, 'na edição', stories.length, changed ? 'edição atualizada' : 'sem mudança');
 
