@@ -1,6 +1,6 @@
 /* Service worker Visão da Fênix: network-first para HTML/JS/CSS; cache só como fallback offline. */
 const CACHE = 'jvf-202611061252';
-const PRE = ['./fonts.css', './logo.webp', './logo.png', './manifest.webmanifest'];
+const PRE = ['./fonts.css', './logo.webp', './logo.png', './manifest.webmanifest', './index.html', './app.js', './edicao.json'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
@@ -15,35 +15,54 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-function networkFirst(req) {
+function networkFirst(req, opts) {
+  const fallbackIndex = !!(opts && opts.fallbackIndex);
+  const cacheKey = (opts && opts.cacheKey) || null;
   return fetch(req).then((r) => {
-    if (r && r.ok && (req.method === 'GET')) {
+    if (r && r.ok && req.method === 'GET') {
       const copy = r.clone();
-      caches.open(CACHE).then((c) => c.put(req, copy)).catch(() => {});
+      caches.open(CACHE).then((c) => {
+        if (cacheKey) c.put(cacheKey, copy);
+        else c.put(req, copy);
+      }).catch(() => {});
     }
     return r;
-  }).catch(() => caches.match(req).then((hit) => hit || caches.match('./index.html')));
+  }).catch(() => {
+    const key = cacheKey || req;
+    return caches.match(key, cacheKey ? { ignoreSearch: true } : undefined).then((hit) => {
+      if (hit) return hit;
+      if (fallbackIndex) return caches.match('./index.html');
+      return undefined;
+    });
+  });
 }
 
 self.addEventListener('fetch', (e) => {
   const u = new URL(e.request.url);
   if (e.request.method !== 'GET' || u.origin !== self.location.origin) return;
   const path = u.pathname;
-  const accept = e.request.headers.get('accept') || '';
-  const isNav = e.request.mode === 'navigate' || accept.includes('text/html');
+  const isNav = e.request.mode === 'navigate';
+
+  // edicao.json: chave estável + ignoreSearch (ignora ?t= do cliente)
+  if (/\/edicao\.json$/.test(path)) {
+    e.respondWith(networkFirst(e.request, { cacheKey: './edicao.json' }));
+    return;
+  }
+
   const isShell =
     isNav ||
     /\/(index\.html)?$/.test(path) ||
     /\/app\.js$/.test(path) ||
     /\/fonts\.css$/.test(path) ||
     /\/sw\.js$/.test(path) ||
-    /\.css$/i.test(path) ||
-    /\/edicao\.json$/.test(path);
+    /\.css$/i.test(path);
+
   if (isShell) {
-    e.respondWith(networkFirst(e.request));
+    // fallback para index.html somente em navegações
+    e.respondWith(networkFirst(e.request, { fallbackIndex: isNav }));
     return;
   }
-  // imagens/fontes: cache-first com atualização em segundo plano
+
   e.respondWith(
     caches.match(e.request).then((hit) => {
       const fresh = fetch(e.request).then((r) => {

@@ -134,7 +134,7 @@ console.log('tradução ok', okT, 'falhou', failT, 'novas por serviço', JSON.st
 // ===== agrupamento estrito do mesmo fato (títulos já traduzidos) =====
 const ents = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')));
 for (const i of all) { i.w = words(i.title); i.e = ents(i.title); i.reg = BR_OUT.has(i.src) ? 'br' : 'ext'; }
-const same = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 12*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; for (const e of a.e) if (b.e.has(e)) return true; return false; };
+const same = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; for (const e of a.e) if (b.e.has(e)) return true; return false; };
 for (const i of all) { i.grp = all.filter(j => same(i, j)); const m = new Map(); for (const j of i.grp) if (!m.has(j.src)) m.set(j.src, j); i.grp = [...m.values()]; i.outros = i.grp.map(j => j.src); }
 for (const i of all) {
   const ageH = Math.max(0, (now - i.ts) / 3600e3);
@@ -197,6 +197,34 @@ if (changed) {
       let sw = fs.readFileSync('sw.js', 'utf8');
       sw = sw.replace(/const CACHE = 'jvf-[^']*'/, "const CACHE = 'jvf-" + build + "'");
       fs.writeFileSync('sw.js', sw);
+    }
+    // Seed da edição atual no index (first paint) e no app.js (sem seed antigo 30/10)
+    {
+      const seedObj = { updated, stories: stories.slice(0, 40), mundoViu };
+      const seedJson = JSON.stringify(seedObj);
+      const seedScript = '<script>window.__JF_ED__=' + seedJson + ';</script>';
+      let html2 = fs.readFileSync('index.html', 'utf8');
+      if (/window\.__JF_ED__\s*=/.test(html2)) {
+        html2 = html2.replace(/<script>window\.__JF_ED__=[\s\S]*?<\/script>/, seedScript);
+      } else {
+        html2 = html2.replace(/(<script[^>]*\bsrc=["']\.\/app\.js["'][^>]*>\s*<\/script>)/i, seedScript + '\n$1');
+        if (!html2.includes('window.__JF_ED__')) {
+          html2 = html2.replace(/<\/body>/i, seedScript + '\n</body>');
+        }
+      }
+      fs.writeFileSync('index.html', html2);
+      if (fs.existsSync('app.js')) {
+        let app = fs.readFileSync('app.js', 'utf8');
+        // Durable markers: replace between JF_SEED_B64_START/END if present; else inject assign after IIFE start
+        const b64 = Buffer.from(seedJson, 'utf8').toString('base64');
+        if (app.includes('JF_SEED_B64_START')) {
+          app = app.replace(/JF_SEED_B64_START[\s\S]*?JF_SEED_B64_END/, 'JF_SEED_B64_START' + b64 + 'JF_SEED_B64_END');
+        } else {
+          // Ensure first-paint path works via index; also stamp a comment marker for audits
+          if (!app.includes('/*JF_EDITION_SEEDED*/')) app = '/*JF_EDITION_SEEDED*/' + app;
+        }
+        fs.writeFileSync('app.js', app);
+      }
     }
   }
 }
