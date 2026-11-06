@@ -204,13 +204,13 @@ if (changed) {
       const seedJson = JSON.stringify(seedObj);
       const seedScript = '<script>window.__JF_ED__=' + seedJson + ';</script>';
       let html2 = fs.readFileSync('index.html', 'utf8');
-      if (/window\.__JF_ED__\s*=/.test(html2)) {
-        html2 = html2.replace(/<script>window\.__JF_ED__=[\s\S]*?<\/script>/, seedScript);
+      html2 = html2.replace(/<script>window\.__JF_ED__=[\s\S]*?<\/script>\n?/g, '');
+      if (/<script[^>]*\bsrc=["']\.\/?app\.js["'][^>]*>\s*<\/script>/i.test(html2)) {
+        html2 = html2.replace(/(<script[^>]*\bsrc=["']\.\/?app\.js["'][^>]*>\s*<\/script>)/i, seedScript + '\n$1');
+      } else if (/<script[^>]*\bsrc=["']app\.js["'][^>]*>\s*<\/script>/i.test(html2)) {
+        html2 = html2.replace(/(<script[^>]*\bsrc=["']app\.js["'][^>]*>\s*<\/script>)/i, seedScript + '\n$1');
       } else {
-        html2 = html2.replace(/(<script[^>]*\bsrc=["']\.\/app\.js["'][^>]*>\s*<\/script>)/i, seedScript + '\n$1');
-        if (!html2.includes('window.__JF_ED__')) {
-          html2 = html2.replace(/<\/body>/i, seedScript + '\n</body>');
-        }
+        html2 = html2.replace(/<\/body>/i, seedScript + '\n</body>');
       }
       fs.writeFileSync('index.html', html2);
       if (fs.existsSync('app.js')) {
