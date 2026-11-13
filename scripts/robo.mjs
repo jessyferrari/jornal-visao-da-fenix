@@ -176,8 +176,8 @@ if (changed) {
     const noscriptBlock = `<noscript><h1>Jornal Visão da Fênix, edição de ${dataCurta}</h1><p>Edição de ${dataCurta}, ${updated.slice(11,16)} (Brasília). Lista das notícias desta edição (sem JavaScript).</p><ul>${noscriptLis}</ul></noscript>`;
     const itemList = ptStories.slice(0, 20).map((s, i) => ({ '@type': 'ListItem', position: i + 1, url: s.link, name: s.title }));
     let html = fs.readFileSync('index.html', 'utf8');
-    html = html.replace(/<noscript>[\s\S]*?<\/noscript>/, noscriptBlock);
-    if (!html.includes('<noscript>')) html = html.replace(/(<div id="root">)/, '$1' + noscriptBlock);
+    html = html.replace(/<noscript>[\s\S]*?<\/noscript>/, () => noscriptBlock);   // função: título com "$1" ou "$&" não vira referência
+    if (!html.includes('<noscript>')) html = html.replace(/(<div id="root">)/, (m) => m + noscriptBlock);
     html = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/, (m) => {
       let ld; try { ld = JSON.parse(m.replace(/^<script[^>]*>/, '').replace(/<\/script>$/, '')); } catch { return m; }
       const graph = Array.isArray(ld['@graph']) ? ld['@graph'] : [];
@@ -206,15 +206,18 @@ if (changed) {
     {
       const seedObj = { updated, stories: stories.slice(0, 40), mundoViu };
       const seedJson = JSON.stringify(seedObj);
-      const seedScript = '<script>window.__JF_ED__=' + seedJson + ';</script>';
+      // 13/11: o JSON vai escapado ("</" e separadores de linha) e a troca usa função: um título com "$1" (ex.: "Hungary seizes $19.5m")
+      // era lido como referência do replace e duplicava <script src="app.js">, deixando 1,5 MB de lixo no index e erro de JS na primeira pintura
+      const seedScript = '<script>window.__JF_ED__=' + seedJson.replace(/<\//g, '<\\/').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029') + ';</script>';
       let html2 = fs.readFileSync('index.html', 'utf8');
-      html2 = html2.replace(/<script>window\.__JF_ED__=[\s\S]*?<\/script>\n?/g, '');
-      if (/<script[^>]*\bsrc=["']\.\/?app\.js["'][^>]*>\s*<\/script>/i.test(html2)) {
-        html2 = html2.replace(/(<script[^>]*\bsrc=["']\.\/?app\.js["'][^>]*>\s*<\/script>)/i, seedScript + '\n$1');
-      } else if (/<script[^>]*\bsrc=["']app\.js["'][^>]*>\s*<\/script>/i.test(html2)) {
-        html2 = html2.replace(/(<script[^>]*\bsrc=["']app\.js["'][^>]*>\s*<\/script>)/i, seedScript + '\n$1');
+      // fim do index sempre igual: </noscript></div> + semente + app.js + registro do service worker (limpa o lixo acumulado entre eles)
+      const fimRoot = html2.indexOf('</noscript></div>'), sw0 = html2.indexOf("<script>\n(function(){\n  if(!('serviceWorker'");
+      if (fimRoot > 0 && sw0 > fimRoot) {
+        html2 = html2.slice(0, fimRoot + '</noscript></div>'.length) + '\n' + seedScript + '\n<script src="app.js"></script>' + html2.slice(sw0);
       } else {
-        html2 = html2.replace(/<\/body>/i, seedScript + '\n</body>');
+        html2 = html2.replace(/<script>window\.__JF_ED__=[\s\S]*?<\/script>\n?/g, '');
+        if (/<script[^>]*\bsrc=["']\.?\/?app\.js["'][^>]*>\s*<\/script>/i.test(html2)) html2 = html2.replace(/(<script[^>]*\bsrc=["']\.?\/?app\.js["'][^>]*>\s*<\/script>)/i, (m) => seedScript + '\n' + m);
+        else html2 = html2.replace(/<\/body>/i, () => seedScript + '\n</body>');
       }
       fs.writeFileSync('index.html', html2);
       if (fs.existsSync('app.js')) {
