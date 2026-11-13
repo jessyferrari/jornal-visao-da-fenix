@@ -214,7 +214,7 @@ const semA = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '
 const casa = (termo, i) => { const k = semA(termo).replace(/^#/, ''); if (k.length < 4 || (!k.includes(' ') && k.length < 6)) return false; const b = semA(i.title + ' ' + (i.tituloPt || '')); return k.includes(' ') ? b.includes(k) : new RegExp('\\b' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(b); };
 for (const t of TEND) {
   const rel = mus.filter(i => casa(t.termo, i)); const blob = t.termo + ' ' + (t.noticiasDaFonte || []).map(n => n.titulo).join(' ');
-  t.setor = /samba|roda de samba/i.test(blob) || rel.some(i => i.setor === 'samba') ? 'samba' : /pagode/i.test(blob) || ARTISTAS.test(blob) || rel.some(i => i.setor === 'pagode') ? 'pagode' : rel.length || MUSICA.test(blob) ? 'musica' : null;
+  t.setor = /samba|roda de samba/i.test(blob) || rel.some(i => i.setor === 'samba') ? 'samba' : /pagode/i.test(blob) || ARTISTAS.test(blob) || rel.some(i => i.setor === 'pagode') ? 'pagode' : rel.length ? 'musica' : null;
   t.noticias = rel.slice(0, 3).map(i => ({ titulo: tit(i), link: i.link, veiculo: i.veic, local: i.local })); for (const i of rel) { i.emAlta = (i.emAlta || []).concat(t.fonte + ': ' + t.termo); }
 }
 const pub = t => ({ termo: t.termo, fonte: t.fonte, trafego: t.trafego || undefined, horasEmAlta: t.horasEmAlta, melhorPosicao: t.melhorPosicao, posts: t.posts || undefined, noticias: t.noticias.length ? t.noticias : (t.noticiasDaFonte || []).slice(0, 2) });
