@@ -2,7 +2,8 @@
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
 import fs from 'node:fs';
-import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto } from './musica-local.mjs';
+import { montarAgenda } from './musica-agenda.mjs';
+import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto, cidadesNoTexto, decidir } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
 const TOPIC = process.argv.includes('--sem-push') ? '' : (process.env.NTFY_TOPIC_MUSICA || '');
@@ -218,6 +219,8 @@ for (const t of TEND) {
 }
 const pub = t => ({ termo: t.termo, fonte: t.fonte, trafego: t.trafego || undefined, horasEmAlta: t.horasEmAlta, melhorPosicao: t.melhorPosicao, posts: t.posts || undefined, noticias: t.noticias.length ? t.noticias : (t.noticiasDaFonte || []).slice(0, 2) });
 const maisFalado = { fontes: MF, samba: TEND.filter(t => t.setor === 'samba').map(pub), pagode: TEND.filter(t => t.setor === 'pagode').map(pub), musica: TEND.filter(t => t.setor === 'musica').slice(0, 12).map(pub) };
+// ===== agenda semanal de shows e rodas (notícias + Bing Notícias + vitrine pública da Bilheteria Digital) =====
+const agenda = await montarAgenda(mus, { agora, ART: ARTISTAS, localizar: t => { const c = []; cidadesNoTexto(t, 3, 'agenda', c); return decidir(c); } });
 const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts);
 const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = chave(i); if (s.has(k) || i.grp.some(g => s.has(chave(g)))) return false; s.add(k); return true; }); };
 const vista = i => ({ local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
@@ -230,7 +233,7 @@ const REG = ['sp', 'rj', 'br', 'int'];
 const porReg = (arr, n = 15) => Object.fromEntries(REG.map(r => { const a = arr.filter(i => i.reg === r); const lo = x => x.slice().sort((p, q) => (!!p.regiaoIncerta - !!q.regiaoIncerta)); return [r, { nome: NOMES[r], quentes: lo(a.filter(i => i.quente)).slice(0, 10).map(vista), itens: lo(a.filter(i => !i.quente)).slice(0, n).map(vista) }]; }));
 const saida = {
   atualizado: brIso(new Date(agora)),
-  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, maisFalado,
+  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, maisFalado, agenda,
   setores: {
     samba: { nome: 'Samba', regioes: porReg(samba) },
     sambaPagode: { nome: 'Samba e Pagode', regioes: porReg(pagode) },
@@ -264,6 +267,7 @@ if (!TOPIC) E.notificadas = NOTIF0; // simulação (--sem-push) não marca nada 
 fs.writeFileSync(EF, JSON.stringify(E));
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
+console.log('AGENDA:', JSON.stringify(agenda.est), '| esta semana', agenda.semana.reduce((n, c) => n + c.eventos.length, 0), 'eventos em', agenda.semana.length, 'cidades | próximas', agenda.proximas.reduce((n, c) => n + c.eventos.length, 0));
 console.log('MAIS FALADO:', JSON.stringify(MF), '| samba', maisFalado.samba.map(t => t.termo).join(', ') || '(nenhum)', '| pagode', maisFalado.pagode.map(t => t.termo).join(', ') || '(nenhum)', '| música', maisFalado.musica.map(t => t.termo).join(', ') || '(nenhum)', '| notícias nossas em alta', mus.filter(i => i.emAlta).length);
 console.log('TRADUÇÃO:', JSON.stringify(TRE), '| títulos estrangeiros', aTraduzir.length, '| traduzidos', aTraduzir.filter(i => i.tituloPt).length);
 console.log('LINKS diretos:', JSON.stringify(LINKS), '| com link direto', mus.filter(direto).length, 'de', mus.length, '| ainda pelo Google Notícias', mus.filter(i => !direto(i)).length);
