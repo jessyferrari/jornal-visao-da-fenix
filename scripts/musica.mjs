@@ -2,6 +2,8 @@
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
 import fs from 'node:fs';
+import { localizarTodos, cidadeDoVeiculo, estadoNoTexto } from './musica-local.mjs';
+const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
 const TOPIC = process.argv.includes('--sem-push') ? '' : (process.env.NTFY_TOPIC_MUSICA || '');
 const UA = { 'user-agent': 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)' };
@@ -79,6 +81,8 @@ const pal = t => new Set(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 const GENERICO = new Set('carnaval samba pagode grupo especial festival show brasil bloco escola grammy latino premio musica cantor cantora album single'.split(' '));
 const ents = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')).filter(w => !GENERICO.has(w)));
 const mesmo = (a, b) => { if (a.dom && a.dom === b.dom) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; if (/[\u3040-\u30ff]/.test(a.title)) return true; for (const e of a.e) if (b.e.has(e)) return true; return false; };
+// mesma cidade + mesmo assunto com palavras diferentes ("apreende" x "encontra"): junta se 4+ palavras em comum
+const mesmo2 = (a, b) => { const la = a.uf || a.ufSoh, lb = b.uf || b.ufSoh; if (!la || la !== lb || (a.dom && a.dom === b.dom)) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; return c >= 4 && c / Math.min(a.w.size, b.w.size) >= 0.5; };
 
 // ===== REGIÃO: SP, RJ, Resto do Brasil, Internacional =====
 const sem = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -127,7 +131,34 @@ for (const i of itens) {
 }
 const mus = itens.filter(i => i.setor);
 // agrupa o mesmo fato (veículos diferentes)
-for (const i of mus) { i.grp = mus.filter(j => j !== i && mesmo(i, j)); }
+// ===== CIDADE de cada notícia (texto real: título, matéria, schema.org, bairros e casas de show) =====
+const semCidadeAntes = mus.filter(i => i.regiaoIncerta).length;
+const EST = await localizarTodos(mus);
+const NUF = { SP: 'sp', RJ: 'rj' };
+for (const i of mus) {
+  if (i.linkReal) i.link = i.linkReal;
+  if (i.cidade || (i.pais && i.pais !== 'Brasil')) {
+    i.reg = i.pais && i.pais !== 'Brasil' ? 'int' : (NUF[i.uf] || 'br'); i.regiaoIncerta = false; i.regiaoMotivo = 'cidade: ' + (i.localComo || '');
+  }
+  // artista brasileiro em evento lá fora (ex.: Grammy Latino em Las Vegas): cidade = onde aconteceu, região = Internacional, com selo
+  if (i.reg === 'int' && /brasileir|brasil\b|leci|anitta|zeca|xande|thiaguinho|p[eé]ricles|ferrugem|sorriso maroto|ludmilla|iza\b|seu jorge|emicida|liniker/i.test(i.title + ' ' + i.sum)) i.brasileiroFora = true;
+  if (i.cidade) i.e.add(sem(i.cidade));
+}
+for (const i of mus) if (!i.cidade && !(i.pais && i.pais !== 'Brasil')) { const e = estadoNoTexto(i.title + ' ' + i.sum); if (e) { i.ufSoh = e.uf; i.ufPista = e.pista; } }
+for (const i of mus) { i.grp = mus.filter(j => j !== i && (mesmo(i, j) || mesmo2(i, j))); }
+// mesmo fato contado por outro veículo que cita a cidade: usa a cidade desse texto real
+for (const i of mus) if (!i.cidade) { const g = i.grp.filter(j => j.cidade && (j.localScore || 0) >= 3).sort((x, y) => (y.localScore || 0) - (x.localScore || 0))[0]; if (g) { Object.assign(i, { cidade: g.cidade, uf: g.uf, pais: g.pais, localComo: 'mesmo fato em ' + g.veic + ': ' + g.localComo, reg: g.reg, regiaoIncerta: false, regiaoMotivo: 'cidade herdada de ' + g.veic }); EST.mesmoFato = (EST.mesmoFato || 0) + 1; } }
+// consenso do mesmo fato: se 2+ outros veículos dão a mesma cidade pelo título/abertura e este item só achou cidade no meio do texto, vale a do fato
+for (const i of mus) { const fortes = i.grp.filter(j => j.cidade && (j.localScore || 0) >= 4); if (fortes.length < 2) continue; const cnt = {}; for (const j of fortes) cnt[j.cidade + '|' + j.uf + '|' + j.pais] = (cnt[j.cidade + '|' + j.uf + '|' + j.pais] || 0) + 1;
+  const [top, n] = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0]; const [c, uf, pais] = top.split('|');
+  if (n >= 2 && c !== i.cidade && !/^título/.test(i.localComo || '')) { const g = fortes.find(j => j.cidade === c); Object.assign(i, { cidade: c, uf, pais, localComo: 'consenso de ' + n + ' veículos do mesmo fato (ex.: ' + g.veic + ': ' + g.localComo + ')' }); i.reg = pais !== 'Brasil' ? 'int' : (NUF[uf] || 'br'); EST.consenso = (EST.consenso || 0) + 1; } }
+// estado citado no texto (sem cidade): mostra o estado
+const NOME_UF = { AC: 'Acre', AL: 'Alagoas', AP: 'Amapá', AM: 'Amazonas', BA: 'Bahia', CE: 'Ceará', DF: 'Distrito Federal', ES: 'Espírito Santo', GO: 'Goiás', MA: 'Maranhão', MT: 'Mato Grosso', MS: 'Mato Grosso do Sul', MG: 'Minas Gerais', PA: 'Pará', PB: 'Paraíba', PR: 'Paraná', PE: 'Pernambuco', PI: 'Piauí', RJ: 'Rio de Janeiro', RN: 'Rio Grande do Norte', RS: 'Rio Grande do Sul', RO: 'Rondônia', RR: 'Roraima', SC: 'Santa Catarina', SP: 'São Paulo', SE: 'Sergipe', TO: 'Tocantins' };
+for (const i of mus) if (!i.cidade && !(i.pais && i.pais !== 'Brasil')) { const e = i.ufSoh ? { uf: i.ufSoh, pista: i.ufPista } : estadoNoTexto(i.title + ' ' + i.sum); if (e) { i.ufSoh = e.uf; i.reg = NUF[e.uf] || 'br'; i.regiaoIncerta = false; i.localComo = 'estado citado no texto: "' + e.pista + '"'; EST.estado = (EST.estado || 0) + 1; } }
+// cidade no nome do veículo regional (só quando a matéria não cita cidade nenhuma): marcado como tal
+for (const i of mus) if (!i.cidade && !i.ufSoh && !(i.pais && i.pais !== 'Brasil')) { const v = cidadeDoVeiculo(i.dom); if (v) { Object.assign(i, { cidade: v.nome, uf: v.uf, pais: 'Brasil', veiculoRegional: true, localComo: 'cidade do veículo regional (' + i.dom + '); a matéria não cita a cidade' }); i.reg = NUF[v.uf] || 'br'; i.regiaoIncerta = false; EST.veiculoRegional = (EST.veiculoRegional || 0) + 1; } }
+for (const i of mus) i.local = i.cidade ? i.cidade + ', ' + (i.pais === 'Brasil' ? i.uf : i.pais) : (i.pais && i.pais !== 'Brasil') ? i.pais + ' (cidade não citada)' : i.ufSoh ? NOME_UF[i.ufSoh] + ' (estado; cidade não citada)' : (i.reg === 'int' && i.nacional) ? 'Exterior (cidade não citada)' : i.nacional ? (i.setor === 'geral' ? 'Assunto geral (sem cidade)' : 'Nacional (sem cidade)') : 'cidade não identificada';
+for (const i of mus) if (i.veiculoRegional) i.local += ' (pelo veículo)';
 // sem local no próprio texto: herda a região de outro veículo que deu o mesmo fato e diz o local
 for (const i of mus) if (i.regiaoIncerta) { const g = i.grp.find(j => !j.regiaoIncerta); if (g) { i.reg = g.reg; i.regiaoIncerta = false; i.regiaoMotivo = NOMES[g.reg] + ': herdado de ' + g.veic + ' (' + g.regiaoMotivo.split(';')[0] + ')'; } }
 // primeira vez que o jornal viu cada fato (estado salvo entre rodadas)
@@ -144,7 +175,7 @@ for (const i of mus) {
 }
 const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (b.ts - a.ts);
 const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = chave(i); if (s.has(k) || i.grp.some(g => s.has(chave(g)))) return false; s.add(k); return true; }); };
-const vista = i => ({ titulo: i.title, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: g.title, link: g.link })), via: i.rot });
+const vista = i => ({ local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, titulo: i.title, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: g.title, link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
 const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
 const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (b.fontes - a.fontes) || (b.ts - a.ts)));
@@ -161,6 +192,7 @@ const saida = {
     geral: { nome: 'Música geral, DJs e cultura', brasil: geral.filter(i => i.reg !== 'int').slice(0, 30).map(vista), fora: geral.filter(i => i.reg === 'int').slice(0, 20).map(vista) },
   },
 };
+saida.auditoriaLocal = { semCidade: mus.filter(i => i.local === 'cidade não identificada').map(i => ({ titulo: i.title, veiculo: i.veic, dominio: i.dom, motivo: i.semCidadeMotivo || '' })), nacional: mus.filter(i => /sem cidade\)$/.test(i.local) && !/estado/.test(i.local)).map(i => ({ titulo: i.title, veiculo: i.veic, motivo: i.semCidadeMotivo || '' })) };
 fs.writeFileSync('musica.json', JSON.stringify(saida, null, 1));
 for (const [k, t] of Object.entries(E.vistos)) if (agora - t > 7 * 86400e3) delete E.vistos[k];
 // ===== push (tópico separado da música): Quente + confirmado em 2 fontes, organizado por setor e região =====
@@ -180,6 +212,10 @@ for (const c of fila.slice(0, 6)) {
 }
 if (fila.length > 6) { await envia({ title: '🎵 +' + (fila.length - 6) + ' de música', message: fila.slice(6, 16).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + c.i.title).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }); for (const c of fila.slice(6)) E.notificadas.unshift(chave(c.i)); }
 E.notificadas = E.notificadas.slice(0, 2000); fs.writeFileSync(EF, JSON.stringify(E));
+console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
+console.log('LOCAL métodos:', JSON.stringify(EST));
+const fim = { cidadeNoTexto: mus.filter(i => i.cidade && !i.veiculoRegional).length, cidadePeloVeiculo: mus.filter(i => i.veiculoRegional).length, estadoSoh: mus.filter(i => !i.cidade && i.ufSoh).length, exteriorSemCidade: mus.filter(i => /^Exterior/.test(i.local)).length, paisSoh: mus.filter(i => !i.cidade && i.pais && i.pais !== 'Brasil').length, nacional: mus.filter(i => i.local === 'Nacional (sem cidade)').length, assuntoGeral: mus.filter(i => i.local === 'Assunto geral (sem cidade)').length, naoIdent: mus.filter(i => i.local === 'cidade não identificada').length };
+console.log('LOCAL depois:', JSON.stringify(fim), 'de', mus.length, '| tempo total', ((Date.now() - T0) / 1000).toFixed(1) + ' s');
 console.log('fontes ok', STATUS.filter(s => s.ok).length, 'de', STATUS.length, '| itens 48h', itens.length, '| de música', mus.length);
 for (const s of STATUS) console.log(' ', s.ok ? 'ok ' : 'ERR', String(s.itens).padStart(3), s.tipo.padEnd(6), s.rot, s.erro || '');
 const cont = arr => REG.map(r => NOMES[r] + ' ' + arr.filter(i => i.reg === r).length + ' (quentes ' + arr.filter(i => i.reg === r && i.quente).length + ')').join(' | ');
