@@ -257,7 +257,7 @@ fs.writeFileSync('musica.json', JSON.stringify(saida, null, 1));
 for (const [k, t] of Object.entries(E.vistos)) if (agora - t > 7 * 86400e3) delete E.vistos[k];
 // ===== push (tópico separado da música): Quente + confirmado em 2 fontes, organizado por setor e região =====
 // título: "🔥 Samba Quente SP" / "🔥 Pagode Quente RJ" / "🎧 DJ Brasil" ; tags ntfy: setor e região (filtráveis no app)
-const NOTIF0 = E.notificadas.slice(); const ja = new Set(E.notificadas);
+const NOTIF0 = E.notificadas.slice(); const MAD0 = (E.madrugada || []).slice(); const ja = new Set(E.notificadas);
 const cand = [
   ...samba.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Samba Quente ' + NOMES[i.reg], tags: ['fire', 'samba', i.reg] })),
   ...pagode.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Pagode Quente ' + NOMES[i.reg], tags: ['fire', 'pagode', i.reg] })),
@@ -271,14 +271,21 @@ const PRI = { sp: 0, rj: 1, br: 2, int: 3 };
 for (const c of cand) { const o = ondeCurto(c.i); if (o) c.t += ' · ' + o; }
 const fila = cand.sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
 const envia = async m => { if (TOPIC) { const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: TOPIC, ...m }) }); console.log('push', r.status, m.title); } else console.log('[push simulado]', m.title, '|', m.message.replace(/\n/g, ' / '), '| tags', m.tags.join(',')); };
-for (const c of candAlerta.slice(0, 3)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags }); E.notificadas.unshift('alerta:' + chave(i)); }
+// ===== HORÁRIO DE SILÊNCIO (23h às 7h, Brasília): só passam Quente confirmado e luto confirmado; o resto vira um resumo às 7h =====
+const hArg = process.argv.indexOf('--hora'); const horaBR = hArg > 0 ? +process.argv[hArg + 1] : new Date(agora - 3 * 3600e3).getUTCHours();
+const silencio = horaBR >= 23 || horaBR < 7; E.madrugada = E.madrugada || [];
+const segura = (c) => { E.madrugada.push({ t: c.t, titulo: tit(c.i), link: c.i.link, k: (c.alerta ? 'alerta:' : '') + chave(c.i) }); E.notificadas.unshift((c.alerta ? 'alerta:' : '') + chave(c.i)); };
+if (!silencio && E.madrugada.length) { const m = E.madrugada; await envia({ title: '🌅 Música da madrugada: ' + m.length + (m.length > 1 ? ' notícias' : ' notícia'), message: m.slice(0, 10).map(x => '• ' + x.t.replace(/^\S+ /, '') + ': ' + x.titulo).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 3, tags: ['sunrise', 'resumo'] }); E.madrugada = []; }
+console.log('SILÊNCIO:', silencio ? 'sim (hora ' + horaBR + 'h Brasília): só Quente confirmado e luto confirmado' : 'não (hora ' + horaBR + 'h Brasília)');
+for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' ? (segura(c), false) : true)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags }); E.notificadas.unshift('alerta:' + chave(i)); }
 for (const c of fila.slice(0, 6)) {
   const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags });
   E.notificadas.unshift(chave(i));
 }
-if (fila.length > 6) { await envia({ title: '🎵 +' + (fila.length - 6) + ' de música', message: fila.slice(6, 16).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + tit(c.i)).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }); for (const c of fila.slice(6)) E.notificadas.unshift(chave(c.i)); }
+if (fila.length > 6 && silencio) { for (const c of fila.slice(6, 16)) segura(c); for (const c of fila.slice(16)) E.notificadas.unshift(chave(c.i)); }
+else if (fila.length > 6) { await envia({ title: '🎵 +' + (fila.length - 6) + ' de música', message: fila.slice(6, 16).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + tit(c.i)).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }); for (const c of fila.slice(6)) E.notificadas.unshift(chave(c.i)); }
 E.notificadas = E.notificadas.slice(0, 2000);
-if (!TOPIC) E.notificadas = NOTIF0; // simulação (--sem-push) não marca nada como notificado
+if (!TOPIC && !process.env.MUSICA_TESTE_ESTADO) { E.notificadas = NOTIF0; E.madrugada = MAD0; } // simulação (--sem-push) não marca nada como notificado
 fs.writeFileSync(EF, JSON.stringify(E));
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
