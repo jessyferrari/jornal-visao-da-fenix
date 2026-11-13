@@ -29,7 +29,7 @@ const LUGARES = [
   [/\b(madureira|sapucai|marques de sapucai|pedra do sal|cacique de ramos|renascenca clube|oswaldo cruz|copacabana|ipanema|leblon|tijuca|vila isabel|jacarepagua|barra da tijuca|recreio dos bandeirantes|meier|bangu|campo grande \(rj\)|lapa carioca|arcos da lapa|centro do rio|zona (norte|sul|oeste) do rio|ilha do governador|praca maua|boulevard olimpico|cidade do samba|parque madureira|parkjacarepagua|park jacarepagua|engenho de dentro|realengo|irajá|iraja|penha circular|ramos|olaria|santa teresa|gloria \(rj\)|botafogo|flamengo \(bairro\)|laranjeiras|praca xv)\b/, 'Rio de Janeiro', 'RJ'],
   [/\b(vivo rio|qualistage|circo voador|fundicao progresso|cidade das artes|jeunesse arena|farmasi arena|theatro municipal do rio|teatro riachuelo rio|maracana|engenhao|nilton santos|beco do rato|trapiche gamboa|bip bip|clube renascenca)\b/, 'Rio de Janeiro', 'RJ'],
   [/\b(mineirinho|mineirao|praca da estacao)\b/, 'Belo Horizonte', 'MG'], [/\b(arena fonte nova|concha acustica|teatro castro alves|pelourinho|rio vermelho em salvador)\b/, 'Salvador', 'BA'],
-  [/\b(classic hall|marco zero do recife)\b/, 'Recife', 'PE'], [/\b(arena da amazonia|teatro amazonas)\b/, 'Manaus', 'AM'], [/\b(mane garrincha|arena bsb|clube do choro)\b/, 'Brasília', 'DF'], [/\b(baixo augusta)\b/, 'São Paulo', 'SP'], [/\b(beira-?rio|gasometro)\b/, 'Porto Alegre', 'RS'],
+  [/\b(classic hall|marco zero do recife)\b/, 'Recife', 'PE'], [/\b(arena da amazonia|teatro amazonas)\b/, 'Manaus', 'AM'], [/\b(mane garrincha|arena bsb|clube do choro)\b/, 'Brasília', 'DF'], [/\b(baixo augusta|d-?edge sp|d-?edge sao paulo|club d-?edge)\b/, 'São Paulo', 'SP'], [/\b(beira-?rio|gasometro)\b/, 'Porto Alegre', 'RS'],
   [/\b(pepsi on stage|auditorio araujo vianna)\b/, 'Porto Alegre', 'RS'], [/\b(pedreira paulo leminski|opera de arame)\b/, 'Curitiba', 'PR'],
 ];
 // escolas de samba: indicam a cidade da escola, mas valem menos que "em <cidade>" (a escola pode se apresentar em outro lugar)
@@ -41,7 +41,7 @@ const FORA = [
   [/\b(toquio|tokyo|asakusa)\b|浅草|東京/, 'Tóquio', 'Japão'], [/\b(osaka)\b|大阪/, 'Osaka', 'Japão'], [/\b(kobe)\b|神戸/, 'Kobe', 'Japão'], [/\b(nagoya)\b|名古屋/, 'Nagoya', 'Japão'], [/\b(yokohama)\b|横浜/, 'Yokohama', 'Japão'],
   [/\b(buenos aires)\b/, 'Buenos Aires', 'Argentina'], [/\b(montevideu|montevideo)\b/, 'Montevidéu', 'Uruguai'], [/\b(santiago do chile|santiago de chile)\b/, 'Santiago', 'Chile'], [/\b(cidade do mexico|mexico city)\b/, 'Cidade do México', 'México'], [/\b(havana)\b/, 'Havana', 'Cuba'], [/\b(luanda)\b/, 'Luanda', 'Angola'], [/\b(maputo)\b/, 'Maputo', 'Moçambique'], [/\b(praia, cabo verde)\b/, 'Praia', 'Cabo Verde'], [/\b(toronto)\b/, 'Toronto', 'Canadá'], [/\b(montreal)\b/, 'Montreal', 'Canadá'], [/\b(sydney)\b/, 'Sydney', 'Austrália'], [/\b(lagos)\b(?= ,? ?nig| \(nig)/, 'Lagos', 'Nigéria'], [/\b(johannesburg|joanesburgo)\b/, 'Joanesburgo', 'África do Sul'],
 ];
-const PAISES = [[/\b(portugal|portugues(es)?)\b/, 'Portugal'], [/\b(japao|japan|japones(a|es)?)\b|サンバ/, 'Japão'], [/\b(estados unidos|eua|usa|united states)\b/, 'EUA'], [/\b(reino unido|inglaterra|england|uk)\b/, 'Reino Unido'], [/\b(franca|france)\b/, 'França'], [/\b(alemanha|germany)\b/, 'Alemanha'], [/\b(espanha|spain)\b/, 'Espanha'], [/\b(italia|italy)\b/, 'Itália'], [/\b(argentina)\b/, 'Argentina'], [/\b(angola)\b/, 'Angola'], [/\b(mocambique)\b/, 'Moçambique'], [/\b(cabo verde)\b/, 'Cabo Verde'], [/\b(mexico)\b/, 'México'], [/\b(canada)\b/, 'Canadá'], [/\b(africa do sul|south africa)\b/, 'África do Sul'], [/\b(nigeria)\b/, 'Nigéria'], [/\b(holanda|netherlands)\b/, 'Holanda'], [/\b(cuba)\b/, 'Cuba'], [/\b(colombia)\b/, 'Colômbia'], [/\b(australia)\b/, 'Austrália'], [/\b(coreia do sul|south korea)\b/, 'Coreia do Sul']];
+const PAISES = [[/\b(portugal|portugues(es)?)\b/, 'Portugal'], [/\b(japao|japan|japones(a|es)?)\b|サンバ/, 'Japão'], [/\b(estados unidos|eua|usa|united states)\b/, 'EUA'], [/\b(reino unido|inglaterra|england|uk)\b/, 'Reino Unido'], [/\b(franca|france)\b/, 'França'], [/\b(alemanha|germany)\b/, 'Alemanha'], [/\b(espanha|spain)\b/, 'Espanha'], [/\b(italia|italy)\b/, 'Itália'], [/\b(argentina)\b/, 'Argentina'], [/\b(angola)\b/, 'Angola'], [/\b(mocambique)\b/, 'Moçambique'], [/\b(cabo verde)\b/, 'Cabo Verde'], [/\b(mexico)\b/, 'México'], [/\b(canada)\b/, 'Canadá'], [/\b(africa do sul|south africa)\b/, 'África do Sul'], [/\b(nigeria)\b/, 'Nigéria'], [/\b(holanda|netherlands)\b/, 'Holanda'], [/\b(cuba)\b/, 'Cuba'], [/\b(colombia)\b/, 'Colômbia'], [/\b(australia)\b/, 'Austrália'], [/\b(coreia do sul|south korea)\b/, 'Coreia do Sul'], [/\b(suica|switzerland)\b/, 'Suíça'], [/\b(suecia|sweden)\b/, 'Suécia'], [/\b(belgica|belgium)\b/, 'Bélgica'], [/\b(irlanda|ireland)\b/, 'Irlanda'], [/\b(chile)\b/, 'Chile'], [/\b(peru)\b(?! de)/, 'Peru'], [/\b(uganda)\b/, 'Uganda'], [/\b(venezuela)\b/, 'Venezuela'], [/\b(uruguai|uruguay)\b/, 'Uruguai'], [/\b(paraguai|paraguay)\b/, 'Paraguai'], [/\b(china)\b/, 'China'], [/\b(india)\b/, 'Índia'], [/\b(israel)\b/, 'Israel'], [/\b(dubai|emirados)\b/, 'Emirados Árabes']];
 const UFS = new Set('AC AL AP AM BA CE DF ES GO MA MT MS MG PA PB PR PE PI RJ RN RS RO RR SC SP SE TO'.split(' '));
 const INSTIT = /(municipal|prefeitura|c[aâ]mara|cidade|munic[ií]pio|secretaria|governo|festival|carnaval|teatro|sesc|universidade|regi[aã]o|zona|centro|porto|praia|arena|escola|samba|r[eé]veillon|festa|feira|orquestra|bloco|estado|interior|litoral|capital|baixada|grande|tv|r[aá]dio|jornal|di[aá]rio|gazeta|correio|folha|tribuna|portal|not[ií]cias|agenda|virada|semana|anivers[aá]rio)$/i;
 const PREP = /(?:^|\s)(em|no|na|de|da|do|a|à|ao|para|pela|pelo|cidade de|municipio de|capital|interior de|litoral de)\s*$/i;
@@ -188,7 +188,8 @@ const CF = 'musica-locais.json'; let CACHE = {}; try { CACHE = JSON.parse(fs.rea
 export async function localizarTodos(itens, { prazoMs = 6 * 60e3, paralelo = 8 } = {}) {
   const t0 = Date.now(); const est = { titulo: 0, cache: 0, rssVeiculo: 0, wordpress: 0, bing: 0, bingWeb: 0, homeVeiculo: 0, sitemap: 0, direto: 0, materia: 0, jsonld: 0, abertura: 0, corpo: 0, semLink: 0, paywall: 0, erro: 0, loginWall: 0, semCidadeNoTexto: 0, fila: 0 };
   // 1) título e resumo do próprio item
-  for (const i of itens) { const c = []; cidadesNoTexto(i.title, 3, 'título', c); cidadesNoTexto(i.sum, 1.5, 'resumo', c); const d = decidir(c); if (d) { Object.assign(i, { localScore: d.total + 2, cidade: d.cidade, uf: d.uf, pais: d.pais, localComo: 'título/resumo: ' + d.origens.slice(0, 2).join('; ') }); est.titulo++; } }
+  const expo = (t, out) => { for (const m of String(t || '').matchAll(/\b(?:Expo|Festa de |Feira de )([A-ZÁÉÍÓÚÂÊÔÃÕÇ][a-zà-ÿ]{4,})\b/g)) { const k = sem(m[1]); const l = POR_NOME.get(k); if (l && l.length === 1 && !COMUNS.has(k)) out.push({ cidade: l[0].nome, uf: l[0].uf, pais: 'Brasil', peso: 6, origem: 'título ("' + m[0] + '")', pos: m.index }); } };
+  for (const i of itens) { const c = []; expo(i.title, c); cidadesNoTexto(i.title, 3, 'título', c); cidadesNoTexto(i.sum, 1.5, 'resumo', c); const d = decidir(c); if (d) { Object.assign(i, { localScore: d.total + 2, cidade: d.cidade, uf: d.uf, pais: d.pais, localComo: 'título/resumo: ' + d.origens.slice(0, 2).join('; ') }); est.titulo++; } }
   // 2) matéria real para quem ainda não tem cidade
   const fila = itens.filter(i => !i.cidade); let idx = 0;
   const um = async i => {
@@ -226,6 +227,25 @@ export async function localizarTodos(itens, { prazoMs = 6 * 60e3, paralelo = 8 }
     Object.assign(i, r); if (!/^fila|^erro/.test(r.semCidadeMotivo || '')) CACHE[ck] = { t: Date.now(), r };
   };
   await Promise.all(Array.from({ length: paralelo }, async () => { while (idx < fila.length) await um(fila[idx++]); }));
+  // 3) MESMO FATO em outro veículo com link direto (Bing Notícias, público): quando a matéria original não abre
+  //    (link do Google sem caminho público, paywall, 403, página sem texto), lê a matéria irmã e usa a cidade dela
+  est.irmaTentou = 0; est.irmaAchou = 0;
+  const fila2 = itens.filter(i => !i.cidade && !(i.pais && i.pais !== 'Brasil') && /Google Not|paywall|paga|HTTP 4|sem texto|login/.test(i.semCidadeMotivo || '')); let idx2 = 0;
+  const limpo = t => String(t || '').replace(/\s+[·|–—-]\s+[^·|–—-]{2,40}$/, '').replace(/ · News ⟋ RA$/, '').trim();
+  const irma = async i => {
+    if (Date.now() - t0 > prazoMs + 90e3) return; const ck = 'S|' + i.link; let sib = CACHE[ck] && Date.now() - CACHE[ck].t < 3 * 86400e3 ? CACHE[ck].r : null;
+    if (!sib) { sib = { lista: [] }; est.irmaTentou++;
+      try { const tt = limpo(i.title); const { x } = await busca('https://www.bing.com/news/search?format=rss&setlang=pt-br&q=' + encodeURIComponent(tt.slice(0, 110)), 9000);
+        for (const b of x.match(/<item>[\s\S]*?<\/item>/g) || []) { const t = txt((b.match(/<title>([\s\S]*?)<\/title>/) || [])[1]); const l = ent((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || ''); let real = l; try { real = new URL(l).searchParams.get('url') || l; } catch {}
+          let h = ''; try { h = new URL(real).hostname.replace(/^www\./, ''); } catch { continue; }
+          if (!h || /bing\.com|google\./.test(h) || PAYWALL_DOM.test(h) || (i.dom && h.endsWith(i.dom.replace(/^www\./, '')))) continue;
+          const sc = Math.max(simil(t, tt), simil(tt, t)); if (sc >= 0.5) sib.lista.push({ t, l: real, h, sc }); }
+        sib.lista = sib.lista.sort((a, b) => b.sc - a.sc).slice(0, 2); } catch {}
+      CACHE[ck] = { t: Date.now(), r: sib }; }
+    for (const s2 of sib.lista) { const ps = { title: s2.t, sum: '', link: s2.l, dom: s2.h }; await um(ps);
+      if (ps.cidade && (ps.localScore || 0) >= 4 && /título|schema|abertura|parágrafo [12]\b|descri/.test(ps.localComo || '')) { Object.assign(i, { cidade: ps.cidade, uf: ps.uf, pais: ps.pais, localScore: ps.localScore, irma: { veiculo: s2.h, link: s2.l, titulo: s2.t }, localComo: 'mesmo fato em ' + s2.h + ' (achado no Bing Notícias): ' + (ps.localComo || '').replace(/^matéria \([^)]*\): /, '') }); est.irmaAchou++; return; } }
+  };
+  await Promise.all(Array.from({ length: 6 }, async () => { while (idx2 < fila2.length) await irma(fila2[idx2++]); }));
   for (const [k, v] of Object.entries(CACHE)) if (Date.now() - v.t > 7 * 86400e3) delete CACHE[k];
   fs.writeFileSync(CF, JSON.stringify(CACHE)); est.ms = Date.now() - t0; return est;
 }
@@ -248,5 +268,13 @@ export async function linksReais(itens, { prazoMs = 3 * 60e3, paralelo = 8 } = {
 // cidade no nome do veículo regional (ex.: juicysantos.com.br, curitibacult.com.br): só capitais e cidades grandes, só domínio .br
 export function cidadeDoVeiculo(dom) { if (!/\.br$/.test(dom || '')) return null; const base = sem(dom.replace(/^www\./, '').split('.')[0]).replace(/[^a-z]/g, '');
   let best = null; for (const [k, lista] of POR_NOME) { if (k.length < 5 || k.includes(' ') && false) continue; const kk = k.replace(/[^a-z]/g, ''); if (kk.length < 5 || !base.includes(kk)) continue; const c = lista.find(x => x.cap) || (GRANDES.has(k) ? lista[0] : null); if (c && (!best || kk.length > best.kk.length)) best = { ...c, kk }; }
-  if (!best && /diariodorio|riodejaneiro/.test(base)) best = { nome: 'Rio de Janeiro', uf: 'RJ' }; return best; }
+  if (!best && /diariodorio|riodejaneiro/.test(base)) best = { nome: 'Rio de Janeiro', uf: 'RJ' };
+  // município inteiro no domínio (ex.: diaadiaarapongas.com.br): nome único no IBGE, 7+ letras, não é palavra comum
+  if (!best) { for (const [k, lista] of POR_NOME) { const kk = k.replace(/[^a-z]/g, ''); if (kk.length < 7 || lista.length !== 1 || COMUNS.has(k) || lista[0].alias) continue; if (base.includes(kk) && (!best || kk.length > best.kk.length)) best = { ...lista[0], kk }; } }
+  // sede conhecida de veículos regionais cujo nome não traz a cidade
+  if (!best) { const SEDE = { 'midiamax.com.br': ['Campo Grande', 'MS'], 'portalcorreio.com.br': ['João Pessoa', 'PB'], 'jornalpequeno.com.br': ['São Luís', 'MA'], 'paraibaonline.com.br': ['Campina Grande', 'PB'], 'wscom.com.br': ['João Pessoa', 'PB'], 'clickpb.com.br': ['João Pessoa', 'PB'] }; const d = dom.replace(/^www\./, ''); if (SEDE[d]) best = { nome: SEDE[d][0], uf: SEDE[d][1] }; }
+  return best; }
+// órgão público (ex.: al.ce.gov.br -> Ceará) e câmara municipal portuguesa (cm-lagos.pt -> Lagos, Portugal)
+export function localDoOrgao(dom) { const d = String(dom || '').replace(/^www\./, ''); let m = d.match(/(?:^|\.)([a-z]{2})\.gov\.br$/); if (m && UFS.has(m[1].toUpperCase())) return { uf: m[1].toUpperCase(), pista: d };
+  m = d.match(/^cm-([a-z-]+)\.pt$/); if (m) return { cidade: m[1].replace(/-/g, ' ').replace(/(^|\s)\S/g, x => x.toUpperCase()), pais: 'Portugal', pista: d }; return null; }
 export { cidadesNoTexto, decidir, paisNoTexto, estadoNoTexto };
