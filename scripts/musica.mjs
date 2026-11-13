@@ -231,9 +231,21 @@ const jaSetor = new Set([...samba, ...pagode].flatMap(i => [chave(i), ...i.grp.m
 const geral = so1(mus.filter(i => i.setor === 'geral' && !jaSetor.has(chave(i)) && !i.grp.some(g => jaSetor.has(chave(g)))).sort(ord));
 const REG = ['sp', 'rj', 'br', 'int'];
 const porReg = (arr, n = 15) => Object.fromEntries(REG.map(r => { const a = arr.filter(i => i.reg === r); const lo = x => x.slice().sort((p, q) => (!!p.regiaoIncerta - !!q.regiaoIncerta)); return [r, { nome: NOMES[r], quentes: lo(a.filter(i => i.quente)).slice(0, 10).map(vista), itens: lo(a.filter(i => !i.quente)).slice(0, n).map(vista) }]; }));
+// ===== ALERTAS de grandes nomes do samba/pagode: luto, homenagem, lançamento (push prioritário) =====
+const LUTO = /\b(morre|morreu|faleceu|falece|morte d[eoa]|vel[oó]rio|sepultad[oa]|enterrad[oa]|luto|despedida de)\b/i;
+const HOMEN = /\b(homenage(m|ia|iam|ado|ada)|tributo|centen[aá]rio|faria \d+ anos|legado de|celebra (a obra|o legado)|in memoriam)\b/i;
+const LANC = /\b(lan[cç]a|lan[cç]amento|novo (single|[aá]lbum|ep|clipe|dvd|projeto)|nova m[uú]sica|single|[aá]lbum|clipe|dvd|feat\.?|parceria in[eé]dita|estreia)\b/i;
+const alertas = [];
+for (const i of mus) { const t = tit(i) + ' ' + (i.sum || ''); const nome = (t.match(ARTISTAS) || [])[0] || ((/\bsambista\b/i.test(t) && LUTO.test(t)) ? 'sambista' : '');
+  if (!nome || /^(roda de samba|samba de raiz)$/i.test(nome)) continue;
+  const tipo = LUTO.test(tit(i)) ? 'luto' : HOMEN.test(tit(i)) ? 'homenagem' : LANC.test(tit(i)) ? 'lancamento' : null; if (!tipo) continue;
+  // luto só com 2 fontes OU portal grande (nunca alarme falso de morte)
+  const seguro = tipo !== 'luto' || i.confirmado || i.emGrande;
+  alertas.push({ i, tipo, nome, seguro }); }
+const alertasOk = so1(alertas.filter(a => a.seguro).sort((a, b) => ({ luto: 0, homenagem: 1, lancamento: 2 })[a.tipo] - ({ luto: 0, homenagem: 1, lancamento: 2 })[b.tipo] || b.i.ts - a.i.ts).map(a => Object.assign(a.i, { alerta: a.tipo, alertaNome: a.nome })));
 const saida = {
   atualizado: brIso(new Date(agora)),
-  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, maisFalado, agenda,
+  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, maisFalado, agenda, alertas: alertasOk.slice(0, 15).map(i => ({ tipo: i.alerta, nome: i.alertaNome, ...vista(i) })),
   setores: {
     samba: { nome: 'Samba', regioes: porReg(samba) },
     sambaPagode: { nome: 'Samba e Pagode', regioes: porReg(pagode) },
@@ -251,12 +263,15 @@ const cand = [
   ...pagode.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Pagode Quente ' + NOMES[i.reg], tags: ['fire', 'pagode', i.reg] })),
   ...geral.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 3, t: (i.cat === 'DJ' ? '🎧 DJ ' : i.cat === 'Cultura' ? '🎭 Cultura ' : '🎵 Música ') + (i.reg === 'int' ? 'Fora' : 'Brasil'), tags: ['musical_note', i.cat.toLowerCase(), i.reg === 'int' ? 'fora' : 'brasil'] })),
 ].filter(c => !ja.has(chave(c.i)));
-const PRI = { sp: 0, rj: 1, br: 2, int: 3 };
+const ROT = { luto: '🕯️ Luto no samba', homenagem: '🎖️ Homenagem no samba', lancamento: '💿 Lançamento no samba' };
 // cidade no título da notificação (ex.: "🔥 Samba Quente RJ · Cabo Frio, RJ"); sem cidade, mostra o que se sabe (estado, país)
 const ondeCurto = i => i.cidade ? i.cidade + ', ' + (i.pais === 'Brasil' ? i.uf : i.pais) : (i.pais && i.pais !== 'Brasil') ? i.pais : i.ufSoh ? NOME_UF[i.ufSoh] : '';
+const candAlerta = alertasOk.filter(i => !ja.has('alerta:' + chave(i)) && agora - i.ts < 24 * 3600e3).map(i => ({ i, p: i.alerta === 'luto' ? 5 : 4, alerta: true, t: ROT[i.alerta] + (ondeCurto(i) ? ' · ' + ondeCurto(i) : ''), tags: [i.alerta === 'luto' ? 'black_heart' : i.alerta === 'homenagem' ? 'medal_sports' : 'cd', 'alerta', i.alerta] }));
+const PRI = { sp: 0, rj: 1, br: 2, int: 3 };
 for (const c of cand) { const o = ondeCurto(c.i); if (o) c.t += ' · ' + o; }
 const fila = cand.sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
 const envia = async m => { if (TOPIC) { const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: TOPIC, ...m }) }); console.log('push', r.status, m.title); } else console.log('[push simulado]', m.title, '|', m.message.replace(/\n/g, ' / '), '| tags', m.tags.join(',')); };
+for (const c of candAlerta.slice(0, 3)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags }); E.notificadas.unshift('alerta:' + chave(i)); }
 for (const c of fila.slice(0, 6)) {
   const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags });
   E.notificadas.unshift(chave(i));
@@ -267,6 +282,7 @@ if (!TOPIC) E.notificadas = NOTIF0; // simulação (--sem-push) não marca nada 
 fs.writeFileSync(EF, JSON.stringify(E));
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
+console.log('ALERTAS:', alertas.length, 'achados |', alertasOk.length, 'seguros |', alertas.filter(a => !a.seguro).length, 'luto aguardando 2ª fonte |', alertasOk.slice(0, 8).map(i => i.alerta + ': ' + tit(i).slice(0, 60)).join(' / '));
 console.log('AGENDA:', JSON.stringify(agenda.est), '| esta semana', agenda.semana.reduce((n, c) => n + c.eventos.length, 0), 'eventos em', agenda.semana.length, 'cidades | próximas', agenda.proximas.reduce((n, c) => n + c.eventos.length, 0));
 console.log('MAIS FALADO:', JSON.stringify(MF), '| samba', maisFalado.samba.map(t => t.termo).join(', ') || '(nenhum)', '| pagode', maisFalado.pagode.map(t => t.termo).join(', ') || '(nenhum)', '| música', maisFalado.musica.map(t => t.termo).join(', ') || '(nenhum)', '| notícias nossas em alta', mus.filter(i => i.emAlta).length);
 console.log('TRADUÇÃO:', JSON.stringify(TRE), '| títulos estrangeiros', aTraduzir.length, '| traduzidos', aTraduzir.filter(i => i.tituloPt).length);
