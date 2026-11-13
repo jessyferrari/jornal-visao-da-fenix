@@ -197,21 +197,26 @@ fs.writeFileSync('musica.json', JSON.stringify(saida, null, 1));
 for (const [k, t] of Object.entries(E.vistos)) if (agora - t > 7 * 86400e3) delete E.vistos[k];
 // ===== push (tópico separado da música): Quente + confirmado em 2 fontes, organizado por setor e região =====
 // título: "🔥 Samba Quente SP" / "🔥 Pagode Quente RJ" / "🎧 DJ Brasil" ; tags ntfy: setor e região (filtráveis no app)
-const ja = new Set(E.notificadas);
+const NOTIF0 = E.notificadas.slice(); const ja = new Set(E.notificadas);
 const cand = [
   ...samba.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Samba Quente ' + NOMES[i.reg], tags: ['fire', 'samba', i.reg] })),
   ...pagode.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Pagode Quente ' + NOMES[i.reg], tags: ['fire', 'pagode', i.reg] })),
   ...geral.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 3, t: (i.cat === 'DJ' ? '🎧 DJ ' : i.cat === 'Cultura' ? '🎭 Cultura ' : '🎵 Música ') + (i.reg === 'int' ? 'Fora' : 'Brasil'), tags: ['musical_note', i.cat.toLowerCase(), i.reg === 'int' ? 'fora' : 'brasil'] })),
 ].filter(c => !ja.has(chave(c.i)));
 const PRI = { sp: 0, rj: 1, br: 2, int: 3 };
+// cidade no título da notificação (ex.: "🔥 Samba Quente RJ · Cabo Frio, RJ"); sem cidade, mostra o que se sabe (estado, país)
+const ondeCurto = i => i.cidade ? i.cidade + ', ' + (i.pais === 'Brasil' ? i.uf : i.pais) : (i.pais && i.pais !== 'Brasil') ? i.pais : i.ufSoh ? NOME_UF[i.ufSoh] : '';
+for (const c of cand) { const o = ondeCurto(c.i); if (o) c.t += ' · ' + o; }
 const fila = cand.sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
 const envia = async m => { if (TOPIC) { const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: TOPIC, ...m }) }); console.log('push', r.status, m.title); } else console.log('[push simulado]', m.title, '|', m.message.replace(/\n/g, ' / '), '| tags', m.tags.join(',')); };
 for (const c of fila.slice(0, 6)) {
-  const i = c.i; await envia({ title: c.t, message: i.title + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags });
+  const i = c.i; await envia({ title: c.t, message: i.title + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags });
   E.notificadas.unshift(chave(i));
 }
 if (fila.length > 6) { await envia({ title: '🎵 +' + (fila.length - 6) + ' de música', message: fila.slice(6, 16).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + c.i.title).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }); for (const c of fila.slice(6)) E.notificadas.unshift(chave(c.i)); }
-E.notificadas = E.notificadas.slice(0, 2000); fs.writeFileSync(EF, JSON.stringify(E));
+E.notificadas = E.notificadas.slice(0, 2000);
+if (!TOPIC) E.notificadas = NOTIF0; // simulação (--sem-push) não marca nada como notificado
+fs.writeFileSync(EF, JSON.stringify(E));
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
 const fim = { cidadeNoTexto: mus.filter(i => i.cidade && !i.veiculoRegional).length, cidadePeloVeiculo: mus.filter(i => i.veiculoRegional).length, estadoSoh: mus.filter(i => !i.cidade && i.ufSoh).length, exteriorSemCidade: mus.filter(i => /^Exterior/.test(i.local)).length, paisSoh: mus.filter(i => !i.cidade && i.pais && i.pais !== 'Brasil').length, nacional: mus.filter(i => i.local === 'Nacional (sem cidade)').length, assuntoGeral: mus.filter(i => i.local === 'Assunto geral (sem cidade)').length, naoIdent: mus.filter(i => i.local === 'cidade não identificada').length };
