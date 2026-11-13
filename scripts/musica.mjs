@@ -221,6 +221,19 @@ const pub = t => ({ termo: t.termo, fonte: t.fonte, trafego: t.trafego || undefi
 const maisFalado = { fontes: MF, samba: TEND.filter(t => t.setor === 'samba').map(pub), pagode: TEND.filter(t => t.setor === 'pagode').map(pub), musica: TEND.filter(t => t.setor === 'musica').slice(0, 12).map(pub) };
 // ===== agenda semanal de shows e rodas (notícias + Bing Notícias + vitrine pública da Bilheteria Digital) =====
 const agenda = await montarAgenda(mus, { agora, ART: ARTISTAS, localizar: t => { const c = []; cidadesNoTexto(t, 3, 'agenda', c); return decidir(c); } });
+// ===== PLACAR DE FUROS: quanto tempo o fato saiu (fonte menor / jornal viu) antes do 1º portal grande =====
+E.furos = E.furos || {};
+const hm = ms => { const m = Math.round(ms / 60e3); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + String(m % 60).padStart(2, '0') : ''); };
+for (const i of mus) { const todos = [i, ...i.grp]; const peq = todos.filter(x => !x.grande), gr = todos.filter(x => x.grande); if (!peq.length) continue;
+  const k = chave(i); const f = E.furos[k] || (E.furos[k] = { titulo: tit(i), veiculo: i.veic, fonteMenor: Infinity, jornalViu: i.primeiro, portal: null, portalVeiculo: '' });
+  f.fonteMenor = Math.min(f.fonteMenor, ...peq.map(x => x.ts)); f.jornalViu = Math.min(f.jornalViu, i.primeiro);
+  if (gr.length) { const g = gr.sort((a, b) => a.ts - b.ts)[0]; const pt = Math.max(g.ts, 0); if (!f.portal || pt < f.portal) { f.portal = pt; f.portalVeiculo = g.veic; } }
+  i.furo = f.portal ? (f.portal - f.fonteMenor > 5 * 60e3 ? { antes: hm(f.portal - f.fonteMenor), portal: f.portalVeiculo, jornalAntes: f.portal > f.jornalViu ? hm(f.portal - f.jornalViu) : null } : { antes: null, portal: f.portalVeiculo }) : { semPortalHa: hm(agora - f.fonteMenor) }; }
+for (const [k, f] of Object.entries(E.furos)) if (agora - (f.fonteMenor === Infinity ? agora : f.fonteMenor) > 7 * 86400e3 || f.fonteMenor === null) delete E.furos[k];
+const FV = Object.values(E.furos).filter(f => f.portal && f.portal - f.fonteMenor > 5 * 60e3).map(f => ({ ...f, ms: f.portal - f.fonteMenor })).sort((a, b) => b.ms - a.ms);
+const med = FV.length ? FV.map(f => f.ms).sort((a, b) => a - b)[Math.floor(FV.length / 2)] : 0;
+const placar = { periodo: 'últimos 7 dias', furos: FV.length, chegaramDepois: Object.values(E.furos).filter(f => f.portal && f.portal - f.fonteMenor <= 5 * 60e3).length, aindaSoNoJornal: Object.values(E.furos).filter(f => !f.portal).length, medianaAntes: FV.length ? hm(med) : null,
+  melhores: FV.slice(0, 5).map(f => ({ titulo: f.titulo, veiculo: f.veiculo, antes: hm(f.ms), portal: f.portalVeiculo })) };
 const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts);
 const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = chave(i); if (s.has(k) || i.grp.some(g => s.has(chave(g)))) return false; s.add(k); return true; }); };
 // ===== FAZER POST: abre o painel do agente (reel-olimpia / Fênix OS) com a notícia preenchida; nada é gerado sem ela clicar lá =====
@@ -229,7 +242,7 @@ const PAINEL = (process.env.FENIX_PAINEL_URL || 'http://127.0.0.1:4317').replace
 const fazerPost = i => { const outros = [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link))].slice(0, 3);
   const q = new URLSearchParams({ origem: 'jornal-musica', titulo: tit(i).slice(0, 200), noticia: i.link, texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic + ' · ' + brIso(new Date(i.ts)).replace('T', ' ').slice(0, 16) + ' (Brasília)', (() => { const r = String(i.sum || '').replace(/&nbsp;|\u00a0/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim(); return r && !r.startsWith(i.title.slice(0, 40)) ? r.slice(0, 600) : ''; })()].filter(Boolean).join('\n') });
   if (outros.length) q.set('links', outros.join('\n')); return PAINEL + '?' + q.toString(); };
-const vista = i => ({ fazerPost: fazerPost(i), local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
+const vista = i => ({ fazerPost: fazerPost(i), furo: i.furo, local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
 const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
 const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (!!b.emAlta - !!a.emAlta) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts)));
@@ -251,7 +264,7 @@ for (const i of mus) { const t = tit(i) + ' ' + (i.sum || ''); const nome = (t.m
 const alertasOk = so1(alertas.filter(a => a.seguro).sort((a, b) => ({ luto: 0, homenagem: 1, lancamento: 2 })[a.tipo] - ({ luto: 0, homenagem: 1, lancamento: 2 })[b.tipo] || b.i.ts - a.i.ts).map(a => Object.assign(a.i, { alerta: a.tipo, alertaNome: a.nome })));
 const saida = {
   atualizado: brIso(new Date(agora)),
-  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, maisFalado, agenda, alertas: alertasOk.slice(0, 15).map(i => ({ tipo: i.alerta, nome: i.alertaNome, ...vista(i) })),
+  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, placar, maisFalado, agenda, alertas: alertasOk.slice(0, 15).map(i => ({ tipo: i.alerta, nome: i.alertaNome, ...vista(i) })),
   setores: {
     samba: { nome: 'Samba', regioes: porReg(samba) },
     sambaPagode: { nome: 'Samba e Pagode', regioes: porReg(pagode) },
@@ -295,6 +308,7 @@ if (!TOPIC && !process.env.MUSICA_TESTE_ESTADO) { E.notificadas = NOTIF0; E.madr
 fs.writeFileSync(EF, JSON.stringify(E));
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
+console.log('PLACAR:', JSON.stringify({ furos: placar.furos, chegaramDepois: placar.chegaramDepois, aindaSoNoJornal: placar.aindaSoNoJornal, medianaAntes: placar.medianaAntes }), '|', placar.melhores.slice(0, 3).map(m => m.antes + ' antes de ' + m.portal + ': ' + m.titulo.slice(0, 50)).join(' / '));
 console.log('ALERTAS:', alertas.length, 'achados |', alertasOk.length, 'seguros |', alertas.filter(a => !a.seguro).length, 'luto aguardando 2ª fonte |', alertasOk.slice(0, 8).map(i => i.alerta + ': ' + tit(i).slice(0, 60)).join(' / '));
 console.log('AGENDA:', JSON.stringify(agenda.est), '| esta semana', agenda.semana.reduce((n, c) => n + c.eventos.length, 0), 'eventos em', agenda.semana.length, 'cidades | próximas', agenda.proximas.reduce((n, c) => n + c.eventos.length, 0));
 console.log('MAIS FALADO:', JSON.stringify(MF), '| samba', maisFalado.samba.map(t => t.termo).join(', ') || '(nenhum)', '| pagode', maisFalado.pagode.map(t => t.termo).join(', ') || '(nenhum)', '| música', maisFalado.musica.map(t => t.termo).join(', ') || '(nenhum)', '| notícias nossas em alta', mus.filter(i => i.emAlta).length);
