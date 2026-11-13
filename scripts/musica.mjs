@@ -222,17 +222,19 @@ const maisFalado = { fontes: MF, samba: TEND.filter(t => t.setor === 'samba').ma
 // ===== agenda semanal de shows e rodas (notícias + Bing Notícias + vitrine pública da Bilheteria Digital) =====
 const agenda = await montarAgenda(mus, { agora, ART: ARTISTAS, localizar: t => { const c = []; cidadesNoTexto(t, 3, 'agenda', c); return decidir(c); } });
 // ===== PLACAR DE FUROS: quanto tempo o fato saiu (fonte menor / jornal viu) antes do 1º portal grande =====
-E.furos = E.furos || {};
+E.furos = {}; // recalculado por fato a cada rodada a partir das datas reais de publicação (48 h de janela)
+
 const hm = ms => { const m = Math.round(ms / 60e3); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + String(m % 60).padStart(2, '0') : ''); };
 for (const i of mus) { const todos = [i, ...i.grp]; const peq = todos.filter(x => !x.grande), gr = todos.filter(x => x.grande); if (!peq.length) continue;
-  const k = chave(i); const f = E.furos[k] || (E.furos[k] = { titulo: tit(i), veiculo: i.veic, fonteMenor: Infinity, jornalViu: i.primeiro, portal: null, portalVeiculo: '' });
+  const k = [i, ...i.grp].map(chave).sort()[0]; const f = E.furos[k] || (E.furos[k] = { titulo: tit(i), veiculo: i.veic, fonteMenor: Infinity, jornalViu: i.primeiro, portal: null, portalVeiculo: '' });
   f.fonteMenor = Math.min(f.fonteMenor, ...peq.map(x => x.ts)); f.jornalViu = Math.min(f.jornalViu, i.primeiro);
   if (gr.length) { const g = gr.sort((a, b) => a.ts - b.ts)[0]; const pt = Math.max(g.ts, 0); if (!f.portal || pt < f.portal) { f.portal = pt; f.portalVeiculo = g.veic; } }
   i.furo = f.portal ? (f.portal - f.fonteMenor > 5 * 60e3 ? { antes: hm(f.portal - f.fonteMenor), portal: f.portalVeiculo, jornalAntes: f.portal > f.jornalViu ? hm(f.portal - f.jornalViu) : null } : { antes: null, portal: f.portalVeiculo }) : { semPortalHa: hm(agora - f.fonteMenor) }; }
 for (const [k, f] of Object.entries(E.furos)) if (agora - (f.fonteMenor === Infinity ? agora : f.fonteMenor) > 7 * 86400e3 || f.fonteMenor === null) delete E.furos[k];
-const FV = Object.values(E.furos).filter(f => f.portal && f.portal - f.fonteMenor > 5 * 60e3).map(f => ({ ...f, ms: f.portal - f.fonteMenor })).sort((a, b) => b.ms - a.ms);
+const FV0 = Object.values(E.furos).filter(f => f.portal && f.portal - f.fonteMenor > 5 * 60e3).map(f => ({ ...f, ms: f.portal - f.fonteMenor })).sort((a, b) => b.ms - a.ms);
+const FV = FV0.filter((f, n) => FV0.findIndex(g => g.portal === f.portal && g.portalVeiculo === f.portalVeiculo) === n); // mesmo fato com 2 títulos conta 1
 const med = FV.length ? FV.map(f => f.ms).sort((a, b) => a - b)[Math.floor(FV.length / 2)] : 0;
-const placar = { periodo: 'últimos 7 dias', furos: FV.length, chegaramDepois: Object.values(E.furos).filter(f => f.portal && f.portal - f.fonteMenor <= 5 * 60e3).length, aindaSoNoJornal: Object.values(E.furos).filter(f => !f.portal).length, medianaAntes: FV.length ? hm(med) : null,
+const placar = { periodo: 'últimas 48 h', furos: FV.length, chegaramDepois: Object.values(E.furos).filter(f => f.portal && f.portal - f.fonteMenor <= 5 * 60e3).length, aindaSoNoJornal: Object.values(E.furos).filter(f => !f.portal).length, medianaAntes: FV.length ? hm(med) : null,
   melhores: FV.slice(0, 5).map(f => ({ titulo: f.titulo, veiculo: f.veiculo, antes: hm(f.ms), portal: f.portalVeiculo })) };
 const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts);
 const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = chave(i); if (s.has(k) || i.grp.some(g => s.has(chave(g)))) return false; s.add(k); return true; }); };
