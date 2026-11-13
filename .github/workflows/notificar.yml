@@ -18,6 +18,13 @@ jobs:
         with: { node-version: 20 }
       - run: node scripts/robo.mjs
         env: { NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}' }
+      - name: Música (samba, pagode, música, DJs e cultura) + notificações do canal Música
+        run: timeout 480 node scripts/musica.mjs || echo "música falhou nesta rodada; a edição geral segue normal"
+        env:
+          NTFY_TOPIC_MUSICA: '${{ secrets.NTFY_TOPIC_MUSICA }}'
+          NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
+          NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
+          FENIX_PAINEL_URL: '${{ secrets.FENIX_PAINEL_URL }}'
       - name: Imagem de compartilhamento (og) da edição
         run: npm i --no-save --no-audit --no-fund playwright-core@1 >/dev/null && node scripts/og.mjs || echo "og falhou, mantém a anterior"
       - name: Status privado dos feeds (só no Actions)
@@ -33,7 +40,7 @@ jobs:
         run: |
           git config user.name "jornal-bot"; git config user.email "actions@users.noreply.github.com"
           # nunca publica status-privado.md no Pages
-          git add edicao.json traducoes.json imagens.json porque-importa.json feed.xml sitemap.xml index.html app.js notificadas.json og.jpg og-quadrado.jpg og/estado.json sw.js
+          git add edicao.json traducoes.json imagens.json porque-importa.json feed.xml sitemap.xml index.html app.js notificadas.json og.jpg og-quadrado.jpg og/estado.json sw.js musica.json musica-estado.json musica-locais.json musica-traducoes.json
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"
           git pull --rebase -q && git push -q

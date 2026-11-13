@@ -48,6 +48,11 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(networkFirst(e.request, { cacheKey: './edicao.json' }));
     return;
   }
+  // musica.json: sempre a versão nova (cache só offline)
+  if (/\/musica\.json$/.test(path)) {
+    e.respondWith(networkFirst(e.request, { cacheKey: './musica.json' }));
+    return;
+  }
 
   const isShell =
     isNav ||

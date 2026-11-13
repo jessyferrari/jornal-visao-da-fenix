@@ -190,6 +190,10 @@ if (changed) {
       }
       return '<script type="application/ld+json">' + JSON.stringify(ld) + '</script>';
     });
+    // atalho fixo para a seção Música (fora do #root do app, não mexe no app.js)
+    const MUS = '<a id="jf-musica" href="musica.html" style="position:fixed;right:14px;bottom:14px;z-index:9999;background:#d4af37;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎵 Música</a>';
+    html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '');
+    html = html.replace(/(<body[^>]*>)/, '$1' + MUS);
     fs.writeFileSync('index.html', html);
     // nova versão do service worker a cada edição → bust do cache no cliente
     if (fs.existsSync('sw.js')) {
