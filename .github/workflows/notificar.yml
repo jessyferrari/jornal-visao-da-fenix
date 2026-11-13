@@ -17,7 +17,11 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: node scripts/robo.mjs
-        env: { NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}' }
+        env:
+          NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}'
+          NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
+          NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
+          FENIX_PAINEL_URL: '${{ secrets.FENIX_PAINEL_URL }}'
       - name: Música (samba, pagode, música, DJs e cultura) + notificações do canal Música
         run: timeout 480 node scripts/musica.mjs || echo "música falhou nesta rodada; a edição geral segue normal"
         env:
