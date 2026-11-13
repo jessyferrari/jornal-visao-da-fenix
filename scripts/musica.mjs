@@ -2,7 +2,7 @@
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
 import fs from 'node:fs';
-import { localizarTodos, cidadeDoVeiculo, estadoNoTexto } from './musica-local.mjs';
+import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
 const TOPIC = process.argv.includes('--sem-push') ? '' : (process.env.NTFY_TOPIC_MUSICA || '');
@@ -134,8 +134,10 @@ const mus = itens.filter(i => i.setor);
 // ===== CIDADE de cada notícia (texto real: título, matéria, schema.org, bairros e casas de show) =====
 const semCidadeAntes = mus.filter(i => i.regiaoIncerta).length;
 const EST = await localizarTodos(mus);
+const LINKS = await linksReais(mus);
 const NUF = { SP: 'sp', RJ: 'rj' };
 for (const i of mus) {
+  if (/news\.google\.com/.test(i.link)) i.linkGoogle = i.link;
   if (i.linkReal) i.link = i.linkReal;
   if (i.cidade || (i.pais && i.pais !== 'Brasil')) {
     i.reg = i.pais && i.pais !== 'Brasil' ? 'int' : (NUF[i.uf] || 'br'); i.regiaoIncerta = false; i.regiaoMotivo = 'cidade: ' + (i.localComo || '');
@@ -173,12 +175,14 @@ for (const i of mus) {
   i.quente = !i.emGrande && agora - i.ts < 12 * 3600e3;
   i.confirmado = i.fontes >= 2;
 }
-const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (b.ts - a.ts);
+const direto = i => !/news\.google\.com/.test(i.link);
+// mesmo fato em vários veículos: o representante preferido é o que tem link direto (abre a matéria sem passar pelo Google)
+const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts);
 const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = chave(i); if (s.has(k) || i.grp.some(g => s.has(chave(g)))) return false; s.add(k); return true; }); };
-const vista = i => ({ local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, titulo: i.title, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: g.title, link: g.link })), via: i.rot });
+const vista = i => ({ local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, titulo: i.title, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: g.title, link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
 const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
-const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (b.fontes - a.fontes) || (b.ts - a.ts)));
+const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts)));
 const jaSetor = new Set([...samba, ...pagode].flatMap(i => [chave(i), ...i.grp.map(chave)]));
 const geral = so1(mus.filter(i => i.setor === 'geral' && !jaSetor.has(chave(i)) && !i.grp.some(g => jaSetor.has(chave(g)))).sort(ord));
 const REG = ['sp', 'rj', 'br', 'int'];
@@ -219,6 +223,7 @@ if (!TOPIC) E.notificadas = NOTIF0; // simulação (--sem-push) não marca nada 
 fs.writeFileSync(EF, JSON.stringify(E));
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
+console.log('LINKS diretos:', JSON.stringify(LINKS), '| com link direto', mus.filter(direto).length, 'de', mus.length, '| ainda pelo Google Notícias', mus.filter(i => !direto(i)).length);
 const fim = { cidadeNoTexto: mus.filter(i => i.cidade && !i.veiculoRegional).length, cidadePeloVeiculo: mus.filter(i => i.veiculoRegional).length, estadoSoh: mus.filter(i => !i.cidade && i.ufSoh).length, exteriorSemCidade: mus.filter(i => /^Exterior/.test(i.local)).length, paisSoh: mus.filter(i => !i.cidade && i.pais && i.pais !== 'Brasil').length, nacional: mus.filter(i => i.local === 'Nacional (sem cidade)').length, assuntoGeral: mus.filter(i => i.local === 'Assunto geral (sem cidade)').length, naoIdent: mus.filter(i => i.local === 'cidade não identificada').length };
 console.log('LOCAL depois:', JSON.stringify(fim), 'de', mus.length, '| tempo total', ((Date.now() - T0) / 1000).toFixed(1) + ' s');
 console.log('fontes ok', STATUS.filter(s => s.ok).length, 'de', STATUS.length, '| itens 48h', itens.length, '| de música', mus.length);

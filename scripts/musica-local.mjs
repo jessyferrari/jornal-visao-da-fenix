@@ -229,6 +229,22 @@ export async function localizarTodos(itens, { prazoMs = 6 * 60e3, paralelo = 8 }
   for (const [k, v] of Object.entries(CACHE)) if (Date.now() - v.t > 7 * 86400e3) delete CACHE[k];
   fs.writeFileSync(CF, JSON.stringify(CACHE)); est.ms = Date.now() - t0; return est;
 }
+// ===== link real (direto no veículo) para TODOS os itens do Google Notícias, inclusive os já localizados pelo título =====
+// mesmas rotas públicas do resolver (RSS do veículo, WordPress, Bing Notícias, página inicial, sitemap); cache de 7 dias
+export async function linksReais(itens, { prazoMs = 3 * 60e3, paralelo = 8 } = {}) {
+  const t0 = Date.now(); const est = { jaTinha: 0, cache: 0, achou: 0, naoAchou: 0, fila: 0 };
+  const fila = itens.filter(i => /news\.google\.com/.test(i.link) && !i.linkReal); est.jaTinha = itens.filter(i => i.linkReal).length; let idx = 0;
+  const um = async i => {
+    const ck = 'L|' + i.link; const c = CACHE[ck];
+    if (c && Date.now() - c.t < 7 * 86400e3) { est.cache++; if (c.r.linkReal) { i.linkReal = c.r.linkReal; i.linkVia = c.r.via; } return; }
+    if (Date.now() - t0 > prazoMs) { est.fila++; return; }
+    let z = null; try { z = await resolver(i); } catch {}
+    if (z) { i.linkReal = z.link; i.linkVia = z.via; est.achou++; } else est.naoAchou++;
+    CACHE[ck] = { t: Date.now(), r: z ? { linkReal: z.link, via: z.via } : {} };
+  };
+  await Promise.all(Array.from({ length: paralelo }, async () => { while (idx < fila.length) await um(fila[idx++]); }));
+  fs.writeFileSync(CF, JSON.stringify(CACHE)); est.ms = Date.now() - t0; return est;
+}
 // cidade no nome do veículo regional (ex.: juicysantos.com.br, curitibacult.com.br): só capitais e cidades grandes, só domínio .br
 export function cidadeDoVeiculo(dom) { if (!/\.br$/.test(dom || '')) return null; const base = sem(dom.replace(/^www\./, '').split('.')[0]).replace(/[^a-z]/g, '');
   let best = null; for (const [k, lista] of POR_NOME) { if (k.length < 5 || k.includes(' ') && false) continue; const kk = k.replace(/[^a-z]/g, ''); if (kk.length < 5 || !base.includes(kk)) continue; const c = lista.find(x => x.cap) || (GRANDES.has(k) ? lista[0] : null); if (c && (!best || kk.length > best.kk.length)) best = { ...c, kk }; }
