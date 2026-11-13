@@ -1,19 +1,27 @@
 // Protótipo do setor MÚSICA do Jornal Visão da Fênix (Samba > Samba e Pagode > Música geral).
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
-// Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC e sem --sem-push)
+// Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
 import fs from 'node:fs';
-const TOPIC = process.argv.includes('--sem-push') ? '' : (process.env.NTFY_TOPIC || '');
+// Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
+const TOPIC = process.argv.includes('--sem-push') ? '' : (process.env.NTFY_TOPIC_MUSICA || '');
 const UA = { 'user-agent': 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)' };
 const gn = (q, hl = 'pt-BR', gl = 'BR', ceid = 'BR:pt-419') => 'https://news.google.com/rss/search?q=' + encodeURIComponent(q + ' when:2d') + `&hl=${hl}&gl=${gl}&ceid=${ceid}`;
 const bing = q => 'https://www.bing.com/news/search?format=rss&q=' + encodeURIComponent(q);
-// [rótulo, url, setor padrão, tipo]
+// [rótulo, url, setor padrão, tipo, dica de região]
 const FONTES = [
+  ['Google Notícias: samba em SP', gn('samba "São Paulo"'), 'samba', 'busca', 'sp'],
+  ['Google Notícias: samba no RJ', gn('samba "Rio de Janeiro"'), 'samba', 'busca', 'rj'],
+  ['Google Notícias: pagode em SP', gn('pagode "São Paulo"'), 'pagode', 'busca', 'sp'],
+  ['Google Notícias: pagode no RJ', gn('pagode "Rio de Janeiro"'), 'pagode', 'busca', 'rj'],
+  ['Google Notícias: DJs', gn('DJ set OR "música eletrônica" OR "DJ brasileiro"'), 'geral', 'busca'],
+  ['Google Notícias: cultura e editais', gn('edital música OR "Lei Paulo Gustavo" OR "Lei Rouanet" música OR "Aldir Blanc" música'), 'geral', 'busca'],
+  ['Google Notícias: DJs (EUA)', gn('DJ new album OR festival lineup', 'en-US', 'US', 'US:en'), 'geral', 'busca', 'int'],
   ['Google Notícias: roda de samba', gn('"roda de samba"'), 'samba', 'busca'],
   ['Google Notícias: samba de mesa', gn('"samba de mesa" OR "samba de raiz"'), 'samba', 'busca'],
   ['Google Notícias: sambista', gn('sambista OR "escola de samba" OR "grupo de samba"'), 'samba', 'busca'],
-  ['Google Notícias: samba (Portugal)', gn('samba', 'pt-PT', 'PT', 'PT:pt-150'), 'samba', 'busca'],
-  ['Google Notícias: samba (EUA)', gn('"samba" brazilian music', 'en-US', 'US', 'US:en'), 'samba', 'busca'],
-  ['Google Notícias: samba (Japão)', gn('サンバ', 'ja', 'JP', 'JP:ja'), 'samba', 'busca'],
+  ['Google Notícias: samba (Portugal)', gn('samba', 'pt-PT', 'PT', 'PT:pt-150'), 'samba', 'busca', 'int'],
+  ['Google Notícias: samba (EUA)', gn('"samba" brazilian music', 'en-US', 'US', 'US:en'), 'samba', 'busca', 'int'],
+  ['Google Notícias: samba (Japão)', gn('サンバ', 'ja', 'JP', 'JP:ja'), 'samba', 'busca', 'int'],
   ['Google Notícias: pagode', gn('pagode show OR pagodeiro OR "grupo de pagode"'), 'pagode', 'busca'],
   ['Google Notícias: música lançamento', gn('lança single OR "novo álbum" OR "turnê" cantor'), 'geral', 'busca'],
   ['Bing Notícias: roda de samba', bing('"roda de samba"'), 'samba', 'busca'],
@@ -22,7 +30,7 @@ const FONTES = [
   ['Ecad', 'https://www.ecad.org.br/feed/', 'geral', 'setor'],
   ['Rolling Stone Brasil', 'https://rollingstone.com.br/feed/', 'geral', 'site'],
   ['Tenho Mais Discos Que Amigos', 'https://www.tenhomaisdiscosqueamigos.com/feed/', 'geral', 'site'],
-  ['O Dia', 'https://odia.ig.com.br/rss.xml', 'geral', 'site'],
+  ['O Dia', 'https://odia.ig.com.br/rss.xml', 'geral', 'site', 'rj'],
   ['The Rio Times', 'https://www.riotimesonline.com/feed/', 'geral', 'site'],
   ['Reddit r/samba', 'https://www.reddit.com/r/samba/new/.rss', 'samba', 'social'],
   // portais grandes: lidos só para saber se o fato já "estourou" (tira o selo Quente)
@@ -46,7 +54,7 @@ const tag = (b, n) => { const m = b.match(new RegExp('<' + n + '(?:\\s[^>]*)?>([
 const brIso = d => new Intl.DateTimeFormat('sv-SE', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }).format(d).replace(' ', 'T');
 const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
 const STATUS = [];
-async function ler([rot, url, setor, tipo]) {
+async function ler([rot, url, setor, tipo, dica = '']) {
   const st = { rot, tipo, ok: false, itens: 0 }; STATUS.push(st);
   try {
     const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) }); if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -60,7 +68,7 @@ async function ler([rot, url, setor, tipo]) {
       const bs = b.match(/<news:Source>([\s\S]*?)<\/news:Source>/i); if (bs) { veic = txt(bs[1]); }
       if (/bing\.com\/news\/apiclick/.test(link)) { try { const real = new URL(link).searchParams.get('url'); if (real) { link = real; dom = host(real); } } catch {} }
       if (tipo === 'social' && /youtube/.test(url)) veic = rot.replace(' (YouTube)', '') + ' no YouTube';
-      out.push({ title, link, ts, veic, dom, rot, tipo, setor0: setor, sum: tag(b, 'description').slice(0, 240) || tag(b, 'media:description').slice(0, 240) });
+      out.push({ title, link, ts, veic, dom, rot, tipo, dica, setor0: setor, sum: tag(b, 'description').slice(0, 240) || tag(b, 'media:description').slice(0, 240) });
     }
     st.ok = true; st.itens = out.length; return out;
   } catch (e) { st.erro = e.message; return []; }
@@ -72,8 +80,42 @@ const GENERICO = new Set('carnaval samba pagode grupo especial festival show bra
 const ents = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')).filter(w => !GENERICO.has(w)));
 const mesmo = (a, b) => { if (a.dom && a.dom === b.dom) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; if (/[\u3040-\u30ff]/.test(a.title)) return true; for (const e of a.e) if (b.e.has(e)) return true; return false; };
 
+// ===== REGIÃO: SP, RJ, Resto do Brasil, Internacional =====
+const sem = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+const R_SP = [/\bsao paulo\b(?! futebol)/, /\bpaulist(a|ano|ana|anos|anas)\b/, /\bgrande sp\b/, /\babc paulista\b/, /\b(em|de|para) santos\b/, /\bcampinas\b/, /\bguarulhos\b/, /\bosasco\b/, /\bsorocaba\b/, /\bribeirao preto\b/, /\bsao bernardo\b/, /\bsanto andre\b/, /\bjundiai\b/, /\bvila madalena\b/, /\bgrajau\b/, /\btatuape\b/, /\bbixiga\b/, /\bbarra funda\b/, /\banhembi\b/, /\bitaquera\b/, /\bcapao redondo\b/, /\bcasa de francisca\b/, /\bvai-?vai\b/, /\bmancha verde\b/, /\bgavioes da fiel\b/, /\brosas de ouro\b/, /\bmocidade alegre\b/, /\bimperio de casa verde\b/, /\btom maior\b/, /\bx-?9 paulistana\b/, /\bdragoes da real\b/, /\baguia de ouro\b/, /\bcamisa verde e branco\b/, /\bsamba da vela\b/, /\bmaria zelia\b/, /\bzona (leste|norte|sul|oeste) de sao paulo\b/, /\bbaixada santista\b/, /\bsanta cecilia\b/, /\bcaraguatatuba\b/, /\blitoral norte de sp\b/, /\bubatuba\b/, /\bperdizes\b/, /\bpompeia\b/, /\bvila mariana\b/, /\bmooca\b/, /\bbras\b(?! de)/, /\bpenha\b/];
+const R_RJ = [/\brio de janeiro\b/, /\bcariocas?\b/, /\bniteroi\b/, /\bsao goncalo\b/, /\bduque de caxias\b/, /\bnova iguacu\b/, /\bnilopolis\b/, /\bmadureira\b/, /\bsapucai\b/, /\bpedra do sal\b/, /\bcacique de ramos\b/, /\brenascenca clube\b/, /\boswaldo cruz\b/, /\bmangueira\b/, /\bportela\b/, /\bsalgueiro\b/, /\bbeija-?flor\b/, /\bvila isabel\b/, /\bimperatriz leopoldinense\b/, /\bgrande rio\b/, /\bviradouro\b/, /\bmocidade independente\b/, /\bunidos da tijuca\b/, /\btuiuti\b/, /\bcopacabana\b/, /\bipanema\b/, /\btijuca\b/, /\bbaixada fluminense\b/, /\bzona (norte|sul|oeste) do rio\b/, /\bcidade do samba\b/, /\bjacarepagua\b/, /\bsao pedro da aldeia\b/, /\bbuzios\b/, /\bcabo frio\b/, /\bpetropolis\b/, /\bvolta redonda\b/, /\bcampos dos goytacazes\b/, /\bmacae\b/, /\bbarra da tijuca\b/, /\brecreio\b/, /\bmeier\b/, /\bbangu\b/, /\bcampo grande \(rj\)/];
+const R_BR = [/\bbahia\b/, /\bbaian[oa]s?\b/, /\bsalvador\b/, /\brecife\b/, /\bpernambuc/, /\bolinda\b/, /\bminas gerais\b/, /\bmineir[oa]s?\b/, /\bbelo horizonte\b/, /\bcuritiba\b/, /\bparana\b/, /\bporto alegre\b/, /\brio grande do (sul|norte)\b/, /\bgauch[oa]s?\b/, /\bflorianopolis\b/, /\bsanta catarina\b/, /\bbrasilia\b/, /\bdistrito federal\b/, /\bgoias\b/, /\bgoiania\b/, /\bfortaleza\b/, /\bceara\b/, /\bsao luis\b/, /\bmaranhao\b/, /\bbelem\b/, /\bmanaus\b/, /\bamazonas\b/, /\bjoao pessoa\b/, /\bparaiba\b/, /\bnatal\b(?! de)/, /\bmaceio\b/, /\balagoas\b/, /\baracaju\b/, /\bsergipe\b/, /\bteresina\b/, /\bpiaui\b/, /\bespirito santo\b/, /\bcapixaba/, /\bcampo grande\b/, /\bmato grosso\b/, /\bcuiaba\b/, /\bporto velho\b/, /\bmacapa\b/, /\btocantins\b/, /\buberlandia\b/, /\bjuiz de fora\b/, /\blondrina\b/, /\bnordest/, /\bvitoria da conquista\b/, /\bfeira de santana\b/, /\bpelotas\b/, /\bmineirinho\b/, /\bleopoldina\b/, /\bcaxias do sul\b/, /\bjoinville\b/, /\bmaringa\b/, /\bcampina grande\b/, /\bpetrolina\b/, /\bilheus\b/, /\bmontes claros\b/];
+const R_INT = [/\bportugal\b/, /\blisboa\b/, /\bjapao\b/, /\btoquio\b/, /\btokyo\b/, /\basakusa\b/, /\bestados unidos\b/, /\beua\b/, /\bnova york\b/, /\bnew york\b/, /\blos angeles\b/, /\bmiami\b/, /\blas vegas\b/, /\blondres\b/, /\blondon\b/, /\bparis\b/, /\bfranca\b/, /\balemanha\b/, /\bberlim\b/, /\beuropa\b/, /\bargentina\b/, /\bbuenos aires\b/, /\bangola\b/, /\bluanda\b/, /\bmocambique\b/, /\bcabo verde\b/, /\bmexico\b/, /\bespanha\b/, /\bitalia\b/, /\bcanada\b/, /\baustralia\b/, /\bjapan\b/, /\buk\b/, /\bnetherlands\b/, /\bholanda\b/, /\bcuba\b/, /\bcolombia\b/];
+// localidade da fonte (peso 1): veículos claramente regionais
+const DOM_REG = { 'odia.ig.com.br': 'rj', 'juicysantos.com.br': 'sp', 'jornaldaparaiba.com.br': 'br', 'bahianoticias.com.br': 'br', 'oimparcial.com.br': 'br', 'diariodoscampos.com.br': 'br', 'dgabc.com.br': 'sp', 'riotimesonline.com': '' };
+const NOME_REG = [[/grande abc|diario de s\.? ?paulo|sp ?agora|prefeitura de sao paulo|agora sp/i, 'sp'], [/^o dia$|extra online|prefeitura do rio|jornal do brasil|diario do rio|riotur/i, 'rj'], [/bahia|paraiba|pernambuco|minas|parana|goias|ceara|maranhao|para$|amazonas|alagoas|sergipe|piaui|espirito santo|sim noticias|mural do parana|imparcial|joao pessoa/i, 'br']];
+const NOMES = { sp: 'SP', rj: 'RJ', br: 'Brasil', int: 'Internacional' };
+function regiao(i) {
+  const t = ' ' + sem(i.title + ' ' + i.sum) + ' ', tt = ' ' + sem(i.title) + ' ', orig = i.title + ' ' + i.sum;
+  const pt = { sp: 0, rj: 0, br: 0, int: 0 }, pos = { sp: 1e9, rj: 1e9, br: 1e9, int: 1e9 }, motivos = [];
+  const marca = (k, lista) => { for (const re of lista) { const m = t.match(re); if (m) { pt[k] += tt.match(re) ? 3 : 2; pos[k] = Math.min(pos[k], m.index); motivos.push(NOMES[k] + ': ' + m[0].trim()); } } };
+  marca('sp', R_SP); marca('rj', R_RJ); marca('br', R_BR); marca('int', R_INT);
+  if (/\bSP\b/.test(orig)) { pt.sp += 2; motivos.push('SP: sigla SP'); }
+  if (/\bRJ\b/.test(orig)) { pt.rj += 2; motivos.push('RJ: sigla RJ'); }
+  if (/\b(no|do|ao|pelo) Rio\b(?! (Grande|Branco|Negro|Verde|Claro|Preto|S[aã]o Francisco|Tiet[eê]|Amazonas|Doce|Paran[aá]))/.test(orig)) { pt.rj += 2; motivos.push('RJ: "no/do Rio"'); }
+  if (/[\u3040-\u30ff\u4e00-\u9fff]/.test(orig)) { pt.int += 3; motivos.push('Internacional: texto em japonês'); }
+  const dr = DOM_REG[i.dom] ?? (NOME_REG.find(([re]) => re.test(sem(i.veic))) || [])[1];
+  if (dr) { pt[dr] += 1; motivos.push(NOMES[dr] + ': fonte ' + (i.dom || i.veic)); }
+  // dica da busca: só desempata quando o texto não diz o local; a dica 'int' só vale para veículo de fora (.br ou nome com Brasil não conta)
+  const BR_DOM = /\.br$|globo\.com$|instagram\.com$|youtube\.com$|metropoles\.com$|r7\.com$|srzd\.com$/;
+  const dicaOk = i.dica && (i.dica !== 'int' || (/Portugal/.test(i.rot) ? /\.pt$/.test(i.dom) : (!BR_DOM.test(i.dom) && !/brasil|brazil/i.test(i.veic))));
+  if (dicaOk) { pt[i.dica] += i.dica === 'int' ? 2 : 0.5; motivos.push(NOMES[i.dica] + ': busca ' + i.rot.replace('Google Notícias: ', '')); }
+  // fonte estrangeira (domínio fora do .br e sem dica) conta como internacional fraco
+    const ord = Object.entries(pt).sort((a, b) => (b[1] - a[1]) || (pos[a[0]] - pos[b[0]]));
+  const [top, sc] = ord[0];
+  i.regiaoMotivo = motivos.slice(0, 4).join('; ') || 'sem local no texto, padrão Brasil';
+  i.regiaoAmbigua = sc > 0 && ord[1][1] === sc;
+  i.regiaoIncerta = sc < 1;
+  if (sc < 1) i.regiaoMotivo = 'sem local no texto, padrão Brasil' + (motivos.length ? ' (' + motivos.join('; ') + ')' : '');
+  return sc < 1 ? 'br' : top;
+}
 const agora = Date.now();
-let itens = (await Promise.all(FONTES.map(ler))).flat().filter(i => agora - i.ts < 48 * 3600e3 && i.ts <= agora + 5 * 60e3);
+let itens = (await Promise.all(FONTES.map(ler))).flat().filter(i => agora - i.ts < 48 * 3600e3 && i.ts <= agora + 5 * 60e3 && !/^[＜<]画像/.test(i.title));
 // dedupe por link e por (veículo + título)
 const vistoK = new Set(); itens = itens.filter(i => { const k = i.link.split('?')[0] + '|' + (i.veic + i.title).toLowerCase(); const k2 = (i.veic + '|' + i.title).toLowerCase(); if (vistoK.has(k) || vistoK.has(k2)) return false; vistoK.add(k); vistoK.add(k2); return true; });
 for (const i of itens) {
@@ -81,10 +123,13 @@ for (const i of itens) {
   i.grande = i.tipo === 'grande' || GRANDES.test(i.dom) || GRANDES_NOME.test(i.veic);
   i.setor = FORA.test(blob) ? null : SAMBA.test(blob) ? 'samba' : PAGODE.test(blob) ? 'pagode' : MUSICA.test(blob) ? 'geral' : null;
   if (i.setor === 'samba' && PAGODE.test(blob) && !/roda de samba|samba de mesa|samba de raiz|escola de samba/i.test(blob)) i.setor = 'pagode';
+  if (i.setor) { i.reg = regiao(i); i.cat = /\bdjs?\b|eletr[oô]nica|techno|house music|rave/i.test(blob) ? 'DJ' : /edital|lei paulo gustavo|rouanet|aldir blanc|minist[eé]rio da cultura|secretaria de cultura|patrim[oô]nio|museu|teatro|cultura\b/i.test(blob) ? 'Cultura' : 'Música'; }
 }
 const mus = itens.filter(i => i.setor);
 // agrupa o mesmo fato (veículos diferentes)
 for (const i of mus) { i.grp = mus.filter(j => j !== i && mesmo(i, j)); }
+// sem local no próprio texto: herda a região de outro veículo que deu o mesmo fato e diz o local
+for (const i of mus) if (i.regiaoIncerta) { const g = i.grp.find(j => !j.regiaoIncerta); if (g) { i.reg = g.reg; i.regiaoIncerta = false; i.regiaoMotivo = NOMES[g.reg] + ': herdado de ' + g.veic + ' (' + g.regiaoMotivo.split(';')[0] + ')'; } }
 // primeira vez que o jornal viu cada fato (estado salvo entre rodadas)
 const EF = 'musica-estado.json'; let E = { vistos: {}, notificadas: [] }; try { E = { vistos: {}, notificadas: [], ...JSON.parse(fs.readFileSync(EF, 'utf8')) }; } catch {}
 const chave = i => [...i.w].sort().slice(0, 6).join('-');
@@ -99,30 +144,45 @@ for (const i of mus) {
 }
 const ord = (a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (b.ts - a.ts);
 const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = chave(i); if (s.has(k) || i.grp.some(g => s.has(chave(g)))) return false; s.add(k); return true; }); };
-const vista = i => ({ titulo: i.title, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: g.title, link: g.link })), via: i.rot });
+const vista = i => ({ titulo: i.title, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: g.title, link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
-const pagode = so1(mus.filter(i => i.setor === 'pagode' || i.setor === 'samba').sort((a, b) => (b.fontes - a.fontes) || (b.ts - a.ts)));
-const geral = so1(mus.filter(i => i.setor === 'geral').sort(ord));
+const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
+const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (b.fontes - a.fontes) || (b.ts - a.ts)));
+const jaSetor = new Set([...samba, ...pagode].flatMap(i => [chave(i), ...i.grp.map(chave)]));
+const geral = so1(mus.filter(i => i.setor === 'geral' && !jaSetor.has(chave(i)) && !i.grp.some(g => jaSetor.has(chave(g)))).sort(ord));
+const REG = ['sp', 'rj', 'br', 'int'];
+const porReg = (arr, n = 15) => Object.fromEntries(REG.map(r => { const a = arr.filter(i => i.reg === r); const lo = x => x.slice().sort((p, q) => (!!p.regiaoIncerta - !!q.regiaoIncerta)); return [r, { nome: NOMES[r], quentes: lo(a.filter(i => i.quente)).slice(0, 10).map(vista), itens: lo(a.filter(i => !i.quente)).slice(0, n).map(vista) }]; }));
 const saida = {
   atualizado: brIso(new Date(agora)),
+  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES,
   setores: {
-    samba: { quentes: samba.filter(i => i.quente).slice(0, 10).map(vista), itens: samba.slice(0, 30).map(vista) },
-    sambaPagode: { maisFalado: pagode.slice(0, 15).map(vista), quentes: pagode.filter(i => i.quente).slice(0, 10).map(vista) },
-    geral: { itens: geral.slice(0, 30).map(vista) },
+    samba: { nome: 'Samba', regioes: porReg(samba) },
+    sambaPagode: { nome: 'Samba e Pagode', regioes: porReg(pagode) },
+    geral: { nome: 'Música geral, DJs e cultura', brasil: geral.filter(i => i.reg !== 'int').slice(0, 30).map(vista), fora: geral.filter(i => i.reg === 'int').slice(0, 20).map(vista) },
   },
 };
 fs.writeFileSync('musica.json', JSON.stringify(saida, null, 1));
-// limpeza do estado: 7 dias
 for (const [k, t] of Object.entries(E.vistos)) if (agora - t > 7 * 86400e3) delete E.vistos[k];
-// ===== push: só Quente + confirmado em 2 fontes, no máximo 3 por rodada =====
-const ja = new Set(E.notificadas); const pushes = samba.filter(i => i.quente && i.confirmado && !ja.has(chave(i))).slice(0, 3);
-for (const i of pushes) {
-  const m = { title: 'QUENTE · Samba · ' + i.title, message: i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília) · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', '), click: i.link, priority: 4, tags: ['fire', 'musical_note'] };
-  if (TOPIC) { const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: TOPIC, ...m }) }); console.log('push', r.status, m.title); }
-  else console.log('[push simulado]', m.title, '|', m.message);
+// ===== push (tópico separado da música): Quente + confirmado em 2 fontes, organizado por setor e região =====
+// título: "🔥 Samba Quente SP" / "🔥 Pagode Quente RJ" / "🎧 DJ Brasil" ; tags ntfy: setor e região (filtráveis no app)
+const ja = new Set(E.notificadas);
+const cand = [
+  ...samba.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Samba Quente ' + NOMES[i.reg], tags: ['fire', 'samba', i.reg] })),
+  ...pagode.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Pagode Quente ' + NOMES[i.reg], tags: ['fire', 'pagode', i.reg] })),
+  ...geral.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 3, t: (i.cat === 'DJ' ? '🎧 DJ ' : i.cat === 'Cultura' ? '🎭 Cultura ' : '🎵 Música ') + (i.reg === 'int' ? 'Fora' : 'Brasil'), tags: ['musical_note', i.cat.toLowerCase(), i.reg === 'int' ? 'fora' : 'brasil'] })),
+].filter(c => !ja.has(chave(c.i)));
+const PRI = { sp: 0, rj: 1, br: 2, int: 3 };
+const fila = cand.sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
+const envia = async m => { if (TOPIC) { const r = await fetch('https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: TOPIC, ...m }) }); console.log('push', r.status, m.title); } else console.log('[push simulado]', m.title, '|', m.message.replace(/\n/g, ' / '), '| tags', m.tags.join(',')); };
+for (const c of fila.slice(0, 6)) {
+  const i = c.i; await envia({ title: c.t, message: i.title + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags });
   E.notificadas.unshift(chave(i));
 }
+if (fila.length > 6) { await envia({ title: '🎵 +' + (fila.length - 6) + ' de música', message: fila.slice(6, 16).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + c.i.title).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }); for (const c of fila.slice(6)) E.notificadas.unshift(chave(c.i)); }
 E.notificadas = E.notificadas.slice(0, 2000); fs.writeFileSync(EF, JSON.stringify(E));
 console.log('fontes ok', STATUS.filter(s => s.ok).length, 'de', STATUS.length, '| itens 48h', itens.length, '| de música', mus.length);
 for (const s of STATUS) console.log(' ', s.ok ? 'ok ' : 'ERR', String(s.itens).padStart(3), s.tipo.padEnd(6), s.rot, s.erro || '');
+const cont = arr => REG.map(r => NOMES[r] + ' ' + arr.filter(i => i.reg === r).length + ' (quentes ' + arr.filter(i => i.reg === r && i.quente).length + ')').join(' | ');
+console.log('SAMBA          ', cont(samba)); console.log('SAMBA E PAGODE ', cont(pagode)); console.log('GERAL          ', 'Brasil ' + geral.filter(i => i.reg !== 'int').length + ' | Fora ' + geral.filter(i => i.reg === 'int').length + ' | DJ ' + geral.filter(i => i.cat === 'DJ').length + ' | Cultura ' + geral.filter(i => i.cat === 'Cultura').length);
+console.log('região ambígua', mus.filter(i => i.regiaoAmbigua).length, '| sem local (padrão Brasil)', mus.filter(i => i.regiaoIncerta).length);
 console.log('samba', samba.length, '(quentes', samba.filter(i => i.quente).length, ', quentes confirmados', samba.filter(i => i.quente && i.confirmado).length, ') | samba e pagode', pagode.length, '| geral', geral.length);
