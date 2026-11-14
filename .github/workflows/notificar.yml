@@ -61,7 +61,18 @@ jobs:
           git add -A busca 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"
-          git pull --rebase -q && git push -q
+          # 14/11: antes um conflito no rebase (ex.: sw.js/traducoes.json mudados por outro commit) perdia a rodada em silêncio.
+          # Agora, nos arquivos gerados, vale a versão desta rodada (-X theirs no rebase) e, se mesmo assim falhar, o passo falha visível.
+          ok=0
+          for i in 1 2 3; do
+            if git pull --rebase -X theirs -q; then
+              if git push -q; then ok=1; break; fi
+            else
+              git rebase --abort 2>/dev/null || true
+            fi
+            echo "publicação: tentativa $i falhou, tentando de novo"; sleep $((i*5))
+          done
+          if [ "$ok" != "1" ]; then echo "::error::edição não publicada nesta rodada (conflito ou push recusado)"; exit 1; fi
           gh api -X POST repos/${{ github.repository }}/pages/builds >/dev/null || echo "build do Pages será disparado pelo push"
 
   proxima:
