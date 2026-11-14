@@ -278,26 +278,52 @@ const CMD = process.env.NTFY_TOPIC_COMANDO || '', ASS = process.env.NTFY_ASSINAT
 const PAINEL = (process.env.FENIX_PAINEL_URL || 'http://127.0.0.1:4317').replace(/\/$/, '') + '/fenix-os/painel/direto.html';
 const { createHash, createHmac } = await import('node:crypto');
 // REGRA DE VERDADE: só notícia com 2+ fontes (veículos diferentes) ganha 'Sim, publicar' e 'Fazer post'; com 1 fonte vai só como aviso 'em apuração'
-const botoes = i => { const acoes = []; const fontes = (i.cov && i.cov.n) || 1; if (fontes < 2) return {};
+// botões SEMPRE visíveis (14/11): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração (abre o jornal)
+const botoes = i => { const acoes = []; const fontes = (i.cov && i.cov.n) || 1;
+  const ver = { action: 'view', label: 'Ver notícia', url: i.link, clear: false };
+  if (fontes < 2 || !CMD || !ASS) return { actions: [ver, { action: 'view', label: fontes < 2 ? '🔎 Em apuração' : 'Abrir jornal', url: B, clear: false }] };
   const texto = [i.title, 'Veículo: ' + i.src + ' · ' + fmtB(i.pub), i.sum ? String(i.sum).slice(0, 300) : ''].filter(Boolean).join('\n').slice(0, 500);
   if (CMD && ASS) { const id = createHash('sha1').update(i.link).digest('hex').slice(0, 12), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), base = { id, sig, titulo: String(i.title).slice(0, 160) }, fsig = createHmac('sha256', ASS).update(id + '|fontes=' + fontes).digest('hex').slice(0, 32);
     acoes.push({ action: 'http', label: '✅ Sim, publicar', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, fontes, fsig, link: i.link, links: '', texto }), clear: true });
-    acoes.push({ action: 'http', label: 'Não', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true });
-    acoes.push({ action: 'view', label: 'Fazer post', url: PAINEL + '?' + new URLSearchParams({ origem: 'jornal-geral', fontes: String(fontes), titulo: String(i.title).slice(0, 200), noticia: i.link, texto }).toString(), clear: false }); }
+    acoes.push(ver);
+    acoes.push({ action: 'http', label: 'Não', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true }); }   // 'Fazer post' continua no painel do agente e na página do jornal (ntfy aceita só 3 botões)
   return acoes.length ? { actions: acoes } : {}; };
 // logo O.S Olimpia Shakur em cada notificação (campo icon do ntfy; o ícone do app na barra de status é do próprio ntfy e não muda)
-const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy.png';
-const post = m => fetch('https://ntfy.sh/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:TOPIC,icon:ICONE,...m})}).then(r => { if (!r.ok) throw new Error('ntfy ' + r.status); });
+const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png';
+const ABRIR = { action: 'view', label: 'Abrir jornal', url: B, clear: false };
+// envio sem perder notícia (14/11): tenta de novo com espera crescente (respeita Retry-After do ntfy), nunca derruba o robô;
+// devolve true/false. O que não saiu NÃO é marcado como avisado e volta na rodada seguinte. 1,5 s entre avisos.
+const espera = ms => new Promise(z => setTimeout(z, ms));
+const FALHAS = [];
+const post = async m => {
+  const corpo = JSON.stringify({ topic: TOPIC, icon: ICONE, actions: [ABRIR], ...m });
+  for (let t = 0; t < 5; t++) {
+    try { const r = await fetch(process.env.NTFY_SERVIDOR || 'https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
+      if (r.ok) { await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }
+      if (r.status !== 429 && r.status < 500) { FALHAS.push(r.status + ' ' + m.title); console.log('push recusado', r.status, m.title); return false; }
+      const ra = +(r.headers.get('retry-after') || 0); await espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1));
+    } catch (e) { await espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); }
+  }
+  FALHAS.push('5 tentativas: ' + m.title); console.log('push não saiu depois de 5 tentativas (volta na próxima rodada):', m.title); return false;
+};
 const hojeBR = brIso(new Date(now)).slice(0, 10), horaBR = +brIso(new Date(now)).slice(11, 13);
 if (!seed && horaBR === 7 && st.edicao1min !== hojeBR) {
   const top = [...all].filter(i => (!i.lang || i.tr) && now - i.ts < 18*3600e3).sort((a, b) => b.score - a.score); const vis = new Set(); const t5 = [];
   for (const i of top) { if (t5.length >= 5) break; if (vis.has(i.key) || i.grp.some(g => vis.has(g.key))) continue; vis.add(i.key); t5.push(i); }
-  if (t5.length) { await post({ title: 'Edição de 1 minuto · ' + hojeBR.slice(8, 10) + '/' + hojeBR.slice(5, 7), message: t5.map((i, n) => (n + 1) + '. ' + i.title + ' (' + i.src + (i.cov.n > 1 ? ', ' + i.cov.n + ' veículos' : '') + ')').join('\n'), click: B, priority: 4, tags: ['sunrise', 'newspaper'] }); st.edicao1min = hojeBR; console.log('edição de 1 minuto enviada'); }
+  if (t5.length && await post({ title: 'Edição de 1 minuto · ' + hojeBR.slice(8, 10) + '/' + hojeBR.slice(5, 7), message: t5.map((i, n) => (n + 1) + '. ' + i.title + ' (' + i.src + (i.cov.n > 1 ? ', ' + i.cov.n + ' veículos' : '') + ')').join('\n'), click: B, priority: 4, tags: ['sunrise', 'newspaper'] })) { st.edicao1min = hojeBR; console.log('edição de 1 minuto enviada'); }
 }
+const naoSaiu = new Set();   // chaves de notícias cujo aviso falhou: não entram em 'vistos' e voltam na próxima rodada
+let enviados = 0;
 if (!seed) {
-  for (const i of novos.slice(0,5)) await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem botão de post)' : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
-  const extra = novos.slice(5);
-  if (extra.length) await post({ title: '+' + extra.length + ' notícias novas no Jornal', message: extra.slice(0,12).map(i => '• ' + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')').join('\n'), click: B, priority: 2, tags: ['newspaper'] });
+  // URGENTE sempre primeiro (novos já vem ordenado: urgente, depois mais recente)
+  for (const i of novos.slice(0,5)) { const ok = await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+    if (ok) enviados++; else naoSaiu.add(i.key); }
+  // o resto vai INTEIRO em resumos (nada cortado em 12): cada resumo cabe no limite de 4.000 caracteres do ntfy
+  const extra = novos.slice(5); const partes = []; let atual = [], tam = 0;
+  for (const i of extra) { const l = '• ' + (i.urg ? 'URGENTE · ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
+  if (atual.length) partes.push(atual);
+  for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
+    if (ok) enviados++; else for (const [i] of pt) naoSaiu.add(i.key); }
 }
-console.log('push enviados', seed ? 0 : Math.min(novos.length,5) + (novos.length > 5 ? 1 : 0), 'novos', novos.length);
-fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k)), ...st.vistos].slice(0,6000) }));
+console.log('push enviados', enviados, 'novos', novos.length, '| não saíram (voltam na próxima rodada):', naoSaiu.size, FALHAS.length ? '| falhas: ' + FALHAS.join(' / ') : '');
+fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k) && !naoSaiu.has(k)), ...st.vistos].slice(0,6000) }));

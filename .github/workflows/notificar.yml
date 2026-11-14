@@ -11,7 +11,7 @@ concurrency: { group: robo-jornal, cancel-in-progress: false }
 jobs:
   robo:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 16
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -29,6 +29,9 @@ jobs:
           NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
           NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
           FENIX_PAINEL_URL: '${{ secrets.FENIX_PAINEL_URL }}'
+      - name: Paradas por gênero (1 vez por hora; samba primeiro; só fontes públicas)
+        run: |
+          if [ "$(date -u +%M)" -lt 15 ] || [ ! -f paradas.json ]; then PARADAS_LOOKUPS=40 timeout 270 node scripts/paradas.mjs || echo "paradas falharam nesta rodada; fica a anterior"; else echo "paradas: só na rodada do início da hora"; fi
       - name: Imagem de compartilhamento (og) da edição
         run: npm i --no-save --no-audit --no-fund playwright-core@1 >/dev/null && node scripts/og.mjs || echo "og falhou, mantém a anterior"
       - name: Status privado dos feeds (só no Actions)
@@ -45,6 +48,7 @@ jobs:
           git config user.name "jornal-bot"; git config user.email "actions@users.noreply.github.com"
           # nunca publica status-privado.md no Pages
           git add edicao.json traducoes.json imagens.json porque-importa.json feed.xml sitemap.xml index.html app.js notificadas.json og.jpg og-quadrado.jpg og/estado.json sw.js musica.json musica-estado.json musica-locais.json musica-traducoes.json
+          git add paradas.json paradas-generos.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"
           git pull --rebase -q && git push -q

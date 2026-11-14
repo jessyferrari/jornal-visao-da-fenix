@@ -296,7 +296,10 @@ const botoesPublicar = i => { if (!CMD || !ASS || !podePublicar(i.fontes)) retur
   const base = { id, sig, titulo: tit(i).slice(0, 160) }; const fontes = i.fontes, fsig = assinarFontes(ASS, id, fontes);
   const pub = { acao: 'publicar', ...base, fontes, fsig, link: i.link, links: [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 2).join('\n'), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n').slice(0, 400) };
   return [{ action: 'http', label: '✅ Sim, publicar', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify(pub), clear: true }, { action: 'http', label: 'Não', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true }]; };
-const acoesPost = i => podePublicar(i.fontes) ? [...botoesPublicar(i), { action: 'view', label: 'Fazer post', url: fazerPost(i), clear: false }] : [];
+// botões SEMPRE visíveis (14/11): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração (abre a página da Música)
+const MUSICA_URL = 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html';
+const acoesPost = i => { const ver = { action: 'view', label: 'Ver notícia', url: i.link, clear: false }; const b = botoesPublicar(i);
+  return b.length ? [b[0], ver, b[1]] : [ver, { action: 'view', label: podePublicar(i.fontes) ? 'Abrir Música' : '🔎 Em apuração', url: MUSICA_URL, clear: false }]; };
 const vista = i => ({ id: idNoticia(i), fazerPost: podePublicar(i.fontes) ? fazerPost(i) : undefined, emApuracao: podePublicar(i.fontes) ? undefined : true, djf: i.djf ? i.djf.tipo + ': ' + i.djf.nome : undefined, furo: i.furo, local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
 const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
@@ -354,11 +357,19 @@ const jaAlerta = new Set([...candAlerta.map(c => chave(c.i)), ...[...ja].filter(
 const fila = cand.filter(c => !jaAlerta.has(chave(c.i))).sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
 // canal de destino: São Paulo vai SÓ para o canal SP (NTFY_TOPIC_MUSICA + '-sp'); RJ, resto do Brasil e Internacional no canal Música
 // logo O.S Olimpia Shakur em cada notificação (campo icon do ntfy)
-const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy.png';
+const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png';
 const TOPIC_SP = topicoSP(TOPIC || 'simulado'); const NOME_CANAL = { sp: 'Música SP', mus: 'Música' };
-const ENVIADOS = { mus: 0, sp: 0 };
+const ENVIADOS = { mus: 0, sp: 0 }; const FALHOU = [];   // o que não saiu NÃO é marcado como avisado: volta na próxima rodada
 const envia = async (m, reg = '') => { const canal = reg === 'sp' && TOPIC_SP ? 'sp' : 'mus'; ENVIADOS[canal]++;
-  if (TOPIC) { const topic = destino(reg, TOPIC); let r; for (let t = 0; t < 4; t++) { r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, icon: ICONE, ...m }) }); if (r.status !== 429) break; await new Promise(z => setTimeout(z, 6000 * (t + 1))); } console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title); await new Promise(z => setTimeout(z, 1500)); return r.ok; } /* ntfy.sh limita rajada (429): espera e tenta de novo */
+  if (TOPIC) { const topic = destino(reg, TOPIC); const corpo = JSON.stringify({ topic, icon: ICONE, actions: [{ action: 'view', label: 'Abrir Música', url: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', clear: false }], ...m });
+    // sem perder notícia: 5 tentativas com espera crescente (respeita Retry-After), erro de rede não derruba o robô
+    for (let t = 0; t < 5; t++) { try { const r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
+        console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title);
+        if (r.ok) { await new Promise(z => setTimeout(z, +(process.env.NTFY_PAUSA_MS || 1500))); return true; }
+        if (r.status !== 429 && r.status < 500) break;
+        const ra = +(r.headers.get('retry-after') || 0); await new Promise(z => setTimeout(z, ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)));
+      } catch (e) { console.log('push erro de rede (' + e.message + '), tentando de novo:', m.title); await new Promise(z => setTimeout(z, (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1))); } }
+    ENVIADOS[canal]--; FALHOU.push(m.title); return false; }
   console.log('[push simulado → ' + NOME_CANAL[canal] + ']', m.title, '|', String(m.message || '').replace(/\n/g, ' / '), '| tags', (m.tags || []).join(',') + (m.actions ? ' | botões ' + m.actions.map(a => a.label).join(' / ') : '')); return false; };
 // aviso de uma vez só (no canal Música que ela já assina) com o botão para assinar o canal Música SP; marcado no estado só se o ntfy aceitou
 if (!E.avisoSP && TOPIC_SP) { const a = avisoSP(NTFY_SRV, TOPIC || 'simulado'); if (a && (await envia(a))) E.avisoSP = brIso(new Date(agora)); }
@@ -366,19 +377,26 @@ if (!E.avisoSP && TOPIC_SP) { const a = avisoSP(NTFY_SRV, TOPIC || 'simulado'); 
 const hArg = process.argv.indexOf('--hora'); const horaBR = hArg > 0 ? +process.argv[hArg + 1] : new Date(agora - 3 * 3600e3).getUTCHours();
 const silencio = horaBR >= 23 || horaBR < 7; E.madrugada = E.madrugada || [];
 const segura = (c) => { E.madrugada.push({ t: c.t, reg: c.i.reg === 'sp' ? 'sp' : '', titulo: tit(c.i), link: c.i.link, k: (c.alerta ? 'alerta:' : '') + chave(c.i) }); E.notificadas.unshift((c.alerta ? 'alerta:' : '') + chave(c.i)); };
-if (!silencio && E.madrugada.length) { for (const rg of ['sp', '']) { const m = E.madrugada.filter(x => (x.reg === 'sp' ? 'sp' : '') === rg); if (m.length) await envia({ title: '🌅 Música da madrugada' + (rg === 'sp' ? ' SP' : '') + ': ' + m.length + (m.length > 1 ? ' notícias' : ' notícia'), message: m.slice(0, 10).map(x => '• ' + x.t.replace(/^\S+ /, '') + ': ' + x.titulo).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 3, tags: ['sunrise', 'resumo'] }, rg); } E.madrugada = []; }
+if (!silencio && E.madrugada.length) { for (const rg of ['sp', '']) { const m = E.madrugada.filter(x => (x.reg === 'sp' ? 'sp' : '') === rg); if (!m.length) continue;
+    // a lista inteira, em partes de até 3.800 caracteres; só sai do estado o que o ntfy aceitou
+    const linhas = m.map(x => '• ' + x.t.replace(/^\S+ /, '') + ': ' + x.titulo); const partes = []; let at = [], tam = 0;
+    for (const [n, l] of linhas.entries()) { if (at.length && tam + l.length > 3800) { partes.push(at); at = []; tam = 0; } at.push(n); tam += l.length + 1; } if (at.length) partes.push(at);
+    for (const [k, pt] of partes.entries()) { const ok = await envia({ title: '🌅 Música da madrugada' + (rg === 'sp' ? ' SP' : '') + ': ' + m.length + (m.length > 1 ? ' notícias' : ' notícia') + (partes.length > 1 ? ' (' + (k + 1) + '/' + partes.length + ')' : ''), message: pt.map(n => linhas[n]).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 3, tags: ['sunrise', 'resumo'] }, rg);
+      if (ok || !TOPIC) { const sai = new Set(pt.map(n => m[n])); E.madrugada = E.madrugada.filter(x => !sai.has(x)); } } } }
 console.log('SILÊNCIO:', silencio ? 'sim (hora ' + horaBR + 'h Brasília): só Quente confirmado e luto confirmado' : 'não (hora ' + horaBR + 'h Brasília)');
-for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' ? (segura(c), false) : true)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags, actions: acoesPost(i) }, i.reg); E.notificadas.unshift('alerta:' + chave(i), chave(i)); }
+for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' ? (segura(c), false) : true)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags, actions: acoesPost(i) }, i.reg).then(ok => ok || !TOPIC ? (E.notificadas.unshift('alerta:' + chave(i), chave(i)), true) : false); }
 for (const c of fila.slice(0, 6)) {
-  const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags, actions: acoesPost(i) }, i.reg);
-  E.notificadas.unshift(chave(i));
+  const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags, actions: acoesPost(i) }, i.reg).then(ok => { if (ok || !TOPIC) E.notificadas.unshift(chave(i)); });
 }
 if (fila.length > 6 && silencio) { for (const c of fila.slice(6, 16)) segura(c); for (const c of fila.slice(16)) E.notificadas.unshift(chave(c.i)); }
-else if (fila.length > 6) { const resto = fila.slice(6); for (const rg of ['sp', '']) { const l = resto.filter(c => (c.i.reg === 'sp' ? 'sp' : '') === rg); if (l.length) await envia({ title: '🎵 +' + l.length + ' de música' + (rg === 'sp' ? ' SP' : ''), message: l.slice(0, 10).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + tit(c.i)).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }, rg); } for (const c of resto) E.notificadas.unshift(chave(c.i)); }
+else if (fila.length > 6) { const resto = fila.slice(6); for (const rg of ['sp', '']) { const l = resto.filter(c => (c.i.reg === 'sp' ? 'sp' : '') === rg); if (!l.length) continue; const partes = []; let at = [], tam = 0;   // a lista INTEIRA, em partes de até 3.800 caracteres (limite do ntfy)
+    for (const c of l) { const x = '• ' + c.t.replace(/^\S+ /, '') + ': ' + tit(c.i); if (at.length && tam + x.length > 3800) { partes.push(at); at = []; tam = 0; } at.push([c, x]); tam += x.length + 1; } if (at.length) partes.push(at);
+    for (const [n, pt] of partes.entries()) { const ok = await envia({ title: '🎵 +' + pt.length + ' de música' + (rg === 'sp' ? ' SP' : '') + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }, rg);
+      if (ok || !TOPIC) for (const [c] of pt) E.notificadas.unshift(chave(c.i)); } } }
 E.notificadas = E.notificadas.slice(0, 2000);
 if (!TOPIC && !process.env.MUSICA_TESTE_ESTADO) { E.notificadas = NOTIF0; E.madrugada = MAD0; } // simulação (--sem-push) não marca nada como notificado
 fs.writeFileSync(EF, JSON.stringify(E));
-console.log('PUSH por canal:', JSON.stringify(ENVIADOS), '| aviso Música SP:', E.avisoSP ? 'já enviado (' + E.avisoSP + ')' : 'ainda não');
+console.log('PUSH por canal:', JSON.stringify(ENVIADOS), FALHOU.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHOU.join(' / ') : '| nenhum falhou', '| aviso Música SP:', E.avisoSP ? 'já enviado (' + E.avisoSP + ')' : 'ainda não');
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
 console.log('PLACAR:', JSON.stringify({ furos: placar.furos, chegaramDepois: placar.chegaramDepois, aindaSoNoJornal: placar.aindaSoNoJornal, medianaAntes: placar.medianaAntes }), '|', placar.melhores.slice(0, 3).map(m => m.antes + ' antes de ' + m.portal + ': ' + m.titulo.slice(0, 50)).join(' / '));
