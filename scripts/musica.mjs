@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
+import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato } from './musica-regras.mjs';
 import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto, cidadesNoTexto, decidir } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
@@ -28,6 +29,10 @@ const FONTES = [
   ['Google Notícias: samba (Japão)', gn('サンバ', 'ja', 'JP', 'JP:ja'), 'samba', 'busca', 'int'],
   ['Google Notícias: pagode', gn('pagode show OR pagodeiro OR "grupo de pagode"'), 'pagode', 'busca'],
   ['Google Notícias: música lançamento', gn('lança single OR "novo álbum" OR "turnê" cantor'), 'geral', 'busca'],
+  // anúncios que saem primeiro em perfil de artista (gravação de DVD/audiovisual, show, lançamento): buscas públicas dirigidas
+  ['Google Notícias: gravação de DVD/audiovisual', gn('("gravação de DVD" OR "gravação do DVD" OR "grava DVD" OR "novo DVD" OR audiovisual) (pagode OR samba OR sambista OR pagodeiro)'), 'pagode', 'busca'],
+  ['Google Notícias: artistas anunciam', gn('("Alexandre Pires" OR Thiaguinho OR Péricles OR "Menos é Mais" OR Ferrugem OR Dilsinho OR "Sorriso Maroto" OR Mumuzinho OR "Xande de Pilares" OR "Diogo Nogueira" OR "Zeca Pagodinho" OR "Jorge Aragão" OR "Grupo Revelação" OR Belo) (anuncia OR grava OR gravação OR lança OR turnê OR audiovisual)'), 'pagode', 'busca'],
+  ['Bing Notícias: gravação de DVD', bing('"gravação de DVD" pagode OR samba'), 'pagode', 'busca'],
   ['Bing Notícias: roda de samba', bing('"roda de samba"'), 'samba', 'busca'],
   ['Bing Notícias: pagode', bing('pagode grupo show'), 'pagode', 'busca'],
   ['Abramus', 'https://www.abramus.org.br/feed/', 'geral', 'setor'],
@@ -77,6 +82,31 @@ async function ler([rot, url, setor, tipo, dica = '']) {
     st.ok = true; st.itens = out.length; return out;
   } catch (e) { st.erro = e.message; return []; }
 }
+// ===== Ticket360: evento novo de samba/pagode posto à venda (ex.: "Sampagode Gravação de DVD Alexandre Pires") =====
+// Sitemap público de eventos (robots.txt: search=yes, Allow: /), com data de atualização; só os IDs mais novos (evento recém-criado)
+// e só samba/pagode/gravação. Abre no máximo 10 páginas públicas de evento para ler nome, data e local (schema.org MusicEvent).
+const T360_RE = /pagode|samba|sambista|batuke|partido alto|grava[cç][aã]o d[eo] (dvd|audiovisual)|audiovisual|roda de/i;
+async function lerTicket360() {
+  const rot = 'Ticket360: eventos novos de samba e pagode', st = { rot, tipo: 'ingresso', ok: false, itens: 0 }; STATUS.push(st);
+  try {
+    const r = await fetch('https://www.ticket360.com.br/sitemap/eventos.xml', { headers: UA, signal: AbortSignal.timeout(20000) }); if (!r.ok) throw new Error('HTTP ' + r.status);
+    const ev = [...(await r.text()).matchAll(/<loc>([^<]+)<\/loc>\s*<lastmod>([^<]+)<\/lastmod>/g)].map(m => ({ link: m[1], id: +((m[1].match(/evento\/(\d+)/) || [])[1] || 0), ts: Date.parse(m[2]), slug: (m[1].split('/')[5] || '').replace(/^ingressos-para-/, '').replace(/-/g, ' ') }));
+    const ids = ev.map(e => e.id).sort((a, b) => b - a); const corte = ids[Math.min(59, ids.length - 1)] || 0;
+    const novos = ev.filter(e => e.id >= corte && Date.now() - e.ts < 48 * 3600e3 && (T360_RE.test(e.slug) || ARTISTAS.test(e.slug))).sort((a, b) => b.id - a.id).slice(0, 10);
+    const out = [];
+    for (const e of novos) {
+      try { const h = await (await fetch(e.link, { headers: UA, signal: AbortSignal.timeout(15000) })).text();
+        const ld = [...h.matchAll(/<script[^>]*ld\+json[^>]*>([\s\S]*?)<\/script>/g)].flatMap(m => { try { const j = JSON.parse(m[1]); return Array.isArray(j) ? j : [j]; } catch { return []; } }).find(j => /Event$/.test(j['@type'] || ''));
+        if (!ld || !ld.name) continue; const ad = (ld.location && ld.location.address) || {}; const quando = ld.startDate ? new Date(ld.startDate) : null;
+        const data = quando ? new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric' }).format(quando) : '';
+        const onde = [ld.location && ld.location.name, ad.addressLocality && ad.addressRegion ? ad.addressLocality + ', ' + ad.addressRegion : ad.addressLocality].filter(Boolean).join(', ');
+        const title = ld.name + ': ingressos à venda' + (data ? ' para ' + data : '') + (onde ? ' em ' + onde : '');
+        out.push({ title, link: e.link, ts: e.ts, veic: 'Ticket360 (venda de ingressos)', dom: 'ticket360.com.br', rot, tipo: 'ingresso', dica: ad.addressRegion === 'SP' ? 'sp' : ad.addressRegion === 'RJ' ? 'rj' : '', setor0: 'pagode', sum: (ad.addressLocality ? ad.addressLocality + ' / ' + (ad.addressRegion || '') + '. ' : '') + String(ld.description || '').slice(0, 200) });
+      } catch {}
+    }
+    st.ok = true; st.itens = out.length; return out;
+  } catch (e) { st.erro = e.message; return []; }
+}
 const STOP = new Set('a o os as de da do das dos e em no na nos nas um uma para por com que se ao à após diz sobre mais seu sua the of to in and for on is at by with from samba pagode show novo nova'.split(' '));
 const pal = t => new Set(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\u3040-\u30ff\u4e00-\u9fff ]/g, ' ').split(/\s+/).filter(w => w.length > 3 && !STOP.has(w)));
 // nome próprio em comum é obrigatório (evita juntar dois blocos diferentes que só dividem 'Carnaval 2027')
@@ -121,7 +151,7 @@ function regiao(i) {
   return sc < 1 ? 'br' : top;
 }
 const agora = Date.now();
-let itens = (await Promise.all(FONTES.map(ler))).flat().filter(i => agora - i.ts < 48 * 3600e3 && i.ts <= agora + 5 * 60e3 && !/^[＜<]画像/.test(i.title));
+let itens = (await Promise.all([...FONTES.map(ler), lerTicket360()])).flat().filter(i => agora - i.ts < 48 * 3600e3 && i.ts <= agora + 5 * 60e3 && !/^[＜<]画像/.test(i.title));
 // dedupe por link e por (veículo + título)
 const vistoK = new Set(); itens = itens.filter(i => { const k = i.link.split('?')[0] + '|' + (i.veic + i.title).toLowerCase(); const k2 = (i.veic + '|' + i.title).toLowerCase(); if (vistoK.has(k) || vistoK.has(k2)) return false; vistoK.add(k); vistoK.add(k2); return true; });
 for (const i of itens) {
@@ -129,6 +159,7 @@ for (const i of itens) {
   i.grande = i.tipo === 'grande' || GRANDES.test(i.dom) || GRANDES_NOME.test(i.veic);
   i.setor = FORA.test(blob) ? null : SAMBA.test(blob) ? 'samba' : PAGODE.test(blob) ? 'pagode' : MUSICA.test(blob) ? 'geral' : null;
   if (i.setor === 'samba' && PAGODE.test(blob) && !/roda de samba|samba de mesa|samba de raiz|escola de samba/i.test(blob)) i.setor = 'pagode';
+  if (i.tipo === 'ingresso') i.setor = SAMBA.test(blob) && !/pagode/i.test(blob) ? 'samba' : 'pagode';   // evento novo à venda na Ticket360 (já filtrado por samba/pagode; a descrição fala de 'desconto' de ingresso, por isso não passa pelo filtro FORA)
   if (i.setor) { i.reg = regiao(i); i.cat = /\bdjs?\b|eletr[oô]nica|techno|house music|rave/i.test(blob) ? 'DJ' : /edital|lei paulo gustavo|rouanet|aldir blanc|minist[eé]rio da cultura|secretaria de cultura|patrim[oô]nio|museu|teatro|cultura\b/i.test(blob) ? 'Cultura' : 'Música'; }
 }
 const mus = itens.filter(i => i.setor);
@@ -149,9 +180,9 @@ for (const i of mus) {
   if (i.cidade) i.e.add(sem(i.cidade));
 }
 for (const i of mus) if (!i.cidade && !(i.pais && i.pais !== 'Brasil')) { const e = estadoNoTexto(i.title + ' ' + i.sum); if (e) { i.ufSoh = e.uf; i.ufPista = e.pista; } }
-for (const i of mus) { i.grp = mus.filter(j => j !== i && (mesmo(i, j) || mesmo2(i, j))); }
+for (const i of mus) { i.grp = mus.filter(j => j !== i && (mesmo(i, j) || mesmo2(i, j) || mesmoFato(i, j))); }
 // mesmo fato contado por outro veículo que cita a cidade: usa a cidade desse texto real
-for (const i of mus) if (!i.cidade) { const g = i.grp.filter(j => j.cidade && (j.localScore || 0) >= 3).sort((x, y) => (y.localScore || 0) - (x.localScore || 0))[0]; if (g) { Object.assign(i, { cidade: g.cidade, uf: g.uf, pais: g.pais, localComo: 'mesmo fato em ' + g.veic + ': ' + g.localComo, reg: g.reg, regiaoIncerta: false, regiaoMotivo: 'cidade herdada de ' + g.veic }); EST.mesmoFato = (EST.mesmoFato || 0) + 1; } }
+for (const i of mus) if (!i.cidade) { const g = i.grp.filter(j => j.cidade).sort((x, y) => (y.localScore || 0) - (x.localScore || 0))[0]; if (g) { Object.assign(i, { cidade: g.cidade, uf: g.uf, pais: g.pais, localComo: 'mesmo fato em ' + g.veic + ': ' + g.localComo, reg: g.reg, regiaoIncerta: false, regiaoMotivo: 'cidade herdada de ' + g.veic }); EST.mesmoFato = (EST.mesmoFato || 0) + 1; } }
 // consenso do mesmo fato: se 2+ outros veículos dão a mesma cidade pelo título/abertura e este item só achou cidade no meio do texto, vale a do fato
 for (const i of mus) { const fortes = i.grp.filter(j => j.cidade && (j.localScore || 0) >= 4); if (fortes.length < 2) continue; const cnt = {}; for (const j of fortes) cnt[j.cidade + '|' + j.uf + '|' + j.pais] = (cnt[j.cidade + '|' + j.uf + '|' + j.pais] || 0) + 1;
   const [top, n] = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0]; const [c, uf, pais] = top.split('|');
@@ -201,7 +232,7 @@ for (const [k, v] of Object.entries(TRC)) if (Date.now() - (v.t || 0) > 14 * 864
 fs.writeFileSync(TRF, JSON.stringify(TRC));
 const tit = i => i.tituloPt || i.title;
 // ===== MAIS FALADO: Google Trends Brasil (RSS público) + trends24 Brasil (página pública dos assuntos do X) =====
-const ARTISTAS = /\b(zeca pagodinho|alcione|martinho da vila|paulinho da viola|leci brand[aã]o|arlindo cruz|arlindinho|xande de pilares|diogo nogueira|p[eé]ricles|thiaguinho|fundo de quintal|jorge arag[aã]o|dudu nobre|mumuzinho|ferrugem|sorriso maroto|grupo revela[cç][aã]o|exaltasamba|belo(?! horizonte)|p[eé] no ch[aã]o|turma do pagode|menos [eé] mais|di propósito|di prop[oó]sito|dilsinho|suel|tiee|vitinho|ludmilla|numanice|teresa cristina|mart'?n[aá]lia|maria rita|roberta s[aá]|mosquito|marcelo d2|seu jorge|beth carvalho|clara nunes|cartola|noel rosa|adoniran barbosa|jo[aã]o nogueira|bezerra da silva|dona ivone lara|elza soares|monarco|nei lopes|wilson das neves|neguinho da beija-?flor|zeca baleiro|raça negra|ra[cç]a negra|art popular|katinguel[eê]|s[oó] pra contrariar|alexandre pires|rodriguinho|mart[ií]nho|reinaldo|sombrinha|almir guineto|jovelina|grupo molejo|anderson leonardo|xamã|negritude j[uú]nior|chrigor|swing e simpatia|harmonia do samba|[eé] o tchan|psirico|l[eé]o santana|parangol[eé]|samba de raiz|roda de samba)\b/i;
+// ARTISTAS vem de musica-regras.mjs (usado também pela leitura da Ticket360 e pelo 'mesmo fato')
 const MF = { google: { ok: false, termos: 0 }, x: { ok: false, termos: 0 } }; const TEND = [];
 try { const r = await fetch('https://trends.google.com/trending/rss?geo=BR', { headers: UAT, signal: AbortSignal.timeout(12000) }); const x = await r.text(); MF.google.ok = r.ok;
   for (const b of x.match(/<item>[\s\S]*?<\/item>/g) || []) { const g = re => ((b.match(re) || [])[1] || '').replace(/&quot;/g, '"').replace(/&amp;/g, '&').replace(/&#39;/g, "'").trim();
@@ -243,17 +274,19 @@ const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = cha
 // FENIX_PAINEL_URL permite trocar pelo endereço do túnel com senha (ACESSO-REMOTO.md) para abrir do celular
 const PAINEL = (process.env.FENIX_PAINEL_URL || 'http://127.0.0.1:4317').replace(/\/$/, '') + '/fenix-os/painel/direto.html';
 const fazerPost = i => { const outros = [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 3);
-  const q = new URLSearchParams({ origem: 'jornal-musica', titulo: tit(i).slice(0, 200), noticia: i.link, texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic + ' · ' + brIso(new Date(i.ts)).replace('T', ' ').slice(0, 16) + ' (Brasília)', (() => { const r = String(i.sum || '').replace(/&nbsp;|\u00a0/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim(); return r && !r.startsWith(i.title.slice(0, 40)) ? r.slice(0, 600) : ''; })()].filter(Boolean).join('\n') });
+  const q = new URLSearchParams({ origem: 'jornal-musica', fontes: String(i.fontes || 1), titulo: tit(i).slice(0, 200), noticia: i.link, texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic + ' · ' + brIso(new Date(i.ts)).replace('T', ' ').slice(0, 16) + ' (Brasília)', (() => { const r = String(i.sum || '').replace(/&nbsp;|\u00a0/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim(); return r && !r.startsWith(i.title.slice(0, 40)) ? r.slice(0, 600) : ''; })()].filter(Boolean).join('\n') });
   if (outros.length) q.set('links', outros.join('\n')); return PAINEL + '?' + q.toString(); };
 // ===== SIM, PUBLICAR (celular -> agente no notebook): botão http do ntfy publica um comando assinado no tópico secreto de comando =====
 const NTFY_SRV = (process.env.NTFY_SERVIDOR || 'https://ntfy.sh').replace(/\/$/, '');
 const CMD = process.env.NTFY_TOPIC_COMANDO || '', ASS = process.env.NTFY_ASSINATURA || '';
 const idNoticia = i => createHash('sha1').update(i.link).digest('hex').slice(0, 12);
-const botoesPublicar = i => { if (!CMD || !ASS) return []; const id = idNoticia(i), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32);
-  const base = { id, sig, titulo: tit(i).slice(0, 160) };
-  const pub = { acao: 'publicar', ...base, link: i.link, links: [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 2).join('\n'), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n').slice(0, 400) };
+// REGRA DE VERDADE: só notícia com 2+ fontes (sites diferentes) ganha 'Sim, publicar'; o número de fontes vai assinado (fsig) e o agente confere
+const botoesPublicar = i => { if (!CMD || !ASS || !podePublicar(i.fontes)) return []; const id = idNoticia(i), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32);
+  const base = { id, sig, titulo: tit(i).slice(0, 160) }; const fontes = i.fontes, fsig = assinarFontes(ASS, id, fontes);
+  const pub = { acao: 'publicar', ...base, fontes, fsig, link: i.link, links: [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 2).join('\n'), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n').slice(0, 400) };
   return [{ action: 'http', label: '✅ Sim, publicar', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify(pub), clear: true }, { action: 'http', label: 'Não', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true }]; };
-const vista = i => ({ id: idNoticia(i), fazerPost: fazerPost(i), furo: i.furo, local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
+const acoesPost = i => podePublicar(i.fontes) ? [...botoesPublicar(i), { action: 'view', label: 'Fazer post', url: fazerPost(i), clear: false }] : [];
+const vista = i => ({ id: idNoticia(i), fazerPost: podePublicar(i.fontes) ? fazerPost(i) : undefined, emApuracao: podePublicar(i.fontes) ? undefined : true, furo: i.furo, local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
 const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
 const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (!!b.emAlta - !!a.emAlta) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts)));
@@ -291,34 +324,43 @@ const NOTIF0 = E.notificadas.slice(); const MAD0 = (E.madrugada || []).slice(); 
 const cand = [
   ...samba.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Samba Quente ' + NOMES[i.reg], tags: ['fire', 'samba', i.reg] })),
   ...pagode.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Pagode Quente ' + NOMES[i.reg], tags: ['fire', 'pagode', i.reg] })),
-  ...geral.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 3, t: (i.cat === 'DJ' ? '🎧 DJ ' : i.cat === 'Cultura' ? '🎭 Cultura ' : '🎵 Música ') + (i.reg === 'int' ? 'Fora' : 'Brasil'), tags: ['musical_note', i.cat.toLowerCase(), i.reg === 'int' ? 'fora' : 'brasil'] })),
+  ...geral.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 3, t: (i.cat === 'DJ' ? '🎧 DJ ' : i.cat === 'Cultura' ? '🎭 Cultura ' : '🎵 Música ') + (i.reg === 'int' ? 'Fora' : i.reg === 'sp' ? 'SP' : 'Brasil'), tags: ['musical_note', i.cat.toLowerCase(), i.reg === 'int' ? 'fora' : i.reg === 'sp' ? 'sp' : 'brasil'] })),
 ].filter(c => !ja.has(chave(c.i)));
 const ROT = { luto: '🕯️ Luto no samba', homenagem: '🎖️ Homenagem no samba', lancamento: '💿 Lançamento no samba' };
 // cidade no título da notificação (ex.: "🔥 Samba Quente RJ · Cabo Frio, RJ"); sem cidade, mostra o que se sabe (estado, país)
 const ondeCurto = i => i.cidade ? i.cidade + ', ' + (i.pais === 'Brasil' ? i.uf : i.pais) : (i.pais && i.pais !== 'Brasil') ? i.pais : i.ufSoh ? NOME_UF[i.ufSoh] : '';
-const candAlerta = alertasOk.filter(i => !ja.has('alerta:' + chave(i)) && !ja.has(chave(i)) && agora - i.ts < 24 * 3600e3).map(i => ({ i, p: i.alerta === 'luto' ? 5 : 4, alerta: true, t: ROT[i.alerta] + (ondeCurto(i) ? ' · ' + ondeCurto(i) : ''), tags: [i.alerta === 'luto' ? 'black_heart' : i.alerta === 'homenagem' ? 'medal_sports' : 'cd', 'alerta', i.alerta] }));
+// alerta com 1 fonte só não é enviado (fica 'em apuração' na página); quando aparecer a 2ª fonte, vai
+const candAlerta = alertasOk.filter(i => podePublicar(i.fontes) && !ja.has('alerta:' + chave(i)) && !ja.has(chave(i)) && agora - i.ts < 24 * 3600e3).map(i => ({ i, p: i.alerta === 'luto' ? 5 : 4, alerta: true, t: ROT[i.alerta] + (ondeCurto(i) ? ' · ' + ondeCurto(i) : ''), tags: [i.alerta === 'luto' ? 'black_heart' : i.alerta === 'homenagem' ? 'medal_sports' : 'cd', 'alerta', i.alerta] }));
 const PRI = { sp: 0, rj: 1, br: 2, int: 3 };
 for (const c of cand) { const o = ondeCurto(c.i); if (o) c.t += ' · ' + o; }
 // a mesma notícia nunca chega 2 vezes: se vira alerta (luto, homenagem, lançamento), não vai também como Quente
 const jaAlerta = new Set([...candAlerta.map(c => chave(c.i)), ...[...ja].filter(k => k.startsWith('alerta:')).map(k => k.slice(7))]);
 const fila = cand.filter(c => !jaAlerta.has(chave(c.i))).sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
-const envia = async m => { if (TOPIC) { let r; for (let t = 0; t < 4; t++) { r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic: TOPIC, ...m }) }); if (r.status !== 429) break; await new Promise(z => setTimeout(z, 6000 * (t + 1))); } console.log('push', r.status, m.title); await new Promise(z => setTimeout(z, 1500)); } /* ntfy.sh limita rajada (429): espera e tenta de novo */ else console.log('[push simulado]', m.title, '|', m.message.replace(/\n/g, ' / '), '| tags', m.tags.join(',') + (m.actions ? ' | botões ' + m.actions.map(a => a.label).join(' / ') : '')); };
+// canal de destino: São Paulo vai SÓ para o canal SP (NTFY_TOPIC_MUSICA + '-sp'); RJ, resto do Brasil e Internacional no canal Música
+const TOPIC_SP = topicoSP(TOPIC || 'simulado'); const NOME_CANAL = { sp: 'Música SP', mus: 'Música' };
+const ENVIADOS = { mus: 0, sp: 0 };
+const envia = async (m, reg = '') => { const canal = reg === 'sp' && TOPIC_SP ? 'sp' : 'mus'; ENVIADOS[canal]++;
+  if (TOPIC) { const topic = destino(reg, TOPIC); let r; for (let t = 0; t < 4; t++) { r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, ...m }) }); if (r.status !== 429) break; await new Promise(z => setTimeout(z, 6000 * (t + 1))); } console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title); await new Promise(z => setTimeout(z, 1500)); return r.ok; } /* ntfy.sh limita rajada (429): espera e tenta de novo */
+  console.log('[push simulado → ' + NOME_CANAL[canal] + ']', m.title, '|', String(m.message || '').replace(/\n/g, ' / '), '| tags', (m.tags || []).join(',') + (m.actions ? ' | botões ' + m.actions.map(a => a.label).join(' / ') : '')); return false; };
+// aviso de uma vez só (no canal Música que ela já assina) com o botão para assinar o canal Música SP; marcado no estado só se o ntfy aceitou
+if (!E.avisoSP && TOPIC_SP) { const a = avisoSP(NTFY_SRV, TOPIC || 'simulado'); if (a && (await envia(a))) E.avisoSP = brIso(new Date(agora)); }
 // ===== HORÁRIO DE SILÊNCIO (23h às 7h, Brasília): só passam Quente confirmado e luto confirmado; o resto vira um resumo às 7h =====
 const hArg = process.argv.indexOf('--hora'); const horaBR = hArg > 0 ? +process.argv[hArg + 1] : new Date(agora - 3 * 3600e3).getUTCHours();
 const silencio = horaBR >= 23 || horaBR < 7; E.madrugada = E.madrugada || [];
-const segura = (c) => { E.madrugada.push({ t: c.t, titulo: tit(c.i), link: c.i.link, k: (c.alerta ? 'alerta:' : '') + chave(c.i) }); E.notificadas.unshift((c.alerta ? 'alerta:' : '') + chave(c.i)); };
-if (!silencio && E.madrugada.length) { const m = E.madrugada; await envia({ title: '🌅 Música da madrugada: ' + m.length + (m.length > 1 ? ' notícias' : ' notícia'), message: m.slice(0, 10).map(x => '• ' + x.t.replace(/^\S+ /, '') + ': ' + x.titulo).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 3, tags: ['sunrise', 'resumo'] }); E.madrugada = []; }
+const segura = (c) => { E.madrugada.push({ t: c.t, reg: c.i.reg === 'sp' ? 'sp' : '', titulo: tit(c.i), link: c.i.link, k: (c.alerta ? 'alerta:' : '') + chave(c.i) }); E.notificadas.unshift((c.alerta ? 'alerta:' : '') + chave(c.i)); };
+if (!silencio && E.madrugada.length) { for (const rg of ['sp', '']) { const m = E.madrugada.filter(x => (x.reg === 'sp' ? 'sp' : '') === rg); if (m.length) await envia({ title: '🌅 Música da madrugada' + (rg === 'sp' ? ' SP' : '') + ': ' + m.length + (m.length > 1 ? ' notícias' : ' notícia'), message: m.slice(0, 10).map(x => '• ' + x.t.replace(/^\S+ /, '') + ': ' + x.titulo).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 3, tags: ['sunrise', 'resumo'] }, rg); } E.madrugada = []; }
 console.log('SILÊNCIO:', silencio ? 'sim (hora ' + horaBR + 'h Brasília): só Quente confirmado e luto confirmado' : 'não (hora ' + horaBR + 'h Brasília)');
-for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' ? (segura(c), false) : true)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags, actions: [...botoesPublicar(i), { action: 'view', label: 'Fazer post', url: fazerPost(i), clear: false }] }); E.notificadas.unshift('alerta:' + chave(i), chave(i)); }
+for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' ? (segura(c), false) : true)) { const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : ''), click: i.link, priority: c.p, tags: c.tags, actions: acoesPost(i) }, i.reg); E.notificadas.unshift('alerta:' + chave(i), chave(i)); }
 for (const c of fila.slice(0, 6)) {
-  const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags, actions: [...botoesPublicar(i), { action: 'view', label: 'Fazer post', url: fazerPost(i), clear: false }] });
+  const i = c.i; await envia({ title: c.t, message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.grp.length ? ' · também em ' + [...new Set(i.grp.map(g => g.veic))].slice(0, 2).join(', ') : ''), click: i.link, priority: c.p, tags: c.tags, actions: acoesPost(i) }, i.reg);
   E.notificadas.unshift(chave(i));
 }
 if (fila.length > 6 && silencio) { for (const c of fila.slice(6, 16)) segura(c); for (const c of fila.slice(16)) E.notificadas.unshift(chave(c.i)); }
-else if (fila.length > 6) { await envia({ title: '🎵 +' + (fila.length - 6) + ' de música', message: fila.slice(6, 16).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + tit(c.i)).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }); for (const c of fila.slice(6)) E.notificadas.unshift(chave(c.i)); }
+else if (fila.length > 6) { const resto = fila.slice(6); for (const rg of ['sp', '']) { const l = resto.filter(c => (c.i.reg === 'sp' ? 'sp' : '') === rg); if (l.length) await envia({ title: '🎵 +' + l.length + ' de música' + (rg === 'sp' ? ' SP' : ''), message: l.slice(0, 10).map(c => '• ' + c.t.replace(/^\S+ /, '') + ': ' + tit(c.i)).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['musical_note'] }, rg); } for (const c of resto) E.notificadas.unshift(chave(c.i)); }
 E.notificadas = E.notificadas.slice(0, 2000);
 if (!TOPIC && !process.env.MUSICA_TESTE_ESTADO) { E.notificadas = NOTIF0; E.madrugada = MAD0; } // simulação (--sem-push) não marca nada como notificado
 fs.writeFileSync(EF, JSON.stringify(E));
+console.log('PUSH por canal:', JSON.stringify(ENVIADOS), '| aviso Música SP:', E.avisoSP ? 'já enviado (' + E.avisoSP + ')' : 'ainda não');
 console.log('LOCAL antes (sem cidade, só pelo título):', semCidadeAntes, 'de', mus.length);
 console.log('LOCAL métodos:', JSON.stringify(EST));
 console.log('PLACAR:', JSON.stringify({ furos: placar.furos, chegaramDepois: placar.chegaramDepois, aindaSoNoJornal: placar.aindaSoNoJornal, medianaAntes: placar.medianaAntes }), '|', placar.melhores.slice(0, 3).map(m => m.antes + ' antes de ' + m.portal + ': ' + m.titulo.slice(0, 50)).join(' / '));

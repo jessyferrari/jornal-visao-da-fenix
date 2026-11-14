@@ -277,12 +277,13 @@ const novos = all.filter(i => !vistos.has(i.key) && now - i.ts < 3*3600e3 && (!i
 const CMD = process.env.NTFY_TOPIC_COMANDO || '', ASS = process.env.NTFY_ASSINATURA || '';
 const PAINEL = (process.env.FENIX_PAINEL_URL || 'http://127.0.0.1:4317').replace(/\/$/, '') + '/fenix-os/painel/direto.html';
 const { createHash, createHmac } = await import('node:crypto');
-const botoes = i => { const acoes = [];
+// REGRA DE VERDADE: só notícia com 2+ fontes (veículos diferentes) ganha 'Sim, publicar' e 'Fazer post'; com 1 fonte vai só como aviso 'em apuração'
+const botoes = i => { const acoes = []; const fontes = (i.cov && i.cov.n) || 1; if (fontes < 2) return {};
   const texto = [i.title, 'Veículo: ' + i.src + ' · ' + fmtB(i.pub), i.sum ? String(i.sum).slice(0, 300) : ''].filter(Boolean).join('\n').slice(0, 500);
-  if (CMD && ASS) { const id = createHash('sha1').update(i.link).digest('hex').slice(0, 12), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), base = { id, sig, titulo: String(i.title).slice(0, 160) };
-    acoes.push({ action: 'http', label: '✅ Sim, publicar', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, link: i.link, links: '', texto }), clear: true });
+  if (CMD && ASS) { const id = createHash('sha1').update(i.link).digest('hex').slice(0, 12), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), base = { id, sig, titulo: String(i.title).slice(0, 160) }, fsig = createHmac('sha256', ASS).update(id + '|fontes=' + fontes).digest('hex').slice(0, 32);
+    acoes.push({ action: 'http', label: '✅ Sim, publicar', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, fontes, fsig, link: i.link, links: '', texto }), clear: true });
     acoes.push({ action: 'http', label: 'Não', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true });
-    acoes.push({ action: 'view', label: 'Fazer post', url: PAINEL + '?' + new URLSearchParams({ origem: 'jornal-geral', titulo: String(i.title).slice(0, 200), noticia: i.link, texto }).toString(), clear: false }); }
+    acoes.push({ action: 'view', label: 'Fazer post', url: PAINEL + '?' + new URLSearchParams({ origem: 'jornal-geral', fontes: String(fontes), titulo: String(i.title).slice(0, 200), noticia: i.link, texto }).toString(), clear: false }); }
   return acoes.length ? { actions: acoes } : {}; };
 const post = m => fetch('https://ntfy.sh/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:TOPIC,...m})}).then(r => { if (!r.ok) throw new Error('ntfy ' + r.status); });
 const hojeBR = brIso(new Date(now)).slice(0, 10), horaBR = +brIso(new Date(now)).slice(11, 13);
@@ -292,7 +293,7 @@ if (!seed && horaBR === 7 && st.edicao1min !== hojeBR) {
   if (t5.length) { await post({ title: 'Edição de 1 minuto · ' + hojeBR.slice(8, 10) + '/' + hojeBR.slice(5, 7), message: t5.map((i, n) => (n + 1) + '. ' + i.title + ' (' + i.src + (i.cov.n > 1 ? ', ' + i.cov.n + ' veículos' : '') + ')').join('\n'), click: B, priority: 4, tags: ['sunrise', 'newspaper'] }); st.edicao1min = hojeBR; console.log('edição de 1 minuto enviada'); }
 }
 if (!seed) {
-  for (const i of novos.slice(0,5)) await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+  for (const i of novos.slice(0,5)) await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem botão de post)' : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
   const extra = novos.slice(5);
   if (extra.length) await post({ title: '+' + extra.length + ' notícias novas no Jornal', message: extra.slice(0,12).map(i => '• ' + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')').join('\n'), click: B, priority: 2, tags: ['newspaper'] });
 }

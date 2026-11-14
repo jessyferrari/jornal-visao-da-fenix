@@ -10,11 +10,11 @@ a{color:#fff;text-decoration:none;font-weight:600}a:hover{text-decoration:underl
 <script>
 const e=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const h0=s=>{const d=s.publicado.slice(8,10)+'/'+s.publicado.slice(5,7)+' '+s.publicado.slice(11,16);
- const c=s.confirmado?'<span class="ok">confirmado em '+s.fontes+' fontes</span>':'<span class="esp">aguardando 2ª fonte</span>';
+ const c=s.confirmado?'<span class="ok">confirmado em '+s.fontes+' fontes</span>':'<span class="esp" title="Só 1 site deu esta notícia até agora. Sem botão de post até aparecer a 2ª fonte.">🔎 em apuração (1 fonte): sem post até a 2ª fonte</span>';
  const t=(s.tambemEm||[]).map(x=>'<a href="'+e(x.link)+'" rel="noopener" target="_blank">'+e(x.veiculo)+'</a>').join(', ');
  const lc=s.local||'';const ok=lc&&!/não identificada/.test(lc);return '<div class="loc'+(ok?'':' inc')+'" title="'+e(s.localComo||s.semCidadeMotivo||'')+'">📍 '+e(lc)+(s.brasileiroFora?' · 🇧🇷 brasileiro lá fora':'')+'</div>'+(s.emAlta?'<div class="fire">📈 em alta: '+e(s.emAlta.join(' · '))+'</div>':'')+'<a href="'+e(s.link)+'" rel="noopener" target="_blank">'+e(s.titulo)+'</a><div class="m">'+e(s.veiculo)+' · '+d+' (Brasília) · '+c+(t?' · também em '+t:'')+(s.categoria&&s.categoria!=='Música'?' · '+e(s.categoria):'')+'</div>';};
 if(/editora/.test(location.hash))localStorage.setItem('jf-editora','1');const ED=localStorage.getItem('jf-editora')==='1';
-const fp=s=>ED&&s.fazerPost?'<div><a class="fp" href="'+e(s.fazerPost)+'" target="_blank" rel="noopener" title="Abre o painel do agente no seu notebook com esta notícia preenchida">✍️ Fazer post</a></div>':'';
+const fp=s=>ED&&s.fazerPost&&s.confirmado?'<div><a class="fp" href="'+e(s.fazerPost)+'" target="_blank" rel="noopener" title="Abre o painel do agente no seu notebook com esta notícia preenchida">✍️ Fazer post</a></div>':'';
 const fu=s=>{const f=s.furo;if(!f)return '';return '<div class="m">⏱️ '+(f.antes?'saiu '+e(f.antes)+' antes de '+e(f.portal)+(f.jornalAntes?' (o jornal viu '+e(f.jornalAntes)+' antes)':''):f.portal?'portal grande ('+e(f.portal)+') deu junto ou antes':'ainda fora dos portais grandes há '+e(f.semPortalHa))+'</div>';};
 const h=s=>h0(s)+fu(s)+fp(s);
 const bloco=(nome,b)=>'<h3>'+e(nome)+'</h3>'+(b.quentes.length||b.itens.length?b.quentes.map(s=>'<div class="q"><span class="tag">QUENTE</span>'+h(s)+'</div>').join('')+b.itens.slice(0,8).map(s=>'<div class="i">'+h(s)+'</div>').join(''):'<div class="vz">Nada novo nesta rodada.</div>');
