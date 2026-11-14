@@ -4,9 +4,10 @@ permissions: { contents: read }
 jobs:
   teste:
     runs-on: ubuntu-latest
-    timeout-minutes: 3
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - run: node scripts/teste-ntfy-botoes.mjs
+      - run: node scripts/teste-ntfy-agendado.mjs

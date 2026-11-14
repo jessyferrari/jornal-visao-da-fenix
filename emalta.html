@@ -1,0 +1,39 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Em Alta · Jornal Visão da Fênix</title><link rel="icon" href="favicon-32.png"><meta name="theme-color" content="#0b0b0d">
+<style>body{margin:0;background:#0b0b0d;color:#eee;font:16px/1.45 system-ui,sans-serif}main{max-width:900px;margin:auto;padding:16px}
+h1{font-size:24px;color:#d4af37;margin:8px 0 2px}h2{font-size:19px;margin:28px 0 6px;color:#d4af37}.m{color:#aaa;font-size:13px}
+nav{position:sticky;top:0;background:#0b0b0dee;padding:8px 0;display:flex;gap:8px;flex-wrap:wrap;z-index:2}nav a{font-size:13px;padding:4px 10px;border:1px solid #333;border-radius:14px;color:#ddd;text-decoration:none}
+a{color:#fff}.it{background:#141418;border:1px solid #26262c;border-radius:10px;padding:10px 12px;margin:8px 0}.it.sub{border-left:4px solid #5fd38d}.it.pic{border-left:4px solid #d4af37}.it.cai{border-left:4px solid #777;opacity:.8}
+.et{font-weight:700;font-size:13px;margin-right:6px}.nm{font-weight:700;font-size:17px}.ok{color:#5fd38d;font-size:13px;font-weight:600}.ap{color:#e8c25a;font-size:13px;font-weight:600}
+.vz{font-size:13px;color:#bbb}.vz a{color:#9fd0ff;text-decoration:none}.slot{display:flex;gap:12px;align-items:baseline;padding:9px 12px;background:#141418;border-radius:10px;margin:6px 0;border:1px solid #26262c}
+.slot b{font-size:20px;color:#d4af37;min-width:64px}.slot.passou{opacity:.45}.barras{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;align-items:end;height:140px;margin:8px 0 2px}
+.barras div{background:#d4af37;border-radius:3px 3px 0 0;min-height:2px}.barras div.top{background:#5fd38d}.hs{display:grid;grid-template-columns:repeat(24,1fr);gap:3px;font-size:10px;color:#888;text-align:center}
+.f{font-size:13px;color:#aaa}.f b{color:#5fd38d}.f i{color:#e8c25a;font-style:normal}</style></head>
+<body><main><a href="./" class="m" style="text-decoration:none">← Jornal</a> · <a href="musica.html" class="m" style="text-decoration:none">Música</a>
+<h1>🚀 Em Alta</h1><div class="m" id="at">carregando…</div>
+<nav><a href="#agenda">🗓️ Agenda de postagens</a><a href="#subindo">🚀 Subindo</a><a href="#pico">🔥 No pico</a><a href="#estavel">🟢 Em alta</a><a href="#caindo">📉 Caindo</a><a href="#curva">📈 Horários de atenção</a><a href="#fontes">Fontes</a></nav>
+<div id="r"></div></main>
+<script>
+const e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const NOMES={subindo:['🚀 Subindo','apareceu há pouco ou está crescendo agora'],pico:['🔥 No pico','em 3 fontes ou mais, no topo'],estavel:['🟢 Em alta','estável'],caindo:['📉 Caindo','perdendo posição']};
+const CL={subindo:'sub',pico:'pic',estavel:'',caindo:'cai'};
+const FN={googleTrendsBrasil:'Google Trends Brasil',googleTrendsEUA:'Google Trends EUA',xBrasil:'X Brasil (trends24)',xMundo:'X mundo (trends24)',googleNoticiasBrasil:'Google Notícias Brasil',googleNoticiasMundo:'Google Notícias Mundo',imprensa:'Imprensa do jornal (mesmo fato em vários veículos)',wikipedia:'Wikipedia (mais lidas)',atencao:'Curva de atenção (Wikipedia por hora)'};
+const item=i=>'<div class="it '+CL[i.etiqueta]+'" id="i-'+e(i.id)+'"><span class="et">'+e(i.rotulo)+'</span><span class="nm">'+e(i.nome)+'</span>'+
+ (i.manchete&&i.manchete!==i.nome?'<div><a href="'+e(i.link)+'" target="_blank" rel="noopener">'+e(i.manchete)+'</a></div>':'')+
+ (i.motivo.length?'<div class="m">Por quê: '+e(i.motivo.join(' · '))+'</div>':'')+'<div class="m">'+e(i.numerosTexto)+' · fontes: '+e(i.tiposNomes.join(', '))+' · confiança '+e(i.confianca)+'</div>'+
+ '<div>'+(i.publicavel?'<span class="ok">✅ '+i.veiculos.length+' veículos diferentes: pode virar post</span>':'<span class="ap">🔎 Em apuração: menos de 2 veículos, ainda não pode virar post</span>')+'</div>'+
+ (i.veiculos.length?'<div class="vz">'+i.veiculos.slice(0,8).map(v=>'<a href="'+e(v.link)+'" target="_blank" rel="noopener" title="'+e(v.titulo)+'">'+e(v.nome)+'</a>').join(' · ')+'</div>':'')+'</div>';
+fetch('emalta.json',{cache:'no-store'}).then(r=>r.json()).then(j=>{
+ document.getElementById('at').textContent='Atualizado '+j.atualizado.replace('T',' ')+' (Brasília) · '+j.itens.length+' assuntos · lista sem tamanho fixo: entra tudo o que passa no corte.';
+ let o='<div class="m">'+e(j.explica)+'</div>';
+ const A=j.agenda||{};o+='<h2 id="agenda">🗓️ Agenda de postagens de hoje</h2><div class="m">'+e(A.explica||'')+'</div>'+
+  (A.slots||[]).map(s=>'<div class="slot'+(s.passou?' passou':'')+'"><b>'+e(s.hora)+'</b><div>'+(s.passou?'já passou':s.item?'<a href="#i-'+e(s.item.id)+'">'+e(s.item.nome)+'</a> '+(s.item.publicavel?'<span class="ok">✅</span>':'<span class="ap">🔎</span>'):'livre')+
+  '<div class="m">'+(s.acima>=0?s.acima+'% acima da média do dia':'abaixo da média')+' ('+e(s.tipoDia)+')</div></div></div>').join('');
+ for(const k of ['subindo','pico','estavel','caindo']){const l=j.itens.filter(i=>i.etiqueta===k);o+='<h2 id="'+k+'">'+NOMES[k][0]+' ('+l.length+')</h2><div class="m">'+NOMES[k][1]+'</div>'+(l.length?l.map(item).join(''):'<div class="m">Nada agora.</div>');}
+ const C=A.curva||{};const bar=(p,t)=>{if(!p)return '';const mx=Math.max(...p),tops=[...p].map((v,h)=>[v,h]).filter(x=>x[1]>=7).sort((a,b)=>b[0]-a[0]).slice(0,4).map(x=>x[1]);
+  return '<h3 style="font-size:15px;margin:14px 0 0">'+t+'</h3><div class="barras">'+p.map((v,h)=>'<div class="'+(tops.includes(h)?'top':'')+'" style="height:'+Math.round(v/mx*100)+'%" title="'+String(h).padStart(2,'0')+'h: '+v+'% do dia"></div>').join('')+'</div><div class="hs">'+p.map((v,h)=>'<span>'+h+'</span>').join('')+'</div>';};
+ o+='<h2 id="curva">📈 Horários de atenção do público brasileiro</h2><div class="m">Parte de cada hora no total de visitas do dia na Wikipedia em português (horário de Brasília). Medido em '+(C.dias||0)+' dias completos'+(C.de?' ('+e(C.de)+' a '+e(C.ate)+')':'')+'. Em verde, as horas mais fortes depois das 7h. É a atenção do público em geral, não dos seus seguidores.</div>'+
+  bar(C.uteis,'Dias úteis ('+(C.diasUteis||0)+' dias)')+bar(C.fimDeSemana,'Fim de semana ('+(C.diasFimDeSemana||0)+' dias)');
+ o+='<h2 id="fontes">Fontes desta rodada</h2><div class="f">'+Object.entries(j.fontes).map(([k,v])=>(FN[k]||k)+': '+(v.ok?'<b>ok</b> ('+v.itens+')':'<i>sem resposta agora</i>')).join(' · ')+'</div><div class="m" style="margin-top:8px">Só fontes públicas, sem login e sem IA. YouTube Em Alta (acabou em 2025), TikTok, Reddit e GDELT ficam de fora porque não abrem de forma pública e estável.</div>';
+ document.getElementById('r').innerHTML=o;}).catch(()=>{document.getElementById('r').textContent='Não consegui carregar o Em Alta agora.';});
+</script></body></html>
