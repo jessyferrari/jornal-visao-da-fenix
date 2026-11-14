@@ -19,7 +19,7 @@ const J = JSON.parse(readFileSync(join(T, 'musica.json'), 'utf8'));
 const avisos = posts.filter(p => /assine o canal Música São Paulo/.test(p.title || ''));
 assert.equal(avisos.length, 1, 'aviso SP uma vez só (rodada 1), não repete na rodada 2'); assert.equal(avisos[0].topic, MUS, 'aviso vai no canal Música que ela já assina');
 assert.match(avisos[0].actions[0].url, new RegExp('^ntfy://127\\.0\\.0\\.1:\\d+/' + MUS + '-sp\\?display=Fenix\\+Musica\\+SP$'));
-for (const p of posts) assert.ok([MUS, MUS + '-sp'].includes(p.topic), 'só os 2 canais da música');
+for (const p of posts) { assert.ok([MUS, MUS + '-sp'].includes(p.topic), 'só os 2 canais da música'); assert.equal(p.icon, 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy.png', 'logo em toda notificação'); }
 const sp = posts.filter(p => p.topic === MUS + '-sp'), mus = posts.filter(p => p.topic === MUS && p !== avisos[0]);
 for (const p of sp) assert.ok(/ SP\b|SP:|SP$/.test(p.title) || (p.tags || []).includes('sp'), 'no canal SP só São Paulo: ' + p.title);
 for (const p of mus) assert.ok(!(p.tags || []).includes('sp') && !/Quente SP\b|DJs e Festivais SP\b|Música SP\b/.test(p.title), 'São Paulo não vai no canal Música: ' + p.title);

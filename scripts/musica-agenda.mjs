@@ -25,7 +25,7 @@ export function dataDoEvento(texto, tsPub) {
   return null;
 }
 const EVENTO = /\b(roda de samba|samba de mesa|show|apresenta|se apresenta|festa|festival|feijoada|pagode|samba|baile|ensaio|bloco|tributo|homenagem)\b/i;
-async function abre(url, ms = 12000) { const r = await fetch(url, { headers: UA, redirect: 'follow', signal: AbortSignal.timeout(ms) }); if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }
+async function abre(url, ms = 12000) { const r = await fetch(url, { headers: UA, redirect: 'follow', signal: AbortSignal.timeout(ms) }); if (!r.ok) { await r.body?.cancel().catch(() => {}); throw new Error('HTTP ' + r.status); } return r.text(); }
 // vitrine pública da Bilheteria Digital: eventos de samba/pagode e a página de cada um
 async function bilheteria(ART, localizar) {
   const st = { ok: false, eventos: 0, erro: '' }; const out = [];

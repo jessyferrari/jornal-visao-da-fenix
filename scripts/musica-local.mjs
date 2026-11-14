@@ -93,7 +93,7 @@ function paisNoTexto(t) { const s = sem(t); for (const [re, p] of PAISES) { cons
 const simil0 = (a, b) => { const A = new Set(sem(a).replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 2)), B = new Set(sem(b).replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 2)); if (!A.size || !B.size) return 0; let c = 0; for (const w of A) if (B.has(w)) c++; return c / Math.max(A.size, B.size); };
 const simil = (cand, alvo) => { const W = s => sem(s).replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter(w => w.length > 2); const A = W(alvo), B = new Set(W(cand)); if (!A.length || !B.size || B.size > A.length * 2.5 + 4) return 0; return A.filter(w => B.has(w)).length / A.length; };
 async function busca(url, ms = 10000, max = 700000) {
-  const r = await fetch(url, { headers: UA, redirect: 'follow', signal: AbortSignal.timeout(ms) }); if (!r.ok) throw new Error('HTTP ' + r.status);
+  const r = await fetch(url, { headers: UA, redirect: 'follow', signal: AbortSignal.timeout(ms) }); if (!r.ok) { await r.body?.cancel().catch(() => {}); throw new Error('HTTP ' + r.status); }
   const ct = r.headers.get('content-type') || ''; const rd = r.body.getReader(); const ch = []; let n = 0; while (n < max) { const { done, value } = await rd.read(); if (done) break; ch.push(value); n += value.length; } try { await rd.cancel(); } catch {}
   const buf = Buffer.concat(ch); const cs = (ct.match(/charset=([^;]+)/i) || buf.subarray(0, 400).toString('latin1').match(/charset=["']?([\w-]+)/i) || [])[1] || 'utf-8';
   let x; try { x = new TextDecoder(cs.trim().toLowerCase()).decode(buf); } catch { x = buf.toString('utf8'); } return { x, url: r.url, ct };

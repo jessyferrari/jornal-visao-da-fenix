@@ -285,7 +285,9 @@ const botoes = i => { const acoes = []; const fontes = (i.cov && i.cov.n) || 1; 
     acoes.push({ action: 'http', label: 'Não', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true });
     acoes.push({ action: 'view', label: 'Fazer post', url: PAINEL + '?' + new URLSearchParams({ origem: 'jornal-geral', fontes: String(fontes), titulo: String(i.title).slice(0, 200), noticia: i.link, texto }).toString(), clear: false }); }
   return acoes.length ? { actions: acoes } : {}; };
-const post = m => fetch('https://ntfy.sh/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:TOPIC,...m})}).then(r => { if (!r.ok) throw new Error('ntfy ' + r.status); });
+// logo O.S Olimpia Shakur em cada notificação (campo icon do ntfy; o ícone do app na barra de status é do próprio ntfy e não muda)
+const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy.png';
+const post = m => fetch('https://ntfy.sh/',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:TOPIC,icon:ICONE,...m})}).then(r => { if (!r.ok) throw new Error('ntfy ' + r.status); });
 const hojeBR = brIso(new Date(now)).slice(0, 10), horaBR = +brIso(new Date(now)).slice(11, 13);
 if (!seed && horaBR === 7 && st.edicao1min !== hojeBR) {
   const top = [...all].filter(i => (!i.lang || i.tr) && now - i.ts < 18*3600e3).sort((a, b) => b.score - a.score); const vis = new Set(); const t5 = [];

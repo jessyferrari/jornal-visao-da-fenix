@@ -4,7 +4,7 @@
 import fs from 'node:fs';
 import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
-import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato } from './musica-regras.mjs';
+import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato, montarDJF, djfNoTexto, buscasDJF } from './musica-regras.mjs';
 import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto, cidadesNoTexto, decidir } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
@@ -47,6 +47,13 @@ const FONTES = [
   ['Terra Música', 'https://www.terra.com.br/diversao/musica/rss.xml', 'geral', 'grande'],
   ['Hugo Gloss', 'https://hugogloss.uol.com.br/feed/', 'geral', 'grande'],
 ];
+// ===== DJs e Festivais (destaque): lista curada em scripts/djs-festivais.json; buscas públicas por grupos de nomes =====
+const DJF_LISTA = JSON.parse(fs.readFileSync(new URL('./djs-festivais.json', import.meta.url), 'utf8')); const DJF = montarDJF(DJF_LISTA); const BDJF = buscasDJF(DJF_LISTA);
+BDJF.djs.forEach((g, n) => FONTES.push(['Google Notícias: DJs ' + (n + 1), gn('(' + g.join(' OR ') + ')'), 'djfest', 'busca']));
+BDJF.festivais.forEach((g, n) => { FONTES.push(['Google Notícias: festivais ' + (n + 1), gn('(' + g.join(' OR ') + ')'), 'djfest', 'busca']); FONTES.push(['Google Notícias: festivais (EUA) ' + (n + 1), gn('(' + g.join(' OR ') + ')', 'en-US', 'US', 'US:en'), 'djfest', 'busca', 'int']); });
+const DJ_INT = DJF_LISTA.djs.filter(d => d.pais !== 'Brasil' && !d.contexto).slice(0, 10).map(d => '"' + d.nome.replace(/\.\.$/, '') + '"');
+FONTES.push(['Google Notícias: DJs (EUA)', gn('(' + DJ_INT.join(' OR ') + ')', 'en-US', 'US', 'US:en'), 'djfest', 'busca', 'int']);
+FONTES.push(['Bing Notícias: DJs e festivais', bing('DJ festival line-up Brasil'), 'djfest', 'busca']);
 // canais do YouTube (RSS público por canal). Mapa vem dos perfis que ela segue; aqui só 2 de amostra.
 const YT = [['Fundo de Quintal (YouTube)', 'UC38LGuulzvTrpd-YAifOPBw'], ['Thiaguinho (YouTube)', 'UClqmzNx7-xd-5_MzdSotYKw']];
 for (const [n, id] of YT) FONTES.push([n, 'https://www.youtube.com/feeds/videos.xml?channel_id=' + id, 'samba', 'social']);
@@ -66,7 +73,7 @@ const STATUS = [];
 async function ler([rot, url, setor, tipo, dica = '']) {
   const st = { rot, tipo, ok: false, itens: 0 }; STATUS.push(st);
   try {
-    const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) }); if (!r.ok) throw new Error('HTTP ' + r.status);
+    const r = await fetch(url, { headers: UA, signal: AbortSignal.timeout(20000) }); if (!r.ok) { await r.body?.cancel().catch(() => {}); throw new Error('HTTP ' + r.status); }
     const x = await r.text(); const out = [];
     for (const b of (x.match(/<(item|entry)[\s>][\s\S]*?<\/(item|entry)>/gi) || []).slice(0, 60)) {
       let title = tag(b, 'title'); let link = tag(b, 'link'); if (!/^https?:/.test(link)) { const m = b.match(/<link[^>]*href=["']([^"']+)/i); link = m ? ent(m[1]) : ''; }
@@ -151,7 +158,9 @@ function regiao(i) {
   return sc < 1 ? 'br' : top;
 }
 const agora = Date.now();
-let itens = (await Promise.all([...FONTES.map(ler), lerTicket360()])).flat().filter(i => agora - i.ts < 48 * 3600e3 && i.ts <= agora + 5 * 60e3 && !/^[＜<]画像/.test(i.title));
+// no máximo 6 leituras ao mesmo tempo (com 40+ fontes, rajada demais derruba conexões e o Google Notícias responde 503)
+const emLotes = async (lista, f, n = 6) => { const out = new Array(lista.length); let k = 0; await Promise.all(Array.from({ length: n }, async () => { while (k < lista.length) { const x = k++; out[x] = await f(lista[x]); } })); return out; };
+let itens = (await Promise.all([emLotes(FONTES, ler), lerTicket360()])).flat(2).filter(i => agora - i.ts < 48 * 3600e3 && i.ts <= agora + 5 * 60e3 && !/^[＜<]画像/.test(i.title));
 // dedupe por link e por (veículo + título)
 const vistoK = new Set(); itens = itens.filter(i => { const k = i.link.split('?')[0] + '|' + (i.veic + i.title).toLowerCase(); const k2 = (i.veic + '|' + i.title).toLowerCase(); if (vistoK.has(k) || vistoK.has(k2)) return false; vistoK.add(k); vistoK.add(k2); return true; });
 for (const i of itens) {
@@ -159,6 +168,8 @@ for (const i of itens) {
   i.grande = i.tipo === 'grande' || GRANDES.test(i.dom) || GRANDES_NOME.test(i.veic);
   i.setor = FORA.test(blob) ? null : SAMBA.test(blob) ? 'samba' : PAGODE.test(blob) ? 'pagode' : MUSICA.test(blob) ? 'geral' : null;
   if (i.setor === 'samba' && PAGODE.test(blob) && !/roda de samba|samba de mesa|samba de raiz|escola de samba/i.test(blob)) i.setor = 'pagode';
+  // DJs e Festivais: DJ ou festival da lista citado (fora samba/pagode); nome comum só com contexto de música
+  if (i.setor !== 'samba' && i.setor !== 'pagode' && !FORA.test(blob)) { const d = djfNoTexto(i.title + ' ' + i.sum, DJF); if (d && (i.setor || i.setor0 === 'djfest' || djfNoTexto(i.title, DJF))) { i.setor = 'djfest'; i.djf = d; } }
   if (i.tipo === 'ingresso') i.setor = SAMBA.test(blob) && !/pagode/i.test(blob) ? 'samba' : 'pagode';   // evento novo à venda na Ticket360 (já filtrado por samba/pagode; a descrição fala de 'desconto' de ingresso, por isso não passa pelo filtro FORA)
   if (i.setor) { i.reg = regiao(i); i.cat = /\bdjs?\b|eletr[oô]nica|techno|house music|rave/i.test(blob) ? 'DJ' : /edital|lei paulo gustavo|rouanet|aldir blanc|minist[eé]rio da cultura|secretaria de cultura|patrim[oô]nio|museu|teatro|cultura\b/i.test(blob) ? 'Cultura' : 'Música'; }
 }
@@ -286,11 +297,13 @@ const botoesPublicar = i => { if (!CMD || !ASS || !podePublicar(i.fontes)) retur
   const pub = { acao: 'publicar', ...base, fontes, fsig, link: i.link, links: [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 2).join('\n'), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n').slice(0, 400) };
   return [{ action: 'http', label: '✅ Sim, publicar', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify(pub), clear: true }, { action: 'http', label: 'Não', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true }]; };
 const acoesPost = i => podePublicar(i.fontes) ? [...botoesPublicar(i), { action: 'view', label: 'Fazer post', url: fazerPost(i), clear: false }] : [];
-const vista = i => ({ id: idNoticia(i), fazerPost: podePublicar(i.fontes) ? fazerPost(i) : undefined, emApuracao: podePublicar(i.fontes) ? undefined : true, furo: i.furo, local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
+const vista = i => ({ id: idNoticia(i), fazerPost: podePublicar(i.fontes) ? fazerPost(i) : undefined, emApuracao: podePublicar(i.fontes) ? undefined : true, djf: i.djf ? i.djf.tipo + ': ' + i.djf.nome : undefined, furo: i.furo, local: i.local, localComo: i.localComo || undefined, semCidadeMotivo: i.cidade ? undefined : i.semCidadeMotivo, brasileiroFora: i.brasileiroFora || undefined, emAlta: i.emAlta, titulo: tit(i), tituloOriginal: i.tituloPt ? i.title : undefined, traduzido: i.traduzido, link: i.link, veiculo: i.veic, dominio: i.dom, publicado: brIso(new Date(i.ts)), primeiroVisto: brIso(new Date(i.primeiro)), fontes: i.fontes, confirmado: i.confirmado, quente: i.quente, regiao: i.reg, regiaoMotivo: i.regiaoMotivo, regiaoAmbigua: i.regiaoAmbigua || undefined, localIncerto: i.regiaoIncerta || undefined, categoria: i.cat, linkDireto: direto(i) || undefined, linkAlternativo: direto(i) ? undefined : (i.grp.find(direto) ? { veiculo: i.grp.find(direto).veic, link: i.grp.find(direto).link } : undefined), tambemEm: i.grp.filter((g, n, a) => a.findIndex(x => x.veic === g.veic) === n).slice(0, 4).map(g => ({ veiculo: g.veic, titulo: tit(g), link: g.link })), via: i.rot });
 const samba = so1(mus.filter(i => i.setor === 'samba').sort(ord));
 const jaSamba = new Set(samba.flatMap(i => [chave(i), ...i.grp.map(chave)]));
 const pagode = so1(mus.filter(i => i.setor === 'pagode' && !jaSamba.has(chave(i)) && !i.grp.some(g => jaSamba.has(chave(g)))).sort((a, b) => (b.quente - a.quente) || (!!b.emAlta - !!a.emAlta) || (b.fontes - a.fontes) || (direto(b) - direto(a)) || (b.ts - a.ts)));
-const jaSetor = new Set([...samba, ...pagode].flatMap(i => [chave(i), ...i.grp.map(chave)]));
+const jaSP = new Set([...samba, ...pagode].flatMap(i => [chave(i), ...i.grp.map(chave)]));
+const djfest = so1(mus.filter(i => i.setor === 'djfest' && !jaSP.has(chave(i)) && !i.grp.some(g => jaSP.has(chave(g)))).sort((a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (b.ts - a.ts)));
+const jaSetor = new Set([...samba, ...pagode, ...djfest].flatMap(i => [chave(i), ...i.grp.map(chave)]));
 const geral = so1(mus.filter(i => i.setor === 'geral' && !jaSetor.has(chave(i)) && !i.grp.some(g => jaSetor.has(chave(g)))).sort(ord));
 const REG = ['sp', 'rj', 'br', 'int'];
 const porReg = (arr, n = 15) => Object.fromEntries(REG.map(r => { const a = arr.filter(i => i.reg === r); const lo = x => x.slice().sort((p, q) => (!!p.regiaoIncerta - !!q.regiaoIncerta)); return [r, { nome: NOMES[r], quentes: lo(a.filter(i => i.quente)).slice(0, 10).map(vista), itens: lo(a.filter(i => !i.quente)).slice(0, n).map(vista) }]; }));
@@ -308,10 +321,11 @@ for (const i of mus) { const t = tit(i) + ' ' + (i.sum || ''); const nome = (t.m
 const alertasOk = so1(alertas.filter(a => a.seguro).sort((a, b) => ({ luto: 0, homenagem: 1, lancamento: 2 })[a.tipo] - ({ luto: 0, homenagem: 1, lancamento: 2 })[b.tipo] || b.i.ts - a.i.ts).map(a => Object.assign(a.i, { alerta: a.tipo, alertaNome: a.nome })));
 const saida = {
   atualizado: brIso(new Date(agora)),
-  ordem: ['samba', 'sambaPagode', 'geral'], regioes: NOMES, placar, maisFalado, agenda, alertas: alertasOk.slice(0, 15).map(i => ({ tipo: i.alerta, nome: i.alertaNome, ...vista(i) })),
+  ordem: ['samba', 'sambaPagode', 'djsFestivais', 'geral'], djsFestivaisLista: { djs: DJF_LISTA.djs.map(d => d.nome), festivais: DJF_LISTA.festivais.map(d => d.nome) }, regioes: NOMES, placar, maisFalado, agenda, alertas: alertasOk.slice(0, 15).map(i => ({ tipo: i.alerta, nome: i.alertaNome, ...vista(i) })),
   setores: {
     samba: { nome: 'Samba', regioes: porReg(samba) },
     sambaPagode: { nome: 'Samba e Pagode', regioes: porReg(pagode) },
+    djsFestivais: { nome: 'DJs e Festivais', regioes: porReg(djfest) },
     geral: { nome: 'Música geral, DJs e cultura', brasil: geral.filter(i => i.reg !== 'int').slice(0, 30).map(vista), fora: geral.filter(i => i.reg === 'int').slice(0, 20).map(vista) },
   },
 };
@@ -324,6 +338,8 @@ const NOTIF0 = E.notificadas.slice(); const MAD0 = (E.madrugada || []).slice(); 
 const cand = [
   ...samba.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Samba Quente ' + NOMES[i.reg], tags: ['fire', 'samba', i.reg] })),
   ...pagode.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 4, t: '🔥 Pagode Quente ' + NOMES[i.reg], tags: ['fire', 'pagode', i.reg] })),
+  // DJs e Festivais: destaque próprio; vai mesmo se já saiu em portal grande (ela quer tudo deles), mas só com 2 fontes e até 12 h
+  ...djfest.filter(i => i.confirmado && agora - i.ts < 12 * 3600e3).map(i => ({ i, p: 4, t: '🎧 DJs e Festivais ' + NOMES[i.reg], tags: ['headphones', 'djfest', i.reg] })),
   ...geral.filter(i => i.quente && i.confirmado).map(i => ({ i, p: 3, t: (i.cat === 'DJ' ? '🎧 DJ ' : i.cat === 'Cultura' ? '🎭 Cultura ' : '🎵 Música ') + (i.reg === 'int' ? 'Fora' : i.reg === 'sp' ? 'SP' : 'Brasil'), tags: ['musical_note', i.cat.toLowerCase(), i.reg === 'int' ? 'fora' : i.reg === 'sp' ? 'sp' : 'brasil'] })),
 ].filter(c => !ja.has(chave(c.i)));
 const ROT = { luto: '🕯️ Luto no samba', homenagem: '🎖️ Homenagem no samba', lancamento: '💿 Lançamento no samba' };
@@ -337,10 +353,12 @@ for (const c of cand) { const o = ondeCurto(c.i); if (o) c.t += ' · ' + o; }
 const jaAlerta = new Set([...candAlerta.map(c => chave(c.i)), ...[...ja].filter(k => k.startsWith('alerta:')).map(k => k.slice(7))]);
 const fila = cand.filter(c => !jaAlerta.has(chave(c.i))).sort((a, b) => (b.p - a.p) || (PRI[a.i.reg] - PRI[b.i.reg]));
 // canal de destino: São Paulo vai SÓ para o canal SP (NTFY_TOPIC_MUSICA + '-sp'); RJ, resto do Brasil e Internacional no canal Música
+// logo O.S Olimpia Shakur em cada notificação (campo icon do ntfy)
+const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy.png';
 const TOPIC_SP = topicoSP(TOPIC || 'simulado'); const NOME_CANAL = { sp: 'Música SP', mus: 'Música' };
 const ENVIADOS = { mus: 0, sp: 0 };
 const envia = async (m, reg = '') => { const canal = reg === 'sp' && TOPIC_SP ? 'sp' : 'mus'; ENVIADOS[canal]++;
-  if (TOPIC) { const topic = destino(reg, TOPIC); let r; for (let t = 0; t < 4; t++) { r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, ...m }) }); if (r.status !== 429) break; await new Promise(z => setTimeout(z, 6000 * (t + 1))); } console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title); await new Promise(z => setTimeout(z, 1500)); return r.ok; } /* ntfy.sh limita rajada (429): espera e tenta de novo */
+  if (TOPIC) { const topic = destino(reg, TOPIC); let r; for (let t = 0; t < 4; t++) { r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ topic, icon: ICONE, ...m }) }); if (r.status !== 429) break; await new Promise(z => setTimeout(z, 6000 * (t + 1))); } console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title); await new Promise(z => setTimeout(z, 1500)); return r.ok; } /* ntfy.sh limita rajada (429): espera e tenta de novo */
   console.log('[push simulado → ' + NOME_CANAL[canal] + ']', m.title, '|', String(m.message || '').replace(/\n/g, ' / '), '| tags', (m.tags || []).join(',') + (m.actions ? ' | botões ' + m.actions.map(a => a.label).join(' / ') : '')); return false; };
 // aviso de uma vez só (no canal Música que ela já assina) com o botão para assinar o canal Música SP; marcado no estado só se o ntfy aceitou
 if (!E.avisoSP && TOPIC_SP) { const a = avisoSP(NTFY_SRV, TOPIC || 'simulado'); if (a && (await envia(a))) E.avisoSP = brIso(new Date(agora)); }
@@ -376,4 +394,5 @@ for (const s of STATUS) console.log(' ', s.ok ? 'ok ' : 'ERR', String(s.itens).p
 const cont = arr => REG.map(r => NOMES[r] + ' ' + arr.filter(i => i.reg === r).length + ' (quentes ' + arr.filter(i => i.reg === r && i.quente).length + ')').join(' | ');
 console.log('SAMBA          ', cont(samba)); console.log('SAMBA E PAGODE ', cont(pagode)); console.log('GERAL          ', 'Brasil ' + geral.filter(i => i.reg !== 'int').length + ' | Fora ' + geral.filter(i => i.reg === 'int').length + ' | DJ ' + geral.filter(i => i.cat === 'DJ').length + ' | Cultura ' + geral.filter(i => i.cat === 'Cultura').length);
 console.log('região ambígua', mus.filter(i => i.regiaoAmbigua).length, '| sem local (padrão Brasil)', mus.filter(i => i.regiaoIncerta).length);
+console.log('DJS E FESTIVAIS ', cont(djfest), '| nomes na lista', DJF_LISTA.djs.length, 'DJs e', DJF_LISTA.festivais.length, 'festivais');
 console.log('samba', samba.length, '(quentes', samba.filter(i => i.quente).length, ', quentes confirmados', samba.filter(i => i.quente && i.confirmado).length, ') | samba e pagode', pagode.length, '| geral', geral.length);

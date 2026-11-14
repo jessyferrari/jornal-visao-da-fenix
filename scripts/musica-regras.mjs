@@ -49,3 +49,29 @@ export function mesmoFato(a, b) {
   if (comum.includes('aniversario')) { const na = anos(a.title), nb = anos(b.title); if (na.size && nb.size && ![...na].some((x) => nb.has(x))) return false; }
   return true;
 }
+
+// ===== DJs e Festivais: lista curada (scripts/djs-festivais.json) =====
+// nome com contexto=true (palavra comum: Fisher, Black Coffee, The Town...) só conta com contexto de música no texto
+const CTX = /\b(dj|djs|festival|festivais|set|line-?up|show|shows|turn[eê]|tour|[aá]lbum|album|faixa|track|remix|single|m[uú]sica|music|eletr[oô]nic|techno|house|palco|stage|edi[cç][aã]o|ingressos?|headliner|atra[cç][aã]o|apresenta)\b/i;
+const esc = (x) => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+export function montarDJF(lista) {
+  const ent = [];
+  for (const [tipo, l] of [['dj', lista.djs || []], ['festival', lista.festivais || []]]) for (const d of l) {
+    const nomes = [...(d.soAliases ? [] : [d.nome]), ...(d.aliases || [])];
+    for (const n of nomes) ent.push({ tipo, nome: d.nome, contexto: !!d.contexto || n.length <= 3, re: new RegExp('(^|[^\\p{L}\\p{N}&])' + esc(sem(n)).replace(/\\\.\\\.$/, '(\\.\\.)?') + '(?![\\p{L}\\p{N}])', 'iu'), pais: d.pais || '', cidade: d.cidade || '' });
+  }
+  ent.sort((a, b) => b.re.source.length - a.re.source.length);   // nome mais longo primeiro (Tomorrowland Brasil antes de Tomorrowland)
+  return ent;
+}
+// devolve { tipo, nome } do 1º DJ/festival citado no texto, ou null
+export function djfNoTexto(texto, ent) {
+  const t = sem(texto); const ctx = CTX.test(texto) || CTX.test(t);
+  for (const e of ent) if (e.re.test(t) && (!e.contexto || ctx)) return { tipo: e.tipo, nome: e.nome, pais: e.pais, cidade: e.cidade };
+  return null;
+}
+// buscas públicas de notícia por grupos de nomes (Google Notícias aceita OR; grupos de 8 para não passar do tamanho)
+export function buscasDJF(lista, n = 8) {
+  const nomes = (l) => l.flatMap((d) => d.soAliases ? (d.aliases || []).slice(0, 1) : [d.nome]).map((x) => '"' + x.replace(/\.\.$/, '') + '"');
+  const grupos = (arr) => { const g = []; for (let i = 0; i < arr.length; i += n) g.push(arr.slice(i, i + n)); return g; };
+  return { djs: grupos(nomes(lista.djs || [])), festivais: grupos(nomes(lista.festivais || [])) };
+}
