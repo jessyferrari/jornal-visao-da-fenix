@@ -1,5 +1,6 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
 import fs from 'node:fs';
+import { arquivar } from './busca-arquivo.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
 // [fonte, url, seção padrão, idioma (vazio = português)]
@@ -20,7 +21,15 @@ const FEEDS = [
  ['Al Jazeera','https://www.aljazeera.com/xml/rss/all.xml','mundo','inglês'],['The Verge','https://www.theverge.com/rss/index.xml','tech','inglês'],
  ['TechCrunch','https://techcrunch.com/feed/','tech','inglês'],['Tecnoblog','https://tecnoblog.net/feed/','tech',''],
  ['BBC News','https://feeds.bbci.co.uk/news/world/rss.xml','mundo','inglês'],['BBC News','https://feeds.bbci.co.uk/news/technology/rss.xml','tech','inglês'],
- ['Wired','https://www.wired.com/feed/rss','tech','inglês'],['Ars Technica','https://feeds.arstechnica.com/arstechnica/index','tech','inglês'],['Canaltech','https://canaltech.com.br/rss/','tech','']];
+ ['Wired','https://www.wired.com/feed/rss','tech','inglês'],['Ars Technica','https://feeds.arstechnica.com/arstechnica/index','tech','inglês'],['Canaltech','https://canaltech.com.br/rss/','tech',''],
+ // 14/11: cultura, música, celebridades e entretenimento (caso Anitta no Grammy Latino). Entram na edição só com 2 fontes ou mais; na busca, sempre.
+ ['g1 Pop & Arte','https://g1.globo.com/rss/g1/pop-arte/','br','','pop'],['Gshow','https://gshow.globo.com/rss/gshow/','br','','pop'],
+ ['Terra Diversão','https://www.terra.com.br/diversao/rss.xml','br','','pop'],['UOL Entretenimento','https://rss.uol.com.br/feed/entretenimento.xml','br','','pop'],
+ ['Folha Ilustrada','https://feeds.folha.uol.com.br/ilustrada/rss091.xml','br','','pop'],['Estadão Cultura','https://www.estadao.com.br/arc/outboundfeeds/feeds/rss/sections/cultura/?outputType=xml','br','','pop'],
+ ['Rolling Stone Brasil','https://rollingstone.com.br/feed/','br','','pop'],['Hugo Gloss','https://hugogloss.uol.com.br/feed/','br','','pop'],
+ ['Metrópoles Entretenimento','https://www.metropoles.com/entretenimento/feed','br','','pop'],
+ // só para a busca: manchetes do Google Notícias Brasil (geral e entretenimento), com o veículo real de cada uma
+ ['Google Notícias','https://news.google.com/rss?hl=pt-BR&gl=BR&ceid=BR:pt-419','br','','arq'],['Google Notícias','https://news.google.com/rss/headlines/section/topic/ENTERTAINMENT?hl=pt-BR&gl=BR&ceid=BR:pt-419','br','','arq']];
 const canon = u => u.trim().split('#')[0].split('?')[0].replace(/\/$/, '');
 const ent = s => s.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#0?39;|&apos;/g,"'").replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(+n)).replace(/&#x([0-9a-f]+);/gi,(_,n)=>String.fromCodePoint(parseInt(n,16)));
 const dec = s => ent(s.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g,'$1')).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
@@ -32,22 +41,22 @@ const fmtB = iso => iso.slice(8,10)+'/'+iso.slice(5,7)+', '+iso.slice(11,16)+' (
 const secOf = (link, def) => /\/(economia|mercado|negocios|financas|poder-economia|seu-dinheiro|agronegocios)\//i.test(link) || /c-level\.folha/.test(link) ? 'neg' : /\/(tecnologia|tec|inovacao)\//i.test(link) ? 'tech' : def;
 const UA = {'user-agent':'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +'+B+')'};
 const FEEDST = [];
-const BR_OUT = new Set(['g1','Folha de S.Paulo','Estadão','CNN Brasil','UOL','Poder360','Agência Brasil','Canaltech','Tecnoblog']);
-async function ler([src,url,sec,lang]) {
+const BR_OUT = new Set(['g1','Folha de S.Paulo','Estadão','CNN Brasil','UOL','Poder360','Agência Brasil','Canaltech','Tecnoblog','g1 Pop & Arte','Gshow','Terra Diversão','UOL Entretenimento','Folha Ilustrada','Estadão Cultura','Rolling Stone Brasil','Hugo Gloss','Metrópoles Entretenimento']);
+async function ler([src,url,sec,lang,tipo]) {
   const stt = { src, url, ok: false, itens: 0, lido: brIso(new Date()) }; FEEDST.push(stt);
   try {
     const r = await fetch(url,{headers:UA,signal:AbortSignal.timeout(20000)}); if (!r.ok) throw new Error('HTTP '+r.status);
     const buf = Buffer.from(await r.arrayBuffer()); const head = buf.subarray(0, 300).toString('latin1'); const cs = (/encoding=["']([^"']+)/i.exec(head) || (r.headers.get('content-type') || '').match(/charset=([^;]+)/i) || [])[1] || 'utf-8';
     let x; try { x = new TextDecoder(cs.trim().toLowerCase()).decode(buf); } catch { x = buf.toString('utf8'); } const out = [];
-    for (const b of (x.match(/<(item|entry)[\s>][\s\S]*?<\/(item|entry)>/gi) || []).slice(0,40)) {
+    let pos = 0; for (const b of (x.match(/<(item|entry)[\s>][\s\S]*?<\/(item|entry)>/gi) || []).slice(0,100)) { pos++;
       let link = tag(b,'link'); link = link.replace(/^.*\/\*(https?:)/, '$1'); if (!/^https?:/.test(link)) { const m = b.match(/<link[^>]*href=["']([^"']+)/i); link = m ? ent(m[1]) : ''; }
-      const title = tag(b,'title'); const pubS = tag(b,'pubDate') || tag(b,'published') || tag(b,'dc:date') || tag(b,'updated');
+      let title = tag(b,'title'); let src2 = src; if (tipo === 'arq') { const mm = title.match(/^(.*\S)\s+-\s+([^-]{2,60})$/); if (mm) { title = mm[1]; src2 = mm[2].trim(); } } const pubS = tag(b,'pubDate') || tag(b,'published') || tag(b,'dc:date') || tag(b,'updated');
       const ts = Date.parse(pubS); if (!link || !title || !ts) continue; // sem horário real, não entra
       let img = (b.match(/<media:(?:content|thumbnail)[^>]*url=["']([^"']+)["'][^>]*>/i) || b.match(/<enclosure[^>]*url=["']([^"']+\.(?:jpe?g|png|webp)[^"']*)["']/i) || [])[1] || '';
       
       if (/\.(mp4|mp3|m3u8)(\?|$)/i.test(img) || !/^https:\/\//.test(img)) img = '';
       let sum = tag(b,'description'); if (sum.startsWith(title)) sum = sum.slice(title.length).trim(); if (sum.length > 220) sum = sum.slice(0,217).replace(/\s\S*$/,'') + '…';
-      out.push({src,title,link:link.replace(/\?(utm_|traffic_source|maca)[^#]*$/,''),key:canon(link),ts,pub:brIso(new Date(ts)),sec:secOf(link,sec),lang,img:ent(img),sum});
+      out.push({src:src2,tipo:tipo||'',arqSo:tipo==='arq'||pos>40,title,link:link.replace(/\?(utm_|traffic_source|maca)[^#]*$/,''),key:canon(link),ts,pub:brIso(new Date(ts)),sec:secOf(link,sec),lang,img:ent(img),sum});
     }
     stt.ok = true; stt.itens = out.length; return out;
   } catch (e) { stt.erro = e.message; console.log('feed falhou:', src, url, e.message); return []; }
@@ -60,13 +69,17 @@ const STOP = new Set('a o os as de da do das dos e em no na nos nas um uma para 
 const words = t => new Set(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w => w.length > 3 && !STOP.has(w)));
 
 const now = Date.now();
-const itens = (await Promise.all(FEEDS.map(ler))).flat().filter(i => i.ts <= now + 5*60e3);
+const lidos = (await Promise.all(FEEDS.map(ler))).flat().filter(i => i.ts <= now + 5*60e3);
+// arquivo de busca: tudo o que foi lido (até 100 por feed, Google Notícias, cultura e entretenimento), mesmo o que não cabe na edição
+const ARQ = lidos.slice();
+// edição e notificações: como antes (40 por feed, sem os feeds só de busca); cultura/entretenimento só com 2 fontes ou mais (abaixo)
+let itens = lidos.filter(i => !i.arqSo);
 // dedupe por URL canônica, mantendo o horário mais antigo (primeira publicação)
 const map = new Map();
 for (const i of itens) { const o = map.get(i.key); if (!o || i.ts < o.ts) map.set(i.key, o ? {...i, img: i.img || o.img} : i); }
 let all = [...map.values()].filter(i => now - i.ts < 36*3600e3).sort((a,b) => b.ts - a.ts);
 // variedade: no máximo 14 por fonte por seção
-const cnt = {}; all = all.filter(i => { const k = i.src + i.sec; cnt[k] = (cnt[k] || 0) + 1; return cnt[k] <= 14; });
+// (o limite de 14 por fonte por seção agora é aplicado depois do pré-agrupamento, e não corta notícia grande)
 // filtra publieditorial / especial publicitário / ofertas comerciais óbvias
 const isSponsored = i => {
   const blob = (i.title + ' ' + i.link + ' ' + (i.sum || '')).toLowerCase();
@@ -77,6 +90,25 @@ const isSponsored = i => {
 };
 const antesSp = all.length; all = all.filter(i => !isSponsored(i));
 if (antesSp !== all.length) console.log('filtrados patrocinados/ofertas', antesSp - all.length);
+// ===== cultura/entretenimento e notícias grandes (14/11) =====
+// pré-agrupamento rápido só em português (antes da tradução): conta quantos veículos diferentes deram o mesmo fato
+{
+  const wq = t => words(t), eq = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')));
+  const pt = all.filter(i => !i.lang); for (const i of pt) { i._w = wq(i.title); i._e = eq(i.title); }
+  const igual = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a._w) if (b._w.has(w)) c++; if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.5) return false; for (const e of a._e) if (b._e.has(e)) return true; return false; };
+  for (const i of pt) { const fs2 = new Set([i.src]); for (const j of pt) if (j !== i && igual(i, j)) fs2.add(j.src); i.pre = fs2.size; }
+  const antesPop = all.length; all = all.filter(i => i.tipo !== 'pop' || (i.pre || 1) >= 2);
+  console.log('cultura/entretenimento: entraram', all.filter(i => i.tipo === 'pop').length, 'com 2+ fontes; ficaram só na busca', antesPop - all.length);
+  // notícias grandes (3+ veículos) seguram lugar na edição por até 36 h, mesmo quando a enxurrada de notícias novas as empurraria para fora
+  const cnt = {}; const grandes0 = new Set(all.filter(i => (i.pre || 1) >= 3));
+  all = all.filter(i => { if (grandes0.has(i)) return true; const k = i.src + i.sec; cnt[k] = (cnt[k] || 0) + 1; return cnt[k] <= 14; });
+  const recentes = all.slice(0, 180), rs = new Set(recentes);
+  const grandes = all.filter(i => !rs.has(i) && (i.pre || 1) >= 3).sort((a, b) => (b.pre - a.pre) || (b.ts - a.ts)).slice(0, 40);
+  const gs = new Set(grandes);
+  all = [...[...recentes, ...grandes].sort((a, b) => b.ts - a.ts), ...all.filter(i => !rs.has(i) && !gs.has(i))];
+  console.log('notícias grandes seguradas na edição:', grandes.length);
+}
+
 // ===== imagens em alta resolução: og:image/twitter:image da página + CDN no maior tamanho + largura real medida =====
 const IF = 'imagens.json'; let IC = { og: {}, dim: {} }; try { IC = { og: {}, dim: {}, ...JSON.parse(fs.readFileSync(IF, 'utf8')) }; } catch {}
 async function metaImgs(url) {
@@ -139,7 +171,7 @@ for (const i of all) { i.grp = all.filter(j => same(i, j)); const m = new Map();
 for (const i of all) {
   const ageH = Math.max(0, (now - i.ts) / 3600e3);
   i.score = +((1 + i.outros.length) * Math.pow(0.5, ageH / 6)).toFixed(3);   // corroboração com meia-vida de 6h
-  i.urg = /urgente|última hora|ultima hora|breaking|^ao vivo/i.test(i.title) || (i.outros.length >= 1 && ageH < 1);
+  i.urg = /urgente|última hora|ultima hora|breaking|^ao vivo/i.test(i.title) || (i.outros.length >= 1 && ageH < 1 && i.tipo !== 'pop');   // fofoca/entretenimento só vira URGENTE com a palavra no título
   i.heat = Math.min(3, i.outros.length + (i.urg ? 1 : 0));
   const srcs = [i, ...i.grp]; const br = [...new Set(srcs.filter(x => x.reg === 'br').map(x => x.src))], ext = [...new Set(srcs.filter(x => x.reg === 'ext').map(x => x.src))];
   i.cov = { n: br.length + ext.length, br, ext }; if (i.cov.n >= 2 && (!br.length || !ext.length)) i.cov.cego = !br.length ? 'Ponto cego: só a imprensa estrangeira cobriu' : 'Ponto cego: só a imprensa brasileira cobriu';
@@ -153,6 +185,12 @@ const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\/
 // Como o mundo viu: notícia de veículo brasileiro com o mesmo fato em veículos estrangeiros (traduzido)
 const _mvSeen = new Set();
 const mundoViu = all.filter(i => i.sid && i.reg === 'br').map(i => ({ id: i.sid, ext: i.grp.filter(j => j.reg === 'ext' && (!j.lang || j.tr) && (j.tr || j.title).toLowerCase().replace(/\W+/g, '') !== i.title.toLowerCase().replace(/\W+/g, '')).map(j => ({ src: j.src, title: j.title, orig: j.orig || '', tr: j.tr || '', link: j.link, pub: j.pub })) })).filter(x => x.ext.length).filter((x, _i, _a, k = x.ext.map(e => e.link).sort().join('|')) => _mvSeen.has(k) ? false : (_mvSeen.add(k), true)).slice(0, 24);
+// ===== arquivo de busca (busca/AAAA-MM-DD.json): tudo o que foi lido, com título traduzido e nº de fontes quando está na edição =====
+try {
+  const naEd = new Map(all.filter(i => i.sid).map(i => [i.key, i]));
+  const r = arquivar(ARQ.filter(i => !isSponsored(i)).map(i => { const e = naEd.get(i.key) || i; return { t: e.title, s: e.sum, f: e.src, l: e.link, p: e.pub, c: i.tipo === 'pop' ? 'cultura' : e.sec, n: e.cov ? e.cov.n : (e.pre || 1), o: e.orig }; }), new Date(now - 3*3600e3).toISOString());
+  console.log('busca: arquivo', JSON.stringify(r));
+} catch (e) { console.log('busca: arquivo falhou', e.message); }
 if (stories.length < 20) { console.log('poucas notícias lidas (' + stories.length + '), mantendo edição anterior'); process.exit(0); }
 
 // ===== site: só grava se o conteúdo mudou =====

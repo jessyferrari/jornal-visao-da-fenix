@@ -29,6 +29,8 @@ jobs:
           NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
           NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
           FENIX_PAINEL_URL: '${{ secrets.FENIX_PAINEL_URL }}'
+      - name: Arquivo de busca (14 dias, inclui a seção Música)
+        run: node scripts/busca-arquivo.mjs || echo "arquivo de busca falhou nesta rodada"
       - name: Em Alta (mais comentado no Brasil e no mundo, tendências subindo, curva de atenção e Agenda de postagens) + canal Fenix Em Alta
         run: timeout 150 node scripts/emalta.mjs || echo "Em Alta falhou nesta rodada; o resto segue normal"
         env:
@@ -56,6 +58,7 @@ jobs:
           git add edicao.json traducoes.json imagens.json porque-importa.json feed.xml sitemap.xml index.html app.js notificadas.json og.jpg og-quadrado.jpg og/estado.json sw.js musica.json musica-estado.json musica-locais.json musica-traducoes.json
           git add paradas.json paradas-generos.json 2>/dev/null || true
           git add emalta.json emalta-estado.json atencao.json emalta.html 2>/dev/null || true
+          git add -A busca 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"
           git pull --rebase -q && git push -q

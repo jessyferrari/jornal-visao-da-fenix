@@ -48,6 +48,11 @@ self.addEventListener('fetch', (e) => {
     e.respondWith(networkFirst(e.request, { cacheKey: './edicao.json' }));
     return;
   }
+  // busca/*.json (arquivo de busca de 14 dias): sempre a versão nova, chave sem ?t= (cache só offline)
+  if (/\/busca\/[^/]+\.json$/.test(path)) {
+    e.respondWith(networkFirst(e.request, { cacheKey: './busca/' + path.split('/').pop() }));
+    return;
+  }
   // musica.json: sempre a versão nova (cache só offline)
   if (/\/musica\.json$/.test(path)) {
     e.respondWith(networkFirst(e.request, { cacheKey: './musica.json' }));
