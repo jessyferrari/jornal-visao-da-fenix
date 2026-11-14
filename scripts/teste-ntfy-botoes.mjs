@@ -10,6 +10,7 @@ const msgs = [
   { title: 'TESTE · +14 notícias novas no Jornal', message: '• a\n• b', click: J, icon: I, actions: [{ action: 'view', label: 'Abrir jornal', url: J }] },
 ];
 for (const m of msgs) { const r = await fetch(SRV + '/', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ topic: T, ...m }) }); console.log('POST', r.status, m.title); if (!r.ok) process.exitCode = 1; }
-const lidos = (await (await fetch(SRV + '/' + T + '/json?poll=1')).text()).trim().split('\n').filter(Boolean).map(l => JSON.parse(l));
+await new Promise(z => setTimeout(z, 3000));
+const lidos = (await (await fetch(SRV + '/' + T + '/json?poll=1&since=all')).text()).trim().split('\n').filter(Boolean).map(l => JSON.parse(l));
 for (const j of lidos) console.log('lido de volta de ' + SRV + ':', j.title, '| logo:', j.icon === I ? 'sim' : 'NÃO', '| botões:', (j.actions || []).map(a => a.action + ':' + a.label).join(' / '));
 if (lidos.length !== 3 || lidos.some(j => !(j.actions || []).length || j.icon !== I)) { console.log('FALHOU'); process.exitCode = 1; } else console.log('BOTÕES E LOGO CHEGARAM: OK');
