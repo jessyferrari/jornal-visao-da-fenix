@@ -1,6 +1,7 @@
 // Protótipo do setor MÚSICA do Jornal Visão da Fênix (Samba > Samba e Pagode > Música geral).
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
+import { botoesApurar, toqueNoNtfy } from './ntfy-acoes.mjs';
 import fs from 'node:fs';
 import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
@@ -303,7 +304,9 @@ const botoesPublicar = i => { if (!CMD || !ASS || !podePublicar(i.fontes)) retur
 // botões SEMPRE visíveis (14/11): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração (abre a página da Música)
 const MUSICA_URL = 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html';
 const acoesPost = i => { const ver = { action: 'view', label: 'Ver notícia', url: i.link, clear: false }; const b = botoesPublicar(i);
-  return b.length ? [b[0], ver, b[1]] : [ver, { action: 'view', label: podePublicar(i.fontes) ? 'Abrir Música' : '🔎 Em apuração', url: MUSICA_URL, clear: false }]; };
+  if (b.length) return [b[0], ver, b[1]];
+  if (!podePublicar(i.fontes)) return botoesApurar({ link: i.link, titulo: tit(i), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n'), pot: i.pot, origem: 'musica', id: idNoticia(i), CMD, ASS, SRV: NTFY_SRV, pagina: MUSICA_URL });   // 17/11: 1 fonte = Apurar no agente
+  return [ver, { action: 'view', label: 'Abrir Música', url: MUSICA_URL, clear: false }]; };
 // ⭐ selo de exclusivo (17/11): só quando o próprio site diz "exclusivo" e só ele publicou; depois de confirmado, quem saiu primeiro
 const alegadoM = i => alegaExclusivo(i.title, tit(i), ...i.grp.map(g => g.title), ...i.grp.map(tit));
 const primeiroM = i => primeiro([i, ...i.grp].map(x => ({ src: x.veic, ts: x.ts, link: x.link })));
@@ -371,7 +374,7 @@ const TOPIC_SP = topicoSP(TOPIC || 'simulado'); const NOME_CANAL = { sp: 'Músic
 const ENVIADOS = { mus: 0, sp: 0 }; const FALHOU = [];   // o que não saiu NÃO é marcado como avisado: volta na próxima rodada
 let OKS = 0;   // envios aceitos pelo ntfy (o ritmo conta só o que chegou)
 const envia = async (m, reg = '') => { const canal = reg === 'sp' && TOPIC_SP ? 'sp' : 'mus'; ENVIADOS[canal]++;
-  if (TOPIC) { const topic = destino(reg, TOPIC); const corpo = JSON.stringify({ topic, icon: ICONE, actions: [{ action: 'view', label: 'Abrir Música', url: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', clear: false }], ...m });
+  if (TOPIC) { const topic = destino(reg, TOPIC); const corpo = JSON.stringify(toqueNoNtfy({ topic, icon: ICONE, actions: [{ action: 'view', label: 'Abrir Música', url: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', clear: false }], ...m }));
     // sem perder notícia: 5 tentativas com espera crescente (respeita Retry-After), erro de rede não derruba o robô
     for (let t = 0; t < 5; t++) { try { const r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
         console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title);

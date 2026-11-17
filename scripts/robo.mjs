@@ -1,4 +1,5 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
+import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado } from './ntfy-acoes.mjs';
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
@@ -329,6 +330,7 @@ if (!TOPIC) { console.log('sem NTFY_TOPIC, pulando push'); process.exit(0); }
 const STATE = 'notificadas.json';
 const seed = !fs.existsSync(STATE);
 const st = seed ? { vistos: [] } : JSON.parse(fs.readFileSync(STATE,'utf8'));
+st.apuracao = st.apuracao || {}; const limparApuracao = (i) => { for (const k of [i.key, ...(i.grp || []).map(g => g.key)]) delete st.apuracao[k]; }; for (const [k, v] of Object.entries(st.apuracao)) if (now - v.t > 24 * 3600e3) delete st.apuracao[k];   // em apuração avisada há até 24 h
 const vistos = new Set(st.vistos);
 const novos = all.filter(i => !vistos.has(i.key) && now - i.ts < 3*3600e3 && (!i.lang || i.tr)).sort((a,b) => (b.urg - a.urg) || (b.ts - a.ts));
 // botões do agente (só se NTFY_TOPIC_COMANDO e NTFY_ASSINATURA existirem): "✅ Sim, publicar" e "Não" mandam um comando assinado
@@ -340,7 +342,8 @@ const { createHash, createHmac } = await import('node:crypto');
 // botões SEMPRE visíveis (14/11): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração (abre o jornal)
 const botoes = i => { const acoes = []; const fontes = (i.cov && i.cov.n) || 1;
   const ver = { action: 'view', label: 'Ver notícia', url: i.link, clear: false };
-  if (fontes < 2 || !CMD || !ASS) return { actions: [ver, { action: 'view', label: fontes < 2 ? '🔎 Em apuração' : 'Abrir jornal', url: B, clear: false }] };
+  if (fontes < 2) return { actions: botoesApurar({ link: i.link, titulo: i.title, texto: [i.title, 'Veículo: ' + i.src + ' · ' + fmtB(i.pub), i.sum ? String(i.sum).slice(0, 300) : ''].filter(Boolean).join('\n'), pot: i.pot, origem: 'jornal', CMD, ASS, pagina: B }) };   // 17/11: 1 fonte = Apurar no agente / Ver notícia / Não
+  if (!CMD || !ASS) return { actions: [ver, { action: 'view', label: 'Abrir jornal', url: B, clear: false }] };
   const texto = [i.title, 'Veículo: ' + i.src + ' · ' + fmtB(i.pub), i.sum ? String(i.sum).slice(0, 300) : ''].filter(Boolean).join('\n').slice(0, 500);
   if (CMD && ASS) { const id = createHash('sha1').update(i.link).digest('hex').slice(0, 12), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), base = { id, sig, titulo: String(i.title).slice(0, 160) }, fsig = createHmac('sha256', ASS).update(id + '|fontes=' + fontes).digest('hex').slice(0, 32);
     const alegado = alegaExclusivo(i.title, i.orig, ...i.grp.map(g => g.title), ...i.grp.map(g => g.orig));
@@ -356,7 +359,7 @@ const ABRIR = { action: 'view', label: 'Abrir jornal', url: B, clear: false };
 const espera = ms => new Promise(z => setTimeout(z, ms));
 const FALHAS = [];
 const post = async m => {
-  const corpo = JSON.stringify({ topic: TOPIC, icon: ICONE, actions: [ABRIR], ...m });
+  const corpo = JSON.stringify(toqueNoNtfy({ topic: TOPIC, icon: ICONE, actions: [ABRIR], ...m }));   // 17/11: aviso de uma notícia abre o ntfy com os botões
   for (let t = 0; t < 5; t++) {
     try { const r = await fetch(process.env.NTFY_SERVIDOR || 'https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
       if (r.ok) { await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }
@@ -383,6 +386,8 @@ if (!seed) {
   // URGENTE não espera a janela: até 3 urgentes extras por janela de 15 min
   const naHora = novos.filter((x, ix) => ix < livres || (x.urg && (R.urg || 0) + novos.slice(livres, ix).filter(y => y.urg).length < 3));
   for (const i of naHora) { const ok = await post({ title: tituloComNota(i.pot, (i.urg ? 'URGENTE · ' : '') + i.title), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : prioridadeNota(i.pot, 2), tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+    if (ok && ((i.cov && i.cov.n) || 1) >= 2) limparApuracao(i);
+    if (ok && ((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) };   // 17/11: volta com Sim, publicar quando confirmar
     if (ok) { enviados++; if (naHora.indexOf(i) < livres) R.n++; else R.urg = (R.urg || 0) + 1; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
   // o resto vai INTEIRO em resumos (nada cortado em 12): cada resumo cabe no limite de 4.000 caracteres do ntfy
   const extra = novos.filter(x => !naHora.includes(x)); if (!podeResumo) { for (const i of extra) naoSaiu.add(i.key); extra.length = 0; }   // resumo só a cada 15 min: o resto espera
@@ -390,22 +395,30 @@ if (!seed) {
   for (const i of extra) { const l = '• ' + (i.pot ? '[' + i.pot.nota + '%' + (i.pot.provisoria ? ' prov.' : '') + '] ' : '') + (i.urg ? 'URGENTE · ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
   if (atual.length) partes.push(atual);
   for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
-    if (ok) { enviados++; R.resumo = now; } else for (const [i] of pt) naoSaiu.add(i.key); }
+    if (ok) { enviados++; R.resumo = now; for (const [i] of pt) if (((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) }; } else for (const [i] of pt) naoSaiu.add(i.key); }
 }
 // 📈 Subindo agora (17/11): o mesmo fato em 3+ veículos em até 30 min; até 6 por dia, nunca de madrugada, com Sim, publicar (já tem 2+ fontes)
 const SUB = subindo(all.filter(i => (!i.lang || i.tr) && i.cov && i.cov.n >= 3), st, { agora: now }); let subEnv = 0;
 if (seed) { for (const x of SUB) for (const k of x.chaves) st.subindo[k] = 'semente'; }
 else for (const x of SUB) { if (!podeSubindo(st, { agora: now })) break; const i = x.i;
   const ok = await post({ title: '📈 Subindo agora: ' + i.title.slice(0, 150), message: textoSubindo(x), click: i.link, priority: 4, tags: ['chart_with_upwards_trend', 'newspaper'], ...botoes(i) });
-  if (ok) { marcarSubindo(st, x, now); subEnv++; } }
+  if (ok) { marcarSubindo(st, x, now); subEnv++; limparApuracao(i); } }
 console.log('subindo agora:', SUB.length, 'fatos com 3+ veículos em 30 min | enviados', subEnv, '| hoje', (st.subindoDia || {}).n || 0);
 // ✅ confirmação de um "possível exclusivo": um 2º veículo publicou; chega com Sim, publicar (no máximo 3 por rodada)
 let confEnv = 0;
 if (!seed) for (const c of EXC.slice(0, 3)) { const i = c.i;
   const ok = await post({ title: '✅ Confirmado: ' + i.title.slice(0, 150), message: textoConfirmado(c.p, i.cov.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + i.grp.map(g => g.src).slice(0, 4).join(', '), click: i.link, priority: 2, tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
-  if (ok) { c.t.confirmado = brIso(new Date(now)); confEnv++; } }
+  if (ok) { c.t.confirmado = brIso(new Date(now)); confEnv++; limparApuracao(i); } }
 else for (const c of EXC) c.t.confirmado = brIso(new Date(now));
 fs.writeFileSync(EXF, JSON.stringify(EX));
 console.log('exclusivos: confirmações enviadas', confEnv, 'de', EXC.length);
+// ✅ 17/11: notícia avisada com 1 fonte que ganhou a 2ª fonte volta com Sim, publicar (até 3 por rodada e 15 por dia)
+const jaConf = new Set([...EXC.map((c) => c.i.key), ...SUB.map((x) => x.i.key)]);
+const CONF = confirmadosDeApuracao(all.filter(i => (!i.lang || i.tr) && i.cov && i.cov.n >= 2 && !jaConf.has(i.key)), st, { agora: now });
+let conf2 = 0;
+if (!seed) for (const { i, chave } of CONF) { if (conf2 >= 3 || !podeConfirmar(st, { agora: now })) break;
+  const ok = await post({ title: tituloComNota(i.pot, '✅ Confirmado: ' + i.title.slice(0, 140)), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + 'Antes em apuração, agora em ' + i.cov.n + ' veículos: ' + [i.src, ...i.grp.map(g => g.src)].slice(0, 4).join(', '), click: i.link, priority: prioridadeNota(i.pot, 2), tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
+  if (ok) { marcarConfirmado(st, chave, { agora: now }); conf2++; } }
+console.log('em apuração que confirmou: ' + CONF.length + ' | avisos enviados ' + conf2 + ' | em apuração guardadas ' + Object.keys(st.apuracao).length);
 console.log('push enviados', enviados, 'novos', novos.length, '| não saíram (voltam na próxima rodada):', naoSaiu.size, FALHAS.length ? '| falhas: ' + FALHAS.join(' / ') : '');
-fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, ritmo: st.ritmo, subindo: st.subindo, subindoDia: st.subindoDia, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k) && !naoSaiu.has(k)), ...st.vistos].slice(0,6000) }));
+fs.writeFileSync(STATE, JSON.stringify({ apuracao: st.apuracao, confDia: st.confDia, edicao1min: st.edicao1min, ritmo: st.ritmo, subindo: st.subindo, subindoDia: st.subindoDia, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k) && !naoSaiu.has(k)), ...st.vistos].slice(0,6000) }));

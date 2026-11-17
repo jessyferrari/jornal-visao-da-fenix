@@ -1,6 +1,7 @@
 // Regras puras do "Em Alta" (testáveis sem rede): canal próprio derivado do canal Música (sem segredo novo),
 // junção de sinais de fontes diferentes no mesmo assunto, etiquetas Subindo / No pico / Caindo / Em alta com base
 // no histórico das rodadas, curva de atenção por hora (Wikipedia pt) e Agenda de postagens. Zero IA: só código.
+import { botoesApurar } from './ntfy-acoes.mjs';
 import { createHash, createHmac } from 'node:crypto';
 
 const TOPICO_OK = /^[-_A-Za-z0-9]{1,64}$/;
@@ -195,6 +196,7 @@ export function corpoComando(acao, i, { CMD, ASS, dia, hora }) {
 }
 export function botoesItem(i, { SRV = 'https://ntfy.sh', CMD, ASS, slot, dia, pagina }) {
   const ver = { action: 'view', label: 'Ver notícia', url: i.link || pagina, clear: false };
+  if (!i.publicavel && i.link) return botoesApurar({ link: i.link, titulo: i.nome, texto: textoProducao(i), pot: i.pot, origem: 'emalta', id: i.id, CMD, ASS, SRV, pagina });   // 17/11: 1 fonte = Apurar no agente
   if (!i.publicavel || !CMD || !ASS) return [ver, { action: 'view', label: i.publicavel ? 'Abrir Em Alta' : '🔎 Em apuração', url: pagina, clear: false }];
   const url = SRV.replace(/\/$/, '') + '/' + CMD;
   const a = [{ action: 'http', label: '✅ Sim, publicar', url, method: 'POST', body: corpoComando('publicar', i, { CMD, ASS }), clear: true }];

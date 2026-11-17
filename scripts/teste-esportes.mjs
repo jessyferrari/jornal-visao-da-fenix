@@ -46,7 +46,7 @@ ok('mesmo fato: 2 veículos = confirmado; 2 feeds do ge = 1 veículo', () => {
 ok('selo e botões: 1 fonte com "Exclusivo:" = possível exclusivo, sem Sim, publicar; 2 fontes = Sim, publicar assinado, origem esportes', () => {
   const um = S.agrupar([it('UOL Esporte', 'Exclusivo: Superbet prepara rescisão com São Paulo e Fluminense', 'https://uol.com.br/x')])[0];
   const v = S.vista(um, { N: 26, agora: T0 }); assert.match(v.selo.texto, /^⭐ Possível exclusivo: UOL Esporte diz que é exclusivo · só 1 de 26 veículos monitorados publicou até 12:00$/);
-  assert.ok(S.botoes(um, { CMD, ASS, pagina: 'p' }).every((b) => b.action === 'view'));
+  { const b1 = S.botoes(um, { CMD, ASS, pagina: 'p' }); assert.deepEqual(b1.map((b) => b.label), ['🔎 Apurar no agente', 'Ver notícia', 'Não']); assert.ok(!JSON.stringify(b1).includes('publicar'), '1 fonte: sem Sim, publicar'); }   // 17/11
   const dois = S.agrupar([it('UOL Esporte', 'Exclusivo: Superbet prepara rescisão com São Paulo e Fluminense', 'https://uol.com.br/x'), it('Lance!', 'Superbet prepara rescisão de contrato com São Paulo e Fluminense', 'https://lance.com.br/y', T0 + 900e3)])[0];
   const b = S.botoes(dois, { CMD, ASS, pagina: 'p' }); const c = JSON.parse(b[0].body);
   assert.equal(b[0].label, '✅ Sim, publicar'); assert.equal(c.origem, 'esportes'); assert.equal(c.fsig, createHmac('sha256', ASS).update(c.id + '|fontes=2').digest('hex').slice(0, 32));
@@ -85,7 +85,7 @@ await (async () => {
   const fontes2 = { ...fontes1, 'Lance!': f('la2', sitemap([['Exclusivo: Neymar acerta volta ao Barcelona por uma temporada', 'https://www.lance.com.br/futebol/neymar', agora + 5 * 60e3]])) };
   recebidos = []; falhar = 5; r = await roda(fontes2, 10); assert.equal(r.c, 0, r.o); assert.equal(recebidos.length, 0); assert.match(r.o, /NÃO SAÍRAM/);
   r = await roda(fontes2, 20); const ex = recebidos.filter((x) => /^⭐ Possível exclusivo: Exclusivo: Neymar/.test(x.title)); assert.equal(ex.length, 1, r.o + JSON.stringify(recebidos.map((x) => x.title)));
-  assert.equal(ex[0].topic, 'mus-esportes'); assert.ok(ex[0].actions.every((a) => a.action === 'view'), '1 fonte: sem Sim, publicar'); assert.ok(!recebidos.some((x) => /assine/.test(x.title)), 'convite não repete');
+  assert.equal(ex[0].topic, 'mus-esportes'); assert.ok(!JSON.stringify(ex[0].actions).includes('"acao\\":\\"publicar'), '1 fonte: sem Sim, publicar'); assert.ok(!('click' in ex[0]), '17/11: o toque abre o ntfy com os botões'); assert.ok(!recebidos.some((x) => /assine/.test(x.title)), 'convite não repete');
   // 4ª rodada: ge confirma o furo do UOL: "✅ Confirmado" com Sim, publicar e selo assinado
   const fontes3 = { ...fontes2, 'ge': f('ge3', rss([['Brasil goleia Singapura no último amistoso do ano', 'https://ge.globo.com/futebol/selecao/a', agora - 50 * 60e3], ['Superbet prepara rescisão de contrato com São Paulo e Fluminense', 'https://ge.globo.com/futebol/superbet', agora + 25 * 60e3]])) };
   recebidos = []; r = await roda(fontes3, 30); assert.equal(r.c, 0, r.o);

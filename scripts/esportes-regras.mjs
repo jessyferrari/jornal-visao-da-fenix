@@ -1,6 +1,7 @@
 // Regras puras da seção ⚽ Esportes: fontes, filtro, modalidade, Opinião/Crítica separada de notícia, mesmo fato,
 // regra das 2 fontes, selo de exclusivo, botões e convite de assinatura. Mesma base da seção Séries e Filmes
 // (leitura de feed, agrupamento e selo vêm de series-regras.mjs e exclusivo.mjs). Testadas em scripts/teste-esportes.mjs.
+import { botoesApurar } from './ntfy-acoes.mjs';
 import { notaPotencial } from './potencial.mjs';
 import { createHmac } from 'node:crypto';
 import { lerFeed, canon, brIso, agrupar, idNoticia, partes } from './series-regras.mjs';
@@ -92,7 +93,8 @@ export const vistaOpiniao = (i) => ({ id: idNoticia(i.link), titulo: i.title, ve
 // botões ntfy (máx. 3): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração
 export function botoes(i, { CMD, ASS, SRV = 'https://ntfy.sh', pagina }) {
   const ver = { action: 'view', label: 'Ver notícia', url: i.link, clear: false };
-  if (i.n < 2 || !CMD || !ASS) return [ver, { action: 'view', label: i.n < 2 ? '🔎 Em apuração' : 'Abrir Esportes', url: pagina, clear: false }];
+  if (i.n < 2) return botoesApurar({ link: i.link, titulo: i.title, texto: [i.title, 'Veículo: ' + i.src, i.sum ? String(i.sum).slice(0, 280) : ''].filter(Boolean).join('\n'), origem: 'esportes', id: idNoticia(i.link), CMD, ASS, SRV, pagina });   // 17/11: 1 fonte = Apurar no agente
+  if (!CMD || !ASS) return [ver, { action: 'view', label: 'Abrir Esportes', url: pagina, clear: false }];
   const id = idNoticia(i.link), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), fontes = i.n;
   const fsig = createHmac('sha256', ASS).update(id + '|fontes=' + fontes).digest('hex').slice(0, 32);
   const alegado = alegaExclusivo(i.title, i.orig, ...i.grp.map((g) => g.title), ...i.grp.map((g) => g.orig));

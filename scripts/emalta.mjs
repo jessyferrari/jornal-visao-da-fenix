@@ -3,6 +3,7 @@
 // imprensa que o robô já agrupa e as mais lidas da Wikipedia). Gera emalta.json (página emalta.html e painel do agente),
 // atencao.json (curva de atenção por hora, Wikipedia pt) e manda o canal ntfy "Fenix Em Alta" (<canal Música>-alta).
 // Zero IA, zero login, zero API paga. Uso: node scripts/emalta.mjs [--agora 2026-11-14T07:05-03:00] [--sem-envio]
+import { toqueNoNtfy } from './ntfy-acoes.mjs';
 import fs from 'node:fs';
 import * as R from './emalta-regras.mjs';
 
@@ -122,7 +123,7 @@ const salvar = () => fs.writeFileSync(ESTF, JSON.stringify(E));
 if (!ALTA || process.argv.includes('--sem-envio')) { console.log(ALTA ? 'sem envio (--sem-envio)' : 'sem NTFY_TOPIC_MUSICA, sem envio'); salvar(); process.exit(0); }
 const espera = (ms) => new Promise((z) => setTimeout(z, ms)); const FALHAS = []; let enviados = 0;
 const post = async (topic, m) => {   // sem perder aviso: 5 tentativas, respeita Retry-After; o que não sai volta na próxima rodada
-  const corpo = JSON.stringify({ topic, icon: ICONE, ...m });
+  const corpo = JSON.stringify(toqueNoNtfy({ topic, icon: ICONE, ...m }));   // 17/11: aviso de uma notícia abre o ntfy com os botões
   for (let t = 0; t < 5; t++) {
     try { const r = await fetch(SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
       if (r.ok) { enviados++; await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }

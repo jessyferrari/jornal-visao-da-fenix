@@ -63,7 +63,7 @@ const ASS = 'segredo-de-teste', CMD = 'cmd-teste';
 ok('vista e botões: 1 fonte = em apuração sem Sim, publicar; 2+ = Sim, publicar com fontes e selo assinados', () => {
   const [um] = S.agrupar([it('Omelete', 'Vingadores: Doutor Destino | Duração do filme é revelada [EXCLUSIVO]', 0, 'https://www.omelete.com.br/filmes/vdd')]);
   const v1 = S.vista(um, { N: 18, agora: T0 + 3600e3 }); assert.equal(v1.emApuracao, true); assert.equal(v1.selo.tipo, 'possivel'); assert.match(v1.selo.texto, /só 1 de 18 veículos monitorados publicou até 13:00$/);
-  const b1 = S.botoes(um, { CMD, ASS, pagina: 'P' }); assert.ok(b1.every((a) => a.action === 'view'), 'sem botão http'); assert.equal(b1[1].label, '🔎 Em apuração');
+  const b1 = S.botoes(um, { CMD, ASS, pagina: 'P' }); assert.deepEqual(b1.map((a) => a.label), ['🔎 Apurar no agente', 'Ver notícia', 'Não']); assert.ok(!JSON.stringify(b1).includes('publicar'), '1 fonte: sem Sim, publicar');   // 17/11
   const [dois] = S.agrupar([it('Omelete', 'Vingadores: Doutor Destino tem duração revelada [EXCLUSIVO]', 0, 'https://www.omelete.com.br/filmes/vdd2'), it('Cinepop', 'Vingadores: Doutor Destino tem duração revelada pela Marvel', 50, 'https://cinepop.com.br/vdd')]);
   assert.equal(dois.n, 2); const v2 = S.vista(dois, { N: 18, agora: T0 }); assert.deepEqual(v2.primeiro, { veiculo: 'Omelete', hora: '12:00' }); assert.equal(v2.exclusivoConfirmado, true); assert.equal(v2.selo, undefined);
   const b2 = S.botoes(dois, { CMD, ASS, pagina: 'P' }); assert.equal(b2[0].label, '✅ Sim, publicar'); const c = JSON.parse(b2[0].body);
@@ -114,7 +114,7 @@ await (async () => {
   recebidos = []; const fontes2 = { ...fontes1, 'PapelPop': f('pp2', rss([['Exclusivo: Marina Ruy Barbosa estrela filme da Globoplay', 'https://www.papelpop.com/mrb', agora + 5 * 60e3, 'Filmes']])) };
   falhar = 5; r = await roda(fontes2, 10); assert.equal(r.c, 0, r.o); assert.equal(recebidos.length, 0, JSON.stringify(recebidos.map((x) => x.title)) + r.o); assert.match(r.o, /NÃO SAÍRAM/);
   r = await roda(fontes2, 20); assert.equal(r.c, 0, r.o); const ex = recebidos.filter((x) => /^⭐ Possível exclusivo/.test(x.title)); assert.equal(ex.length, 1, r.o + JSON.stringify(recebidos.map((x) => x.title)));
-  assert.equal(ex[0].topic, 'mus-series'); assert.ok(ex[0].actions.every((a) => a.action === 'view'), 'exclusivo de 1 fonte não tem Sim, publicar');
+  assert.equal(ex[0].topic, 'mus-series'); assert.ok(!JSON.stringify(ex[0].actions).includes('"acao\\":\\"publicar'), 'exclusivo de 1 fonte não tem Sim, publicar'); assert.ok(!('click' in ex[0]), '17/11: o toque abre o ntfy com os botões');
   // 4ª rodada: Gshow confirma o fato da Deborah Secco: chega "✅ Confirmado" com Sim, publicar e o selo assinado
   recebidos = []; const fontes3 = { ...fontes2, 'Gshow': f('gs3', rss([['Deborah Secco revela papel em nova série da Netflix e comemora', 'https://gshow.globo.com/ds', agora + 25 * 60e3, 'Séries']])) };
   r = await roda(fontes3, 30); assert.equal(r.c, 0, r.o);

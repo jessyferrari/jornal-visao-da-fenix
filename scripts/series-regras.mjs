@@ -1,5 +1,6 @@
 // Regras puras da seção 🎬 Séries e Filmes (streaming): fontes, filtro do assunto, agrupamento do mesmo fato,
 // regra das 2 fontes, plataforma citada, selo de exclusivo, botões e resumos. Testadas em scripts/teste-series.mjs.
+import { botoesApurar } from './ntfy-acoes.mjs';
 import { notaPotencial } from './potencial.mjs';
 import { createHash, createHmac } from 'node:crypto';
 import { alegaExclusivo, primeiro, selo, campoSelo, hhmm } from './exclusivo.mjs';
@@ -118,7 +119,8 @@ export function vista(i, { N, agora, google }) {
 // botões ntfy (máx. 3): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração
 export function botoes(i, { CMD, ASS, SRV = 'https://ntfy.sh', pagina }) {
   const ver = { action: 'view', label: 'Ver notícia', url: i.link, clear: false };
-  if (i.n < 2 || !CMD || !ASS) return [ver, { action: 'view', label: i.n < 2 ? '🔎 Em apuração' : 'Abrir Séries', url: pagina, clear: false }];
+  if (i.n < 2) return botoesApurar({ link: i.link, titulo: i.title, texto: [i.title, 'Veículo: ' + i.src, i.sum ? String(i.sum).slice(0, 280) : ''].filter(Boolean).join('\n'), origem: 'series', id: idNoticia(i.link), CMD, ASS, SRV, pagina });   // 17/11: 1 fonte = Apurar no agente
+  if (!CMD || !ASS) return [ver, { action: 'view', label: 'Abrir Séries', url: pagina, clear: false }];
   const id = idNoticia(i.link), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), fontes = i.n;
   const fsig = createHmac('sha256', ASS).update(id + '|fontes=' + fontes).digest('hex').slice(0, 32);
   const alegado = alegaExclusivo(i.title, i.orig, ...i.grp.map((g) => g.title), ...i.grp.map((g) => g.orig));

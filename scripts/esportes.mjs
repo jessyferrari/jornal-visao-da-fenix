@@ -4,6 +4,7 @@
 // contagem do Google Notícias só para esses itens, e o aviso "Confirmado por N veículos, X saiu primeiro às HH:MM".
 // Gera esportes.json (página esportes.html, busca e painel) e manda o canal ntfy "Fenix Esportes" (<canal Música>-esportes).
 // Zero IA, zero login, zero API paga. Uso: node scripts/esportes.mjs [--agora 2026-11-17T09:05-03:00] [--sem-envio] [--sem-google]
+import { toqueNoNtfy } from './ntfy-acoes.mjs';
 import fs from 'node:fs';
 import * as S from './esportes-regras.mjs';
 import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo.mjs';
@@ -87,7 +88,7 @@ if (seed) { for (const g of grupos) marcar(g); for (const c of confirmados) c.t.
 if (!SER || process.argv.includes('--sem-envio')) { console.log(SER ? 'sem envio (--sem-envio)' : 'sem NTFY_TOPIC_MUSICA, sem envio'); salvar(); process.exit(0); }
 const espera = (ms) => new Promise((z) => setTimeout(z, ms)); const FALHAS = []; let enviados = 0;
 const post = async (topic, m) => {
-  const corpo = JSON.stringify({ topic, icon: ICONE, ...m });
+  const corpo = JSON.stringify(toqueNoNtfy({ topic, icon: ICONE, ...m }));   // 17/11: aviso de uma notícia abre o ntfy com os botões
   for (let t = 0; t < 5; t++) {
     try { const r = await fetch(SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
       if (r.ok) { enviados++; await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }

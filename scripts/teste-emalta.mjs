@@ -72,7 +72,7 @@ ok('botões: no máximo 3; 2 veículos = Sim, publicar + Agendar + Ver (assinado
   assert.equal(pub.sig, createHmac('sha256', ASS).update(i.id).digest('hex').slice(0, 32)); assert.equal(pub.fsig, createHmac('sha256', ASS).update(i.id + '|fontes=2').digest('hex').slice(0, 32));
   assert.equal(ag.acao, 'agendar'); assert.equal(ag.hora, '20:00'); assert.equal(ag.asig, createHmac('sha256', ASS).update(i.id + '|agendar|2026-11-14|20:00').digest('hex').slice(0, 32));
   assert.ok(JSON.stringify(b).length < 3000, 'cabe no limite de 4.096 bytes do ntfy');
-  const u = R.botoesItem({ ...i, veiculos: V('G1'), publicavel: false }, { CMD: 'cmd', ASS, slot: { hora: '20:00' }, pagina: 'P' }); assert.deepEqual(u.map((x) => x.label), ['Ver notícia', '🔎 Em apuração']); assert.ok(!JSON.stringify(u).includes('publicar'));
+  const u = R.botoesItem({ ...i, veiculos: V('G1'), publicavel: false }, { CMD: 'cmd', ASS, slot: { hora: '20:00' }, pagina: 'P' }); assert.deepEqual(u.map((x) => x.label), ['🔎 Apurar no agente', 'Ver notícia', 'Não']); assert.ok(!JSON.stringify(u).includes('publicar'), '1 fonte: sem Sim, publicar'); assert.equal(JSON.parse(u[0].body).acao, 'apurar');
 });
 ok('números só os que a fonte dá', () => {
   const t = { tipos: ['gt', 'x', 'wiki'], veiculos: V('A', 'B'), numeros: { gt: { trafego: '2000+', pais: ['br'] }, x: { posicao: 3, melhor: 3, horas: 4, posts: '', onde: ['br'] }, wiki: { views: 21150, vezesMedia: 2.6, dia: '2026-11-12' } } };
