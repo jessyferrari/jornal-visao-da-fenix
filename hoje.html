@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel do dia · Jornal Visão da Fênix</title>
+<meta name="description" content="Datas do dia, o que vale postar em ordem de horário, exclusivos e notícias importantes.">
+<link rel="icon" href="favicon-32.png">
+<style>
+:root{--fundo:#0d0b08;--sup:#16130e;--linha:#3a3832;--tinta:#fff8ea;--tinta2:#c9b896;--ouro:#d4af37;--ouro2:#f2d27a;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--fundo);color:var(--tinta);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:16px}a{color:var(--ouro2)}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 2px}h1{font-size:1.5rem;margin:0}h1 span{color:var(--ouro)}
+h2{font-size:1.1rem;margin:24px 0 8px;color:var(--ouro);display:flex;align-items:baseline;gap:8px}h2 small{color:var(--tinta2);font-weight:400;font-size:13px}
+h3{font-size:.95rem;margin:16px 0 6px;color:var(--ouro2);text-transform:uppercase;letter-spacing:.06em}
+.m{color:var(--tinta2);font-size:13px}.voltar{color:var(--ouro);text-decoration:none;font-weight:600}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.meta div{background:var(--sup);border:1px solid var(--linha);border-radius:12px;padding:8px 12px}.meta b{color:var(--ouro);font-size:1.2rem;display:block}
+.data{background:var(--sup);border:1px solid var(--linha);border-left:3px solid var(--ouro);border-radius:12px;padding:10px 12px;margin:6px 0}
+.it{display:grid;grid-template-columns:52px 1fr;gap:10px;background:var(--sup);border:1px solid var(--linha);border-radius:12px;padding:10px 12px;margin:6px 0}
+.h{font:700 15px/1.2 system-ui;color:var(--ouro2)}.nota{display:inline-block;font:700 12px system-ui;padding:3px 8px;border-radius:999px;border:1.5px solid var(--ouro);margin-right:6px}
+.nota.nao-deixe{background:var(--ouro);color:#0d0b08}.nota.vale{color:var(--ouro)}.t{font-weight:600;color:var(--tinta);text-decoration:underline;text-decoration-color:var(--linha)}
+.vazio{color:var(--tinta2);padding:6px 0}
+</style>
+</head>
+<body>
+<main>
+<header><a class="voltar" href="./">← Jornal</a><h1><span>Painel do dia</span></h1></header>
+<div class="m" id="atual">carregando…</div>
+<div class="meta" id="meta"></div>
+<h2>Datas de hoje <small>só com fonte oficial</small></h2><div id="datas"></div>
+<h2>O que vale postar <small>70% ou mais, em ordem de horário</small></h2><div id="vale"></div>
+<h2>Exclusivos <small>como o veículo disse</small></h2><div id="excl"></div>
+<h2>Também importantes <small>3 ou mais veículos</small></h2><div id="imp"></div>
+</main>
+<script>
+const e=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const hm=s=>String(s||'').slice(11,16);
+const item=i=>'<div class="it"><div class="h">'+e(hm(i.publicado))+'</div><div><span class="nota '+e(i.faixa)+'">'+e(i.nota)+'%'+(i.provisoria?' prov.':'')+'</span><span class="m">'+e(i.secao)+' · '+e(i.veiculo)+' · '+e(i.fontes)+(i.fontes>1?' veículos':' veículo')+'</span><br><a class="t" href="'+e(i.link)+'" target="_blank" rel="noopener">'+e(i.titulo)+'</a>'+(i.selo?'<div class="m">'+e(i.selo.texto)+'</div>':'')+(i.motivo?'<div class="m">'+e(i.motivo)+'</div>':'')+'</div></div>';
+fetch('hoje.json',{cache:'no-cache'}).then(r=>r.json()).then(h=>{
+ document.getElementById('atual').textContent='Atualizado '+h.atualizado.slice(8,10)+'/'+h.atualizado.slice(5,7)+' '+hm(h.atualizado)+' (Brasília). Meta: '+h.meta+' postagens por dia.';
+ document.getElementById('meta').innerHTML='<div><b>'+h.naoDeixe+'</b>não deixe de postar</div><div><b>'+h.totalVale+'</b>vale postar</div><div><b>'+h.exclusivos.length+'</b>exclusivos</div>';
+ const d=[...h.datas.nacionais.map(x=>['🇧🇷 Nacional',x]),...h.datas.internacionais.map(x=>['🌍 Internacional',x])];
+ document.getElementById('datas').innerHTML=d.length?d.map(([a,x])=>'<div class="data"><b>'+e(x.nome)+'</b><div class="m">'+a+(x.feriado?' · feriado':'')+' · fonte: <a href="'+e(x.link)+'" target="_blank" rel="noopener">'+e(x.fonte)+'</a></div></div>').join(''):'<div class="vazio">Nenhuma data com fonte oficial cadastrada para hoje.</div>';
+ document.getElementById('vale').innerHTML=h.valePostar.map(p=>'<h3>'+e(p.nome)+'</h3>'+(p.itens.length?p.itens.map(item).join(''):'<div class="vazio">Nada com 70% ou mais neste período.</div>')).join('');
+ document.getElementById('excl').innerHTML=h.exclusivos.length?h.exclusivos.map(item).join(''):'<div class="vazio">Nenhum exclusivo hoje.</div>';
+ document.getElementById('imp').innerHTML=h.importantes.length?h.importantes.map(item).join(''):'<div class="vazio">Nada com 3 ou mais veículos fora da lista acima.</div>';
+}).catch(()=>{document.getElementById('atual').textContent='O painel aparece depois da próxima rodada do robô.';});
+</script>
+</body>
+</html>

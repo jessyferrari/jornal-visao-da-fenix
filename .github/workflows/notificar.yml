@@ -59,6 +59,10 @@ jobs:
         run: |
           idade=$(node -e 'try{const g=require("./referencias.json").atualizado;console.log(Math.round((Date.now()-Date.parse(g+":00-03:00"))/60e3))}catch{console.log(9999)}')
           if [ "$idade" -ge 28 ]; then timeout 120 node scripts/referencias.mjs || echo "referências falharam nesta rodada; fica a anterior"; else echo "referências: geradas há $idade min"; fi
+      - name: Painel do dia (datas oficiais, o que vale postar por horário, exclusivos) + aviso das 7h e das 19h
+        env:
+          NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}'
+        run: timeout 60 node scripts/hoje.mjs || echo "painel do dia falhou nesta rodada; fica o anterior"
       - name: Imagem de compartilhamento (og) da edição
         run: npm i --no-save --no-audit --no-fund playwright-core@1 >/dev/null && node scripts/og.mjs || echo "og falhou, mantém a anterior"
       - name: Status privado dos feeds (só no Actions)
@@ -79,6 +83,7 @@ jobs:
           git add emalta.json emalta-estado.json atencao.json emalta.html 2>/dev/null || true
           git add series.json series-estado.json series-traducoes.json series.html esportes.json esportes-estado.json esportes-traducoes.json esportes.html exclusivos-estado.json 2>/dev/null || true
           git add referencias.json referencias-estado.json 2>/dev/null || true
+          git add hoje.json hoje-estado.json hoje.html 2>/dev/null || true
           git add -A busca 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"
