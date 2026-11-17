@@ -151,14 +151,14 @@ for (const r of RESUMOS) {
   const fortes = itens.filter((i) => i.tipos.length >= 2 || i.publicavel), soUma = itens.filter((i) => !fortes.includes(i));
   const porFonte = {}; for (const i of soUma) (porFonte[R.TIPOS[i.tipos[0]]] = porFonte[R.TIPOS[i.tipos[0]]] || []).push(i.nome);
   const L = [...cab, ...fortes.map(linhaItem), ...(soUma.length ? ['', 'Só em 1 fonte (ainda sem confirmação):', ...Object.entries(porFonte).map(([f, l]) => '• ' + f + ': ' + l.join(', '))] : [])]; const P = partes(L); let tudo = true;
-  for (const [n, p] of P.entries()) { const ok1 = await post(ALTA, { title: (r === '07:00' ? '☀️ Bom dia · ' : '🚀 ') + 'Em Alta ' + r.replace(':', 'h') + ' · ' + itens.length + (itens.length > 1 ? ' assuntos' : ' assunto') + (P.length > 1 ? ' (' + (n + 1) + '/' + P.length + ')' : ''), message: p.join('\n'), click: PAGINA, priority: r === '07:00' ? 4 : 3, tags: ['rocket'], actions: n === 0 ? botoesAgenda(plano) : [{ action: 'view', label: 'Abrir Em Alta', url: PAGINA, clear: false }] }); if (!ok1) tudo = false; }
+  for (const [n, p] of P.entries()) { const ok1 = await post(ALTA, { title: (r === '07:00' ? '☀️ Bom dia · ' : '🚀 ') + 'Em Alta ' + r.replace(':', 'h') + ' · ' + itens.length + (itens.length > 1 ? ' assuntos' : ' assunto') + (P.length > 1 ? ' (' + (n + 1) + '/' + P.length + ')' : ''), message: p.join('\n'), click: PAGINA, priority: 2, tags: ['rocket'], actions: n === 0 ? botoesAgenda(plano) : [{ action: 'view', label: 'Abrir Em Alta', url: PAGINA, clear: false }] }); if (!ok1) tudo = false; }
   if (tudo) { N.resumos[r] = R.brIso(AGORA); if (comAgenda) N.planos.ultimo = plano.filter((s) => !s.passou).map((s) => ({ h: s.hora, id: s.item && s.item.id })); }
 }
 // replanejamento das 13h: só chega se a agenda das próximas horas mudou (algo novo estourou)
 if (!N.planos.r13 && min >= 13 * 60 && min <= 14 * 60 + 40 && N.resumos['07:00']) {
   const agoraIds = plano.filter((s) => !s.passou).map((s) => ({ h: s.hora, id: s.item && s.item.id })); const antes = (N.planos.ultimo || []).filter((x) => x.h >= R.hm(min));
   if (agoraIds.length && JSON.stringify(agoraIds.map((x) => x.id)) !== JSON.stringify(antes.map((x) => x.id))) {
-    if (await post(ALTA, { title: '🗓️ Agenda replanejada · ' + diaTxt, message: 'Algo novo subiu. Horários que ainda faltam hoje:\n' + agendaTexto(plano), click: PAGINA + '#agenda', priority: 3, tags: ['spiral_calendar'], actions: botoesAgenda(plano) })) { N.planos.r13 = R.brIso(AGORA); N.planos.ultimo = agoraIds; }
+    if (await post(ALTA, { title: '🗓️ Agenda replanejada · ' + diaTxt, message: 'Algo novo subiu. Horários que ainda faltam hoje:\n' + agendaTexto(plano), click: PAGINA + '#agenda', priority: 2, tags: ['spiral_calendar'], actions: botoesAgenda(plano) })) { N.planos.r13 = R.brIso(AGORA); N.planos.ultimo = agoraIds; }
   } else N.planos.r13 = 'sem mudança';
 }
 // aviso na hora: só quando dispara forte (Subindo, 2+ fontes, visto pela 1ª vez há menos de 60 min), no máximo 6 por dia

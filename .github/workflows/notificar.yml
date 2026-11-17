@@ -1,7 +1,8 @@
 name: Robô do Jornal (edição + notificações)
 on:
   schedule:
-    - cron: '7,22,37,52 * * * *'
+    # 17/11: edição a cada ~5 min (cron */5 + encadeamento abaixo). Rodadas de cron que chegam com outra na fila ficam esperando/canceladas pelo grupo (normal).
+    - cron: '*/5 * * * *'
   workflow_dispatch:
 permissions:
   contents: write
@@ -35,7 +36,7 @@ jobs:
           NTFY_TOPIC_MUSICA: '${{ secrets.NTFY_TOPIC_MUSICA }}'
           NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
           NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
-      - name: Esportes (todos os esportes, Brasil e mundo, 26 veículos públicos, regra das 2 fontes, Opinião/Crítica à parte, ⭐ possível exclusivo) + canal Fenix Esportes
+      - name: Esportes (todos os esportes, Brasil e mundo, 25 veículos públicos, regra das 2 fontes, Opinião/Crítica à parte, ⭐ possível exclusivo) + canal Fenix Esportes
         run: timeout 300 node scripts/esportes.mjs || echo "Esportes falhou nesta rodada; o resto segue normal"
         env:
           NTFY_TOPIC_MUSICA: '${{ secrets.NTFY_TOPIC_MUSICA }}'
@@ -51,7 +52,9 @@ jobs:
           NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
       - name: Paradas por gênero (1 vez por hora; samba primeiro; só fontes públicas)
         run: |
-          if [ "$(date -u +%M)" -lt 15 ] || [ ! -f paradas.json ]; then PARADAS_LOOKUPS=40 timeout 270 node scripts/paradas.mjs || echo "paradas falharam nesta rodada; fica a anterior"; else echo "paradas: só na rodada do início da hora"; fi
+          # 17/11: com rodadas a cada ~5 min, o portão é a idade de paradas.json (55+ min), não o minuto do relógio
+          idade=$(node -e 'try{const g=require("./paradas.json").geradoEm;const t=Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(g)?g:g+":00-03:00");console.log(Math.round((Date.now()-t)/60e3))}catch{console.log(9999)}')
+          if [ "$idade" -ge 55 ]; then PARADAS_LOOKUPS=40 timeout 270 node scripts/paradas.mjs || echo "paradas falharam nesta rodada; fica a anterior"; else echo "paradas: geradas há $idade min, só de novo com 55+ min"; fi
       - name: Imagem de compartilhamento (og) da edição
         run: npm i --no-save --no-audit --no-fund playwright-core@1 >/dev/null && node scripts/og.mjs || echo "og falhou, mantém a anterior"
       - name: Status privado dos feeds (só no Actions)
@@ -94,10 +97,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Agendar a próxima edição (~15 min)
+      - uses: actions/checkout@v4
+        with: { sparse-checkout: scripts }
+      - name: Via rápida (fontes que mais publicam, a cada ~90 s) e agendar a próxima edição (~5 min)
         env: { GH_TOKEN: '${{ github.token }}' }
         run: |
-          sleep 780
+          # espera até 180 s; se uma fonte rápida publicar antes, a próxima edição começa já. Não notifica nada daqui.
+          VIA_RAPIDA_SEG=180 VIA_RAPIDA_VOLTA=90 timeout 260 node scripts/via-rapida.mjs || { echo "via rápida falhou, espera simples"; sleep 120; }
           outras=$(gh api "repos/${{ github.repository }}/actions/workflows/notificar.yml/runs?per_page=20" --jq '[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.status=="queued" or .status=="in_progress" or .status=="waiting" or .status=="pending")] | length' || echo "ERR")
           if [ "$outras" != "0" ] && [ "$outras" != "ERR" ]; then echo "já há rodada na fila ($outras), não encadeia"; exit 0; fi
           ok=0

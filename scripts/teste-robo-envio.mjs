@@ -17,16 +17,25 @@ const srv = createServer(async (q, r) => { let b = ''; for await (const c of q) 
   posts.push({ ...m, rodada }); r.writeHead(200, { 'content-type': 'application/json' }); r.end('{"id":"x"}'); });
 await new Promise(ok => srv.listen(0, '127.0.0.1', ok));
 const rodar = () => new Promise(ok => { const p = spawn(process.execPath, ['scripts/robo.mjs'], { cwd: T, env: { ...process.env, NTFY_TOPIC: 'teste-geral', NTFY_TOPIC_COMANDO: 'teste-cmd', NTFY_ASSINATURA: 'chave-teste', NTFY_SERVIDOR: 'http://127.0.0.1:' + srv.address().port + '/', NTFY_RETRY_MS: '200', NTFY_PAUSA_MS: '20' } }); let out = ''; p.stdout.on('data', c => out += c); p.stderr.on('data', c => out += c); p.on('close', (code) => ok({ out, code })); });
-const a = await rodar(); rodada = 2; const b = await rodar(); srv.close();
+const a = await rodar(); rodada = 2; const b = await rodar();
+// 17/11 RITMO: a rodada 2 vem logo em seguida (mesma janela de 15 min): no máximo 5 avisos na hora por janela e 1 resumo a cada 15 min; o resto espera, sem perder.
+const r2 = posts.filter(p => p.rodada === 2), r1ok = posts.filter(p => p.rodada === 1 && !/^\+\d+ notícias|^Edição de 1 minuto|^📈/.test(p.title) && !/^URGENTE/.test(p.title)).length;
+const r2ind = r2.filter(p => !/^\+\d+ notícias|^Edição de 1 minuto|^📈/.test(p.title) && !/^URGENTE/.test(p.title)).length;
+console.log('ritmo: rodada 2 na mesma janela | avisos comuns', r2ind, '(r1 já usou', r1ok + ') | resumos', r2.filter(p => /^\+\d+ notícias/.test(p.title)).length);
+assert.ok(r1ok + r2ind <= 3, 'no máximo 3 avisos comuns por janela de 15 min');
+if (posts.some(p => p.rodada === 1 && /^\+\d+ notícias/.test(p.title))) assert.equal(r2.filter(p => /^\+\d+ notícias/.test(p.title)).length, 0, 'resumo no máximo 1 vez a cada 15 min');
+// simula a janela passando (16 min) e roda a 3ª: tudo que esperou sai agora
+const stt = JSON.parse(readFileSync(join(T, 'notificadas.json'), 'utf8')); stt.ritmo.ini -= 16 * 60e3; if (stt.ritmo.resumo) stt.ritmo.resumo -= 16 * 60e3; writeFileSync(join(T, 'notificadas.json'), JSON.stringify(stt));
+rodada = 3; const c3 = await rodar(); srv.close(); assert.equal(c3.code, 0);
 const l = (o) => (o.split('\n').find(x => x.startsWith('push enviados')) || '').trim();
-console.log('rodada 1 (código ' + a.code + '):', l(a.out)); console.log('rodada 2 (código ' + b.code + '):', l(b.out));
+console.log('rodada 1 (código ' + a.code + '):', l(a.out)); console.log('rodada 2 (código ' + b.code + '):', l(b.out)); console.log('rodada 3 (código ' + c3.code + '):', l(c3.out));
 assert.equal(a.code, 0, 'robô não cai com 429/503'); assert.equal(b.code, 0);
-const p1 = posts.filter(p => p.rodada === 1), p2 = posts.filter(p => p.rodada === 2);
+const p1 = posts.filter(p => p.rodada === 1), p2 = posts.filter(p => p.rodada >= 2);
 for (const p of posts) { assert.ok((p.actions || []).length >= 1 && p.actions.length <= 3, 'todo aviso tem botão: ' + p.title); assert.match(p.icon, /icone-ntfy-v2\.png$/); }
 const ind = p1.filter(p => !/^\+\d+ notícias|^Edição de 1 minuto/.test(p.title)); const urg = ind.findIndex(p => /^URGENTE/.test(p.title)), nUrg = ind.findIndex(p => !/^URGENTE/.test(p.title));
 if (urg >= 0 && nUrg >= 0) assert.ok(urg < nUrg, 'URGENTE sai antes');
 const novos = +((l(a.out).match(/novos (\d+)/) || [])[1] || 0); const resumos = p1.filter(p => /^\+\d+ notícias/.test(p.title));
-const linhasResumo = [...resumos, ...posts.filter(p => p.rodada === 2 && /^\+\d+ notícias/.test(p.title))].reduce((s, p) => s + p.message.split('\n').length, 0);
+const linhasResumo = [...resumos, ...posts.filter(p => p.rodada >= 2 && /^\+\d+ notícias/.test(p.title))].reduce((s, p) => s + p.message.split('\n').length, 0);
 assert.match(l(a.out), /não saíram \(voltam na próxima rodada\): [1-9]/, 'a rodada 1 registra o que não saiu');
 console.log('rodada 1: novos', novos, '| individuais', ind.length, '| resumos aceitos', resumos.length, '| recusados de propósito', recusados.length);
 for (const t of recusados.filter(t => !/^\+/.test(t))) assert.ok(p2.some(p => p.title === t), 'aviso que falhou volta na rodada 2: ' + t);

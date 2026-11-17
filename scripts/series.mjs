@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import * as S from './series-regras.mjs';
 import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo.mjs';
+import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
@@ -76,7 +77,7 @@ const visto = (g) => { const v = chaves(g).map((k) => E.vistos[k]).filter((x) =>
 const marcar = (g) => { for (const k of chaves(g)) E.vistos[k] = Math.max(E.vistos[k] || 0, g.n); };
 for (const [k, t] of Object.entries(E.vistos)) if (typeof t !== 'number') delete E.vistos[k];
 const limpar = () => { const vivos = new Set(lidos.map((i) => i.key)); const l = Object.entries(E.vistos); if (l.length > 4000) E.vistos = Object.fromEntries(l.filter(([k]) => vivos.has(k)).slice(-4000)); };
-if (seed) { for (const g of grupos) marcar(g); for (const c of confirmados) c.t.confirmado = S.brIso(AGORA); for (const i of novosExcl) E.excl[i.key].avisado = 'semente'; limpar(); salvar(); console.log('primeira rodada: estado criado, sem avisos antigos (só o convite para assinar)'); }
+if (seed) { for (const g of grupos) marcar(g); for (const c of confirmados) c.t.confirmado = S.brIso(AGORA); for (const i of novosExcl) E.excl[i.key].avisado = 'semente'; for (const x of subindo(grupos, E, { agora: AGORA })) for (const k of x.chaves) E.subindo[k] = 'semente-' + S.brIso(AGORA); limpar(); salvar(); console.log('primeira rodada: estado criado, sem avisos antigos (só o convite para assinar)'); }
 if (!SER || process.argv.includes('--sem-envio')) { console.log(SER ? 'sem envio (--sem-envio)' : 'sem NTFY_TOPIC_MUSICA, sem envio'); salvar(); process.exit(0); }
 const espera = (ms) => new Promise((z) => setTimeout(z, ms)); const FALHAS = []; let enviados = 0;
 const post = async (topic, m) => {
@@ -102,20 +103,26 @@ const madrugada = minBR < 7 * 60;
 let nConf = 0;
 for (const c of confirmados) {
   if (nConf >= LIM.confPorRodada) break; const g = c.i;
-  const ok = await post(SER, { title: '✅ Confirmado: ' + g.title.slice(0, 150), message: textoConfirmado(c.p, g.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + g.grp.map((x) => x.src).slice(0, 4).join(', '), click: g.link, priority: madrugada ? 2 : 4, tags: ['white_check_mark', 'clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const ok = await post(SER, { title: '✅ Confirmado: ' + g.title.slice(0, 150), message: textoConfirmado(c.p, g.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + g.grp.map((x) => x.src).slice(0, 4).join(', '), click: g.link, priority: 2, tags: ['white_check_mark', 'clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { c.t.confirmado = S.brIso(AGORA); marcar(g); nConf++; }
+}
+// 4a2) 📈 Subindo agora: o mesmo fato em 3+ veículos em até 30 min (até 6 por dia, nunca de madrugada); já tem 2+ fontes, então vai com Sim, publicar
+for (const x of subindo(grupos, E, { agora: AGORA })) {
+  if (!podeSubindo(E, { agora: AGORA })) break; const g = x.i;
+  const ok = await post(SER, { title: '📈 Subindo agora: ' + g.title.slice(0, 150), message: textoSubindo(x), click: g.link, priority: 4, tags: ['chart_with_upwards_trend', 'clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  if (ok) { marcarSubindo(E, x, AGORA); marcar(g); }
 }
 // 4b) possível exclusivo (1 fonte, o site diz que é exclusivo): aviso na hora, sem botão de post (em apuração)
 for (const g of grupos.filter((x) => x.n === 1 && E.excl[x.key] && !E.excl[x.key].avisado && !E.excl[x.key].confirmado && AGORA - x.ts < 12 * 3600e3)) {
   if (D.exclusivos >= LIM.exclDia || madrugada) break; const v = V.get(g); if (!v.selo) continue;
-  const ok = await post(SER, { title: '⭐ ' + (v.selo.tipo === 'possivel' ? 'Possível exclusivo' : 'Diz que é exclusivo') + ': ' + g.title.slice(0, 140), message: v.selo.texto + '\n🔎 Em apuração: sem botão de post até um 2º veículo publicar. Quando isso acontecer, chega o aviso "Confirmado" com Sim, publicar.', click: g.link, priority: 3, tags: ['star', 'clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const ok = await post(SER, { title: '⭐ ' + (v.selo.tipo === 'possivel' ? 'Possível exclusivo' : 'Diz que é exclusivo') + ': ' + g.title.slice(0, 140), message: v.selo.texto + '\n🔎 Em apuração: sem botão de post até um 2º veículo publicar. Quando isso acontecer, chega o aviso "Confirmado" com Sim, publicar.', click: g.link, priority: 2, tags: ['star', 'clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { E.excl[g.key].avisado = S.brIso(AGORA); D.exclusivos++; marcar(g); }
 }
 // 4c) confirmados novos (2+ veículos): na hora até 3 por rodada e 10 por dia; o resto vai no resumo
 const novosConf = confirmadosL.filter((g) => !visto(g) && AGORA - g.ts < 24 * 3600e3);
 for (const g of novosConf.slice(0, LIM.instPorRodada)) {
   if (D.instantaneos >= LIM.instDia || madrugada) break; const p = S.primeiro([g, ...g.grp]);
-  const ok = await post(SER, { title: '🎬 ' + g.title.slice(0, 160), message: g.src + ' · ' + hhmm(g.ts) + (g.orig ? ' · traduzido do inglês' : '') + '\n✅ ' + g.n + ' veículos: ' + [g.src, ...g.grp.map((x) => x.src)].slice(0, 5).join(', ') + '\n' + p.veiculo + ' saiu primeiro às ' + p.hora + (V.get(g).plataformas.length ? '\n📺 ' + V.get(g).plataformas.join(', ') : ''), click: g.link, priority: 3, tags: ['clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const ok = await post(SER, { title: '🎬 ' + g.title.slice(0, 160), message: g.src + ' · ' + hhmm(g.ts) + (g.orig ? ' · traduzido do inglês' : '') + '\n✅ ' + g.n + ' veículos: ' + [g.src, ...g.grp.map((x) => x.src)].slice(0, 5).join(', ') + '\n' + p.veiculo + ' saiu primeiro às ' + p.hora + (V.get(g).plataformas.length ? '\n📺 ' + V.get(g).plataformas.join(', ') : ''), click: g.link, priority: 2, tags: ['clapper'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { D.instantaneos++; marcar(g); }
 }
 // 4d) resumos 09:00, 14:00 e 20:00 (janela de 2 h): tudo o que ainda não foi avisado nas últimas 24 h, inteiro, em partes
@@ -132,4 +139,4 @@ for (const r of ['09:00', '14:00', '20:00']) {
 // fora da janela de 24 h e nunca avisado: sai da fila em silêncio (notícia velha não vira aviso)
 for (const g of grupos) if (!visto(g) && AGORA - g.ts >= 24 * 3600e3) marcar(g);
 limpar(); salvar();
-console.log('PUSH Séries: enviados', enviados, '| confirmações', nConf, '| exclusivos hoje', D.exclusivos, '| na hora hoje', D.instantaneos, '| resumos', JSON.stringify(D.resumos), '| aviso de assinatura', E.avisoSeries || 'ainda não', FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');
+console.log('PUSH Séries: enviados', enviados, '| confirmações', nConf, '| exclusivos hoje', D.exclusivos, '| subindo hoje', (E.subindoDia || {}).n || 0, '| na hora hoje', D.instantaneos, '| resumos', JSON.stringify(D.resumos), '| aviso de assinatura', E.avisoSeries || 'ainda não', FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');

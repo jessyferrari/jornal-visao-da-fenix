@@ -17,7 +17,11 @@ const posts = []; const srv = createServer(async (q, r) => { let b = ''; for awa
 await new Promise(ok => srv.listen(0, '127.0.0.1', ok));
 const MUS = 'teste-musica-e2e', ASS = 'chave-de-teste'; const hArg = process.argv.indexOf('--hora'); const hora = hArg > 0 ? process.argv[hArg + 1] : '15';
 const rodar = () => new Promise(ok => { const p = spawn(process.execPath, ['scripts/musica.mjs', '--hora', hora], { cwd: T, env: { ...process.env, NTFY_TOPIC_MUSICA: MUS, NTFY_TOPIC_COMANDO: 'teste-cmd', NTFY_ASSINATURA: ASS, NTFY_SERVIDOR: 'http://127.0.0.1:' + srv.address().port, NTFY_RETRY_MS: '200', NTFY_PAUSA_MS: '50' } }); let out = ''; p.stdout.on('data', c => out += c); p.stderr.on('data', c => out += c); p.on('close', () => ok(out)); });
-const o1 = await rodar(); const n1 = posts.length; rodada = 2; const o2 = await rodar(); srv.close();
+const o1 = await rodar(); const n1 = posts.length;
+// 17/11 RITMO: no máximo 4 avisos na hora por janela de 15 min; simula a janela passando antes da rodada 2 (o que esperou ou falhou sai agora)
+{ const fs = await import('node:fs'), pth = (await import('node:path')).join(T, 'musica-estado.json'); const e = JSON.parse(fs.readFileSync(pth, 'utf8'));
+  if (e.ritmo) { console.log('ritmo rodada 1: avisos na hora aceitos', e.ritmo.n); if (e.ritmo.n > 4) throw new Error('mais de 4 avisos na janela'); e.ritmo.ini -= 16 * 60e3; if (e.ritmo.resumo) e.ritmo.resumo -= 16 * 60e3; fs.writeFileSync(pth, JSON.stringify(e)); } }
+rodada = 2; const o2 = await rodar(); srv.close();
 // SEM PERDER NOTÍCIA: o que levou 503 na rodada 1 não foi marcado como avisado e saiu na rodada 2
 const r1 = [...new Set(recusados)]; const saiu2 = new Set(posts.slice(n1).map(p => p.title));
 console.log('rodada 1: recusados pelo ntfy falso', r1.length, '| 429 com Retry-After respeitado:', /assine o canal/.test(posts[0] && posts[0].title || '') ? 'sim (o aviso saiu na 2ª tentativa)' : 'ver log');

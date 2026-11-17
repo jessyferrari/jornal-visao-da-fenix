@@ -2,6 +2,7 @@
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
+import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
 // [fonte, url, seção padrão, idioma (vazio = português)]
@@ -363,28 +364,42 @@ const hojeBR = brIso(new Date(now)).slice(0, 10), horaBR = +brIso(new Date(now))
 if (!seed && horaBR === 7 && st.edicao1min !== hojeBR) {
   const top = [...all].filter(i => (!i.lang || i.tr) && now - i.ts < 18*3600e3).sort((a, b) => b.score - a.score); const vis = new Set(); const t5 = [];
   for (const i of top) { if (t5.length >= 5) break; if (vis.has(i.key) || i.grp.some(g => vis.has(g.key))) continue; vis.add(i.key); t5.push(i); }
-  if (t5.length && await post({ title: 'Edição de 1 minuto · ' + hojeBR.slice(8, 10) + '/' + hojeBR.slice(5, 7), message: t5.map((i, n) => (n + 1) + '. ' + i.title + ' (' + i.src + (i.cov.n > 1 ? ', ' + i.cov.n + ' veículos' : '') + ')').join('\n'), click: B, priority: 4, tags: ['sunrise', 'newspaper'] })) { st.edicao1min = hojeBR; console.log('edição de 1 minuto enviada'); }
+  if (t5.length && await post({ title: 'Edição de 1 minuto · ' + hojeBR.slice(8, 10) + '/' + hojeBR.slice(5, 7), message: t5.map((i, n) => (n + 1) + '. ' + i.title + ' (' + i.src + (i.cov.n > 1 ? ', ' + i.cov.n + ' veículos' : '') + ')').join('\n'), click: B, priority: 2, tags: ['sunrise', 'newspaper'] })) { st.edicao1min = hojeBR; console.log('edição de 1 minuto enviada'); }
 }
 const naoSaiu = new Set();   // chaves de notícias cujo aviso falhou: não entram em 'vistos' e voltam na próxima rodada
 let enviados = 0;
 if (!seed) {
+  // RITMO (17/11, robô a cada ~5 min): o celular recebe no MESMO ritmo de antes (que era a cada 15 min): até 3 avisos na hora
+  // por janela de 15 min (bateria: o resto vai agrupado no resumo, silencioso, prioridade 2) e no máximo 1 resumo "+N" a cada 15 min. O que passar disso NÃO é marcado e sai na rodada seguinte.
+  const R = st.ritmo && now - st.ritmo.ini < 15 * 60e3 ? st.ritmo : (st.ritmo = { ini: now, n: 0, resumo: st.ritmo && st.ritmo.resumo });
+  const livres = Math.max(0, 3 - R.n), podeResumo = !R.resumo || now - R.resumo >= 14 * 60e3;
   // URGENTE sempre primeiro (novos já vem ordenado: urgente, depois mais recente)
-  for (const i of novos.slice(0,5)) { const ok = await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
-    if (ok) { enviados++; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
+  // URGENTE não espera a janela: até 3 urgentes extras por janela de 15 min
+  const naHora = novos.filter((x, ix) => ix < livres || (x.urg && (R.urg || 0) + novos.slice(livres, ix).filter(y => y.urg).length < 3));
+  for (const i of naHora) { const ok = await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : 2, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+    if (ok) { enviados++; if (naHora.indexOf(i) < livres) R.n++; else R.urg = (R.urg || 0) + 1; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
   // o resto vai INTEIRO em resumos (nada cortado em 12): cada resumo cabe no limite de 4.000 caracteres do ntfy
-  const extra = novos.slice(5); const partes = []; let atual = [], tam = 0;
+  const extra = novos.filter(x => !naHora.includes(x)); if (!podeResumo) { for (const i of extra) naoSaiu.add(i.key); extra.length = 0; }   // resumo só a cada 15 min: o resto espera
+  const partes = []; let atual = [], tam = 0;
   for (const i of extra) { const l = '• ' + (i.urg ? 'URGENTE · ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
   if (atual.length) partes.push(atual);
   for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
-    if (ok) enviados++; else for (const [i] of pt) naoSaiu.add(i.key); }
+    if (ok) { enviados++; R.resumo = now; } else for (const [i] of pt) naoSaiu.add(i.key); }
 }
+// 📈 Subindo agora (17/11): o mesmo fato em 3+ veículos em até 30 min; até 6 por dia, nunca de madrugada, com Sim, publicar (já tem 2+ fontes)
+const SUB = subindo(all.filter(i => (!i.lang || i.tr) && i.cov && i.cov.n >= 3), st, { agora: now }); let subEnv = 0;
+if (seed) { for (const x of SUB) for (const k of x.chaves) st.subindo[k] = 'semente'; }
+else for (const x of SUB) { if (!podeSubindo(st, { agora: now })) break; const i = x.i;
+  const ok = await post({ title: '📈 Subindo agora: ' + i.title.slice(0, 150), message: textoSubindo(x), click: i.link, priority: 4, tags: ['chart_with_upwards_trend', 'newspaper'], ...botoes(i) });
+  if (ok) { marcarSubindo(st, x, now); subEnv++; } }
+console.log('subindo agora:', SUB.length, 'fatos com 3+ veículos em 30 min | enviados', subEnv, '| hoje', (st.subindoDia || {}).n || 0);
 // ✅ confirmação de um "possível exclusivo": um 2º veículo publicou; chega com Sim, publicar (no máximo 3 por rodada)
 let confEnv = 0;
 if (!seed) for (const c of EXC.slice(0, 3)) { const i = c.i;
-  const ok = await post({ title: '✅ Confirmado: ' + i.title.slice(0, 150), message: textoConfirmado(c.p, i.cov.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + i.grp.map(g => g.src).slice(0, 4).join(', '), click: i.link, priority: 4, tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
+  const ok = await post({ title: '✅ Confirmado: ' + i.title.slice(0, 150), message: textoConfirmado(c.p, i.cov.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + i.grp.map(g => g.src).slice(0, 4).join(', '), click: i.link, priority: 2, tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
   if (ok) { c.t.confirmado = brIso(new Date(now)); confEnv++; } }
 else for (const c of EXC) c.t.confirmado = brIso(new Date(now));
 fs.writeFileSync(EXF, JSON.stringify(EX));
 console.log('exclusivos: confirmações enviadas', confEnv, 'de', EXC.length);
 console.log('push enviados', enviados, 'novos', novos.length, '| não saíram (voltam na próxima rodada):', naoSaiu.size, FALHAS.length ? '| falhas: ' + FALHAS.join(' / ') : '');
-fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k) && !naoSaiu.has(k)), ...st.vistos].slice(0,6000) }));
+fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, ritmo: st.ritmo, subindo: st.subindo, subindoDia: st.subindoDia, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k) && !naoSaiu.has(k)), ...st.vistos].slice(0,6000) }));

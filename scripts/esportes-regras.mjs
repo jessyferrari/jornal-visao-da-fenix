@@ -6,6 +6,7 @@ import { lerFeed, canon, brIso, agrupar, idNoticia, partes } from './series-regr
 import { alegaExclusivo, primeiro, selo, campoSelo, hhmm } from './exclusivo.mjs';
 
 // [veículo, url, tipo, idioma, rótulo do feed]  todas as fontes são de esporte (testadas em 17/11/2026, só as que responderam com itens recentes)
+// ESPN Brasil ficou de fora: o feed põe o MESMO horário (do momento da leitura, com fuso errado) em todas as matérias, então não dá para saber quem saiu primeiro
 // feeds do mesmo veículo (ge, ESPN) têm o mesmo nome: contam como 1 veículo na regra das 2 fontes e no "só 1 de N"
 export const FONTES = [
   ['ge', 'https://ge.globo.com/rss/ge/', 'esporte', '', 'ge'],
@@ -14,7 +15,6 @@ export const FONTES = [
   ['ge', 'https://ge.globo.com/rss/ge/motor/formula-1/', 'esporte', '', 'ge Motor'],
   ['ge', 'https://ge.globo.com/rss/ge/combate/', 'esporte', '', 'ge Combate'],
   ['UOL Esporte', 'https://rss.uol.com.br/feed/esporte.xml', 'esporte', ''],
-  ['ESPN Brasil', 'https://www.espn.com.br/rss', 'esporte', ''],
   ['Lance!', 'https://www.lance.com.br/sitemap-news.xml', 'esporte', ''],
   ['Gazeta Esportiva', 'https://www.gazetaesportiva.com/feed/', 'esporte', ''],
   ['Folha Esporte', 'https://feeds.folha.uol.com.br/esporte/rss091.xml', 'esporte', ''],

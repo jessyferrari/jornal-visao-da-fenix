@@ -13,7 +13,7 @@ const sitemap = (itens) => '<?xml version="1.0"?><urlset xmlns:news="x">' + iten
 const T0 = Date.parse('2026-11-17T12:00:00-03:00'), CMD = 'cmd-teste', ASS = 'k'.repeat(48);
 const it = (src, title, link, ts = T0, extra = {}) => ({ src, title, link, key: S.canon(link), ts, sum: '', tipo: 'esporte', lang: '', ...extra });
 
-ok('fontes: 30 feeds de 26 veículos; feeds do ge contam como 1 veículo', () => { assert.equal(S.FONTES.length, 30); assert.equal(S.VEICULOS.length, 26); assert.equal(S.FONTES.filter((f) => f[0] === 'ge').length, 5); });
+ok('fontes: 29 feeds de 25 veículos (ESPN Brasil fora: horário falso no feed); feeds do ge contam como 1 veículo', () => { assert.equal(S.FONTES.length, 29); assert.equal(S.VEICULOS.length, 25); assert.ok(!S.VEICULOS.includes('ESPN Brasil')); assert.equal(S.FONTES.filter((f) => f[0] === 'ge').length, 5); });
 ok('filtro: aposta, palpite e saúde ficam de fora', () => {
   assert.ok(!S.ehEsporte(it('Lance!', 'Por que o corpo sente o sedentarismo', 'https://www.lance.com.br/lance-saude/x.html')));
   assert.ok(!S.ehEsporte(it('X', 'Palpite Flamengo x Palmeiras: odds', 'https://x.com/a')));
