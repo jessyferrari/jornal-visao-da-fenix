@@ -1,5 +1,5 @@
 {
- "_leia": "Referências (17/11, pedido B): perfis sérios do Brasil e de fora. Critério da lista: credibilidade, alcance e os nichos do jornal (notícias, negócios e finanças, empreendedorismo, entretenimento, esportes, tecnologia), sem preferência pessoal. Rotas só legítimas e gratuitas: RSS oficial do canal no YouTube e RSS oficial do site. Instagram, X e TikTok de terceiros não têm rota grátis e legítima: ficam listados com o que precisaria. youtube: 'UC...' é o ID do canal; '@...' é o endereço público do canal, cujo RSS oficial o robô descobre pelo anúncio da própria página (padrão RSS autodiscovery), uma vez, e guarda.",
+ "_leia": "Referências (17/11, pedido B): perfis sérios do Brasil e de fora. Critério da lista: credibilidade, alcance e os nichos do jornal (notícias, negócios e finanças, empreendedorismo, entretenimento, esportes, tecnologia), sem preferência pessoal. Rotas só legítimas e gratuitas: RSS oficial do canal no YouTube e RSS oficial do site. Instagram, X e TikTok de terceiros não têm rota grátis e legítima: ficam listados com o que precisaria. youtube: 'UC...' é o ID do canal; '@...' é o endereço público do canal, cujo RSS oficial o robô descobre pelo anúncio da própria página (padrão RSS autodiscovery), uma vez, e guarda. confere: parte do nome que o próprio RSS do canal precisa declarar; se o ID responder com outro nome, a rota falha e nada é publicado.",
  "perfis": [
   {
    "nome": "CNN Brasil",
@@ -14,7 +14,8 @@
     "Instagram",
     "X",
     "TikTok"
-   ]
+   ],
+   "confere": "CNN Brasil"
   },
   {
    "nome": "CNN",
@@ -115,7 +116,8 @@
     "Instagram",
     "X",
     "TikTok"
-   ]
+   ],
+   "confere": "BBC News"
   },
   {
    "nome": "Folha de S.Paulo",
@@ -195,13 +197,14 @@
    "tipo": "pessoa",
    "nicho": "negócios e finanças",
    "pais": "Brasil",
-   "youtube": "@mepoupe",
+   "youtube": "UC8mDF5mWNGE-Kpfcvnn0bUg",
    "rss": [],
    "redes": [
     "Instagram",
     "X",
     "TikTok"
-   ]
+   ],
+   "confere": "Me Poupe"
   },
   {
    "nome": "Joel Jota",
@@ -227,7 +230,8 @@
     "Instagram",
     "X",
     "TikTok"
-   ]
+   ],
+   "confere": "Primo Rico"
   },
   {
    "nome": "Viola Davis",

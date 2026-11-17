@@ -19,6 +19,11 @@ export const PRECISA = {
   TikTok: 'sem rota grátis: o TikTok não tem RSS oficial',
 };
 
+// O YouTube não entrega o anúncio do RSS ao robô do GitHub; sem o ID oficial (UC...), a rota fica fora, com o passo para ativar.
+export const SEM_ID = (yt) => 'canal sem ID confirmado: o YouTube não entrega o RSS pelo endereço ' + yt + ' ao robô. Para ativar: abra youtube.com/' + yt.replace(/^@?/, '@') + ', toque em "mais" na descrição do canal, depois em "Compartilhar canal" e "Copiar ID do canal" (começa com UC), e me mande o ID';
+const sem = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+/** o RSS declarou o canal esperado? (ID errado responde com outro nome: falha e nada é publicado) */
+export const confere = (esperado, canal) => !esperado || sem(canal).includes(sem(esperado));
 const ent = (s) => String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;|&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#(\d+);/g, (_, n) => String.fromCharCode(+n)).replace(/\s+/g, ' ').trim();
 const tag = (b, t) => { const m = b.match(new RegExp('<' + t + '(?:\\s[^>]*)?>([\\s\\S]*?)</' + t + '>', 'i')); return m ? ent(m[1]) : ''; };
 const brIso = (ms) => new Date(ms - 3 * 3600e3).toISOString().slice(0, 16);
@@ -55,8 +60,8 @@ async function feedDoCanal(yt) {
   if (/^UC[\w-]{22}$/.test(yt)) return 'https://www.youtube.com/feeds/videos.xml?channel_id=' + yt;
   const c = E.canais[yt]; if (c && c.feed && AGORA - (c.t || 0) < 30 * 86400e3) return c.feed;
   const pagina = 'https://www.youtube.com/' + yt.replace(/^@?/, '@');
-  const html = await busca(pagina, 12000); const f = anuncioRss(html.slice(0, 600000), pagina);
-  if (!f || !/youtube\.com\/feeds\/videos\.xml\?channel_id=UC/.test(f)) throw new Error('a página do canal não anunciou o RSS oficial (endereço ' + yt + ' pode não existir)');
+  let html; try { html = await busca(pagina, 12000); } catch { throw new Error(SEM_ID(yt)); } const f = anuncioRss(html.slice(0, 600000), pagina);
+  if (!f || !/youtube\.com\/feeds\/videos\.xml\?channel_id=UC/.test(f)) throw new Error(SEM_ID(yt));
   E.canais[yt] = { feed: f, t: AGORA }; return f;
 }
 
@@ -66,11 +71,12 @@ export async function coletar(lista = LISTA.perfis) {
     const rotas = [];
     const ler = async (tipo, origem, f) => {
       try { const url = await f(); const { canal, itens: l } = lerFeed(await busca(url));
+        if (tipo === 'YouTube' && !confere(p.confere, canal)) throw new Error('o ID respondeu como "' + canal + '", que não é o canal esperado (' + p.confere + '); nada publicado');
         const novos = l.filter((i) => i.ts && AGORA - i.ts < JANELA && i.ts <= AGORA + 10 * 60e3).sort((a, b) => b.ts - a.ts).slice(0, POR_PERFIL);
         rotas.push({ tipo, origem, url, ok: true, canal, n: novos.length });
         for (const i of novos) itens.push({ quem: p.nome, nicho: p.nicho, pais: p.pais, rede: tipo, canal, titulo: i.titulo, link: i.link, publicado: brIso(i.ts), ts: i.ts,
           frase: p.nome + ' publicou' + (tipo === 'YouTube' ? ' no YouTube' : ' no site') });
-      } catch (e) { rotas.push({ tipo, origem, ok: false, erro: String(e.message || e).slice(0, 160) }); }
+      } catch (e) { rotas.push({ tipo, origem, ok: false, erro: String(e.message || e).slice(0, 400) }); }
     };
     const tarefas = [];
     if (p.youtube) tarefas.push(ler('YouTube', p.youtube, () => feedDoCanal(p.youtube)));

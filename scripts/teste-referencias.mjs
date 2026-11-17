@@ -10,11 +10,12 @@ globalThis.fetch = async (url) => { const u = String(url); pedidos.push(u);
   const ok = (b) => new Response(b, { status: 200 });
   if (u === 'https://www.youtube.com/@canalbom') return ok('<html><head><link rel="alternate" type="application/rss+xml" title="RSS" href="https://www.youtube.com/feeds/videos.xml?channel_id=UCaaaaaaaaaaaaaaaaaaaaaa"></head></html>');
   if (u === 'https://www.youtube.com/@naoexiste') return new Response('', { status: 404 });
+  if (u.includes('channel_id=UCbbbbbbbbbbbbbbbbbbbbbb')) return ok(atom('Outro Canal Qualquer', [['Vídeo de outro', 'https://www.youtube.com/watch?v=9', '2026-11-17T13:00:00Z']]));
   if (u.includes('channel_id=UCaaaaaaaaaaaaaaaaaaaaaa')) return ok(atom('Canal Bom', [['Vídeo novo de hoje', 'https://www.youtube.com/watch?v=1', '2026-11-17T13:00:00Z'], ['Vídeo de 5 dias atrás', 'https://www.youtube.com/watch?v=2', '2026-11-12T13:00:00Z']]));
   if (u === 'https://site.example/feed/') return ok(rss('Site Sério', [['Matéria do site', 'https://site.example/m', '2026-11-17T14:30:00Z']]));
   if (u === 'https://quebrado.example/feed/') throw new Error('fetch failed');
   return new Response('', { status: 404 }); };
-const { coletar, lerFeed, anuncioRss, PRECISA } = await import(new URL('./referencias.mjs', import.meta.url));
+const { coletar, lerFeed, anuncioRss, PRECISA, SEM_ID, confere } = await import(new URL('./referencias.mjs', import.meta.url));
 let n = 0; const t = (nome, f) => Promise.resolve(f()).then(() => console.log('ok ' + (++n) + ' ' + nome));
 
 await t('lê RSS e Atom com o nome que o próprio feed declara', () => {
@@ -48,5 +49,14 @@ await t('nenhum pedido a Instagram, X ou TikTok (sem raspagem)', () => {
 await t('a lista curada tem os perfis pedidos por ela', async () => {
   const L = JSON.parse((await import('node:fs')).readFileSync(new URL('./referencias.json', import.meta.url), 'utf8')).perfis.map((p) => p.nome).join(' | ');
   for (const nome of ['CNN', 'Globo', 'Globoplay', 'Flávio Augusto', 'Nathalia Arcuri', 'Joel Jota', 'Viola Davis']) assert.ok(L.includes(nome), nome);
+});
+await t('ID errado: o canal que respondeu não é o esperado, falha visível e nada publicado', async () => {
+  const { itens, perfis } = await coletar([{ nome: 'Pessoa', tipo: 'pessoa', nicho: 'x', pais: 'Brasil', youtube: 'UCbbbbbbbbbbbbbbbbbbbbbb', confere: 'Canal Bom', rss: [], redes: [] }]);
+  assert.equal(itens.length, 0); assert.match(perfis[0].rotas[0].erro, /não é o canal esperado/);
+  assert.ok(confere('Me Poupe', 'Me Poupe!')); assert.ok(confere('Primo Rico', 'O Primo Rico')); assert.ok(!confere('Me Poupe', 'Outro'));
+});
+await t('endereço @ que o YouTube não entrega: diz "sem ID confirmado" e o passo para ativar', async () => {
+  const { perfis } = await coletar([{ nome: 'Errado', tipo: 'pessoa', nicho: 'x', pais: 'Brasil', youtube: '@naoexiste', rss: [], redes: [] }]);
+  assert.equal(perfis[0].rotas[0].erro, SEM_ID('@naoexiste')); assert.match(SEM_ID('@x'), /Copiar ID do canal/);
 });
 console.log('TODOS OS TESTES PASSARAM: ' + n);
