@@ -91,6 +91,7 @@ const post = async (topic, m) => {
   FALHAS.push('5 tentativas: ' + m.title); return false;
 };
 // aviso único para assinar (vai no canal Música, que ela já assina)
+if (!E.avisoSeries && lerJ('esportes-estado.json', {}).avisoEsportes) E.avisoSeries = 'no convite combinado com Esportes';   // o convite de Esportes já leva o botão de Séries: não manda outro
 if (!E.avisoSeries) { const a = S.avisoSeries(SRV, MUS); if (a && await post(MUS, a)) E.avisoSeries = S.brIso(AGORA); }
 if (seed) { salvar(); console.log('PUSH Séries: primeira rodada, aviso de assinatura', E.avisoSeries || 'não saiu', FALHAS.join(' / ')); process.exit(0); }
 const hoje = S.brIso(AGORA).slice(0, 10), minBR = +S.brIso(AGORA).slice(11, 13) * 60 + +S.brIso(AGORA).slice(14, 16);

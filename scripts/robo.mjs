@@ -243,8 +243,9 @@ if (changed) {
     const MUS = '<a id="jf-musica" href="musica.html" style="position:fixed;right:14px;bottom:14px;z-index:9999;background:#d4af37;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎵 Música</a>';
     const ALTA = '<a id="jf-emalta" href="emalta.html" style="position:fixed;right:14px;bottom:62px;z-index:9999;background:#5fd38d;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🚀 Em Alta</a>';
     const SER = '<a id="jf-series" href="series.html" style="position:fixed;right:14px;bottom:110px;z-index:9999;background:#e0413a;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎬 Séries</a>';
-    html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '');
-    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER);
+    const ESP = '<a id="jf-esportes" href="esportes.html" style="position:fixed;right:14px;bottom:158px;z-index:9999;background:#2b6cd4;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">⚽ Esportes</a>';
+    html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-esportes"[^>]*>[\s\S]*?<\/a>/, '');
+    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER + ESP);
     fs.writeFileSync('index.html', html);
     // nova versão do service worker a cada edição → bust do cache no cliente
     if (fs.existsSync('sw.js')) {
