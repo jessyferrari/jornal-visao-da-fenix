@@ -8,6 +8,8 @@ const RAIZ = dirname(dirname(fileURLToPath(import.meta.url))); const T = mkdtemp
 for (const f of ['scripts', 'musica-estado.json', 'musica-locais.json', 'musica-traducoes.json']) { try { cpSync(join(RAIZ, f), join(T, f), { recursive: true }); } catch {} }
 // --estado-limpo: começa sem notícias já avisadas (para ver o roteamento com muitas notícias de uma vez)
 if (process.argv.includes('--estado-limpo')) { const { writeFileSync } = await import('node:fs'); let E = {}; try { E = JSON.parse(readFileSync(join(T, 'musica-estado.json'), 'utf8')); } catch {} E.notificadas = []; E.madrugada = []; delete E.avisoSP; writeFileSync(join(T, 'musica-estado.json'), JSON.stringify(E)); }
+// o aviso de assinatura do canal SP é o que o teste confere: começa sempre sem ele (o estado real já o tem desde 13/11)
+{ const { writeFileSync } = await import('node:fs'); let E = {}; try { E = JSON.parse(readFileSync(join(T, 'musica-estado.json'), 'utf8')); } catch {} delete E.avisoSP; writeFileSync(join(T, 'musica-estado.json'), JSON.stringify(E)); }
 // falhas de propósito na rodada 1: o 1º envio leva 429 com Retry-After e todo aviso '🔥' leva 503 (o ntfy fora do ar para eles)
 let rodada = 1, primeiro = true; const recusados = [];
 const posts = []; const srv = createServer(async (q, r) => { let b = ''; for await (const c of q) b += c; let m = {}; try { m = JSON.parse(b); } catch {}
