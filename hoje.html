@@ -39,7 +39,7 @@ const item=i=>'<div class="it"><div class="h">'+e(hm(i.publicado))+'</div><div><
 fetch('hoje.json',{cache:'no-cache'}).then(r=>r.json()).then(h=>{
  document.getElementById('atual').textContent='Atualizado '+h.atualizado.slice(8,10)+'/'+h.atualizado.slice(5,7)+' '+hm(h.atualizado)+' (Brasília). Meta: '+h.meta+' postagens por dia.';
  document.getElementById('meta').innerHTML='<div><b>'+h.naoDeixe+'</b>não deixe de postar</div><div><b>'+h.totalVale+'</b>vale postar</div><div><b>'+h.exclusivos.length+'</b>exclusivos</div>';
- const d=[...h.datas.nacionais.map(x=>['🇧🇷 Nacional',x]),...h.datas.internacionais.map(x=>['🌍 Internacional',x])];
+ const d=[...(h.datas.mes||[]).map(x=>['🎗️ Campanha do mês',x]),...h.datas.nacionais.map(x=>['🇧🇷 Nacional',x]),...h.datas.internacionais.map(x=>['🌍 Internacional',x])];
  document.getElementById('datas').innerHTML=d.length?d.map(([a,x])=>'<div class="data"><b>'+e(x.nome)+'</b><div class="m">'+a+(x.feriado?' · feriado':'')+' · fonte: <a href="'+e(x.link)+'" target="_blank" rel="noopener">'+e(x.fonte)+'</a></div></div>').join(''):'<div class="vazio">Nenhuma data com fonte oficial cadastrada para hoje.</div>';
  document.getElementById('vale').innerHTML=h.valePostar.map(p=>'<h3>'+e(p.nome)+'</h3>'+(p.itens.length?p.itens.map(item).join(''):'<div class="vazio">Nada com 70% ou mais neste período.</div>')).join('');
  document.getElementById('excl').innerHTML=h.exclusivos.length?h.exclusivos.map(item).join(''):'<div class="vazio">Nenhum exclusivo hoje.</div>';

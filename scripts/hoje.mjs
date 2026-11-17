@@ -33,7 +33,7 @@ export function itensDe(dados, secao) {
   andar(dados); return out;
 }
 
-export function montar({ secoes, datas, agora = AGORA }) {
+export function montar({ secoes, datas, meses = [], agora = AGORA }) {
   const hoje = brIso(agora).slice(0, 10), ddmm = hoje.slice(8, 10) + '/' + hoje.slice(5, 7);
   const vistos = new Map();
   for (const [nome, rot] of SECOES) for (const i of itensDe(secoes[nome] || {}, rot)) {
@@ -47,7 +47,8 @@ export function montar({ secoes, datas, agora = AGORA }) {
   const usados = new Set([...valePostar, ...exclusivos].map((i) => i.link));
   const importantes = todos.filter((i) => !usados.has(i.link) && i.fontes >= 3).sort((a, b) => b.fontes - a.fontes || b.nota - a.nota).slice(0, 12);
   const doDia = (datas || []).filter((d) => d.dia === ddmm && d.fonte && /^https?:\/\//.test(d.link || ''));
-  return { atualizado: brIso(agora), dia: hoje, datas: { nacionais: doDia.filter((d) => d.ambito === 'nacional'), internacionais: doDia.filter((d) => d.ambito !== 'nacional') },
+  const doMes = (meses || []).filter((m) => m.mes === hoje.slice(5, 7) && m.fonte && /^https?:\/\//.test(m.link || ''));
+  return { atualizado: brIso(agora), dia: hoje, datas: { nacionais: doDia.filter((d) => d.ambito === 'nacional'), internacionais: doDia.filter((d) => d.ambito !== 'nacional'), mes: doMes },
     valePostar: porPeriodo, totalVale: valePostar.length, naoDeixe: valePostar.filter((i) => i.faixa === 'nao-deixe').length, exclusivos, importantes, meta: 5 };
 }
 
@@ -56,6 +57,7 @@ export function aviso(h, { quando = 'manha' } = {}) {
   const d = [...h.datas.nacionais, ...h.datas.internacionais];
   const l = [];
   if (d.length) l.push('📅 ' + d.map((x) => x.nome).join(' · '));
+  if ((h.datas.mes || []).length) l.push('🎗️ ' + h.datas.mes.map((x) => x.nome).join(' · '));
   else l.push('📅 Nenhuma data oficial cadastrada para hoje');
   const top = h.valePostar.flatMap((p) => p.itens).sort((a, b) => b.nota - a.nota).slice(0, 5);
   if (top.length) l.push('', '🔥 Vale postar (' + h.totalVale + '):', ...top.map((i) => '• ' + i.publicado.slice(11, 16) + ' · ' + i.nota + '% · ' + i.titulo.slice(0, 90)));
@@ -68,8 +70,8 @@ export function aviso(h, { quando = 'manha' } = {}) {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const ler = (f, p) => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return p; } };
   const secoes = Object.fromEntries(SECOES.map(([n]) => [n, ler(n + '.json', {})]));
-  const datas = ler(new URL('./datas.json', import.meta.url), { datas: [] }).datas;
-  const h = montar({ secoes, datas });
+  const DJ = ler(new URL('./datas.json', import.meta.url), { datas: [] }), datas = DJ.datas, meses = DJ.meses || [];
+  const h = montar({ secoes, datas, meses });
   fs.writeFileSync('hoje.json', JSON.stringify(h));
   console.log('PAINEL DO DIA', h.dia, '| datas', h.datas.nacionais.length + h.datas.internacionais.length, '| vale postar', h.totalVale, '| exclusivos', h.exclusivos.length, '| importantes', h.importantes.length);
   // 2 avisos por dia (7h e 19h de Brasília), prioridade 2: sem som, sem gastar bateria e dentro do limite do ntfy grátis
