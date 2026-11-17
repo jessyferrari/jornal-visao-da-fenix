@@ -75,3 +75,14 @@ export function buscasDJF(lista, n = 8) {
   const grupos = (arr) => { const g = []; for (let i = 0; i < arr.length; i += n) g.push(arr.slice(i, i + n)); return g; };
   return { djs: grupos(nomes(lista.djs || [])), festivais: grupos(nomes(lista.festivais || [])) };
 }
+
+// 17/11: o rótulo é sempre o do site que o link abre. Se o link real é de OUTRO site (cópia da matéria com o mesmo título),
+// o nome passa a ser o do site real e o veículo citado pelo Google fica em veicGoogle; a contagem de fontes usa o site real.
+export function rotuloReal(i) {
+  if (!i.linkReal) return i;
+  i.link = i.linkReal;
+  let h = ''; try { h = new URL(i.linkReal).hostname.replace(/^www\./, ''); } catch {}
+  const d = String(i.dom || '').replace(/^www\./, '');
+  if (h && d && !/google\./.test(d) && !(h.endsWith(d) || d.endsWith(h))) { i.veicGoogle = i.veic; i.veic = h; i.dom = h; }
+  return i;
+}

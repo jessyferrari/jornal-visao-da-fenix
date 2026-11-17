@@ -129,10 +129,13 @@ async function resolver(i) {
   // 2b) feed de busca do WordPress (?s=...&feed=rss2), público
   if (i.dom && !/google|instagram|facebook|youtube|youtu\.be/.test(i.dom)) { try { const { x } = await busca('https://' + i.dom + '/?feed=rss2&s=' + encodeURIComponent(i.title.split(/\s+/).slice(0, 8).join(' ')), 9000, 3000000);
     for (const b of x.match(/<item>[\s\S]*?<\/item>/g) || []) { const t = txt((b.match(/<title>([\s\S]*?)<\/title>/) || [])[1]); const l = ent((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || '').trim(); const c = (b.match(/<content:encoded>([\s\S]*?)<\/content:encoded>/) || [])[1] || ''; if (simil(t, i.title) >= 0.8 && /^https?:/.test(l)) return { link: l, html: c.length > 400 ? c : '', via: 'busca WordPress do veículo' }; } } catch {} }
+  // 17/11: a cópia da matéria em OUTRO site (mesmo título) só entra se o próprio veículo não for achado por nenhum caminho;
+  // nesse caso o rótulo passa a ser o do site real (musica.mjs), nunca o do veículo original.
+  let outro = null; const mesmoVeiculo = u => { let h = ''; try { h = new URL(u).hostname.replace(/^www\./, ''); } catch {} const d = (i.dom || '').replace(/^www\./, ''); return !d || /google\./.test(d) || (h && (h.endsWith(d) || d.endsWith(h))); };
   // 3) RSS público do Bing Notícias com o título exato
   try { const { x } = await busca('https://www.bing.com/news/search?format=rss&q=' + encodeURIComponent('"' + i.title.slice(0, 120) + '"'), 9000);
     for (const b of x.match(/<item>[\s\S]*?<\/item>/g) || []) { const t = txt((b.match(/<title>([\s\S]*?)<\/title>/) || [])[1]); const l = ent((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || ''); if (simil(t, i.title) < 0.7) continue;
-      let real = l; try { real = new URL(l).searchParams.get('url') || l; } catch {} if (/^https?:/.test(real) && !/bing\.com/.test(real)) return { link: real, html: '', via: 'Bing Notícias (título exato)' }; }
+      let real = l; try { real = new URL(l).searchParams.get('url') || l; } catch {} if (/^https?:/.test(real) && !/bing\.com/.test(real)) { if (mesmoVeiculo(real)) return { link: real, html: '', via: 'Bing Notícias (título exato)' }; outro = outro || { link: real, html: '', via: 'Bing Notícias (título exato, outro veículo)' }; } }
   } catch {}
   // 5) página inicial do veículo: link cujo texto ou endereço bate com o título
   const slugSim = u => { try { return simil(decodeURIComponent(new URL(u).pathname).replace(/[-_/]+/g, ' ').replace(/\.\w+$/, ''), i.title); } catch { return 0; } };
@@ -148,12 +151,12 @@ async function resolver(i) {
   // 3b) Bing Notícias com as palavras do título (sem aspas), aceita só título equivalente
   try { const { x } = await busca('https://www.bing.com/news/search?format=rss&q=' + encodeURIComponent(i.title.slice(0, 120)), 9000);
     for (const b of x.match(/<item>[\s\S]*?<\/item>/g) || []) { const t = txt((b.match(/<title>([\s\S]*?)<\/title>/) || [])[1]); const l = ent((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || ''); if (simil(t, i.title) < 0.85) continue;
-      let real = l; try { real = new URL(l).searchParams.get('url') || l; } catch {} if (/^https?:/.test(real) && !/bing\.com/.test(real)) return { link: real, html: '', via: 'Bing Notícias (título exato)' }; } } catch {}
+      let real = l; try { real = new URL(l).searchParams.get('url') || l; } catch {} if (/^https?:/.test(real) && !/bing\.com/.test(real)) { if (mesmoVeiculo(real)) return { link: real, html: '', via: 'Bing Notícias (título exato)' }; outro = outro || { link: real, html: '', via: 'Bing Notícias (título exato, outro veículo)' }; } } } catch {}
   // 4) RSS público da busca web do Bing com o título exato (aceita só se o título bater e o domínio for o do veículo)
   try { const { x } = await busca('https://www.bing.com/search?format=rss&q=' + encodeURIComponent('"' + i.title.slice(0, 110) + '"'), 9000);
     for (const b of x.match(/<item>[\s\S]*?<\/item>/g) || []) { const t = txt((b.match(/<title>([\s\S]*?)<\/title>/) || [])[1]); const l = ent((b.match(/<link>([\s\S]*?)<\/link>/) || [])[1] || '').trim(); let h = ''; try { h = new URL(l).hostname.replace(/^www\./, ''); } catch {}
       if (simil(t, i.title) >= 0.8 && h && (!i.dom || h.endsWith(i.dom.replace(/^www\./, '')) || i.dom.endsWith(h))) return { link: l, html: '', via: 'Bing busca web (título exato)' }; } } catch {}
-  return null;
+  return outro;
 }
 
 // ===== ler a matéria e achar a cidade =====

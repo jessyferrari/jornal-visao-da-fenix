@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
 import { alegaExclusivo, selo, primeiro, campoSelo } from './exclusivo.mjs';
-import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato, montarDJF, djfNoTexto, buscasDJF } from './musica-regras.mjs';
+import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato, montarDJF, djfNoTexto, buscasDJF, rotuloReal } from './musica-regras.mjs';
 import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto, cidadesNoTexto, decidir } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
@@ -183,7 +183,7 @@ const LINKS = await linksReais(mus);
 const NUF = { SP: 'sp', RJ: 'rj' };
 for (const i of mus) {
   if (/news\.google\.com/.test(i.link)) i.linkGoogle = i.link;
-  if (i.linkReal) i.link = i.linkReal;
+  rotuloReal(i);   // 17/11: rótulo = site real do link (musica-regras.mjs)
   if (i.cidade || (i.pais && i.pais !== 'Brasil')) {
     i.reg = i.pais && i.pais !== 'Brasil' ? 'int' : (NUF[i.uf] || 'br'); i.regiaoIncerta = false; i.regiaoMotivo = 'cidade: ' + (i.localComo || '');
   }
