@@ -7,7 +7,7 @@ import { join, dirname } from 'node:path'; import { tmpdir } from 'node:os'; imp
 const RAIZ = dirname(dirname(fileURLToPath(import.meta.url))); const T = mkdtempSync(join(tmpdir(), 'robo-envio-'));
 for (const f of ['scripts', 'notificadas.json', 'edicao.json', 'traducoes.json', 'imagens.json', 'porque-importa.json', 'index.html', 'app.js', 'sw.js', 'og']) { try { cpSync(join(RAIZ, f), join(T, f), { recursive: true }); } catch {} }
 // estado sem nada avisado nas últimas horas: muitas notícias de uma vez (pior caso)
-const st = JSON.parse(readFileSync(join(T, 'notificadas.json'), 'utf8')); st.vistos = []; writeFileSync(join(T, 'notificadas.json'), JSON.stringify(st));
+const st = JSON.parse(readFileSync(join(T, 'notificadas.json'), 'utf8')); st.vistos = []; delete st.ritmo; writeFileSync(join(T, 'notificadas.json'), JSON.stringify(st));
 let rodada = 1, n = 0; const recusados = [], posts = [];
 const srv = createServer(async (q, r) => { let b = ''; for await (const c of q) b += c; let m = {}; try { m = JSON.parse(b); } catch {}
   if (rodada === 1) { n++; if (n === 1) { r.writeHead(429, { 'retry-after': '1' }); return r.end('{}'); }
