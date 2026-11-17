@@ -1,6 +1,7 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
+import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
 // [fonte, url, seção padrão, idioma (vazio = português)]
@@ -97,7 +98,7 @@ if (antesSp !== all.length) console.log('filtrados patrocinados/ofertas', antesS
   const pt = all.filter(i => !i.lang); for (const i of pt) { i._w = wq(i.title); i._e = eq(i.title); }
   const igual = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a._w) if (b._w.has(w)) c++; if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.5) return false; for (const e of a._e) if (b._e.has(e)) return true; return false; };
   for (const i of pt) { const fs2 = new Set([i.src]); for (const j of pt) if (j !== i && igual(i, j)) fs2.add(j.src); i.pre = fs2.size; }
-  const antesPop = all.length; all = all.filter(i => i.tipo !== 'pop' || (i.pre || 1) >= 2);
+  const antesPop = all.length; all = all.filter(i => i.tipo !== 'pop' || (i.pre || 1) >= 2 || alegaExclusivo(i.title));   // 17/11: cultura de 1 fonte só entra se o próprio site diz que é exclusivo (vai em apuração, com o selo)
   console.log('cultura/entretenimento: entraram', all.filter(i => i.tipo === 'pop').length, 'com 2+ fontes; ficaram só na busca', antesPop - all.length);
   // notícias grandes (3+ veículos) seguram lugar na edição por até 36 h, mesmo quando a enxurrada de notícias novas as empurraria para fora
   const cnt = {}; const grandes0 = new Set(all.filter(i => (i.pre || 1) >= 3));
@@ -176,12 +177,22 @@ for (const i of all) {
   const srcs = [i, ...i.grp]; const br = [...new Set(srcs.filter(x => x.reg === 'br').map(x => x.src))], ext = [...new Set(srcs.filter(x => x.reg === 'ext').map(x => x.src))];
   i.cov = { n: br.length + ext.length, br, ext }; if (i.cov.n >= 2 && (!br.length || !ext.length)) i.cov.cego = !br.length ? 'Ponto cego: só a imprensa estrangeira cobriu' : 'Ponto cego: só a imprensa brasileira cobriu';
 }
+// ===== ⭐ Possível exclusivo / ✅ Confirmado depois (17/11): só a palavra do próprio site + a contagem real dos veículos lidos =====
+const EXF = 'exclusivos-estado.json', EX = (() => { try { return JSON.parse(fs.readFileSync(EXF, 'utf8')); } catch { return {}; } })();
+const NMON = new Set(FEEDST.filter(f => f.ok && f.src !== 'Google Notícias').map(f => f.src)).size;
+const RX_ = rastrear(EX, all.filter(i => !i.lang || i.tr).map(i => ({ key: i.key, src: i.src, title: i.title, orig: i.orig, link: i.link, ts: i.ts, n: i.cov.n, grp: i.grp, _i: i })), { agora: now });
+const EXC = RX_.confirmados.map(c => ({ ...c, i: c.i._i }));
+try { const g = await googleParaMarcados(EX, all.filter(i => i.cov.n === 1 && EX.excl[i.key] && !EX.excl[i.key].confirmado).map(i => i.key), { agora: now, max: 1 }); console.log('exclusivos: marcados', Object.keys(EX.excl).length, '| novos', RX_.novos.length, '| confirmados agora', EXC.length, '| Google', JSON.stringify(g)); } catch (e) { console.log('exclusivos: Google falhou', e.message); }
+const exclDe = i => { const t = EX.excl[i.key] || i.grp.map(g => EX.excl[g.key]).find(Boolean); if (!t) return null;
+  if (i.cov.n >= 2) { const p = primeiro([i, ...i.grp]); return p ? { tipo: 'confirmado', texto: textoConfirmado(p, i.cov.n) + ' · ' + t.veiculo + ' tinha dito que era exclusivo' } : null; }
+  return selo({ veiculo: i.src, N: NMON, agora: now, google: t.google }); };
+fs.writeFileSync(EXF, JSON.stringify(EX));
 let PQ = {}; try { PQ = JSON.parse(fs.readFileSync('porque-importa.json', 'utf8')); } catch {}
 const PQc = Object.fromEntries(Object.entries(PQ).filter(([k, v]) => typeof v === 'string' && v.trim()).map(([k, v]) => [canon(k), v.trim()]));
 const ids = new Set();
 const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
-  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; s.eid = [i.key, ...i.grp.map(g => g.key)].sort()[0]; if (PQc[i.key]) s.pq = PQc[i.key]; i.sid = id; return s; });
+  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; s.eid = [i.key, ...i.grp.map(g => g.key)].sort()[0]; if (PQc[i.key]) s.pq = PQc[i.key]; const ex = exclDe(i); if (ex) { s.excl = ex; i.excl = ex; } i.sid = id; return s; });
 // Como o mundo viu: notícia de veículo brasileiro com o mesmo fato em veículos estrangeiros (traduzido)
 const _mvSeen = new Set();
 const mundoViu = all.filter(i => i.sid && i.reg === 'br').map(i => ({ id: i.sid, ext: i.grp.filter(j => j.reg === 'ext' && (!j.lang || j.tr) && (j.tr || j.title).toLowerCase().replace(/\W+/g, '') !== i.title.toLowerCase().replace(/\W+/g, '')).map(j => ({ src: j.src, title: j.title, orig: j.orig || '', tr: j.tr || '', link: j.link, pub: j.pub })) })).filter(x => x.ext.length).filter((x, _i, _a, k = x.ext.map(e => e.link).sort().join('|')) => _mvSeen.has(k) ? false : (_mvSeen.add(k), true)).slice(0, 24);
@@ -231,8 +242,9 @@ if (changed) {
     // atalho fixo para a seção Música (fora do #root do app, não mexe no app.js)
     const MUS = '<a id="jf-musica" href="musica.html" style="position:fixed;right:14px;bottom:14px;z-index:9999;background:#d4af37;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎵 Música</a>';
     const ALTA = '<a id="jf-emalta" href="emalta.html" style="position:fixed;right:14px;bottom:62px;z-index:9999;background:#5fd38d;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🚀 Em Alta</a>';
-    html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '');
-    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA);
+    const SER = '<a id="jf-series" href="series.html" style="position:fixed;right:14px;bottom:110px;z-index:9999;background:#e0413a;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎬 Séries</a>';
+    html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '');
+    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER);
     fs.writeFileSync('index.html', html);
     // nova versão do service worker a cada edição → bust do cache no cliente
     if (fs.existsSync('sw.js')) {
@@ -323,7 +335,8 @@ const botoes = i => { const acoes = []; const fontes = (i.cov && i.cov.n) || 1;
   if (fontes < 2 || !CMD || !ASS) return { actions: [ver, { action: 'view', label: fontes < 2 ? '🔎 Em apuração' : 'Abrir jornal', url: B, clear: false }] };
   const texto = [i.title, 'Veículo: ' + i.src + ' · ' + fmtB(i.pub), i.sum ? String(i.sum).slice(0, 300) : ''].filter(Boolean).join('\n').slice(0, 500);
   if (CMD && ASS) { const id = createHash('sha1').update(i.link).digest('hex').slice(0, 12), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32), base = { id, sig, titulo: String(i.title).slice(0, 160) }, fsig = createHmac('sha256', ASS).update(id + '|fontes=' + fontes).digest('hex').slice(0, 32);
-    acoes.push({ action: 'http', label: '✅ Sim, publicar', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, fontes, fsig, link: i.link, links: '', texto }), clear: true });
+    const alegado = alegaExclusivo(i.title, i.orig, ...i.grp.map(g => g.title), ...i.grp.map(g => g.orig));
+    acoes.push({ action: 'http', label: '✅ Sim, publicar', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, fontes, fsig, link: i.link, links: i.grp.map(g => g.link).filter(l => l && l !== i.link).slice(0, 2).join('\n'), texto, ...campoSelo(ASS, id, { p: primeiro([i, ...i.grp]), fontes, alegado }) }), clear: true });
     acoes.push(ver);
     acoes.push({ action: 'http', label: 'Não', url: 'https://ntfy.sh/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true }); }   // 'Fazer post' continua no painel do agente e na página do jornal (ntfy aceita só 3 botões)
   return acoes.length ? { actions: acoes } : {}; };
@@ -355,14 +368,22 @@ const naoSaiu = new Set();   // chaves de notícias cujo aviso falhou: não entr
 let enviados = 0;
 if (!seed) {
   // URGENTE sempre primeiro (novos já vem ordenado: urgente, depois mais recente)
-  for (const i of novos.slice(0,5)) { const ok = await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
-    if (ok) enviados++; else naoSaiu.add(i.key); }
+  for (const i of novos.slice(0,5)) { const ok = await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : 3, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+    if (ok) { enviados++; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
   // o resto vai INTEIRO em resumos (nada cortado em 12): cada resumo cabe no limite de 4.000 caracteres do ntfy
   const extra = novos.slice(5); const partes = []; let atual = [], tam = 0;
-  for (const i of extra) { const l = '• ' + (i.urg ? 'URGENTE · ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
+  for (const i of extra) { const l = '• ' + (i.urg ? 'URGENTE · ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
   if (atual.length) partes.push(atual);
   for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
     if (ok) enviados++; else for (const [i] of pt) naoSaiu.add(i.key); }
 }
+// ✅ confirmação de um "possível exclusivo": um 2º veículo publicou; chega com Sim, publicar (no máximo 3 por rodada)
+let confEnv = 0;
+if (!seed) for (const c of EXC.slice(0, 3)) { const i = c.i;
+  const ok = await post({ title: '✅ Confirmado: ' + i.title.slice(0, 150), message: textoConfirmado(c.p, i.cov.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + i.grp.map(g => g.src).slice(0, 4).join(', '), click: i.link, priority: 4, tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
+  if (ok) { c.t.confirmado = brIso(new Date(now)); confEnv++; } }
+else for (const c of EXC) c.t.confirmado = brIso(new Date(now));
+fs.writeFileSync(EXF, JSON.stringify(EX));
+console.log('exclusivos: confirmações enviadas', confEnv, 'de', EXC.length);
 console.log('push enviados', enviados, 'novos', novos.length, '| não saíram (voltam na próxima rodada):', naoSaiu.size, FALHAS.length ? '| falhas: ' + FALHAS.join(' / ') : '');
 fs.writeFileSync(STATE, JSON.stringify({ edicao1min: st.edicao1min, atualizado: new Date(now).toISOString(), vistos: [...all.map(i => i.key).filter(k => !vistos.has(k) && !naoSaiu.has(k)), ...st.vistos].slice(0,6000) }));
