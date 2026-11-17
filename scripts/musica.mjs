@@ -159,6 +159,7 @@ function regiao(i) {
   if (sc < 1) i.regiaoMotivo = 'sem local no texto, padrão Brasil' + (motivos.length ? ' (' + motivos.join('; ') + ')' : '');
   return sc < 1 ? 'br' : top;
 }
+const ARTISTAS_PESSOAS = new RegExp(ARTISTAS.source.replace('|samba de raiz|roda de samba', ''), ARTISTAS.flags);   // pessoa famosa da nota: só nomes
 const agora = Date.now();
 // no máximo 6 leituras ao mesmo tempo (com 40+ fontes, rajada demais derruba conexões e o Google Notícias responde 503)
 const emLotes = async (lista, f, n = 6) => { const out = new Array(lista.length); let k = 0; await Promise.all(Array.from({ length: n }, async () => { while (k < lista.length) { const x = k++; out[x] = await f(lista[x]); } })); return out; };
@@ -224,7 +225,7 @@ for (const i of mus) {
   i.primeiro = ja.length ? Math.min(...ja) : agora; for (const x of ks) E.vistos[x] = i.primeiro;
   const doms = new Set([i.dom || i.veic, ...i.grp.map(g => g.dom || g.veic)]);
   i.fontes = doms.size; i.emGrande = i.grande || i.grp.some(g => g.grande);
-  i.pot = notaPotencial({ titulo: tit(i), resumo: i.sum, veiculos: [...new Set([i.veic, ...i.grp.map(g => g.veic)])], ts: Math.min(i.ts, ...i.grp.map(g => g.ts).filter(Boolean)), agora, famosos: ARTISTAS });   // 📊 nota de potencial (17/11)
+  i.pot = notaPotencial({ titulo: i.tituloPt || i.title, resumo: i.sum, veiculos: [...new Set([i.veic, ...i.grp.map(g => g.veic)])], ts: Math.min(i.ts, ...i.grp.map(g => g.ts).filter(Boolean)), agora, famosos: ARTISTAS_PESSOAS });   // 📊 nota de potencial (17/11)
   // QUENTE: fato recente (até 12 h), ainda em nenhum portal grande, visto em fontes menores/sociais
   i.quente = !i.emGrande && agora - i.ts < 12 * 3600e3;
   i.confirmado = i.fontes >= 2;
@@ -288,7 +289,7 @@ const so1 = arr => { const s = new Set(); return arr.filter(i => { const k = cha
 // FENIX_PAINEL_URL permite trocar pelo endereço do túnel com senha (ACESSO-REMOTO.md) para abrir do celular
 const PAINEL = (process.env.FENIX_PAINEL_URL || 'http://127.0.0.1:4317').replace(/\/$/, '') + '/fenix-os/painel/direto.html';
 const fazerPost = i => { const outros = [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 3);
-  const q = new URLSearchParams({ origem: 'jornal-musica', fontes: String(i.fontes || 1), titulo: tit(i).slice(0, 200), noticia: i.link, texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic + ' · ' + brIso(new Date(i.ts)).replace('T', ' ').slice(0, 16) + ' (Brasília)', (() => { const r = String(i.sum || '').replace(/&nbsp;|\u00a0/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim(); return r && !r.startsWith(i.title.slice(0, 40)) ? r.slice(0, 600) : ''; })()].filter(Boolean).join('\n') });
+  const q = new URLSearchParams({ origem: 'jornal-musica', fontes: String(i.fontes || 1), ...(i.pot ? { nota: String(i.pot.nota), faixa: i.pot.faixa } : {}), titulo: tit(i).slice(0, 200), noticia: i.link, texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic + ' · ' + brIso(new Date(i.ts)).replace('T', ' ').slice(0, 16) + ' (Brasília)', (() => { const r = String(i.sum || '').replace(/&nbsp;|\u00a0/g, ' ').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim(); return r && !r.startsWith(i.title.slice(0, 40)) ? r.slice(0, 600) : ''; })()].filter(Boolean).join('\n') });
   if (outros.length) q.set('links', outros.join('\n')); return PAINEL + '?' + q.toString(); };
 // ===== SIM, PUBLICAR (celular -> agente no notebook): botão http do ntfy publica um comando assinado no tópico secreto de comando =====
 const NTFY_SRV = (process.env.NTFY_SERVIDOR || 'https://ntfy.sh').replace(/\/$/, '');
@@ -297,7 +298,7 @@ const idNoticia = i => createHash('sha1').update(i.link).digest('hex').slice(0, 
 // REGRA DE VERDADE: só notícia com 2+ fontes (sites diferentes) ganha 'Sim, publicar'; o número de fontes vai assinado (fsig) e o agente confere
 const botoesPublicar = i => { if (!CMD || !ASS || !podePublicar(i.fontes)) return []; const id = idNoticia(i), sig = createHmac('sha256', ASS).update(id).digest('hex').slice(0, 32);
   const base = { id, sig, titulo: tit(i).slice(0, 160) }; const fontes = i.fontes, fsig = assinarFontes(ASS, id, fontes);
-  const pub = { acao: 'publicar', ...base, fontes, fsig, link: i.link, links: [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 2).join('\n'), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n').slice(0, 400), ...campoSelo(ASS, id, { p: primeiroM(i), fontes, alegado: alegadoM(i) }) };
+  const pub = { acao: 'publicar', ...base, fontes, fsig, ...(i.pot ? { nota: i.pot.nota, faixa: i.pot.faixa } : {}), link: i.link, links: [...new Set(i.grp.map(g => g.link).filter(l => l && l !== i.link && !/news\.google\.com/.test(l)))].slice(0, 2).join('\n'), texto: [tit(i), i.local ? 'Local: ' + i.local : '', 'Veículo: ' + i.veic].filter(Boolean).join('\n').slice(0, 400), ...campoSelo(ASS, id, { p: primeiroM(i), fontes, alegado: alegadoM(i) }) };
   return [{ action: 'http', label: '✅ Sim, publicar', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify(pub), clear: true }, { action: 'http', label: 'Não', url: NTFY_SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true }]; };
 // botões SEMPRE visíveis (14/11): 2+ fontes = Sim, publicar / Ver notícia / Não; 1 fonte = Ver notícia / Em apuração (abre a página da Música)
 const MUSICA_URL = 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html';

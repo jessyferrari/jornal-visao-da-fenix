@@ -100,8 +100,9 @@ export function botoes(i, { CMD, ASS, SRV = 'https://ntfy.sh', pagina }) {
   const texto = [i.title, 'Veículo: ' + i.src + ' · ' + brIso(i.ts).replace('T', ' ') + ' (Brasília)', i.sum ? String(i.sum).slice(0, 280) : ''].filter(Boolean).join('\n').slice(0, 500);
   const links = i.grp.map((g) => g.link).filter((l) => l && l !== i.link).slice(0, 2).join('\n');
   const base = { id, sig, titulo: String(i.title).slice(0, 160) };
+  const pt = notaPotencial({ titulo: i.title, resumo: i.sum, veiculos: [i.src, ...i.grp.map((g) => g.src)], ts: Math.min(i.ts, ...i.grp.map((g) => g.ts).filter(Boolean)), agora: Date.now() });   // a nota viaja no pedido (aprende com o resultado do post)
   return [
-    { action: 'http', label: '✅ Sim, publicar', url: SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, fontes, fsig, link: i.link, links, texto, origem: 'esportes', ...campoSelo(ASS, id, { p, fontes, alegado }) }), clear: true },
+    { action: 'http', label: '✅ Sim, publicar', url: SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'publicar', ...base, fontes, fsig, nota: pt.nota, faixa: pt.faixa, link: i.link, links, texto, origem: 'esportes', ...campoSelo(ASS, id, { p, fontes, alegado }) }), clear: true },
     ver,
     { action: 'http', label: 'Não', url: SRV + '/' + CMD, method: 'POST', body: JSON.stringify({ acao: 'recusar', ...base }), clear: true },
   ];
