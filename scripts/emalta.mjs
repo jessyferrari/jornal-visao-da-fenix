@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import * as R from './emalta-regras.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
+import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const UA = { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36', 'Accept-Language': 'pt-BR,pt;q=0.9' };
 const UAW = { 'User-Agent': 'JornalVisaoDaFenix/1.0 (https://github.com/jessyferrari/jornal-visao-da-fenix)' };   // Wikimedia pede User-Agent que identifique
@@ -84,7 +85,8 @@ for (const t of todos) {
   const rel = R.relevante(t); if (!rel && t.tipos.length < 2) continue;
   const [k, T] = R.lembrar(E, t, AGORA, seed); if (!rel) continue;
   const { etiqueta, motivo } = R.etiquetar(t, T, AGORA);
-  itens.push({ id: R.idAlta(k), chave: k, ...t, etiqueta, rotulo: R.ROTULO[etiqueta], motivo, confianca: R.confianca(t), publicavel: R.publicavel(t), numerosTexto: R.numerosTexto(t), primeiroVisto: R.brIso(T.primeiro), tiposNomes: t.tipos.map((x) => R.TIPOS[x]) });
+  itens.push({ id: R.idAlta(k), chave: k, ...t, etiqueta, rotulo: R.ROTULO[etiqueta], motivo, confianca: R.confianca(t), publicavel: R.publicavel(t), numerosTexto: R.numerosTexto(t), primeiroVisto: R.brIso(T.primeiro), tiposNomes: t.tipos.map((x) => R.TIPOS[x]),
+    pot: (({ nota, faixa, provisoria, rotulo, motivo }) => ({ nota, faixa, provisoria, rotulo, motivo }))(notaPotencial({ titulo: t.manchete || t.nome, veiculos: t.veiculos.map((v) => v.nome), ts: T.primeiro, agora: AGORA })) });   // 📊 nota de potencial (17/11)
 }
 R.esquecer(E, AGORA);
 itens.sort((a, b) => (R.ORDEM[a.etiqueta] - R.ORDEM[b.etiqueta]) || (b.tipos.length - a.tipos.length) || (b.veiculos.length - a.veiculos.length));
@@ -135,7 +137,7 @@ if (!E.avisoAlta) { const a = R.avisoAlta(SRV, MUS); if (a && await post(MUS, a)
 const N = E.envios && E.envios.dia === hoje ? E.envios : (E.envios = { dia: hoje, resumos: {}, instantaneos: 0, planos: {} });
 const min = R.brMin(AGORA); const prox = R.proximoHorario(slots, AGORA, hoje);
 const DS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb']; const diaTxt = DS[new Date(hoje + 'T12:00:00-03:00').getUTCDay()] + ' ' + hoje.slice(8, 10) + '/' + hoje.slice(5, 7);
-const linhaItem = (i) => '• ' + i.rotulo.split(' ')[0] + ' ' + i.nome + (i.motivo.length ? ': ' + i.motivo.slice(0, 2).join(', ') : '') + ' (' + i.numerosTexto + ')' + (i.publicavel ? ' ✅ pode postar' : ' 🔎 em apuração');
+const linhaItem = (i) => '• ' + (i.pot ? '[' + i.pot.nota + '%' + (i.pot.provisoria ? ' prov.' : '') + '] ' : '') + i.rotulo.split(' ')[0] + ' ' + i.nome + (i.motivo.length ? ': ' + i.motivo.slice(0, 2).join(', ') : '') + ' (' + i.numerosTexto + ')' + (i.publicavel ? ' ✅ pode postar' : ' 🔎 em apuração');
 const agendaTexto = (pl) => pl.filter((s) => !s.passou).map((s) => s.hora + ' · ' + (s.item ? R.ROTULO[s.item.etiqueta].split(' ')[0] + ' ' + s.item.nome + (s.item.publicavel ? ' ✅' : ' 🔎') : 'livre')).join('\n');
 const partes = (linhas, lim = 3300) => { const P = []; let a = [], t = 0; for (const l of linhas) { const b = Buffer.byteLength(l) + 1; if (a.length && t + b > lim) { P.push(a); a = []; t = 0; } a.push(l); t += b; } if (a.length) P.push(a); return P; };   // em bytes: o ntfy aceita até 4.096 bytes de texto
 const botoesAgenda = (pl) => { const b = []; for (const s of pl.filter((x) => !x.passou && x.item && x.item.publicavel && R.deBR(hoje, x.hora) - AGORA >= 75 * 60e3)) { if (b.length >= 2 || !CMD || !ASS) break; const it = itens.find((i) => i.id === s.item.id);
@@ -167,7 +169,7 @@ if (!seed) for (const i of itens) {
   if (N.instantaneos >= 6) break;
   const T = E.topicos[i.chave]; if (i.etiqueta !== 'subindo' || i.tipos.length < 2 || !T || T.seed || AGORA - T.primeiro > 60 * 60e3 || E.avisados.some((x) => x.id === i.id)) continue;
   const noite = R.brHora(AGORA) < 7;
-  if (await post(ALTA, { title: '🚀 Subindo agora: ' + i.nome.slice(0, 110), message: (i.motivo.join(', ') || 'apareceu agora') + '\n' + i.numerosTexto + '\n' + (i.publicavel ? '✅ ' + i.veiculos.length + ' veículos: pode postar' + (prox ? ' (ou agende para ' + prox.hora + ', próximo horário forte)' : '') : '🔎 Em apuração: menos de 2 veículos, sem botão de post até a 2ª fonte'), click: i.link || PAGINA, priority: noite ? 2 : 4, tags: ['rocket'], actions: R.botoesItem(i, { SRV, CMD, ASS, slot: prox, dia: hoje, pagina: PAGINA }) })) { N.instantaneos++; E.avisados.push({ id: i.id, t: AGORA }); }
+  if (await post(ALTA, { title: tituloComNota(i.pot, '🚀 Subindo agora: ' + i.nome.slice(0, 90)), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + (i.motivo.join(', ') || 'apareceu agora') + '\n' + i.numerosTexto + '\n' + (i.publicavel ? '✅ ' + i.veiculos.length + ' veículos: pode postar' + (prox ? ' (ou agende para ' + prox.hora + ', próximo horário forte)' : '') : '🔎 Em apuração: menos de 2 veículos, sem botão de post até a 2ª fonte'), click: i.link || PAGINA, priority: prioridadeNota(i.pot, noite ? 2 : 4), tags: ['rocket'], actions: R.botoesItem(i, { SRV, CMD, ASS, slot: prox, dia: hoje, pagina: PAGINA }) })) { N.instantaneos++; E.avisados.push({ id: i.id, t: AGORA }); }
 }
 salvar();
 console.log('PUSH Em Alta: enviados', enviados, '| resumos hoje', JSON.stringify(N.resumos), '| na hora hoje', N.instantaneos, FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');

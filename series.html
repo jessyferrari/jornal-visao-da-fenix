@@ -17,12 +17,14 @@ input{width:100%;box-sizing:border-box;background:#141418;color:#eee;border:1px 
 <input id="q" type="search" placeholder="Filtrar nesta página (ex.: Netflix, Bruna Surfistinha)" aria-label="Filtrar">
 <div id="r"></div></main>
 <script>
+const nt=s=>{const p=s&&s.pot;if(!p)return'';const C={'nao-deixe':['#d4af37','#0d0b08','#d4af37'],vale:['#0d0b08','#d4af37','#d4af37'],opcional:['#0d0b08','#bfa775','#5a5040']}[p.faixa]||['#0d0b08','#bfa775','#5a5040'];return '<div class="nota" data-qa="nota" style="margin:2px 0 6px"><span style="display:inline-block;font:700 13px/1.2 system-ui,sans-serif;letter-spacing:.02em;padding:5px 10px;border-radius:999px;border:1.5px solid '+C[2]+';background:'+C[0]+';color:'+C[1]+'">'+e(p.rotulo)+'</span><div style="font:500 12px/1.35 system-ui,sans-serif;color:#bfa775;margin-top:3px">'+e(p.motivo)+'</div></div>'};  // 📊 nota de potencial (17/11): selo preto e dourado
+
 const e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const dt=p=>p.slice(8,10)+'/'+p.slice(5,7)+' '+p.slice(11,16);
 const item=(s,cls)=>{const st=s.confirmado?'<span class="ok">✅ '+s.fontes+' veículos: pode virar post</span>':'<span class="esp" title="Só 1 site deu até agora. Sem post até aparecer a 2ª fonte.">🔎 em apuração: só 1 fonte, sem post até a 2ª</span>';
  const t=(s.tambemEm||[]).map(x=>'<a href="'+e(x.link)+'" target="_blank" rel="noopener">'+e(x.veiculo)+'</a>'+(x.republicadaDe?' (republicou '+e(x.republicadaDe)+', não conta como 2ª fonte)':'')).join(', ');
  return '<div class="'+(cls||'i')+'" data-t="'+e((s.titulo+' '+s.veiculo+' '+(s.original||'')+' '+(s.plataformas||[]).join(' ')).toLowerCase())+'">'+
- (s.selo?'<div><span class="selo">'+(s.selo.tipo==='possivel'?'⭐ POSSÍVEL EXCLUSIVO':'📰 O SITE DIZ QUE É EXCLUSIVO')+'</span></div><div class="m">'+e(s.selo.texto)+'</div>':'')+
+ nt(s)+(s.selo?'<div><span class="selo">'+(s.selo.tipo==='possivel'?'⭐ POSSÍVEL EXCLUSIVO':'📰 O SITE DIZ QUE É EXCLUSIVO')+'</span></div><div class="m">'+e(s.selo.texto)+'</div>':'')+
  (s.exclusivoConfirmado?'<div><span class="selo">✅ EXCLUSIVO CONFIRMADO</span></div>':'')+
  '<a href="'+e(s.link)+'" target="_blank" rel="noopener">'+e(s.titulo)+'</a>'+
  '<div class="m">'+e(s.veiculo)+' · '+dt(s.publicado)+' (Brasília)'+(s.traduzido?' · '+e(s.traduzido)+' · original: “'+e(s.original)+'”':'')+'</div>'+

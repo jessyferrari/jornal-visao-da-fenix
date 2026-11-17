@@ -10,6 +10,7 @@ import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
+import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)' };
 const PAGINA = 'https://jessyferrari.github.io/jornal-visao-da-fenix/esportes.html';
@@ -126,7 +127,8 @@ for (const g of grupos.filter((x) => x.n === 1 && E.excl[x.key] && !E.excl[x.key
 const novosConf = confirmadosL.filter((g) => !visto(g) && AGORA - g.ts < 24 * 3600e3);
 for (const g of novosConf.slice(0, LIM.instPorRodada)) {
   if (D.instantaneos >= LIM.instDia || madrugada) break; const p = S.primeiro([g, ...g.grp]);
-  const ok = await post(SER, { title: (V.get(g).aoVivo ? '🔴 ' : '⚽ ') + g.title.slice(0, 160), message: g.src + ' · ' + hhmm(g.ts) + (g.orig ? ' · traduzido do inglês' : '') + '\n✅ ' + g.n + ' veículos: ' + [g.src, ...g.grp.map((x) => x.src)].slice(0, 5).join(', ') + '\n' + p.veiculo + ' saiu primeiro às ' + p.hora + '\n🏅 ' + V.get(g).modalidade, click: g.link, priority: 2, tags: ['soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const pg = notaPotencial({ titulo: g.title, resumo: g.sum, veiculos: [g.src, ...g.grp.map((x) => x.src)], ts: Math.min(g.ts, ...g.grp.map((x) => x.ts).filter(Boolean)), agora: AGORA });
+  const ok = await post(SER, { title: tituloComNota(pg, (V.get(g).aoVivo ? '🔴 ' : '⚽ ') + g.title.slice(0, 140)), message: '📊 ' + pg.motivo + '\n' + g.src + ' · ' + hhmm(g.ts) + (g.orig ? ' · traduzido do inglês' : '') + '\n✅ ' + g.n + ' veículos: ' + [g.src, ...g.grp.map((x) => x.src)].slice(0, 5).join(', ') + '\n' + p.veiculo + ' saiu primeiro às ' + p.hora + '\n🏅 ' + V.get(g).modalidade, click: g.link, priority: prioridadeNota(pg, 2), tags: ['soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { D.instantaneos++; marcar(g); }
 }
 // 4d) resumos 09:00, 14:00 e 20:00 (janela de 2 h): tudo o que ainda não foi avisado nas últimas 24 h, inteiro, em partes

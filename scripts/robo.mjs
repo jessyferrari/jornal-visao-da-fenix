@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
 // [fonte, url, seção padrão, idioma (vazio = português)]
@@ -178,6 +179,8 @@ for (const i of all) {
   const srcs = [i, ...i.grp]; const br = [...new Set(srcs.filter(x => x.reg === 'br').map(x => x.src))], ext = [...new Set(srcs.filter(x => x.reg === 'ext').map(x => x.src))];
   i.cov = { n: br.length + ext.length, br, ext }; if (i.cov.n >= 2 && (!br.length || !ext.length)) i.cov.cego = !br.length ? 'Ponto cego: só a imprensa estrangeira cobriu' : 'Ponto cego: só a imprensa brasileira cobriu';
 }
+// 📊 nota de potencial de postagem (17/11): assunto, veículos, repetição, pessoa e frescor (scripts/potencial.mjs)
+for (const i of all) { const srcs = [i, ...i.grp]; i.pot = notaPotencial({ titulo: i.title, resumo: i.sum, veiculos: [...new Set(srcs.map(x => x.src))], ts: Math.min(...srcs.map(x => x.ts).filter(Boolean)), agora: now }); }
 // ===== ⭐ Possível exclusivo / ✅ Confirmado depois (17/11): só a palavra do próprio site + a contagem real dos veículos lidos =====
 const EXF = 'exclusivos-estado.json', EX = (() => { try { return JSON.parse(fs.readFileSync(EXF, 'utf8')); } catch { return {}; } })();
 const NMON = new Set(FEEDST.filter(f => f.ok && f.src !== 'Google Notícias').map(f => f.src)).size;
@@ -193,7 +196,7 @@ const PQc = Object.fromEntries(Object.entries(PQ).filter(([k, v]) => typeof v ==
 const ids = new Set();
 const stories = all.slice(0,220).map(i => { let id = i.key.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').slice(-40).toLowerCase(); while (ids.has(id)) id += 'x'; ids.add(id);
   const s = { id, sec: i.sec, src: i.src, title: i.title, sum: i.sum || ('Reportagem de ' + i.src + '.'), link: i.link, pub: i.pub };
-  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; s.eid = [i.key, ...i.grp.map(g => g.key)].sort()[0]; if (PQc[i.key]) s.pq = PQc[i.key]; const ex = exclDe(i); if (ex) { s.excl = ex; i.excl = ex; } i.sid = id; return s; });
+  if (i.img) { s.img = i.img; s.imgW = i.imgW; if (i.srcset) s.srcset = i.srcset; } if (i.lang) s.lang = i.lang; if (i.tr) { s.tr = i.tr; s.orig = i.orig; } if (i.heat) { s.heat = i.heat; s.why = i.outros.length ? 'Também em ' + i.outros.slice(0,3).join(', ') : 'Última hora'; } s.score = i.score; s.cov = i.cov; if (i.pot) s.pot = { nota: i.pot.nota, faixa: i.pot.faixa, provisoria: i.pot.provisoria, rotulo: i.pot.rotulo, motivo: i.pot.motivo }; s.eid = [i.key, ...i.grp.map(g => g.key)].sort()[0]; if (PQc[i.key]) s.pq = PQc[i.key]; const ex = exclDe(i); if (ex) { s.excl = ex; i.excl = ex; } i.sid = id; return s; });
 // Como o mundo viu: notícia de veículo brasileiro com o mesmo fato em veículos estrangeiros (traduzido)
 const _mvSeen = new Set();
 const mundoViu = all.filter(i => i.sid && i.reg === 'br').map(i => ({ id: i.sid, ext: i.grp.filter(j => j.reg === 'ext' && (!j.lang || j.tr) && (j.tr || j.title).toLowerCase().replace(/\W+/g, '') !== i.title.toLowerCase().replace(/\W+/g, '')).map(j => ({ src: j.src, title: j.title, orig: j.orig || '', tr: j.tr || '', link: j.link, pub: j.pub })) })).filter(x => x.ext.length).filter((x, _i, _a, k = x.ext.map(e => e.link).sort().join('|')) => _mvSeen.has(k) ? false : (_mvSeen.add(k), true)).slice(0, 24);
@@ -244,9 +247,11 @@ if (changed) {
     const MUS = '<a id="jf-musica" href="musica.html" style="position:fixed;right:14px;bottom:14px;z-index:9999;background:#d4af37;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎵 Música</a>';
     const ALTA = '<a id="jf-emalta" href="emalta.html" style="position:fixed;right:14px;bottom:62px;z-index:9999;background:#5fd38d;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🚀 Em Alta</a>';
     const SER = '<a id="jf-series" href="series.html" style="position:fixed;right:14px;bottom:110px;z-index:9999;background:#e0413a;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎬 Séries</a>';
-    const ESP = '<a id="jf-esportes" href="esportes.html" style="position:fixed;right:14px;bottom:158px;z-index:9999;background:#2b6cd4;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">⚽ Esportes</a>';
+    const ESP = '<a id="jf-esportes" href="esportes.html" style="position:fixed;right:14px;bottom:158px;z-index:9999;background:#0d0b08;color:#d4af37;border:1.5px solid #d4af37;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">⚽ Esportes</a>';
     html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-esportes"[^>]*>[\s\S]*?<\/a>/, '');
     html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER + ESP);
+    // 📊 selo da nota de potencial (17/11): script fora do app (nota.js), incluído uma vez só
+    if (!html.includes('src="nota.js"')) html = html.replace(/<\/body>/, '<script src="nota.js" defer></script></body>');
     fs.writeFileSync('index.html', html);
     // nova versão do service worker a cada edição → bust do cache no cliente
     if (fs.existsSync('sw.js')) {
@@ -376,12 +381,12 @@ if (!seed) {
   // URGENTE sempre primeiro (novos já vem ordenado: urgente, depois mais recente)
   // URGENTE não espera a janela: até 3 urgentes extras por janela de 15 min
   const naHora = novos.filter((x, ix) => ix < livres || (x.urg && (R.urg || 0) + novos.slice(livres, ix).filter(y => y.urg).length < 3));
-  for (const i of naHora) { const ok = await post({ title: (i.urg ? 'URGENTE · ' : '') + i.title, message: i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : 2, tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+  for (const i of naHora) { const ok = await post({ title: tituloComNota(i.pot, (i.urg ? 'URGENTE · ' : '') + i.title), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : prioridadeNota(i.pot, 2), tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
     if (ok) { enviados++; if (naHora.indexOf(i) < livres) R.n++; else R.urg = (R.urg || 0) + 1; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
   // o resto vai INTEIRO em resumos (nada cortado em 12): cada resumo cabe no limite de 4.000 caracteres do ntfy
   const extra = novos.filter(x => !naHora.includes(x)); if (!podeResumo) { for (const i of extra) naoSaiu.add(i.key); extra.length = 0; }   // resumo só a cada 15 min: o resto espera
   const partes = []; let atual = [], tam = 0;
-  for (const i of extra) { const l = '• ' + (i.urg ? 'URGENTE · ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
+  for (const i of extra) { const l = '• ' + (i.pot ? '[' + i.pot.nota + '%' + (i.pot.provisoria ? ' prov.' : '') + '] ' : '') + (i.urg ? 'URGENTE · ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
   if (atual.length) partes.push(atual);
   for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
     if (ok) { enviados++; R.resumo = now; } else for (const [i] of pt) naoSaiu.add(i.key); }

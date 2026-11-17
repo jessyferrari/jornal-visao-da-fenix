@@ -1,5 +1,6 @@
 // Regras puras da seção 🎬 Séries e Filmes (streaming): fontes, filtro do assunto, agrupamento do mesmo fato,
 // regra das 2 fontes, plataforma citada, selo de exclusivo, botões e resumos. Testadas em scripts/teste-series.mjs.
+import { notaPotencial } from './potencial.mjs';
 import { createHash, createHmac } from 'node:crypto';
 import { alegaExclusivo, primeiro, selo, campoSelo, hhmm } from './exclusivo.mjs';
 
@@ -104,7 +105,8 @@ export const tituloPt = (i) => i.title;
 export function vista(i, { N, agora, google }) {
   const confirmado = i.n >= 2, alegado = alegaExclusivo(i.title, i.orig, ...i.grp.map((g) => g.title), ...i.grp.map((g) => g.orig));
   const p = confirmado ? primeiro([i, ...i.grp]) : null;
-  const v = { id: idNoticia(i.link), titulo: i.title, veiculo: i.src, link: i.link, publicado: brIso(i.ts), fontes: i.n, confirmado,
+  const pot = notaPotencial({ titulo: i.title, resumo: i.sum, veiculos: [i.src, ...i.grp.map((g) => g.src)], ts: Math.min(i.ts, ...i.grp.map((g) => g.ts).filter(Boolean)), agora });   // 📊 nota de potencial (17/11)
+  const v = { id: idNoticia(i.link), titulo: i.title, veiculo: i.src, link: i.link, publicado: brIso(i.ts), fontes: i.n, confirmado, pot: { nota: pot.nota, faixa: pot.faixa, provisoria: pot.provisoria, rotulo: pot.rotulo, motivo: pot.motivo },
     emApuracao: confirmado ? undefined : true, resumo: i.sum || undefined, plataformas: plataformas(i.title + ' ' + (i.sum || '')),
     tambemEm: i.grp.slice(0, 4).map((g) => ({ veiculo: g.src, titulo: g.title, link: g.link, publicado: brIso(g.ts), republicadaDe: g.republicada || undefined })) };
   if (i.orig) { v.original = i.orig; v.traduzido = 'Traduzido do ' + i.lang; }
