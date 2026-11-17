@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import * as R from './emalta-regras.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
-import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const UA = { 'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124 Safari/537.36', 'Accept-Language': 'pt-BR,pt;q=0.9' };
 const UAW = { 'User-Agent': 'JornalVisaoDaFenix/1.0 (https://github.com/jessyferrari/jornal-visao-da-fenix)' };   // Wikimedia pede User-Agent que identifique
@@ -170,7 +170,7 @@ if (!seed) for (const i of itens) {
   if (N.instantaneos >= 6) break;
   const T = E.topicos[i.chave]; if (i.etiqueta !== 'subindo' || i.tipos.length < 2 || !T || T.seed || AGORA - T.primeiro > 60 * 60e3 || E.avisados.some((x) => x.id === i.id)) continue;
   const noite = R.brHora(AGORA) < 7;
-  if (await post(ALTA, { title: tituloComNota(i.pot, '🚀 Subindo agora: ' + i.nome.slice(0, 90)), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + (i.motivo.join(', ') || 'apareceu agora') + '\n' + i.numerosTexto + '\n' + (i.publicavel ? '✅ ' + i.veiculos.length + ' veículos: pode postar' + (prox ? ' (ou agende para ' + prox.hora + ', próximo horário forte)' : '') : '🔎 Em apuração: menos de 2 veículos, sem botão de post até a 2ª fonte'), click: i.link || PAGINA, priority: prioridadeNota(i.pot, noite ? 2 : 4), tags: ['rocket'], actions: R.botoesItem(i, { SRV, CMD, ASS, slot: prox, dia: hoje, pagina: PAGINA }) })) { N.instantaneos++; E.avisados.push({ id: i.id, t: AGORA }); }
+  if (await post(ALTA, { title: tituloComNota(i.pot, '🚀 Subindo agora: ' + i.nome.slice(0, 90)), message: (i.pot ? linhaNota(i.pot) + '\n' : '') + (i.motivo.join(', ') || 'apareceu agora') + '\n' + i.numerosTexto + '\n' + (i.publicavel ? '✅ ' + i.veiculos.length + ' veículos: pode postar' + (prox ? ' (ou agende para ' + prox.hora + ', próximo horário forte)' : '') : '🔎 Em apuração: menos de 2 veículos, sem botão de post até a 2ª fonte'), click: i.link || PAGINA, priority: prioridadeNota(i.pot, noite ? 2 : 4), tags: ['rocket'], actions: R.botoesItem(i, { SRV, CMD, ASS, slot: prox, dia: hoje, pagina: PAGINA }) })) { N.instantaneos++; E.avisados.push({ id: i.id, t: AGORA }); }
 }
 salvar();
 console.log('PUSH Em Alta: enviados', enviados, '| resumos hoje', JSON.stringify(N.resumos), '| na hora hoje', N.instantaneos, FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');

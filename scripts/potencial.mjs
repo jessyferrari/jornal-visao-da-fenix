@@ -56,5 +56,9 @@ export function notaPotencial(x) {
 
 /** prioridade do ntfy pela nota, poupando bateria: só 90%+ (e nunca a provisória) sobe para 4 (com som); o resto segue a base (2 = silencioso). */
 export const prioridadeNota = (p, base = 2) => (p && !p.provisoria && p.nota >= 90 ? Math.max(base, 4) : base);
-/** título do aviso com a nota na frente, bem visível */
-export const tituloComNota = (p, titulo) => (p ? p.rotulo + ' | ' : '') + titulo;
+/** selo curto do título (17/11: o selo longo comia a manchete): 🔥 não deixe, 👍 vale, ⏳ provisória; a faixa por extenso vai na 1ª linha da mensagem */
+export const seloCurto = (p) => (p ? (p.provisoria ? '⏳' : p.faixa === 'nao-deixe' ? '🔥' : p.faixa === 'vale' ? '👍' : '') + p.nota + '%' : '');
+/** título do aviso: selo curto e a manchete logo depois */
+export const tituloComNota = (p, titulo) => (p ? seloCurto(p) + ' · ' : '') + titulo;
+/** 1ª linha da mensagem: a faixa por extenso e o motivo da nota */
+export const linhaNota = (p) => (p ? '📊 ' + { 'nao-deixe': 'Não deixe de postar', vale: 'Vale postar', opcional: 'Opcional' }[p.faixa] + (p.provisoria ? ' (nota provisória)' : '') + ' · ' + p.motivo : '');

@@ -7,7 +7,7 @@ import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
 import { alegaExclusivo, selo, primeiro, campoSelo } from './exclusivo.mjs';
 import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato, montarDJF, djfNoTexto, buscasDJF, rotuloReal } from './musica-regras.mjs';
-import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
 import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto, cidadesNoTexto, decidir } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.

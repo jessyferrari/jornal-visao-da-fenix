@@ -1,6 +1,6 @@
 // Teste da nota de potencial de postagem (17/11, pedido A). Sem rede.
 import assert from 'node:assert/strict';
-import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
 const A = Date.parse('2026-11-17T12:00:00-03:00'); let ok = 0;
 const t = (nome, f) => { f(); console.log('ok ' + (++ok) + ' ' + nome); };
 
@@ -46,7 +46,9 @@ t('prioridade do ntfy poupa bateria: só 90%+ confirmada sobe para 4; provisóri
 });
 t('título do aviso começa pela nota, bem visível', () => {
   const r = notaPotencial({ titulo: 'Morre cantora aos 91 anos', veiculos: ['g1', 'Folha', 'CNN Brasil'], ts: A - 40 * 60e3, agora: A });
-  assert.match(tituloComNota(r, 'Morre cantora aos 91 anos'), /^🔥 \d+% · vale postar \| Morre cantora/);
+  assert.match(tituloComNota(r, 'Morre cantora aos 91 anos'), /^👍\d+% · Morre cantora/);   // 17/11: selo curto, a manchete não é cortada
+  assert.match(linhaNota(r), /^📊 Vale postar · /);
+  assert.match(tituloComNota({ ...r, provisoria: true }, 'X'), /^⏳\d+% · X/); assert.match(tituloComNota({ ...r, faixa: 'nao-deixe', nota: 93 }, 'X'), /^🔥93% · X/);
 });
 t('portal local com nome parecido não vira veículo grande (Folha do Leste)', () => {
   assert.doesNotMatch(notaPotencial({ titulo: 'Roda de samba', veiculos: ['Folha do Leste'], ts: A, agora: A }).motivo, /veículo grande/);

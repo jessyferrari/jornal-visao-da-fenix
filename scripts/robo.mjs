@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
-import { notaPotencial, prioridadeNota, tituloComNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
 // [fonte, url, seção padrão, idioma (vazio = português)]
@@ -385,16 +385,18 @@ if (!seed) {
   // URGENTE sempre primeiro (novos já vem ordenado: urgente, depois mais recente)
   // URGENTE não espera a janela: até 3 urgentes extras por janela de 15 min
   const naHora = novos.filter((x, ix) => ix < livres || (x.urg && (R.urg || 0) + novos.slice(livres, ix).filter(y => y.urg).length < 3));
-  for (const i of naHora) { const ok = await post({ title: tituloComNota(i.pot, (i.urg ? 'URGENTE · ' : '') + i.title), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? 5 : prioridadeNota(i.pot, 2), tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+  for (const i of naHora) { const ok = await post({ title: tituloComNota(i.pot, i.title), message: (i.urg ? '🚨 Urgente: acabou de acontecer\n' : '') + (i.pot ? linhaNota(i.pot) + '\n' : '') + i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? (i.pot && i.pot.nota >= 70 ? 5 : 4) : prioridadeNota(i.pot, 2), tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
     if (ok && ((i.cov && i.cov.n) || 1) >= 2) limparApuracao(i);
     if (ok && ((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) };   // 17/11: volta com Sim, publicar quando confirmar
     if (ok) { enviados++; if (naHora.indexOf(i) < livres) R.n++; else R.urg = (R.urg || 0) + 1; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
   // o resto vai INTEIRO em resumos (nada cortado em 12): cada resumo cabe no limite de 4.000 caracteres do ntfy
   const extra = novos.filter(x => !naHora.includes(x)); if (!podeResumo) { for (const i of extra) naoSaiu.add(i.key); extra.length = 0; }   // resumo só a cada 15 min: o resto espera
+  // 17/11: no resumo, o que vale postar (70%+) vem primeiro, em ordem de horário; depois o resto, também por horário
+  extra.sort((a, b) => ((b.pot && b.pot.nota >= 70) - (a.pot && a.pot.nota >= 70)) || a.pub.localeCompare(b.pub));
   const partes = []; let atual = [], tam = 0;
-  for (const i of extra) { const l = '• ' + (i.pot ? '[' + i.pot.nota + '%' + (i.pot.provisoria ? ' prov.' : '') + '] ' : '') + (i.urg ? 'URGENTE · ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
+  for (const i of extra) { const l = '• ' + i.pub.slice(11,16) + ' ' + (i.pot ? (i.pot.nota >= 70 ? '🔥' : '') + i.pot.nota + '%' + (i.pot.provisoria ? ' prov.' : '') + ' · ' : '') + (i.urg ? '🚨 ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
   if (atual.length) partes.push(atual);
-  for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
+  for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (pt.some(x => x[0].pot && x[0].pot.nota >= 70) ? ' · ' + pt.filter(x => x[0].pot && x[0].pot.nota >= 70).length + ' vale postar' : '') + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
     if (ok) { enviados++; R.resumo = now; for (const [i] of pt) if (((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) }; } else for (const [i] of pt) naoSaiu.add(i.key); }
 }
 // 📈 Subindo agora (17/11): o mesmo fato em 3+ veículos em até 30 min; até 6 por dia, nunca de madrugada, com Sim, publicar (já tem 2+ fontes)
@@ -417,7 +419,7 @@ const jaConf = new Set([...EXC.map((c) => c.i.key), ...SUB.map((x) => x.i.key)])
 const CONF = confirmadosDeApuracao(all.filter(i => (!i.lang || i.tr) && i.cov && i.cov.n >= 2 && !jaConf.has(i.key)), st, { agora: now });
 let conf2 = 0;
 if (!seed) for (const { i, chave } of CONF) { if (conf2 >= 3 || !podeConfirmar(st, { agora: now })) break;
-  const ok = await post({ title: tituloComNota(i.pot, '✅ Confirmado: ' + i.title.slice(0, 140)), message: (i.pot ? '📊 ' + i.pot.motivo + '\n' : '') + 'Antes em apuração, agora em ' + i.cov.n + ' veículos: ' + [i.src, ...i.grp.map(g => g.src)].slice(0, 4).join(', '), click: i.link, priority: prioridadeNota(i.pot, 2), tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
+  const ok = await post({ title: tituloComNota(i.pot, '✅ Confirmado: ' + i.title.slice(0, 140)), message: (i.pot ? linhaNota(i.pot) + '\n' : '') + 'Antes em apuração, agora em ' + i.cov.n + ' veículos: ' + [i.src, ...i.grp.map(g => g.src)].slice(0, 4).join(', '), click: i.link, priority: prioridadeNota(i.pot, 2), tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
   if (ok) { marcarConfirmado(st, chave, { agora: now }); conf2++; } }
 console.log('em apuração que confirmou: ' + CONF.length + ' | avisos enviados ' + conf2 + ' | em apuração guardadas ' + Object.keys(st.apuracao).length);
 console.log('push enviados', enviados, 'novos', novos.length, '| não saíram (voltam na próxima rodada):', naoSaiu.size, FALHAS.length ? '| falhas: ' + FALHAS.join(' / ') : '');
