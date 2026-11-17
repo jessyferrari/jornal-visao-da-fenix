@@ -14,3 +14,5 @@ jobs:
       - run: node scripts/teste-robo-envio.mjs
       - run: node scripts/teste-robo-offline.mjs
       - run: node scripts/teste-hoje.mjs
+      - run: node scripts/teste-emalta-e2e.mjs
+      - run: node scripts/teste-musica-e2e.mjs
