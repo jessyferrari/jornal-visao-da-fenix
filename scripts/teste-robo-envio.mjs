@@ -8,6 +8,7 @@ const RAIZ = dirname(dirname(fileURLToPath(import.meta.url))); const T = mkdtemp
 for (const f of ['scripts', 'notificadas.json', 'edicao.json', 'traducoes.json', 'imagens.json', 'porque-importa.json', 'index.html', 'app.js', 'sw.js', 'og']) { try { cpSync(join(RAIZ, f), join(T, f), { recursive: true }); } catch {} }
 // estado sem nada avisado nas últimas horas: muitas notícias de uma vez (pior caso)
 const st = JSON.parse(readFileSync(join(T, 'notificadas.json'), 'utf8')); st.vistos = []; delete st.ritmo; writeFileSync(join(T, 'notificadas.json'), JSON.stringify(st));
+const ehUrg = (p) => /^URGENTE/.test(p.title || '') || /^🚨 Urgente/.test(p.message || '');   // 17/11: URGENTE saiu do título, fica na 1ª linha
 let rodada = 1, n = 0; const recusados = [], posts = [];
 const srv = createServer(async (q, r) => { let b = ''; for await (const c of q) b += c; let m = {}; try { m = JSON.parse(b); } catch {}
   if (rodada === 1) { n++; if (n === 1) { r.writeHead(429, { 'retry-after': '1' }); return r.end('{}'); }
@@ -19,8 +20,8 @@ await new Promise(ok => srv.listen(0, '127.0.0.1', ok));
 const rodar = () => new Promise(ok => { const p = spawn(process.execPath, ['scripts/robo.mjs'], { cwd: T, env: { ...process.env, NTFY_TOPIC: 'teste-geral', NTFY_TOPIC_COMANDO: 'teste-cmd', NTFY_ASSINATURA: 'chave-teste', NTFY_SERVIDOR: 'http://127.0.0.1:' + srv.address().port + '/', NTFY_RETRY_MS: '200', NTFY_PAUSA_MS: '20' } }); let out = ''; p.stdout.on('data', c => out += c); p.stderr.on('data', c => out += c); p.on('close', (code) => ok({ out, code })); });
 const a = await rodar(); rodada = 2; const b = await rodar();
 // 17/11 RITMO: a rodada 2 vem logo em seguida (mesma janela de 15 min): no máximo 5 avisos na hora por janela e 1 resumo a cada 15 min; o resto espera, sem perder.
-const r2 = posts.filter(p => p.rodada === 2), r1ok = posts.filter(p => p.rodada === 1 && !/^\+\d+ notícias|^Edição de 1 minuto|^📈/.test(p.title) && !/^URGENTE/.test(p.title)).length;
-const r2ind = r2.filter(p => !/^\+\d+ notícias|^Edição de 1 minuto|^📈/.test(p.title) && !/^URGENTE/.test(p.title)).length;
+const r2 = posts.filter(p => p.rodada === 2), r1ok = posts.filter(p => p.rodada === 1 && !/^\+\d+ notícias|^Edição de 1 minuto|^📈/.test(p.title) && !ehUrg(p)).length;
+const r2ind = r2.filter(p => !/^\+\d+ notícias|^Edição de 1 minuto|^📈/.test(p.title) && !ehUrg(p)).length;
 console.log('ritmo: rodada 2 na mesma janela | avisos comuns', r2ind, '(r1 já usou', r1ok + ') | resumos', r2.filter(p => /^\+\d+ notícias/.test(p.title)).length);
 assert.ok(r1ok + r2ind <= 3, 'no máximo 3 avisos comuns por janela de 15 min');
 if (posts.some(p => p.rodada === 1 && /^\+\d+ notícias/.test(p.title))) assert.equal(r2.filter(p => /^\+\d+ notícias/.test(p.title)).length, 0, 'resumo no máximo 1 vez a cada 15 min');
@@ -32,7 +33,7 @@ console.log('rodada 1 (código ' + a.code + '):', l(a.out)); console.log('rodada
 assert.equal(a.code, 0, 'robô não cai com 429/503'); assert.equal(b.code, 0);
 const p1 = posts.filter(p => p.rodada === 1), p2 = posts.filter(p => p.rodada >= 2);
 for (const p of posts) { assert.ok((p.actions || []).length >= 1 && p.actions.length <= 3, 'todo aviso tem botão: ' + p.title); assert.match(p.icon, /icone-ntfy-v2\.png$/); }
-const ind = p1.filter(p => !/^\+\d+ notícias|^Edição de 1 minuto/.test(p.title)); const urg = ind.findIndex(p => /^URGENTE/.test(p.title)), nUrg = ind.findIndex(p => !/^URGENTE/.test(p.title));
+const ind = p1.filter(p => !/^\+\d+ notícias|^Edição de 1 minuto/.test(p.title)); const urg = ind.findIndex(ehUrg), nUrg = ind.findIndex(p => !ehUrg(p));
 if (urg >= 0 && nUrg >= 0) assert.ok(urg < nUrg, 'URGENTE sai antes');
 const novos = +((l(a.out).match(/novos (\d+)/) || [])[1] || 0); const resumos = p1.filter(p => /^\+\d+ notícias/.test(p.title));
 const linhasResumo = [...resumos, ...posts.filter(p => p.rodada >= 2 && /^\+\d+ notícias/.test(p.title))].reduce((s, p) => s + p.message.split('\n').length, 0);
