@@ -55,6 +55,10 @@ jobs:
           # 17/11: com rodadas a cada ~5 min, o portão é a idade de paradas.json (55+ min), não o minuto do relógio
           idade=$(node -e 'try{const g=require("./paradas.json").geradoEm;const t=Date.parse(/[zZ]|[+-]\d\d:\d\d$/.test(g)?g:g+":00-03:00");console.log(Math.round((Date.now()-t)/60e3))}catch{console.log(9999)}')
           if [ "$idade" -ge 55 ]; then PARADAS_LOOKUPS=40 timeout 270 node scripts/paradas.mjs || echo "paradas falharam nesta rodada; fica a anterior"; else echo "paradas: geradas há $idade min, só de novo com 55+ min"; fi
+      - name: Referências (perfis sérios do Brasil e de fora, 1 vez a cada 30 min; só RSS oficial do YouTube e dos sites, sem raspagem)
+        run: |
+          idade=$(node -e 'try{const g=require("./referencias.json").atualizado;console.log(Math.round((Date.now()-Date.parse(g+":00-03:00"))/60e3))}catch{console.log(9999)}')
+          if [ "$idade" -ge 28 ]; then timeout 120 node scripts/referencias.mjs || echo "referências falharam nesta rodada; fica a anterior"; else echo "referências: geradas há $idade min"; fi
       - name: Imagem de compartilhamento (og) da edição
         run: npm i --no-save --no-audit --no-fund playwright-core@1 >/dev/null && node scripts/og.mjs || echo "og falhou, mantém a anterior"
       - name: Status privado dos feeds (só no Actions)
@@ -74,6 +78,7 @@ jobs:
           git add paradas.json paradas-generos.json 2>/dev/null || true
           git add emalta.json emalta-estado.json atencao.json emalta.html 2>/dev/null || true
           git add series.json series-estado.json series-traducoes.json series.html esportes.json esportes-estado.json esportes-traducoes.json esportes.html exclusivos-estado.json 2>/dev/null || true
+          git add referencias.json referencias-estado.json 2>/dev/null || true
           git add -A busca 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"

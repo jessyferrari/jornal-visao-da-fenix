@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Referências · Jornal Visão da Fênix</title>
+<meta name="description" content="O que perfis sérios do Brasil e de fora publicaram, com link e hora. Sempre como 'fulano publicou'.">
+<link rel="icon" href="favicon-32.png">
+<style>
+:root{--fundo:#0d0b08;--sup:#16130e;--linha:#3a3832;--tinta:#fff8ea;--tinta2:#c9b896;--ouro:#d4af37;--ouro2:#f2d27a;--ok:#62D394;--erro:#e8857c;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--fundo);color:var(--tinta);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:860px;margin:0 auto;padding:16px}a{color:var(--ouro2)}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0 4px}h1{font-size:1.5rem;margin:0}h1 span{color:var(--ouro)}
+h2{font-size:1.1rem;margin:26px 0 10px;color:var(--ouro)}.m{color:var(--tinta2);font-size:13px}
+.voltar{color:var(--ouro);text-decoration:none;font-weight:600}
+.regra{border:1px solid var(--linha);border-radius:12px;padding:10px 12px;margin:10px 0;color:var(--tinta2);font-size:13px}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.filtros button{background:var(--sup);color:var(--tinta);border:1px solid var(--linha);border-radius:999px;padding:7px 12px;font:600 13px system-ui;cursor:pointer}
+.filtros button.on{background:var(--ouro);color:#0d0b08;border-color:var(--ouro)}
+.it{background:var(--sup);border:1px solid var(--linha);border-left:3px solid var(--ouro);border-radius:12px;padding:10px 12px;margin:8px 0}
+.it .q{font-weight:700}.it .q b{color:var(--ouro2)}.it a.t{display:block;margin:4px 0;font-weight:600;color:var(--tinta);text-decoration:underline;text-decoration-color:var(--linha)}
+.p{border:1px solid var(--linha);border-radius:12px;padding:10px 12px;margin:8px 0}.p .n{font-weight:700}
+.r{font-size:13px;margin:3px 0}.r .ok{color:var(--ok)}.r .no{color:var(--erro)}.sr{font-size:13px;color:var(--tinta2);margin:2px 0}
+.vazio{color:var(--tinta2);padding:12px 0}
+</style>
+</head>
+<body>
+<main>
+<header><a class="voltar" href="./">← Jornal</a><h1>📚 <span>Referências</span></h1></header>
+<div class="m" id="atual">carregando…</div>
+<div class="regra">Regra da verdade: o post de uma pessoa ou de um veículo aparece como <b>"fulano publicou"</b>, com link e hora (Brasília). Nada aqui é afirmado pelo jornal. Rotas só legítimas e gratuitas: RSS oficial do canal no YouTube e RSS oficial do site.</div>
+<div class="filtros" id="filtros"></div>
+<div id="itens"></div>
+<h2>Perfis e rotas</h2>
+<div class="m">De onde vem cada perfil e o que falta para incluir as redes sem rota grátis.</div>
+<div id="perfis"></div>
+</main>
+<script>
+const e=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dt=s=>s?s.slice(8,10)+'/'+s.slice(5,7)+' '+s.slice(11,16):'';
+let D=null,F='todos';
+function itens(){const l=(D.itens||[]).filter(i=>F==='todos'||i.nicho===F);
+ document.getElementById('itens').innerHTML=l.length?l.map(i=>'<div class="it"><div class="q"><b>'+e(i.quem)+'</b> publicou'+(i.rede==='YouTube'?' no YouTube':' no site')+' · <span class="m">'+e(dt(i.publicado))+' (Brasília) · '+e(i.nicho)+'</span></div><a class="t" href="'+e(i.link)+'" target="_blank" rel="noopener">'+e(i.titulo)+'</a>'+(i.canal?'<div class="m">canal ou site que publicou: '+e(i.canal)+'</div>':'')+'</div>').join(''):'<div class="vazio">Nada publicado nas últimas 72 horas nesta escolha.</div>';}
+fetch('referencias.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;
+ document.getElementById('atual').textContent='Atualizado '+dt(d.atualizado)+' (Brasília) · '+(d.itens||[]).length+' publicações nas últimas 72 h · '+d.perfis.filter(p=>p.ativo).length+' de '+d.perfis.length+' perfis com rota ativa';
+ const nichos=['todos',...new Set(d.perfis.map(p=>p.nicho))];
+ const fb=document.getElementById('filtros');fb.innerHTML=nichos.map(n=>'<button data-n="'+e(n)+'"'+(n===F?' class="on"':'')+'>'+e(n)+'</button>').join('');
+ fb.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;F=b.dataset.n;[...fb.children].forEach(x=>x.classList.toggle('on',x===b));itens();};
+ itens();
+ document.getElementById('perfis').innerHTML=d.perfis.map(p=>'<div class="p"><div class="n">'+e(p.nome)+' <span class="m">· '+e(p.tipo)+' · '+e(p.nicho)+' · '+e(p.pais)+'</span></div>'+
+  p.rotas.map(r=>'<div class="r">'+(r.ok?'<span class="ok">✓</span> ':'<span class="no">✗</span> ')+e(r.tipo)+(r.ok?' · '+r.n+' publicações em 72 h'+(r.canal?' · o RSS respondeu como: '+e(r.canal):''):' · '+e(r.erro))+'</div>').join('')+
+  p.semRota.map(s=>'<div class="sr">• '+e(s.rede)+': '+e(s.precisa)+'</div>').join('')+'</div>').join('');
+}).catch(()=>{document.getElementById('atual').textContent='A seção ainda não tem dados: ela aparece depois da próxima rodada do robô.';});
+</script>
+</body>
+</html>

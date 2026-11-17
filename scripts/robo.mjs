@@ -248,8 +248,9 @@ if (changed) {
     const ALTA = '<a id="jf-emalta" href="emalta.html" style="position:fixed;right:14px;bottom:62px;z-index:9999;background:#5fd38d;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🚀 Em Alta</a>';
     const SER = '<a id="jf-series" href="series.html" style="position:fixed;right:14px;bottom:110px;z-index:9999;background:#e0413a;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎬 Séries</a>';
     const ESP = '<a id="jf-esportes" href="esportes.html" style="position:fixed;right:14px;bottom:158px;z-index:9999;background:#0d0b08;color:#d4af37;border:1.5px solid #d4af37;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">⚽ Esportes</a>';
-    html = html.replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-esportes"[^>]*>[\s\S]*?<\/a>/, '');
-    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER + ESP);
+    const REF = '<a id="jf-referencias" href="referencias.html" style="position:fixed;right:14px;bottom:206px;z-index:9999;background:#0d0b08;color:#d4af37;border:1.5px solid #d4af37;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0006">📚 Referências</a>';
+    html = html.replace(/<a id="jf-referencias"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-esportes"[^>]*>[\s\S]*?<\/a>/, '');
+    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER + ESP + REF);
     // 📊 selo da nota de potencial (17/11): script fora do app (nota.js), incluído uma vez só
     if (!html.includes('src="nota.js"')) html = html.replace(/<\/body>/, '<script src="nota.js" defer></script></body>');
     fs.writeFileSync('index.html', html);
