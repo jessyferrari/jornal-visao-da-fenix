@@ -58,7 +58,9 @@ export function montarDJF(lista) {
   const ent = [];
   for (const [tipo, l] of [['dj', lista.djs || []], ['festival', lista.festivais || []]]) for (const d of l) {
     const nomes = [...(d.soAliases ? [] : [d.nome]), ...(d.aliases || [])];
-    for (const n of nomes) ent.push({ tipo, nome: d.nome, contexto: !!d.contexto || n.length <= 3, re: new RegExp('(^|[^\\p{L}\\p{N}&])' + esc(sem(n)).replace(/\\\.\\\.$/, '(\\.\\.)?') + '(?![\\p{L}\\p{N}])', 'iu'), pais: d.pais || '', cidade: d.cidade || '' });
+    // 17/11: festival com nome de lugar (Glastonbury, Coachella, Primavera...) só conta com contexto de música:
+    // "Glastonbury High lockdown lifted" era uma escola nos EUA e entrou como festival
+    for (const n of nomes) ent.push({ tipo, nome: d.nome, contexto: !!d.contexto || n.length <= 3 || (tipo === 'festival' && !/(fest|palooza|tomorrowland|rock|music|sound|beats)/i.test(n)), re: new RegExp('(^|[^\\p{L}\\p{N}&])' + esc(sem(n)).replace(/\\\.\\\.$/, '(\\.\\.)?') + '(?![\\p{L}\\p{N}])', 'iu'), pais: d.pais || '', cidade: d.cidade || '' });
   }
   ent.sort((a, b) => b.re.source.length - a.re.source.length);   // nome mais longo primeiro (Tomorrowland Brasil antes de Tomorrowland)
   return ent;

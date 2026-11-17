@@ -28,5 +28,6 @@ for (const x of ['Rock in Rio', 'Lollapalooza Brasil', 'Tomorrowland', 'Tomorrow
 assert.equal(djfNoTexto('Alok anuncia novo álbum', D).nome, 'Alok'); assert.equal(djfNoTexto('Tomorrowland Brasil anuncia data de 2027', D).nome, 'Tomorrowland Brasil'); assert.equal(djfNoTexto('Tiesto lança remix', D).nome, 'Tiësto');
 assert.equal(djfNoTexto('Carrie Fisher ganha homenagem', D), null); assert.equal(djfNoTexto('Café: Black Coffee é bom', D), null); assert.equal(djfNoTexto('DJ Black Coffee confirma show no Brasil', D).nome, 'Black Coffee');
 assert.equal(djfNoTexto('Câmara de the town hall', D), null); assert.equal(djfNoTexto('The Town divulga line-up de 2027', D).nome, 'The Town'); ok('DJ/festival reconhecido; nome comum sem contexto de música não conta');
+assert.equal(djfNoTexto('Glastonbury High lockdown lifted after swatting incident', D), null, 'escola nos EUA não é o festival'); assert.equal(djfNoTexto('Glastonbury divulga atrações do palco Pyramid', D).nome, 'Glastonbury'); ok('festival com nome de lugar só com contexto de música (17/11)');
 const B = buscasDJF(L); assert.ok(B.djs.every(g => g.length <= 8) && B.djs.flat().includes('"Alok"')); ok('buscas públicas por grupos de 8 nomes');
 console.log('TODOS OS TESTES PASSARAM:', n);
