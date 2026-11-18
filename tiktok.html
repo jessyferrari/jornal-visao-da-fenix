@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Conectar o TikTok</title>
+<style>
+  :root { --fundo: #0B0E14; --texto: #F5F1E8; --ouro: #D4AF37; --fraco: #9aa0aa; }
+  body { margin: 0; background: var(--fundo); color: var(--texto); font: 17px/1.5 system-ui, sans-serif; display: grid; place-items: center; min-height: 100vh; padding: 16px; box-sizing: border-box; }
+  main { max-width: 520px; width: 100%; }
+  h1 { font-size: 22px; color: var(--ouro); margin: 0 0 12px; }
+  code { display: block; word-break: break-all; background: #161b24; border: 1px solid #2a3140; border-radius: 10px; padding: 14px; font-size: 15px; margin: 12px 0; }
+  button { background: var(--ouro); color: #111; border: 0; border-radius: 10px; padding: 12px 18px; font-size: 16px; font-weight: 600; cursor: pointer; }
+  p.fraco { color: var(--fraco); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Conectar o TikTok ao Fênix OS</h1>
+  <div id="ok" hidden>
+    <p>Copie o código e cole no Fênix OS, em <b>Estratégia › Threads e TikTok › Código que a página mostrou</b>.</p>
+    <code id="codigo"></code>
+    <button id="copiar" type="button">Copiar o código</button>
+    <p class="fraco">O código vale poucos minutos e só funciona no seu notebook, junto com as chaves do app. Esta página não guarda nada.</p>
+  </div>
+  <div id="erro" hidden><p>O TikTok não mandou o código. Volte ao Fênix OS e toque em <b>Autorizar no TikTok</b> de novo.</p><p class="fraco" id="motivo"></p></div>
+</main>
+<script>
+  const q = new URLSearchParams(location.search), c = q.get("code");
+  if (c) { document.getElementById("ok").hidden = false; document.getElementById("codigo").textContent = c;
+    document.getElementById("copiar").onclick = async (e) => { try { await navigator.clipboard.writeText(c); e.target.textContent = "Copiado"; } catch { e.target.textContent = "Selecione e copie o código acima"; } }; }
+  else { document.getElementById("erro").hidden = false; document.getElementById("motivo").textContent = q.get("error_description") || q.get("error") || ""; }
+</script>
+</body>
+</html>
