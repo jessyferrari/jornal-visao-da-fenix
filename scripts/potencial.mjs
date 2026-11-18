@@ -54,8 +54,13 @@ export function notaPotencial(x) {
   return { nota, faixa, provisoria, rotulo, motivo: (motivo.length ? motivo.slice(0, 4).join(' · ') : 'sem sinal forte ainda') + (provisoria ? ' · nota provisória: ' + faltam.join(', ') : ''), criterios: c };
 }
 
-/** prioridade do ntfy pela nota, poupando bateria: só 90%+ (e nunca a provisória) sobe para 4 (com som); o resto segue a base (2 = silencioso). */
-export const prioridadeNota = (p, base = 2) => (p && !p.provisoria && p.nota >= 90 ? Math.max(base, 4) : base);
+/** prioridade do ntfy pela nota (18/11, pedido da Jessyca: celular organizado, só o que importa toca):
+ *  Não deixe de postar (90%+, confirmada) = 5, toca alto; Vale postar = 2, chega sem som;
+ *  Opcional ou nota provisória = 1: não vai ao celular (toqueNoNtfy manda para o canal <tópico>-mesa, que só a Mesa de Postagem do agente lê).
+ *  Sem nota (resumos, avisos de canal): vale a base de quem chamou. */
+export const prioridadeNota = (p, base = 2) => (!p ? base : p.provisoria || p.faixa === 'opcional' ? 1 : p.faixa === 'nao-deixe' ? 5 : 2);
+/** exclusivo confirmado (o site disse que era exclusivo e um 2º veículo confirmou): toca alto, igual a Não deixe de postar */
+export const PRIORIDADE_EXCLUSIVO = 5;
 /** selo curto do título (17/11: o selo longo comia a manchete): 🔥 não deixe, 👍 vale, ⏳ provisória; a faixa por extenso vai na 1ª linha da mensagem */
 export const seloCurto = (p) => (p ? (p.provisoria ? '⏳' : p.faixa === 'nao-deixe' ? '🔥' : p.faixa === 'vale' ? '👍' : '') + p.nota + '%' : '');
 /** título do aviso: selo curto e a manchete logo depois */

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
-import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO } from './potencial.mjs';
 import { estudarFormato, linhaFormato, iconeFormato } from './formato.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
@@ -387,7 +387,7 @@ if (!seed) {
   // URGENTE sempre primeiro (novos já vem ordenado: urgente, depois mais recente)
   // URGENTE não espera a janela: até 3 urgentes extras por janela de 15 min
   const naHora = novos.filter((x, ix) => ix < livres || (x.urg && (R.urg || 0) + novos.slice(livres, ix).filter(y => y.urg).length < 3));
-  for (const i of naHora) { const ok = await post({ title: tituloComNota(i.pot, i.title), message: (i.urg ? '🚨 Urgente: acabou de acontecer\n' : '') + (i.pot ? linhaNota(i.pot) + '\n' : '') + (i.fmt && ((i.cov && i.cov.n) || 1) >= 2 ? linhaFormato(i.fmt) + '\n' : '') + i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: i.urg ? (i.pot && i.pot.nota >= 70 ? 5 : 4) : prioridadeNota(i.pot, 2), tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
+  for (const i of naHora) { const ok = await post({ title: tituloComNota(i.pot, i.title), message: (i.urg ? '🚨 Urgente: acabou de acontecer\n' : '') + (i.pot ? linhaNota(i.pot) + '\n' : '') + (i.fmt && ((i.cov && i.cov.n) || 1) >= 2 ? linhaFormato(i.fmt) + '\n' : '') + i.src + ' · ' + fmtB(i.pub) + (i.tr ? ' · ' + i.tr : '') + (i.outros.length ? ' · também em ' + i.outros.slice(0,3).join(', ') : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '\n' + i.excl.texto : '') + (((i.cov && i.cov.n) || 1) < 2 ? '\n🔎 Em apuração: só 1 fonte até agora (sem Sim, publicar até a 2ª fonte)' : ''), click: i.link, priority: prioridadeNota(i.pot, i.urg ? 4 : 2), tags: [i.urg ? 'rotating_light' : (i.sec === 'tech' ? 'computer' : 'newspaper')], ...botoes(i) });
     if (ok && ((i.cov && i.cov.n) || 1) >= 2) limparApuracao(i);
     if (ok && ((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) };   // 17/11: volta com Sim, publicar quando confirmar
     if (ok) { enviados++; if (naHora.indexOf(i) < livres) R.n++; else R.urg = (R.urg || 0) + 1; if (EX.excl[i.key]) EX.excl[i.key].avisado = brIso(new Date(now)); } else naoSaiu.add(i.key); }
@@ -411,7 +411,7 @@ console.log('subindo agora:', SUB.length, 'fatos com 3+ veículos em 30 min | en
 // ✅ confirmação de um "possível exclusivo": um 2º veículo publicou; chega com Sim, publicar (no máximo 3 por rodada)
 let confEnv = 0;
 if (!seed) for (const c of EXC.slice(0, 3)) { const i = c.i;
-  const ok = await post({ title: '✅ Confirmado: ' + i.title.slice(0, 150), message: textoConfirmado(c.p, i.cov.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + i.grp.map(g => g.src).slice(0, 4).join(', '), click: i.link, priority: 2, tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
+  const ok = await post({ title: '⭐ EXCLUSIVO confirmado: ' + i.title.slice(0, 150), message: textoConfirmado(c.p, i.cov.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + i.grp.map(g => g.src).slice(0, 4).join(', '), click: i.link, priority: PRIORIDADE_EXCLUSIVO, tags: ['white_check_mark', 'newspaper'], ...botoes(i) });
   if (ok) { c.t.confirmado = brIso(new Date(now)); confEnv++; limparApuracao(i); } }
 else for (const c of EXC) c.t.confirmado = brIso(new Date(now));
 fs.writeFileSync(EXF, JSON.stringify(EX));

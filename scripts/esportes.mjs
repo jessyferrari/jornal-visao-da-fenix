@@ -11,7 +11,7 @@ import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
-import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO } from './potencial.mjs';
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)' };
 const PAGINA = 'https://jessyferrari.github.io/jornal-visao-da-fenix/esportes.html';
@@ -109,7 +109,7 @@ const madrugada = minBR < 7 * 60;
 let nConf = 0;
 for (const c of confirmados) {
   if (nConf >= LIM.confPorRodada) break; const g = c.i;
-  const ok = await post(SER, { title: '✅ Confirmado: ' + g.title.slice(0, 150), message: textoConfirmado(c.p, g.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + g.grp.map((x) => x.src).slice(0, 4).join(', '), click: g.link, priority: 2, tags: ['white_check_mark', 'soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const ok = await post(SER, { title: '⭐ EXCLUSIVO confirmado: ' + g.title.slice(0, 150), message: textoConfirmado(c.p, g.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + g.grp.map((x) => x.src).slice(0, 4).join(', '), click: g.link, priority: PRIORIDADE_EXCLUSIVO, tags: ['white_check_mark', 'soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { c.t.confirmado = S.brIso(AGORA); marcar(g); nConf++; }
 }
 // 4a2) 📈 Subindo agora: o mesmo fato em 3+ veículos em até 30 min (até 6 por dia, nunca de madrugada); já tem 2+ fontes, então vai com Sim, publicar

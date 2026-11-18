@@ -89,7 +89,7 @@ await (async () => {
   // 4ª rodada: ge confirma o furo do UOL: "✅ Confirmado" com Sim, publicar e selo assinado
   const fontes3 = { ...fontes2, 'ge': f('ge3', rss([['Brasil goleia Singapura no último amistoso do ano', 'https://ge.globo.com/futebol/selecao/a', agora - 50 * 60e3], ['Superbet prepara rescisão de contrato com São Paulo e Fluminense', 'https://ge.globo.com/futebol/superbet', agora + 25 * 60e3]])) };
   recebidos = []; r = await roda(fontes3, 30); assert.equal(r.c, 0, r.o);
-  const cf = recebidos.find((x) => /^✅ Confirmado: Exclusivo: Superbet/.test(x.title)); assert.ok(cf, JSON.stringify(recebidos.map((x) => x.title)));
+  const cf = recebidos.find((x) => /^⭐ EXCLUSIVO confirmado: Exclusivo: Superbet/.test(x.title)); assert.ok(cf, JSON.stringify(recebidos.map((x) => x.title))); assert.equal(cf.priority, 5);
   assert.match(cf.message, /^✅ Confirmado por 2 veículos · UOL Esporte saiu primeiro às 11:10/); const corpo = JSON.parse(cf.actions[0].body);
   assert.equal(corpo.origem, 'esportes'); assert.equal(corpo.selo.tipo, 'exclusivo'); assert.equal(corpo.ssig, X.assinarSelo(ASS, corpo.id, corpo.selo));
   // resumo das 14h: confirmados listados, 1 fonte só contada, colunas à parte

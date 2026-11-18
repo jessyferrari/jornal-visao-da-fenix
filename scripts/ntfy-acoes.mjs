@@ -23,7 +23,11 @@ export function botoesApurar({ link, titulo, texto, pot, origem, id, CMD, ASS, S
 }
 
 /** aviso de uma notícia: tira o "click" para o site (o toque abre o ntfy com os botões), sem perder o link */
-export function toqueNoNtfy(m) {
+// 18/11 (Jessyca): prioridade 1 (Opcional ou nota provisória) não vai ao celular: segue para <tópico>-mesa, que só a Mesa de Postagem do agente lê
+export const MESA = '-mesa';
+export const paraMesa = (m) => (m && m.priority === 1 && m.topic && !String(m.topic).endsWith(MESA) ? { ...m, topic: String(m.topic) + MESA } : m);
+export function toqueNoNtfy(m0) {
+  const m = paraMesa(m0);
   const c = String(m.click || ''), a = m.actions || [];
   if (!/^https?:\/\//.test(c) || c.startsWith(JORNAL) || !a.length) return m;   // resumos e páginas do jornal continuam abrindo o jornal
   const temLink = a.some((x) => x.action === 'view' && x.url === c);

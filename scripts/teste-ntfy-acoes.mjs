@@ -1,7 +1,7 @@
 // Teste do toque e dos botões das notificações (17/11). Sem rede.
 import assert from 'node:assert/strict';
 import { createHmac } from 'node:crypto';
-import { botoesApurar, toqueNoNtfy, idDoLink, confirmadosDeApuracao, podeConfirmar, marcarConfirmado, JORNAL } from './ntfy-acoes.mjs';
+import { paraMesa, botoesApurar, toqueNoNtfy, idDoLink, confirmadosDeApuracao, podeConfirmar, marcarConfirmado, JORNAL } from './ntfy-acoes.mjs';
 let n = 0; const t = (nome, f) => { f(); console.log('ok ' + (++n) + ' ' + nome); };
 const ASS = 'k'.repeat(48), CMD = 'cmd-teste', link = 'https://www.cnnbrasil.com.br/economia/huang';
 
@@ -40,4 +40,9 @@ t('em apuração que ganhou a 2ª fonte volta uma vez com Sim, publicar; limite 
   st.confDia = { dia: '2026-11-17', n: 15 }; assert.equal(podeConfirmar(st, { agora }), false);
   assert.equal(podeConfirmar(st, { agora: agora + 86400e3 }), true, 'novo dia zera');
 });
+// 18/11: prioridade 1 (Opcional) vai para <tópico>-mesa; o resto fica no tópico de sempre; nunca dobra o sufixo
+{ const a = toqueNoNtfy({ topic: 'jornal-x', priority: 1, title: 'o', click: 'https://g1.globo.com/a', actions: [{ action: 'http', label: 'Sim, publicar', url: 'u' }] });
+  assert.equal(a.topic, 'jornal-x-mesa'); assert.equal(paraMesa({ topic: 'jornal-x-mesa', priority: 1 }).topic, 'jornal-x-mesa');
+  assert.equal(toqueNoNtfy({ topic: 'jornal-x', priority: 2, title: 'v' }).topic, 'jornal-x'); assert.equal(toqueNoNtfy({ topic: 'jornal-x', priority: 5, title: 'n' }).topic, 'jornal-x');
+  console.log('ok Opcional vai para a Mesa, Vale e Não deixe ficam no celular'); }
 console.log('TODOS OS TESTES PASSARAM: ' + n);
