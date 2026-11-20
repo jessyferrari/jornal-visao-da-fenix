@@ -48,6 +48,12 @@ jobs:
           NTFY_TOPIC_MUSICA: '${{ secrets.NTFY_TOPIC_MUSICA }}'
           NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
           NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
+      - name: Urgência dos perfis do agente (Hugo Gloss, Forbes Brasil, Fórmula 1, CazéTV; a cada rodada, ~5 min; só rotas públicas, sem a conta de Instagram dela) + canal geral e Mesa
+        run: timeout 120 node scripts/perfis.mjs || echo "urgência dos perfis falhou nesta rodada; o resto segue normal"
+        env:
+          NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}'
+          NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
+          NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
       - name: Arquivo de busca (14 dias, inclui as seções Música, Séries e Filmes, Esportes e Games)
         run: node scripts/busca-arquivo.mjs || echo "arquivo de busca falhou nesta rodada"
       - name: Em Alta (mais comentado no Brasil e no mundo, tendências subindo, curva de atenção e Agenda de postagens) + canal Fenix Em Alta
@@ -89,6 +95,7 @@ jobs:
           git add emalta.json emalta-estado.json atencao.json emalta.html 2>/dev/null || true
           git add series.json series-estado.json series-traducoes.json series.html esportes.json esportes-estado.json esportes-traducoes.json esportes.html games.json games-estado.json games-traducoes.json games.html exclusivos-estado.json 2>/dev/null || true
           git add referencias.json referencias-estado.json 2>/dev/null || true
+          git add perfis.json perfis-estado.json perfis-traducoes.json 2>/dev/null || true
           git add hoje.json hoje-estado.json hoje.html 2>/dev/null || true
           git add -A busca 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi

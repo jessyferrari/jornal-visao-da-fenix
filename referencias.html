@@ -28,6 +28,12 @@ h2{font-size:1.1rem;margin:26px 0 10px;color:var(--ouro)}.m{color:var(--tinta2);
 <header><a class="voltar" href="./">← Jornal</a><h1>📚 <span>Referências</span></h1></header>
 <div class="m" id="atual">carregando…</div>
 <div class="regra">Regra da verdade: o post de uma pessoa ou de um veículo aparece como <b>"fulano publicou"</b>, com link e hora (Brasília). Nada aqui é afirmado pelo jornal. Rotas só legítimas e gratuitas: RSS oficial do canal no YouTube e RSS oficial do site.</div>
+<h2 id="perfis-agente">⚡ Perfis do agente: urgência a cada ~5 min</h2>
+<div class="m" id="pa-atual">carregando…</div>
+<div class="regra">Os perfis que o agente estuda são conferidos a cada rodada do robô (cron de 5 min no GitHub; na prática de 3 a 6 min) pelas rotas públicas: site, YouTube e Google Notícias. Sem a sua conta. 🔎 = só 1 fonte (em apuração). ✅ = 2 ou mais veículos. O estudo de estilo pelo seu Instagram continua devagar, no agente.</div>
+<div id="pa-itens"></div>
+<div id="pa-perfis"></div>
+<h2>Referências</h2>
 <div class="filtros" id="filtros"></div>
 <div id="itens"></div>
 <h2>Perfis e rotas</h2>
@@ -50,6 +56,14 @@ fetch('referencias.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{D=d;
   p.rotas.map(r=>'<div class="r">'+(r.ok?'<span class="ok">✓</span> ':'<span class="no">✗</span> ')+e(r.tipo)+(r.ok?' · '+r.n+' publicações em 72 h'+(r.canal?' · o RSS respondeu como: '+e(r.canal):''):' · '+e(r.erro))+'</div>').join('')+
   p.semRota.map(s=>'<div class="sr">• '+e(s.rede)+': '+e(s.precisa)+'</div>').join('')+'</div>').join('');
 }).catch(()=>{document.getElementById('atual').textContent='A seção ainda não tem dados: ela aparece depois da próxima rodada do robô.';});
+fetch('perfis.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{
+ document.getElementById('pa-atual').textContent='Atualizado '+dt(d.atualizado)+' (Brasília) · '+d.perfis.length+' perfis · '+(d.itens||[]).length+' publicações nas últimas 24 h';
+ const cont={},l=(d.itens||[]).filter(i=>(cont[i.perfil]=(cont[i.perfil]||0)+1)<=8).slice(0,30);
+ document.getElementById('pa-itens').innerHTML=l.length?l.map(i=>'<div class="it"><div class="q">'+(i.confirmado?'✅ ':'🔎 ')+'<b>'+e(i.quem)+'</b> publicou · <span class="m">'+e(dt(i.publicado))+' (Brasília) · '+(i.confirmado?i.fontes+' veículos':'em apuração, 1 fonte')+(i.diz?' · '+e(i.diz):'')+'</span></div><a class="t" href="'+e(i.link)+'" target="_blank" rel="noopener">'+e(i.titulo)+'</a>'+(i.original?'<div class="m">traduzido do inglês: '+e(i.original)+'</div>':'')+((i.tambemEm||[]).length?'<div class="m">também em: '+i.tambemEm.map(t=>e(t.veiculo)).join(', ')+'</div>':'')+'</div>').join(''):'<div class="vazio">Nada nas últimas 24 horas.</div>';
+ document.getElementById('pa-perfis').innerHTML=d.perfis.map(p=>'<div class="p"><div class="n">'+e(p.nome)+' <span class="m">· '+e((p.instagram||[]).join(' '))+' · '+(p.estudoInstagram?'no estudo do agente':'só urgência pública ('+e(p.aguarda||'aguardando confirmação')+')')+'</span></div>'+
+  (p.rotas||[]).map(r=>'<div class="r">'+(r.ok?'<span class="ok">✓</span> ':'<span class="no">✗</span> ')+e(r.tipo)+(r.ok?' · '+r.n+' itens':' · '+e(r.erro||''))+'</div>').join('')+
+  (p.semRota||[]).map(s=>'<div class="sr">• '+e(s)+': sem rota grátis e legítima</div>').join('')+'</div>').join('');
+}).catch(()=>{document.getElementById('pa-atual').textContent='Aparece depois da próxima rodada do robô.';});
 </script>
 </body>
 </html>

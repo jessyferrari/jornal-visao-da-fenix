@@ -1,0 +1,52 @@
+{
+ "_leia": "Perfis do agente (20/11, Jessyca t320/t322): URGÊNCIA pública a cada rodada do robô (~5 min), SEM usar a conta de Instagram dela. Para cada perfil que o agente estuda, só rotas públicas, gratuitas e legítimas: RSS oficial do site, RSS oficial do canal no YouTube e a busca pública do Google Notícias. Instagram, X e TikTok de terceiros não têm leitura grátis e legítima (o X só com a API paga, não aprovada): ficam listados como sem rota. O estudo de estilo pelo Instagram logado dela continua no agente (reel-olimpia), devagar. estudoInstagram: true = está na lista de estudo do agente; false = só urgência pública, esperando a Jessyca confirmar o perfil. Para incluir um perfil: copie um bloco, ponha o nome, as rotas e 'confere' (parte do nome que o feed precisa declarar).",
+ "perfis": [
+  {
+   "nome": "Hugo Gloss",
+   "instagram": ["@hugogloss"],
+   "estudoInstagram": true,
+   "nicho": "entretenimento",
+   "rotas": [
+    { "tipo": "site", "url": "https://hugogloss.uol.com.br/feed/", "confere": "Hugo Gloss" }
+   ],
+   "google": "",
+   "semRota": ["Instagram", "X", "TikTok"]
+  },
+  {
+   "nome": "Forbes Brasil",
+   "instagram": ["@forbesbr"],
+   "estudoInstagram": true,
+   "nicho": "negócios",
+   "rotas": [
+    { "tipo": "site", "url": "https://forbes.com.br/feed/", "confere": "Forbes" }
+   ],
+   "google": "",
+   "semRota": ["Instagram", "X", "TikTok"]
+  },
+  {
+   "nome": "Fórmula 1",
+   "instagram": ["@f1"],
+   "estudoInstagram": true,
+   "nicho": "esportes",
+   "idioma": "inglês",
+   "rotas": [
+    { "tipo": "site", "url": "https://www.formula1.com/en/latest/all.xml", "confere": "F1", "semData": true },
+    { "tipo": "YouTube", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCB_qr75-ydFVKSF9Dmo6izg", "confere": "FORMULA 1" }
+   ],
+   "google": "",
+   "semRota": ["Instagram", "X", "TikTok"]
+  },
+  {
+   "nome": "CazéTV",
+   "instagram": ["@cazetv", "@cazetvtenis"],
+   "estudoInstagram": false,
+   "aguarda": "a Jessyca mandar os links do Instagram de todos os perfis da CazéTV para entrar no estudo do agente",
+   "nicho": "esportes",
+   "rotas": [
+    { "tipo": "YouTube", "url": "https://www.youtube.com/feeds/videos.xml?channel_id=UCZiYbVptd3PVPf4f6eR6UaQ", "confere": "CazéTV" }
+   ],
+   "google": "CazéTV",
+   "semRota": ["Instagram", "X (@cazetvoficial)", "TikTok"]
+  }
+ ]
+}
