@@ -4,6 +4,7 @@ import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcar
 import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
+import { tituloDoItem } from './titulo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO, valePostar } from './potencial.mjs';
@@ -57,7 +58,7 @@ async function ler([src,url,sec,lang,tipo]) {
     let x; try { x = new TextDecoder(cs.trim().toLowerCase()).decode(buf); } catch { x = buf.toString('utf8'); } const out = [];
     let pos = 0; for (const b of (x.match(/<(item|entry)[\s>][\s\S]*?<\/(item|entry)>/gi) || []).slice(0,100)) { pos++;
       let link = tag(b,'link'); link = link.replace(/^.*\/\*(https?:)/, '$1'); if (!/^https?:/.test(link)) { const m = b.match(/<link[^>]*href=["']([^"']+)/i); link = m ? ent(m[1]) : ''; }
-      let title = tag(b,'title'); let src2 = src; if (tipo === 'arq') { const mm = title.match(/^(.*\S)\s+-\s+([^-]{2,60})$/); if (mm) { title = mm[1]; src2 = mm[2].trim(); } } const pubS = tag(b,'pubDate') || tag(b,'published') || tag(b,'dc:date') || tag(b,'updated');
+      let title = tituloDoItem(tag(b,'title'), b); let src2 = src; if (tipo === 'arq') { const mm = title.match(/^(.*\S)\s+-\s+([^-]{2,60})$/); if (mm) { title = mm[1]; src2 = mm[2].trim(); } } const pubS = tag(b,'pubDate') || tag(b,'published') || tag(b,'dc:date') || tag(b,'updated');
       const ts = Date.parse(pubS); if (!link || !title || !ts) continue; // sem horário real, não entra
       let img = (b.match(/<media:(?:content|thumbnail)[^>]*url=["']([^"']+)["'][^>]*>/i) || b.match(/<enclosure[^>]*url=["']([^"']+\.(?:jpe?g|png|webp)[^"']*)["']/i) || [])[1] || '';
       

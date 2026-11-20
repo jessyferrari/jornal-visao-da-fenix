@@ -29,6 +29,14 @@
   // agregadores republicam matéria de outros: aparecem, mas não contam como veículo que confirma
   var AGREG = { 'msn.com': 1, 'yahoo.com': 1, 'news.google.com': 1, 'bing.com': 1, 'flipboard.com': 1 };
   function nomeDe(h) { h = String(h || '').replace(/^www\./, ''); return NOMES[h] || NOMES[base(h)] || h; }
+  // título + legenda da foto colados pelo feed (ex.: Hugo Gloss): fica só a 1ª cópia (mesma regra de scripts/titulo.mjs, t341)
+  function semRepetir(t) {
+    var s = String(t || '').replace(/\s+/g, ' ').trim().replace(/\s*\((?:fotos?|imagens?|reprodução|crédito|divulgação)\s*[:_\/][^()]*\)?\s*$/i, '').trim();
+    var w = s.split(' '), n = Math.min(5, Math.floor(w.length / 2)), k, cab;
+    if (n >= 3) { cab = w.slice(0, n).join(' ').toLowerCase(); for (k = Math.max(n, Math.ceil(w.length * 0.35)); k <= w.length - n; k++) if (w.length - k >= k * 0.5 && w.slice(k, k + n).join(' ').toLowerCase() === cab) return w.slice(0, k).join(' ').replace(/[\s:;,–-]+$/, ''); }
+    if (w.length >= 16 && w[0].length >= 4) { cab = w.slice(0, 2).join(' '); for (k = Math.ceil(w.length * 0.4); k <= w.length - 6; k++) if (w.slice(k, k + 2).join(' ') === cab) return w.slice(0, k).join(' ').replace(/[\s:;,–-]+$/, ''); }
+    return s;
+  }
   function host(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch (e) { return ''; } }
   // Google Notícias: veículo vem em <source> ou no fim do título " - Veículo"
   function lerGoogle(xml) {
@@ -130,7 +138,7 @@
   function ordenar(gs) { gs.sort(function (a, b) { var pa = recente(a), pb = recente(b); return pa < pb ? 1 : pa > pb ? -1 : (b.confirmado - a.confirmado); }); return gs; }
   // dia de hoje em Brasília (AAAA-MM-DD) de um ISO UTC
   function hojeBR(iso) { try { return new Date(new Date(iso).getTime() - 3 * 3600e3).toISOString().slice(0, 10); } catch (e) { return ''; } }
-  var api = { filtrar: filtrar, temFrase: temFrase, nomeDe: nomeDe, base: base, chaveVeiculo: chaveVeiculo, lerGoogle: lerGoogle, lerBing: lerBing, lerGdelt: lerGdelt, ordenar: ordenar, hojeBR: hojeBR, lerRss2json: lerRss2json, relevante: relevante, agrupar: agrupar, toks: toks, norm: norm };
+  var api = { semRepetir: semRepetir, filtrar: filtrar, temFrase: temFrase, nomeDe: nomeDe, base: base, chaveVeiculo: chaveVeiculo, lerGoogle: lerGoogle, lerBing: lerBing, lerGdelt: lerGdelt, ordenar: ordenar, hojeBR: hojeBR, lerRss2json: lerRss2json, relevante: relevante, agrupar: agrupar, toks: toks, norm: norm };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   raiz.__jfBuscaWeb = api;
 
@@ -173,8 +181,8 @@
       return primeiro([corslol(u), allorigins(u)]).then(lerGoogle).catch(function () { return rss2json(u).then(function (j) { return lerRss2json(j, 'g'); }); });
     });
   }
-  // GDELT: CORS aberto, sem proxy; pede 1 consulta a cada 5 s por aparelho (a busca faz 1 só)
-  function motorD(q) { return pega(urlD(q), 15000, true).then(lerGdelt); }
+  // GDELT: CORS aberto, sem proxy; pede 1 consulta a cada 5 s por aparelho (a busca faz 1 só); reserva, espera no máximo 6 s
+  function motorD(q) { return pega(urlD(q), 6000, true).then(lerGdelt); } // 20/11 (t341): espera máxima 6 s (antes 15 s), para a busca terminar antes quando o GDELT não responde
   function hora(p) {
     if (!p) return '';
     try { return new Date(p).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', ' às') + ' (Brasília)'; } catch (e) { return ''; }
@@ -256,7 +264,7 @@
     MOT.forEach(function (m, i) {
       new Promise(function (ok) { setTimeout(ok, i * 200); }).then(m[1]).then(function (its) {
         if (mine !== seq) return;
-        todos = todos.concat(its); estado.ok = (estado.ok || []).concat([m[0]]); if (its.some(function (x) { return relevante(q, x); }) && estado.fontes.indexOf(m[0]) < 0) estado.fontes.push(m[0]);
+        its.forEach(function (x) { if (x && x.t) x.t = semRepetir(x.t); }); todos = todos.concat(its); estado.ok = (estado.ok || []).concat([m[0]]); if (its.some(function (x) { return relevante(q, x); }) && estado.fontes.indexOf(m[0]) < 0) estado.fontes.push(m[0]);
       }, function () { estado.falhou++; estado.semResposta.push(m[0]); }).then(function () {
         if (mine !== seq) return;
         feitos++; estado.carregando = feitos < MOT.length; estado.ms = Date.now() - t0; var f = filtrar(q, todos); estado.exata = f.exata; estado.res = f.itens.length ? agrupar(q, f.itens) : null;

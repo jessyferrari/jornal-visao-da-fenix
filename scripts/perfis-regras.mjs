@@ -21,7 +21,8 @@ const tag = (b, n) => { const m = b.match(new RegExp('<' + n + '(?:\\s[^>]*)?>([
 const sem = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
 /** 20/11: o feed do Hugo Gloss repete a manchete inteira 2 vezes no <title>; fica 1 vez só */
-export const semRepetir = (t) => String(t || '').replace(/^(.{12,}?)\s+\1$/s, '$1');
+import { semRepetir, tituloDoItem } from './titulo.mjs';
+export { semRepetir };
 /** mesmo assunto que o jornal já avisou? (link de qualquer veículo do grupo ou manchete equivalente nas últimas 24 h) */
 export function jaAvisadoAssunto(i, links, titulos, agora) {
   if ([i.key, ...(i.grp || []).map((g) => g.key || canon(g.link))].some((k) => k && links.has(k))) return true;
@@ -36,7 +37,7 @@ export function lerFeed(xml, perfil, rota) {
   const itens = [];
   for (const b of (x.match(/<(item|entry)[\s>][\s\S]*?<\/(item|entry)>/gi) || []).slice(0, 60)) {
     let link = tag(b, 'link'); if (!/^https?:/.test(link)) { const m = b.match(/<link[^>]*href=["']([^"']+)/i); link = m ? ent(m[1]) : ''; }
-    const title = semRepetir(tag(b, 'title')), ts = Date.parse(tag(b, 'pubDate') || tag(b, 'published') || tag(b, 'dc:date') || tag(b, 'updated'));
+    const title = tituloDoItem(tag(b, 'title'), b), ts = Date.parse(tag(b, 'pubDate') || tag(b, 'published') || tag(b, 'dc:date') || tag(b, 'updated'));
     if (!/^https?:\/\//.test(link) || !title || (!ts && !rota.semData)) continue;   // sem horário real, não entra (rota.semData: o site não publica a hora; vale a hora em que o robô viu)
     itens.push({ src: perfil.nome, title, link, key: canon(link), ts: ts || 0, semHora: !ts || undefined, sum: (tag(b, 'description') || tag(b, 'media:description')).slice(0, 300), rota: rota.tipo, lang: perfil.idioma || '' });
   }

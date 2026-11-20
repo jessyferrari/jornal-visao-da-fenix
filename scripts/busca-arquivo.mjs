@@ -5,6 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { semRepetir, curarTitulo } from './titulo.mjs';
 
 const DIR = 'busca';
 export const DIAS_GUARDADOS = 14;
@@ -30,12 +31,18 @@ export function arquivar(itens, hojeIso) {
   const hoje = (hojeIso || new Date().toISOString()).slice(0, 10);
   const limite = new Date(Date.parse(hoje + 'T12:00:00Z') - DIAS_GUARDADOS * 86400e3).toISOString().slice(0, 10);
   let novos = 0, atualizados = 0;
+  // cura títulos repetidos (título + legenda da foto colados pelo feed) que já estavam gravados, em todos os dias (t341)
+  for (const f of fs.readdirSync(DIR).filter(f => /^\d{4}-\d\d-\d\d\.json$/.test(f))) {
+    const dia = f.slice(0, 10), lista = lerDia(dia); let cur = 0;
+    for (const x of lista) { const c = curarTitulo(x.t, x.s); if (c && c !== x.t) { x.t = c; cur++; } }
+    if (cur) { gravarDia(dia, lista); atualizados += cur; }
+  }
   for (const [dia, lista] of porDia) {
     if (dia < limite) continue;
     const atual = lerDia(dia); const idx = new Map(atual.map((x, k) => [canon(x.l), k]));
     let mudou = false;
     for (const i of lista) {
-      const o = { t: corta(i.t, 220), s: corta(i.s, 180), f: i.f || '', l: i.l, p: i.p.slice(0, 16), c: i.c || 'br' };
+      const o = { t: corta(semRepetir(i.t), 220), s: corta(i.s, 180), f: i.f || '', l: i.l, p: i.p.slice(0, 16), c: i.c || 'br' };
       if (i.o) o.o = corta(i.o, 220);   // título original (notícia traduzida)
       if (i.n && i.n > 1) o.n = i.n;
       const k = canon(i.l);
