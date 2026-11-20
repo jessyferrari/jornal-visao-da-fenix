@@ -1,5 +1,6 @@
 // Regras puras da seção 🎬 Séries e Filmes (streaming): fontes, filtro do assunto, agrupamento do mesmo fato,
 // regra das 2 fontes, plataforma citada, selo de exclusivo, botões e resumos. Testadas em scripts/teste-series.mjs.
+import { veiculoDe } from './veiculo.mjs';
 import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { botoesApurar } from './ntfy-acoes.mjs';
 import { notaPotencial } from './potencial.mjs';
@@ -78,7 +79,7 @@ const RX_ENT = /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{2,}/
 const ents = (t) => nomesPelaCaixa(t, RX_ENT);
 const dominio = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
 export function mesmo(a, b) {
-  if (a.src === b.src || Math.abs(a.ts - b.ts) > 18 * 3600e3) return false;
+  if (a.src === b.src || veiculoDe(a) === veiculoDe(b) || Math.abs(a.ts - b.ts) > 18 * 3600e3) return false;   // 20/11: g1 = G1, www./m./subdomínio = mesmo veículo
   if (a._t !== a.title) { a._t = a.title; a._w = words(limparComparar(a.title)); a._e = ents(a.title); a._n = nomesPelaCaixa(a.title, RX_NOME); }
   if (b._t !== b.title) { b._t = b.title; b._w = words(limparComparar(b.title)); b._e = ents(b.title); b._n = nomesPelaCaixa(b.title, RX_NOME); }
   let c = 0; for (const w of a._w) if (b._w.has(w)) c++;
@@ -93,10 +94,10 @@ export function agrupar(itens) {
   const L = [...itens].sort((a, b) => a.ts - b.ts), usados = new Set(), out = [];
   for (const i of L) {
     if (usados.has(i)) continue; usados.add(i);
-    const grp = []; for (const j of L) if (!usados.has(j) && mesmo(i, j) && !grp.some((g) => g.src === j.src)) { grp.push(j); usados.add(j); }
+    const grp = []; for (const j of L) if (!usados.has(j) && mesmo(i, j) && !grp.some((g) => g.src === j.src || veiculoDe(g) === veiculoDe(j))) { grp.push(j); usados.add(j); }
     // matéria republicada (mesmo título em outro site, ex.: Terra republica o Estadão) conta 1 vez só: não é 2ª fonte
     const tit = new Map(); for (const x of [i, ...grp]) { const k = normTit(x.orig || x.title); if (!tit.has(k)) tit.set(k, x.src); else x.republicada = tit.get(k); }
-    const n = new Set([i, ...grp].filter((x) => !x.republicada).map((x) => dominio(x.link) || x.src)).size;
+    const n = new Set([i, ...grp].filter((x) => !x.republicada).map((x) => veiculoDe(x) || dominio(x.link) || x.src)).size;
     out.push({ ...i, grp, n });
   }
   return out;

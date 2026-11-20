@@ -1,5 +1,6 @@
 // Paradas por gênero: regras puras (sem rede), testáveis. Nunca inventa posição: cada música guarda a posição
 // que ela tem na parada da fonte (ex.: "#12 no Spotify Brasil, dia 12/11").
+import { chaveVeiculo, mesmoVeiculo } from './veiculo.mjs';   // 20/11: mesmo veículo (www., m., subdomínio) nunca confirma a si mesmo
 import { mesmoFato, pessoas } from './musica-regras.mjs';
 
 const sem = (t) => String(t || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -105,10 +106,10 @@ export function agruparLancamentos(noticias, nomesConhecidos = []) {
   const VAZIAS = new Set(['lanca', 'lancamento', 'novo', 'nova', 'album', 'single', 'musica', 'data', 'anuncia', 'announces', 'album', 'release', 'date', 'with', 'sobre', 'para', 'como', 'mais', 'esperado', 'esperados', 'disco', 'clipe', 'faixa', 'faixas', 'feat', 'new']);
   const parecido = (a, b) => { const pa = quem(a.titulo), pb = quem(b.titulo); if (![...pa].some(x => pb.has(x))) return false; const nomeW = new Set([...pa, ...pb].flatMap(x => x.split(' '))); const A = new Set([...tok(a.titulo)].filter(w => !VAZIAS.has(w) && !nomeW.has(w))), B = new Set([...tok(b.titulo)].filter(w => !VAZIAS.has(w) && !nomeW.has(w))); if (!A.size || !B.size) return false; let n = 0; for (const w of A) if (B.has(w)) n++; return n / Math.max(1, Math.min(A.size, B.size)) >= 0.5; };
   for (const n of ord) {
-    const g = grupos.find(g => g.itens.some(x => x.dom !== n.dom && (parecido(x, n) || mesmoFato({ title: x.titulo, ts: x.ts, dom: x.dom }, { title: n.titulo, ts: n.ts, dom: n.dom }))) || g.itens.some(x => x.link === n.link || (x.dom === n.dom && sem(x.titulo) === sem(n.titulo))));
+    const g = grupos.find(g => g.itens.some(x => !mesmoVeiculo(x.dom, n.dom) && (parecido(x, n) || mesmoFato({ title: x.titulo, ts: x.ts, dom: x.dom }, { title: n.titulo, ts: n.ts, dom: n.dom }))) || g.itens.some(x => x.link === n.link || (mesmoVeiculo(x.dom, n.dom) && sem(x.titulo) === sem(n.titulo))));
     if (g) g.itens.push(n); else grupos.push({ itens: [n] });
   }
-  return grupos.map(g => { const doms = new Set(g.itens.map(x => x.dom)); const p = g.itens[0];
-    return { titulo: p.titulo, link: p.link, veiculo: p.veic, publicado: p.ts, fontes: doms.size, confirmado: doms.size >= 2, emApuracao: doms.size < 2 || undefined, escopo: p.escopo, tambemEm: g.itens.slice(1).filter((x, i, a) => x.dom !== p.dom && a.findIndex(y => y.dom === x.dom) === i).slice(0, 3).map(x => ({ veiculo: x.veic, titulo: x.titulo, link: x.link })) }; })
+  return grupos.map(g => { const doms = new Set(g.itens.map(x => chaveVeiculo(x.dom) || x.dom)); const p = g.itens[0];
+    return { titulo: p.titulo, link: p.link, veiculo: p.veic, publicado: p.ts, fontes: doms.size, confirmado: doms.size >= 2, emApuracao: doms.size < 2 || undefined, escopo: p.escopo, tambemEm: g.itens.slice(1).filter((x, i, a) => !mesmoVeiculo(x.dom, p.dom) && a.findIndex(y => mesmoVeiculo(y.dom, x.dom) || y.dom === x.dom) === i).slice(0, 3).map(x => ({ veiculo: x.veic, titulo: x.titulo, link: x.link })) }; })
     .sort((a, b) => (b.confirmado - a.confirmado) || (b.fontes - a.fontes) || (b.publicado - a.publicado));
 }

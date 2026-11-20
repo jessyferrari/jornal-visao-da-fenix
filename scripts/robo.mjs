@@ -1,4 +1,5 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
+import { veiculoDe, veiculosDistintos, mesmoVeiculo } from './veiculo.mjs';   // 20/11: mesmo veículo (g1 = G1, www./m./subdomínio) nunca confirma a si mesmo
 import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { aplicarAtalhos } from './atalhos.mjs';
 import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado } from './ntfy-acoes.mjs';
@@ -104,8 +105,8 @@ if (antesSp !== all.length) console.log('filtrados patrocinados/ofertas', antesS
 {
   const wq = t => words(limparComparar(t)), eq = t => nomesPelaCaixa(t, /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g);   // 20/11: sem emojis/#/@; CAIXA ALTA herda nomes do outro título
   const pt = all.filter(i => !i.lang); for (const i of pt) { i._w = wq(i.title); i._e = eq(i.title); }
-  const igual = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a._w) if (b._w.has(w)) c++; if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.5) return false; const [ea, eb] = nomesDoPar(a.title, a._e, b.title, b._e); for (const e of ea) if (eb.has(e)) return true; return false; };
-  for (const i of pt) { const fs2 = new Set([i.src]); for (const j of pt) if (j !== i && igual(i, j)) fs2.add(j.src); i.pre = fs2.size; }
+  const igual = (a, b) => { if (a.src === b.src || veiculoDe(a) === veiculoDe(b) || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a._w) if (b._w.has(w)) c++; if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.5) return false; const [ea, eb] = nomesDoPar(a.title, a._e, b.title, b._e); for (const e of ea) if (eb.has(e)) return true; return false; };
+  for (const i of pt) { const fs2 = new Set([veiculoDe(i)]); for (const j of pt) if (j !== i && igual(i, j)) fs2.add(veiculoDe(j)); i.pre = fs2.size; }
   const antesPop = all.length; all = all.filter(i => i.tipo !== 'pop' || (i.pre || 1) >= 2 || alegaExclusivo(i.title));   // 17/11: cultura de 1 fonte só entra se o próprio site diz que é exclusivo (vai em apuração, com o selo)
   console.log('cultura/entretenimento: entraram', all.filter(i => i.tipo === 'pop').length, 'com 2+ fontes; ficaram só na busca', antesPop - all.length);
   // notícias grandes (3+ veículos) seguram lugar na edição por até 36 h, mesmo quando a enxurrada de notícias novas as empurraria para fora
@@ -175,14 +176,14 @@ console.log('tradução ok', okT, 'falhou', failT, 'novas por serviço', JSON.st
 // ===== agrupamento estrito do mesmo fato (títulos já traduzidos) =====
 const ents = t => nomesPelaCaixa(t, /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g);   // 20/11 (t339): título em CAIXA ALTA herda os nomes próprios do outro veículo; emojis/#/@ saem
 for (const i of all) { i.w = words(limparComparar(i.title)); i.e = ents(i.title); i.reg = BR_OUT.has(i.src) ? 'br' : 'ext'; }
-const same = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; const [ea, eb] = nomesDoPar(a.title, a.e, b.title, b.e); for (const e of ea) if (eb.has(e)) return true; return false; };
-for (const i of all) { i.grp = all.filter(j => same(i, j)); const m = new Map(); for (const j of i.grp) if (!m.has(j.src)) m.set(j.src, j); i.grp = [...m.values()]; i.outros = i.grp.map(j => j.src); }
+const same = (a, b) => { if (a.src === b.src || veiculoDe(a) === veiculoDe(b) || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; const [ea, eb] = nomesDoPar(a.title, a.e, b.title, b.e); for (const e of ea) if (eb.has(e)) return true; return false; };
+for (const i of all) { i.grp = all.filter(j => same(i, j)); const m = new Map(); for (const j of i.grp) if (!m.has(veiculoDe(j))) m.set(veiculoDe(j), j); i.grp = [...m.values()]; i.outros = i.grp.map(j => j.src); }
 for (const i of all) {
   const ageH = Math.max(0, (now - i.ts) / 3600e3);
   i.score = +((1 + i.outros.length) * Math.pow(0.5, ageH / 6)).toFixed(3);   // corroboração com meia-vida de 6h
   i.urg = /urgente|última hora|ultima hora|breaking|^ao vivo/i.test(i.title) || (i.outros.length >= 1 && ageH < 1 && i.tipo !== 'pop');   // fofoca/entretenimento só vira URGENTE com a palavra no título
   i.heat = Math.min(3, i.outros.length + (i.urg ? 1 : 0));
-  const srcs = [i, ...i.grp]; const br = [...new Set(srcs.filter(x => x.reg === 'br').map(x => x.src))], ext = [...new Set(srcs.filter(x => x.reg === 'ext').map(x => x.src))];
+  const srcs = [i, ...i.grp]; const br = veiculosDistintos(srcs.filter(x => x.reg === 'br').map(x => x.src)), ext = veiculosDistintos(srcs.filter(x => x.reg === 'ext').map(x => x.src)).filter(s => !br.some(b => mesmoVeiculo(b, s)));   // 20/11: o mesmo veículo conta uma vez
   i.cov = { n: br.length + ext.length, br, ext }; if (i.cov.n >= 2 && (!br.length || !ext.length)) i.cov.cego = !br.length ? 'Ponto cego: só a imprensa estrangeira cobriu' : 'Ponto cego: só a imprensa brasileira cobriu';
 }
 // 📊 nota de potencial de postagem (17/11): assunto, veículos, repetição, pessoa e frescor (scripts/potencial.mjs)

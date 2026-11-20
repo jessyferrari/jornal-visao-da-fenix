@@ -1,6 +1,7 @@
 // Protótipo do setor MÚSICA do Jornal Visão da Fênix (Samba > Samba e Pagode > Música geral).
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
+import { chaveVeiculo, mesmoVeiculo } from './veiculo.mjs';   // 20/11: mesmo veículo (www., m., subdomínio) nunca confirma a si mesmo
 import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { botoesApurar, toqueNoNtfy } from './ntfy-acoes.mjs';
 import { criarDisjuntor } from './disjuntor.mjs';
@@ -124,9 +125,9 @@ const pal = t => new Set(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036
 // nome próprio em comum é obrigatório (evita juntar dois blocos diferentes que só dividem 'Carnaval 2027')
 const GENERICO = new Set('carnaval samba pagode grupo especial festival show brasil bloco escola grammy latino premio musica cantor cantora album single'.split(' '));
 const ents = t => nomesPelaCaixa(t, /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g, w => !GENERICO.has(w));   // 20/11 (t339): sem emojis/#/@ do fim; CAIXA ALTA herda nomes do outro título (titulo-norm.mjs)
-const mesmo = (a, b) => { if (a.dom && a.dom === b.dom) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; if (/[\u3040-\u30ff]/.test(a.title)) return true; const [ea, eb] = nomesDoPar(a.title, a.e, b.title, b.e); for (const e of ea) if (eb.has(e)) return true; return false; };
+const mesmo = (a, b) => { if (a.dom && (a.dom === b.dom || mesmoVeiculo(a.dom, b.dom))) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; if (/[\u3040-\u30ff]/.test(a.title)) return true; const [ea, eb] = nomesDoPar(a.title, a.e, b.title, b.e); for (const e of ea) if (eb.has(e)) return true; return false; };
 // mesma cidade + mesmo assunto com palavras diferentes ("apreende" x "encontra"): junta se 4+ palavras em comum
-const mesmo2 = (a, b) => { const la = a.uf || a.ufSoh, lb = b.uf || b.ufSoh; if (!la || la !== lb || (a.dom && a.dom === b.dom)) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; return c >= 4 && c / Math.min(a.w.size, b.w.size) >= 0.5; };
+const mesmo2 = (a, b) => { const la = a.uf || a.ufSoh, lb = b.uf || b.ufSoh; if (!la || la !== lb || (a.dom && (a.dom === b.dom || mesmoVeiculo(a.dom, b.dom)))) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; return c >= 4 && c / Math.min(a.w.size, b.w.size) >= 0.5; };
 
 // ===== REGIÃO: SP, RJ, Resto do Brasil, Internacional =====
 const sem = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -226,7 +227,7 @@ const chave = i => [...i.w].sort().slice(0, 6).join('-');
 for (const i of mus) {
   const k = chave(i); const ks = [k, ...i.grp.map(chave)]; const ja = ks.map(x => E.vistos[x]).filter(Boolean);
   i.primeiro = ja.length ? Math.min(...ja) : agora; for (const x of ks) E.vistos[x] = i.primeiro;
-  const doms = new Set([i.dom || i.veic, ...i.grp.map(g => g.dom || g.veic)]);
+  const doms = new Set([i.dom || i.veic, ...i.grp.map(g => g.dom || g.veic)].map(v => chaveVeiculo(v) || v));
   i.fontes = doms.size; i.emGrande = i.grande || i.grp.some(g => g.grande);
   i.pot = notaPotencial({ titulo: i.tituloPt || i.title, resumo: i.sum, veiculos: [...new Set([i.veic, ...i.grp.map(g => g.veic)])], ts: Math.min(i.ts, ...i.grp.map(g => g.ts).filter(Boolean)), agora, famosos: ARTISTAS_PESSOAS });   // 📊 nota de potencial (17/11)
   // QUENTE: fato recente (até 12 h), ainda em nenhum portal grande, visto em fontes menores/sociais

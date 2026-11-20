@@ -1,5 +1,6 @@
 // Regras puras do setor Música (testáveis sem rede): canal só de São Paulo, mesmo fato com palavras diferentes,
 // e a regra de verdade: notícia com 1 fonte só fica "em apuração" (sem "Sim, publicar" e sem "Fazer post").
+import { mesmoVeiculo } from './veiculo.mjs';
 import { createHmac } from 'node:crypto';
 
 export const ARTISTAS = /\b(zeca pagodinho|alcione|martinho da vila|paulinho da viola|leci brand[aã]o|arlindo cruz|arlindinho|xande de pilares|diogo nogueira|p[eé]ricles|thiaguinho|fundo de quintal|jorge arag[aã]o|dudu nobre|mumuzinho|ferrugem|sorriso maroto|grupo revela[cç][aã]o|exaltasamba|belo(?! horizonte)|p[eé] no ch[aã]o|turma do pagode|menos [eé] mais|di propósito|di prop[oó]sito|dilsinho|suel|tiee|vitinho|ludmilla|numanice|teresa cristina|mart'?n[aá]lia|maria rita|roberta s[aá]|mosquito|marcelo d2|seu jorge|beth carvalho|clara nunes|cartola|noel rosa|adoniran barbosa|jo[aã]o nogueira|bezerra da silva|dona ivone lara|elza soares|monarco|nei lopes|wilson das neves|neguinho da beija-?flor|zeca baleiro|raça negra|ra[cç]a negra|art popular|katinguel[eê]|s[oó] pra contrariar|alexandre pires|rodriguinho|mart[ií]nho|reinaldo|sombrinha|almir guineto|jovelina|grupo molejo|anderson leonardo|xamã|negritude j[uú]nior|chrigor|swing e simpatia|harmonia do samba|[eé] o tchan|psirico|l[eé]o santana|parangol[eé]|samba de raiz|roda de samba)\b/i;
@@ -42,7 +43,7 @@ const anos = (t) => new Set([...String(t).matchAll(/\b(\d{2,3}) anos\b/gi)].map(
 // a, b: { title, dom, ts, cidade? }. Junta só se: sites diferentes, até 72 h de distância, mesma pessoa/artista no título e mesmo tipo de fato.
 // "show" exige também a mesma cidade (dois shows diferentes do mesmo artista não viram um fato só); aniversário exige o mesmo número de anos.
 export function mesmoFato(a, b) {
-  if (!a || !b || a === b || (a.dom && a.dom === b.dom) || Math.abs((a.ts || 0) - (b.ts || 0)) > 72 * 3600e3) return false;
+  if (!a || !b || a === b || (a.dom && (a.dom === b.dom || mesmoVeiculo(a.dom, b.dom))) || Math.abs((a.ts || 0) - (b.ts || 0)) > 72 * 3600e3) return false;
   const pa = pessoas(a.title), pb = pessoas(b.title); if (![...pa].some((x) => pb.has(x))) return false;
   const ea = eventos(a.title), eb = eventos(b.title); const comum = [...ea].filter((x) => eb.has(x)); if (!comum.length) return false;
   if (comum.length === 1 && comum[0] === 'show' && !(a.cidade && a.cidade === b.cidade)) return false;

@@ -35,7 +35,7 @@ const J = JSON.parse(readFileSync(join(T, 'musica.json'), 'utf8'));
 const avisos = posts.filter(p => /assine o canal Música São Paulo/.test(p.title || ''));
 assert.equal(avisos.length, 1, 'aviso SP uma vez só (rodada 1), não repete na rodada 2'); assert.equal(avisos[0].topic, MUS, 'aviso vai no canal Música que ela já assina');
 assert.match(avisos[0].actions[0].url, new RegExp('^ntfy://127\\.0\\.0\\.1:\\d+/' + MUS + '-sp\\?display=Fenix\\+Musica\\+SP$'));
-for (const p of posts) { assert.ok([MUS, MUS + '-sp'].includes(p.topic), 'só os 2 canais da música'); assert.equal(p.icon, 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png', 'logo em toda notificação'); assert.ok((p.actions || []).length >= 1 && p.actions.length <= 3, 'todo aviso tem botão visível: ' + p.title); }
+for (const p of posts) { assert.ok([MUS, MUS + '-sp', MUS + '-mesa', MUS + '-sp-mesa'].includes(p.topic), 'só os 2 canais da música (prioridade 1 vai para o canal -mesa deles, ntfy-acoes paraMesa): ' + p.topic); assert.equal(p.icon, 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png', 'logo em toda notificação'); assert.ok((p.actions || []).length >= 1 && p.actions.length <= 3, 'todo aviso tem botão visível: ' + p.title); }
 for (const p of posts) if (/fonte|Quente|Lançamento|DJs|Música|Samba|Pagode/.test(p.title) && p.click && !/musica\.html$/.test(p.click)) { assert.ok(p.actions.some(a => a.label === 'Ver notícia' && a.url === p.click), 'notícia tem Ver notícia: ' + p.title); }
 const sp = posts.filter(p => p.topic === MUS + '-sp'), mus = posts.filter(p => p.topic === MUS && p !== avisos[0]);
 for (const p of sp) assert.ok(/ SP\b|SP:|SP$/.test(p.title) || (p.tags || []).includes('sp'), 'no canal SP só São Paulo: ' + p.title);

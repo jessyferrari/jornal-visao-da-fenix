@@ -5,6 +5,7 @@
 // "exclusivo" só como "<veículo> diz que é exclusivo"; nunca dizemos que a Olimpia Shakur foi a primeira.
 // Bateria (t320): "Vale postar" e "Não deixe de postar" confirmados podem tocar SOM (prioridade 3, nunca 4 ou 5, que forçam vibração longa);
 // forte em apuração chega silencioso (2); o resto vai só para a Mesa do agente (1 = canal <tópico>-mesa, que o celular não assina).
+import { veiculoDe } from './veiculo.mjs';
 import { createHmac } from 'node:crypto';
 import { botoesApurar } from './ntfy-acoes.mjs';
 import { notaPotencial, ehSurf } from './potencial.mjs';
@@ -73,11 +74,11 @@ export function palavras(titulo) {
 
 /** mesmo fato em outros veículos (pool = outras seções do jornal + Google Notícias); conta veículos distintos (nome normalizado) */
 export function confirmar(item, pool) {
-  const grp = []; const nomes = new Set([sem(item.src)]);
+  const grp = []; const nomes = new Set([veiculoDe(item)]);   // 20/11: veículo normalizado (g1 = G1, www./m./subdomínio)
   for (const o of pool) {
-    if (!o || !o.title || !o.ts || nomes.has(sem(o.src))) continue;
+    if (!o || !o.title || !o.ts || nomes.has(veiculoDe(o))) continue;
     if (canon(o.link) === item.key) continue;
-    if (mesmo({ src: item.src, title: item.title, ts: item.ts }, { src: o.src, title: o.title, ts: o.ts })) { grp.push(o); nomes.add(sem(o.src)); }
+    if (mesmo({ src: item.src, title: item.title, ts: item.ts }, { src: o.src, title: o.title, ts: o.ts })) { grp.push(o); nomes.add(veiculoDe(o)); }
   }
   return { grp, n: nomes.size };
 }
