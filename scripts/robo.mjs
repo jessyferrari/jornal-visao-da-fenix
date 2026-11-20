@@ -256,6 +256,8 @@ if (changed) {
     html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER + ESP + REF);
     // 📊 selo da nota de potencial (17/11): script fora do app (nota.js), incluído uma vez só
     if (!html.includes('src="nota.js"')) html = html.replace(/<\/body>/, '<script src="nota.js" defer></script></body>');
+    // 🌐 busca universal (20/11): jornal + internet ao vivo (busca-web.js, fora do app), incluída uma vez só
+    if (!html.includes('src="busca-web.js"')) html = html.replace(/<\/body>/, '<script src="busca-web.js" defer></script></body>');
     fs.writeFileSync('index.html', html);
     // nova versão do service worker a cada edição → bust do cache no cliente
     if (fs.existsSync('sw.js')) {

@@ -62,7 +62,7 @@ self.addEventListener('fetch', (e) => {
   const isShell =
     isNav ||
     /\/(index\.html)?$/.test(path) ||
-    /\/app\.js$/.test(path) ||
+    /\/(app|busca-web|nota)\.js$/.test(path) ||
     /\/fonts\.css$/.test(path) ||
     /\/sw\.js$/.test(path) ||
     /\.css$/i.test(path);
