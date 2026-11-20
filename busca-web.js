@@ -160,16 +160,21 @@
     var u = urlB(q, mk) + (v || '');
     return rss2json(u).then(function (j) { return lerRss2json(j, 'b'); }).catch(function () { return corslol(u).then(lerBing); });
   }
-  // Google Notícias pt-BR (bônus, quando as rotas gratuitas deixam): corrida entre api.cors.lol e allorigins; plano C rss2json
+  // Google Notícias pt-BR e en-US: função própria primeiro; reserva: corrida entre api.cors.lol e allorigins; plano C rss2json
+  // 20/11 (t341): fonte principal é a função grátis do Netlify da Jessyca (busca-visao-da-fenix), que lê o Google Notícias direto,
+  // sem proxy gratuito (CORS só para o jornal, cache de 3 min). Os proxies antigos ficam só como reserva.
+  var FUNCAO_G = 'https://busca-visao-da-fenix.netlify.app/api/google';
+  function funcaoG(q, ed, extra) {
+    return pega(FUNCAO_G + '?q=' + encodeURIComponent(q + (extra || '')) + '&hl=' + (ed === 'en' ? 'en-US' : 'pt-BR'), 8000).then(function (x) { if (!/<rss/i.test(x)) throw 0; return x; });
+  }
   function motorG(q, ed, extra) {
     var u = urlG(q, ed, extra);
-    return primeiro([corslol(u), allorigins(u)]).then(lerGoogle).catch(function () { return rss2json(u).then(function (j) { return lerRss2json(j, 'g'); }); });
+    return funcaoG(q, ed, extra).then(lerGoogle).catch(function () {
+      return primeiro([corslol(u), allorigins(u)]).then(lerGoogle).catch(function () { return rss2json(u).then(function (j) { return lerRss2json(j, 'g'); }); });
+    });
   }
   // GDELT: CORS aberto, sem proxy; pede 1 consulta a cada 5 s por aparelho (a busca faz 1 só)
   function motorD(q) { return pega(urlD(q), 15000, true).then(lerGdelt); }
-  // Google Notícias depende de proxies gratuitos que às vezes bloqueiam: se falharem todas as rotas, pausa 2 min (é a única fonte com as notícias de hoje) (não atrasa nem suja o console a cada busca)
-  function googleLiberado() { try { return Date.now() > +(localStorage.getItem('jvf-google-pausa') || 0); } catch (e) { return true; } }
-  function googlePausa() { try { localStorage.setItem('jvf-google-pausa', String(Date.now() + 2 * 60e3)); } catch (e) {} }
   function hora(p) {
     if (!p) return '';
     try { return new Date(p).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', ' às') + ' (Brasília)'; } catch (e) { return ''; }
@@ -196,7 +201,7 @@
     }
   }
   function desenhar(q, estado) {
-    var b = caixa(); b.textContent = ''; b.setAttribute('data-q', q); b.setAttribute('data-estado', estado.carregando ? 'carregando' : 'pronto');
+    var b = caixa(); b.textContent = ''; b.setAttribute('data-q', q); b.setAttribute('data-estado', estado.carregando ? 'carregando' : 'pronto'); b.setAttribute('data-ok', (estado.ok || []).join('|'));
     var h = el('h3', 'margin:0 0 6px;font:700 13px/1.2 system-ui,sans-serif;letter-spacing:.06em;color:' + OURO + ';text-transform:uppercase', '🌐 Encontrado agora na internet');
     b.appendChild(h);
     if (estado.carregando && !estado.res) { b.appendChild(el('div', 'color:' + SUAVE, 'Buscando “' + q + '” agora no Google Notícias, Bing Notícias e GDELT, no Brasil e no mundo…')); encaixar(); return; }
@@ -244,16 +249,14 @@
     var MOT = [['Bing Notícias', function () { return motorB(q, '&qft=sortbydate%3d%221%22'); }],
       ['Bing Notícias (mundo)', function () { return motorB(q, '&qft=sortbydate%3d%221%22', 'en'); }],
       ['GDELT (mundo)', function () { return motorD(q); }]];
-    if (googleLiberado()) {
-      var gFalhas = 0, gErro = function (e) { if (++gFalhas === 2) googlePausa(); throw e; };
-      MOT.unshift(['Google Notícias', function () { return motorG(q, 'pt', ' when:3d').catch(gErro); }], ['Google Notícias (mundo)', function () { return motorG(q, 'en', ' when:1d').catch(gErro); }]);
-    }
+    // 20/11 (t341): Google Notícias SEMPRE (função própria no Netlify, sem a pausa de 2 min que existia por causa dos proxies)
+    MOT.unshift(['Google Notícias', function () { return motorG(q, 'pt', ' when:3d'); }], ['Google Notícias (mundo)', function () { return motorG(q, 'en', ' when:1d'); }]);
     var estado = { q: q, carregando: true, res: null, fontes: [], semResposta: [], falhou: 0, total: MOT.length, ms: 0 }, todos = [], feitos = 0;
     ultimo = estado; desenhar(q, estado);
     MOT.forEach(function (m, i) {
       new Promise(function (ok) { setTimeout(ok, i * 200); }).then(m[1]).then(function (its) {
         if (mine !== seq) return;
-        todos = todos.concat(its); if (its.some(function (x) { return relevante(q, x); }) && estado.fontes.indexOf(m[0]) < 0) estado.fontes.push(m[0]);
+        todos = todos.concat(its); estado.ok = (estado.ok || []).concat([m[0]]); if (its.some(function (x) { return relevante(q, x); }) && estado.fontes.indexOf(m[0]) < 0) estado.fontes.push(m[0]);
       }, function () { estado.falhou++; estado.semResposta.push(m[0]); }).then(function () {
         if (mine !== seq) return;
         feitos++; estado.carregando = feitos < MOT.length; estado.ms = Date.now() - t0; var f = filtrar(q, todos); estado.exata = f.exata; estado.res = f.itens.length ? agrupar(q, f.itens) : null;
