@@ -7,7 +7,7 @@
 // forte em apuração chega silencioso (2); o resto vai só para a Mesa do agente (1 = canal <tópico>-mesa, que o celular não assina).
 import { createHmac } from 'node:crypto';
 import { botoesApurar } from './ntfy-acoes.mjs';
-import { notaPotencial } from './potencial.mjs';
+import { notaPotencial, ehSurf } from './potencial.mjs';
 import { alegaExclusivo, primeiro, campoSelo, hhmm } from './exclusivo.mjs';
 import { mesmo, canon, brIso, idNoticia } from './series-regras.mjs';
 
@@ -92,8 +92,10 @@ export function classificar(i, { agora }) {
   const forte = URGENTE.test(i.title) || (i.orig && URGENTE.test(i.orig));
   const confirmado = (i.n || 1) >= 2;
   // bateria: só confirmado "Vale postar"/"Não deixe" toca som (3); forte em apuração chega silencioso (2); o resto só na Mesa (1)
-  const prioridade = confirmado && !pot.provisoria && (pot.faixa === 'vale' || pot.faixa === 'nao-deixe') ? 3 : !confirmado && forte ? 2 : confirmado ? 1 : 0;
-  return { pot, forte, confirmado, prioridade };
+  // 🏄 t339: surf em apuração (1 fonte) vai para a Mesa como cartão em apuração (1, silencioso); confirmado já é Vale postar pelo piso de surf
+  const surf = !!(ehSurf(i.title, i.sum) || (i.orig && ehSurf(i.orig)));
+  const prioridade = confirmado && !pot.provisoria && (pot.faixa === 'vale' || pot.faixa === 'nao-deixe') ? 3 : !confirmado && forte ? 2 : confirmado ? 1 : surf ? 1 : 0;
+  return { pot, forte, confirmado, prioridade, surf };
 }
 
 /** madrugada (0h a 7h de Brasília): Vale postar/Não deixe confirmado chega no celular 24 h (t330); o resto vai só para a Mesa */

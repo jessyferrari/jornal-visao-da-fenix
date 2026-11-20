@@ -90,7 +90,7 @@ for (const i of candidatos) {
   let c0 = P.confirmar(i, poolTotal()); Object.assign(i, c0);
   if (E.vistos[i.key] != null && E.vistos[i.key] >= i.n) continue;
   let c = P.classificar(i, { agora: AGORA });
-  if (!c.confirmado && c.forte && !seed && buscas < P.LIM.googlePorRodada && googleLivre()) {   // forte e só 1 fonte: procura a 2ª fonte no Google Notícias
+  if (!c.confirmado && (c.forte || c.surf) && !seed && buscas < P.LIM.googlePorRodada && googleLivre()) {   // forte (ou surf, t339) e só 1 fonte: procura a 2ª fonte no Google Notícias
     buscas++;
     try { const g = P.lerGoogle(await baixa(P.urlGoogle(P.palavras(i.title)))); if (!g) pausarGoogle(); else { pool.push(...g); Object.assign(i, P.confirmar(i, poolTotal())); c = P.classificar(i, { agora: AGORA }); } } catch {}
   }

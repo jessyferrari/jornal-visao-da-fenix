@@ -48,7 +48,7 @@ jobs:
           NTFY_TOPIC_MUSICA: '${{ secrets.NTFY_TOPIC_MUSICA }}'
           NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
           NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
-      - name: Urgência dos perfis do agente (Hugo Gloss, Forbes Brasil, Fórmula 1, CazéTV; a cada rodada, ~5 min; só rotas públicas, sem a conta de Instagram dela) + canal geral e Mesa
+      - name: Urgência dos perfis do agente (Hugo Gloss, Forbes Brasil, Fórmula 1, CazéTV, Gigantes de Nazaré; a cada rodada, ~5 min; só rotas públicas, sem a conta de Instagram dela) + canal geral e Mesa
         run: timeout 120 node scripts/perfis.mjs || echo "urgência dos perfis falhou nesta rodada; o resto segue normal"
         env:
           NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}'

@@ -19,6 +19,14 @@ const MEDIO = palavra('show|turn[eê]|[aá]lbum|single|clipe|feat|parceria|trail
 export const FAMOSOS = palavra('lula|bolsonaro|trump|biden|musk|zuckerberg|papa le[aã]o|papa francisco|neymar|vin[ií]cius j[uú]nior|vini jr|messi|cristiano ronaldo|cr7|mbapp[eé]|ancelotti|anitta|ludmilla|ivete sangalo|caetano veloso|gilberto gil|roberto carlos|xuxa|ang[eé]lica|luciano huck|faust[aã]o|silvio santos|virginia fonseca|zé felipe|ze felipe|wesley safad[aã]o|gusttavo lima|marília mendonça|mar[ií]lia mendon[cç]a|jorge e mateus|henrique e juliano|thiaguinho|p[eé]ricles|zeca pagodinho|alcione|seu jorge|iza|pabllo vittar|juliette|bruna marquezine|sasha meneghel|gisele b[uü]ndchen|ana maria braga|taylor swift|beyonc[eé]|rihanna|drake|bad bunny|shakira|lady gaga|billie eilish|the weeknd|kanye|kim kardashian|selena gomez|justin bieber|viola davis|zendaya|tom cruise|oprah|lebron|serena williams|hamilton|verstappen|joel jota|fl[aá]vio augusto|nathalia arcuri|primo rico|whindersson|casimiro');
 
 const PESO = { veiculo: 20, repeticao: 30, tema: 25, pessoa: 15, frescor: 10 };
+// 🏄 20/11 (Jessyca, t339): surf é paixão dela. Notícia de surf relevante (Nazaré e ondas gigantes, WSL, brasileiros no surf) tem piso de 70% =
+// "Vale postar". A regra da verdade continua: com 1 veículo só a nota sai PROVISÓRIA (em apuração, sem som e sem botão de post).
+// "Nazaré" sozinho não conta (nome de gente e de cidade); precisa de onda, surf ou Praia do Norte. Agenda/"onde assistir" não sobe.
+const semAc = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+export const SURF = /(?<![a-z0-9])(surf|surfe|surfar|surfa|surfou|surfando|surfista|surfistas|bodyboard|wsl|world surf league|championship tour|circuito mundial de surf|big ?waves?|ondas? gigantes?|maiores ondas|gigantes de nazare|praia do norte|nazare (big|surf|onda|ondas|canhao|tow)|(onda|ondas|surf|canhao) (de|em|na) nazare|tow[- ]?in|gabriel medina|italo ferreira|filipe toledo|tatiana weston-webb|tati weston-webb|weston-webb|yago dora|joao chianca|chumbinho|lucas chumbo|maya gabeira|rodrigo koxa|carlos burle|kelly slater|john john florence|pipeline masters|teahupoo|peahi|jaws (maui|peahi)|mavericks (surf|onda|challenge))(?![a-z0-9])/;
+const SURF_RUIDO = /onde assistir|onde vai passar|programacao|previsao (das ondas|do mar)|horario (das baterias|e onde)|agenda/;
+export const ehSurf = (titulo, resumo = '') => { const t = semAc(titulo + ' ' + resumo); return SURF.test(t) && !SURF_RUIDO.test(semAc(titulo)); };
+export const PISO_SURF = 70;
 
 /** x: { titulo, resumo?, veiculos: [nomes ou domínios dos veículos diferentes], ts: ms da 1ª publicação, agora: ms, famosos?: RegExp extra } */
 export function notaPotencial(x) {
@@ -45,7 +53,10 @@ export function notaPotencial(x) {
   // frescor
   c.frescor = horas === null ? 0 : horas <= 1 ? 10 : horas <= 6 ? 6 : horas <= 24 ? 3 : 0;
   if (horas !== null && horas <= 1) motivo.push('acabou de sair');
-  const nota = Math.max(0, Math.min(100, Math.round(Object.values(c).reduce((s, v) => s + v, 0))));
+  let nota = Math.max(0, Math.min(100, Math.round(Object.values(c).reduce((s, v) => s + v, 0))));
+  const surf = ehSurf(titulo, x.resumo);
+  if (surf && nota < PISO_SURF) { c.surf = PISO_SURF - nota; nota = PISO_SURF; }
+  if (surf) motivo.unshift('surf (prioridade da Jessyca: sempre Vale postar)');
   const faltam = []; if (n < 2) faltam.push('só 1 veículo até agora'); if (!temHora) faltam.push('sem horário');
   const provisoria = faltam.length > 0;
   const faixa = nota >= 90 ? 'nao-deixe' : nota >= 70 ? 'vale' : 'opcional';

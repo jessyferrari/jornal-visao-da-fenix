@@ -55,4 +55,11 @@ t('portal local com nome parecido não vira veículo grande (Folha do Leste)', (
   assert.match(notaPotencial({ titulo: 'Roda de samba', veiculos: ['Folha de S.Paulo'], ts: A, agora: A }).motivo, /veículo grande \(Folha de S\.Paulo\)/);
   assert.match(notaPotencial({ titulo: 'Roda de samba', veiculos: ['Folha Ilustrada'], ts: A, agora: A }).motivo, /veículo grande/);
 });
+t('🏄 surf (t339): piso Vale postar; 1 fonte segue provisória; Nazaré sozinho e agenda não sobem', () => {
+  for (const t of ['Ondas gigantes abrem a temporada em Nazaré', 'Gabriel Medina vence etapa da WSL', 'Tati Weston-Webb vai à final no Taiti', 'Lucas Chumbo surfa onda gigante']) {
+    const r = notaPotencial({ titulo: t, veiculos: ['ge', 'UOL'], ts: A - 600e3, agora: A }); assert.ok(r.nota >= 70, t + ' ' + r.nota); assert.equal(r.faixa, 'vale'); assert.match(r.motivo, /^surf/); assert.equal(prioridadeNota(r), 3);
+    const u = notaPotencial({ titulo: t, veiculos: ['ge'], ts: A - 600e3, agora: A }); assert.equal(u.provisoria, true); assert.equal(prioridadeNota(u), 1, '1 fonte não toca');
+  }
+  for (const t of ['Nazaré Tedesco vira meme', 'Onde assistir a WSL hoje', 'Mavericks vencem na NBA']) assert.doesNotMatch(notaPotencial({ titulo: t, veiculos: ['ge', 'UOL'], ts: A, agora: A }).motivo, /surf/, t);
+});
 console.log('TODOS OS TESTES PASSARAM: ' + ok);
