@@ -25,7 +25,7 @@ const agora = Date.parse('2026-11-20T12:00:00-03:00');
   assert.equal(c1.surf, true); assert.equal(c1.confirmado, false); assert.equal(c1.pot.faixa, 'vale'); assert.equal(c1.pot.provisoria, true); assert.equal(c1.prioridade, 1, 'surf em apuração: só a Mesa');
   assert.match(P.montarAviso(um, c1, { agora }).message, /Em apuração/); assert.ok(!JSON.stringify(P.botoes(um, c1, { CMD: 'c', ASS: 'k' })).includes('\\"acao\\":\\"publicar'));
   const ge = { src: 'ge', title: 'Temporada de ondas gigantes é aberta em Nazaré com brasileiros', link: 'https://ge.globo.com/surfe/nazare', ts: agora - 5 * 60e3 };
-  const yt2 = { ...yt.itens[0], title: 'Temporada de ondas gigantes é aberta em Nazaré', link: 'https://www.youtube.com/watch?v=gn2', key: 'https://www.youtube.com/watch?v=gn2' };   // título em CAIXA ALTA não casa com outro veículo (limite conhecido do casamento de manchetes)
+  const yt2 = { ...yt.itens[0], title: '🌊 TEMPORADA DE ONDAS GIGANTES ABERTA NA NAZARÉ! 🔥 #gigantesdenazare', link: 'https://www.youtube.com/watch?v=gn2', key: 'https://www.youtube.com/watch?v=gn2' };   // título real do canal, em CAIXA ALTA com emojis e hashtag (corrigido em 20/11: antes não casava)
   const dois = { ...yt2, ...P.confirmar(yt2, [ge]) };
   assert.equal(dois.n, 2, 'o ge confirma o mesmo fato'); { const c2 = P.classificar(dois, { agora }); assert.equal(c2.confirmado, true); assert.ok(['vale', 'nao-deixe'].includes(c2.pot.faixa)); assert.equal(c2.prioridade, 3, 'surf confirmado = Vale postar com som'); }
   const medina = { src: 'ge', title: 'Gabriel Medina vence etapa da WSL', link: 'https://ge.globo.com/m', key: 'https://ge.globo.com/m', ts: agora - 60e3, grp: [{ src: 'UOL', title: 'Medina vence etapa', link: 'https://uol.com.br/m', ts: agora }], n: 2 };

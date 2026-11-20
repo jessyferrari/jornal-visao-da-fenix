@@ -1,5 +1,6 @@
 // Regras puras da seção 🎬 Séries e Filmes (streaming): fontes, filtro do assunto, agrupamento do mesmo fato,
 // regra das 2 fontes, plataforma citada, selo de exclusivo, botões e resumos. Testadas em scripts/teste-series.mjs.
+import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { botoesApurar } from './ntfy-acoes.mjs';
 import { notaPotencial } from './potencial.mjs';
 import { createHash, createHmac } from 'node:crypto';
@@ -72,18 +73,21 @@ export const plataformas = (t) => PLAT.filter(([, r]) => r.test(t)).map(([n]) =>
 // ---- mesmo fato (títulos em português, já traduzidos): 3+ palavras em comum (60% do menor e 35% do maior) e um nome próprio em comum, até 18 h
 const STOP = new Set('a o os as de da do das dos e em no na nos nas um uma para por com que se ao à após apos diz disse sobre mais nova novo novos novas primeira segunda temporada serie série filme filmes series séries como quem porque onde quando veja assista saiba confira aqui todos todas pela pelo pelos pelas isso esta este essa esse sera será entre ainda depois antes tudo seus suas sobre the of to in and for on is at by with from what when how'.split(' '));
 const words = (t) => new Set(String(t).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((w) => w.length > 3 && !STOP.has(w)));
-const ents = (t) => new Set((String(t).match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{2,}/g) || []).map((w) => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')));
+// 20/11 (t339): emojis, #hashtags e @menções saem antes; título em CAIXA ALTA herda os nomes próprios do outro veículo (scripts/titulo-norm.mjs)
+const RX_ENT = /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{2,}/g, RX_NOME = /\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{2,}/g;
+const ents = (t) => nomesPelaCaixa(t, RX_ENT);
 const dominio = (u) => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return ''; } };
 export function mesmo(a, b) {
   if (a.src === b.src || Math.abs(a.ts - b.ts) > 18 * 3600e3) return false;
-  a._w = a._w || words(a.title); b._w = b._w || words(b.title); a._e = a._e || ents(a.title); b._e = b._e || ents(b.title);
+  if (a._t !== a.title) { a._t = a.title; a._w = words(limparComparar(a.title)); a._e = ents(a.title); a._n = nomesPelaCaixa(a.title, RX_NOME); }
+  if (b._t !== b.title) { b._t = b.title; b._w = words(limparComparar(b.title)); b._e = ents(b.title); b._n = nomesPelaCaixa(b.title, RX_NOME); }
   let c = 0; for (const w of a._w) if (b._w.has(w)) c++;
   if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.6 || c / Math.max(a._w.size, b._w.size) < 0.35) return false;   // mais estrito: assunto parecido (ex.: outra matéria sobre o mesmo ator) não conta como 2ª fonte
-  let nomeComum = false; for (const e of a._e) if (b._e.has(e)) { nomeComum = true; break; } if (!nomeComum) return false;
+  const [ea, eb] = nomesDoPar(a.title, a._e, b.title, b._e), [na, nb] = nomesDoPar(a.title, a._n, b.title, b._n);
+  let nomeComum = false; for (const e of ea) if (eb.has(e)) { nomeComum = true; break; } if (!nomeComum) return false;
   // e pelo menos 1 palavra comum que NÃO é nome próprio (o fato, não só a pessoa): evita juntar matérias diferentes sobre o mesmo ator
-  for (const w of a._w) if (b._w.has(w) && !a._e.has(w) && !b._e.has(w) && !NOMES_TITULO(a, w) && !NOMES_TITULO(b, w)) return true; return false;
+  for (const w of a._w) if (b._w.has(w) && !ea.has(w) && !eb.has(w) && !na.has(w) && !nb.has(w)) return true; return false;
 }
-const NOMES_TITULO = (x, w) => { x._n = x._n || new Set((String(x.title).match(/\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{2,}/g) || []).map((y) => y.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, ''))); return x._n.has(w); };
 // agrupa: cada fato vira 1 item (o mais antigo é o principal) com grp = outros veículos; n = veículos diferentes (domínios)
 export function agrupar(itens) {
   const L = [...itens].sort((a, b) => a.ts - b.ts), usados = new Set(), out = [];

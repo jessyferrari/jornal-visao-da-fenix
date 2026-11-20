@@ -1,6 +1,7 @@
 // Protótipo do setor MÚSICA do Jornal Visão da Fênix (Samba > Samba e Pagode > Música geral).
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
+import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { botoesApurar, toqueNoNtfy } from './ntfy-acoes.mjs';
 import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
@@ -122,8 +123,8 @@ const STOP = new Set('a o os as de da do das dos e em no na nos nas um uma para 
 const pal = t => new Set(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\u3040-\u30ff\u4e00-\u9fff ]/g, ' ').split(/\s+/).filter(w => w.length > 3 && !STOP.has(w)));
 // nome próprio em comum é obrigatório (evita juntar dois blocos diferentes que só dividem 'Carnaval 2027')
 const GENERICO = new Set('carnaval samba pagode grupo especial festival show brasil bloco escola grammy latino premio musica cantor cantora album single'.split(' '));
-const ents = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')).filter(w => !GENERICO.has(w)));
-const mesmo = (a, b) => { if (a.dom && a.dom === b.dom) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; if (/[\u3040-\u30ff]/.test(a.title)) return true; for (const e of a.e) if (b.e.has(e)) return true; return false; };
+const ents = t => nomesPelaCaixa(t, /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g, w => !GENERICO.has(w));   // 20/11 (t339): sem emojis/#/@ do fim; CAIXA ALTA herda nomes do outro título (titulo-norm.mjs)
+const mesmo = (a, b) => { if (a.dom && a.dom === b.dom) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; if (/[\u3040-\u30ff]/.test(a.title)) return true; const [ea, eb] = nomesDoPar(a.title, a.e, b.title, b.e); for (const e of ea) if (eb.has(e)) return true; return false; };
 // mesma cidade + mesmo assunto com palavras diferentes ("apreende" x "encontra"): junta se 4+ palavras em comum
 const mesmo2 = (a, b) => { const la = a.uf || a.ufSoh, lb = b.uf || b.ufSoh; if (!la || la !== lb || (a.dom && a.dom === b.dom)) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; return c >= 4 && c / Math.min(a.w.size, b.w.size) >= 0.5; };
 
@@ -169,7 +170,7 @@ let itens = (await Promise.all([emLotes(FONTES, ler), lerTicket360()])).flat(2).
 // dedupe por link e por (veículo + título)
 const vistoK = new Set(); itens = itens.filter(i => { const k = i.link.split('?')[0] + '|' + (i.veic + i.title).toLowerCase(); const k2 = (i.veic + '|' + i.title).toLowerCase(); if (vistoK.has(k) || vistoK.has(k2)) return false; vistoK.add(k); vistoK.add(k2); return true; });
 for (const i of itens) {
-  const blob = i.title + ' ' + i.sum; i.w = pal(i.title); i.e = ents(i.title);
+  const blob = i.title + ' ' + i.sum; i.w = pal(limparComparar(i.title)); i.e = ents(i.title);
   i.grande = i.tipo === 'grande' || GRANDES.test(i.dom) || GRANDES_NOME.test(i.veic);
   i.setor = FORA.test(blob) ? null : SAMBA.test(blob) ? 'samba' : PAGODE.test(blob) ? 'pagode' : MUSICA.test(blob) ? 'geral' : null;
   if (i.setor === 'samba' && PAGODE.test(blob) && !/roda de samba|samba de mesa|samba de raiz|escola de samba/i.test(blob)) i.setor = 'pagode';

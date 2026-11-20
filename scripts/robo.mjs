@@ -1,4 +1,5 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
+import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { aplicarAtalhos } from './atalhos.mjs';
 import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado } from './ntfy-acoes.mjs';
 import { criarDisjuntor } from './disjuntor.mjs';
@@ -101,9 +102,9 @@ if (antesSp !== all.length) console.log('filtrados patrocinados/ofertas', antesS
 // ===== cultura/entretenimento e notícias grandes (14/11) =====
 // pré-agrupamento rápido só em português (antes da tradução): conta quantos veículos diferentes deram o mesmo fato
 {
-  const wq = t => words(t), eq = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')));
+  const wq = t => words(limparComparar(t)), eq = t => nomesPelaCaixa(t, /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g);   // 20/11: sem emojis/#/@; CAIXA ALTA herda nomes do outro título
   const pt = all.filter(i => !i.lang); for (const i of pt) { i._w = wq(i.title); i._e = eq(i.title); }
-  const igual = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a._w) if (b._w.has(w)) c++; if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.5) return false; for (const e of a._e) if (b._e.has(e)) return true; return false; };
+  const igual = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a._w) if (b._w.has(w)) c++; if (c < 3 || c / Math.min(a._w.size, b._w.size) < 0.5) return false; const [ea, eb] = nomesDoPar(a.title, a._e, b.title, b._e); for (const e of ea) if (eb.has(e)) return true; return false; };
   for (const i of pt) { const fs2 = new Set([i.src]); for (const j of pt) if (j !== i && igual(i, j)) fs2.add(j.src); i.pre = fs2.size; }
   const antesPop = all.length; all = all.filter(i => i.tipo !== 'pop' || (i.pre || 1) >= 2 || alegaExclusivo(i.title));   // 17/11: cultura de 1 fonte só entra se o próprio site diz que é exclusivo (vai em apuração, com o selo)
   console.log('cultura/entretenimento: entraram', all.filter(i => i.tipo === 'pop').length, 'com 2+ fontes; ficaram só na busca', antesPop - all.length);
@@ -172,9 +173,9 @@ fs.writeFileSync(TF, JSON.stringify(Object.fromEntries(Object.entries(cache).fil
 console.log('tradução ok', okT, 'falhou', failT, 'novas por serviço', JSON.stringify(eng));
 
 // ===== agrupamento estrito do mesmo fato (títulos já traduzidos) =====
-const ents = t => new Set((t.match(/(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g) || []).map(w => w.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')));
-for (const i of all) { i.w = words(i.title); i.e = ents(i.title); i.reg = BR_OUT.has(i.src) ? 'br' : 'ext'; }
-const same = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; for (const e of a.e) if (b.e.has(e)) return true; return false; };
+const ents = t => nomesPelaCaixa(t, /(?<!^)(?<![.:!?]\s)\b[A-ZÁÉÍÓÚÂÊÔÃÕÇ][\wÀ-ÿ'-]{3,}/g);   // 20/11 (t339): título em CAIXA ALTA herda os nomes próprios do outro veículo; emojis/#/@ saem
+for (const i of all) { i.w = words(limparComparar(i.title)); i.e = ents(i.title); i.reg = BR_OUT.has(i.src) ? 'br' : 'ext'; }
+const same = (a, b) => { if (a.src === b.src || Math.abs(a.ts - b.ts) > 18*3600e3) return false; let c = 0; for (const w of a.w) if (b.w.has(w)) c++; if (c < 3 || c / Math.min(a.w.size, b.w.size) < 0.5) return false; const [ea, eb] = nomesDoPar(a.title, a.e, b.title, b.e); for (const e of ea) if (eb.has(e)) return true; return false; };
 for (const i of all) { i.grp = all.filter(j => same(i, j)); const m = new Map(); for (const j of i.grp) if (!m.has(j.src)) m.set(j.src, j); i.grp = [...m.values()]; i.outros = i.grp.map(j => j.src); }
 for (const i of all) {
   const ageH = Math.max(0, (now - i.ts) / 3600e3);
