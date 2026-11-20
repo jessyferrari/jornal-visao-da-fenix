@@ -19,3 +19,4 @@ jobs:
       - run: node scripts/teste-musica-e2e.mjs
       - run: node scripts/teste-disjuntor.mjs
       - run: node scripts/teste-lembrete-assinar.mjs
+      - run: node scripts/teste-games.mjs

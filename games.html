@@ -1,0 +1,51 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Games · Jornal Visão da Fênix</title>
+<link rel="icon" href="favicon-32.png"><meta name="theme-color" content="#0b0b0d">
+<style>body{margin:0;background:#0b0b0d;color:#eee;font:16px/1.45 system-ui,sans-serif}main{max-width:860px;margin:auto;padding:14px}
+h1{font-size:22px;color:#d4af37;margin:6px 0}h2{font-size:18px;margin:24px 0 6px;color:#d4af37}
+nav{position:sticky;top:0;background:#0b0b0dee;padding:8px 0;display:flex;gap:8px;flex-wrap:wrap;z-index:2}nav a{font-size:13px;padding:5px 11px;border:1px solid #333;border-radius:14px;font-weight:500}
+a{color:#fff;text-decoration:none;font-weight:600}a:hover{text-decoration:underline}.m{color:#aaa;font-size:13px}
+.i{padding:9px 0;border-bottom:1px solid #222}.ex{border-left:4px solid #e0413a;background:#1d0f0f;padding:9px 12px;margin:8px 0;border-radius:6px}
+.selo{display:inline-block;background:#e0413a;color:#fff;font-weight:800;font-size:12px;letter-spacing:.4px;padding:2px 8px;border-radius:5px;margin-bottom:4px}
+.ok{color:#5fd38d}.esp{color:#e8c25a}.pl{display:inline-block;font-size:11px;font-weight:700;color:#111;background:#7fc8ff;border-radius:4px;padding:1px 6px;margin:3px 4px 0 0}
+.vz{color:#666;font-size:13px}.exp{background:#141418;border:1px solid #26262c;border-radius:8px;padding:9px 12px;font-size:13px;color:#bbb}
+input{width:100%;box-sizing:border-box;background:#141418;color:#eee;border:1px solid #333;border-radius:10px;padding:9px 12px;font:inherit;margin:6px 0}
+.voltar{font-size:13px;color:#aaa}.op{border-left:4px solid #8e7cc3;background:#15121d;padding:9px 12px;margin:8px 0;border-radius:6px}.opt{display:inline-block;background:#8e7cc3;color:#fff;font-weight:800;font-size:12px;padding:2px 8px;border-radius:5px;margin-bottom:4px}.mods{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0}.mods button{background:#141418;color:#ddd;border:1px solid #333;border-radius:14px;padding:5px 10px;font:inherit;font-size:13px}.mods button.on{background:#d4af37;color:#111}.vivo{color:#ff5a4f;font-weight:700}</style></head><body><main>
+<a class="voltar" href="./">← Jornal</a> · <a class="voltar" href="musica.html">🎵 Música</a> · <a class="voltar" href="emalta.html">🚀 Em Alta</a> · <a class="voltar" href="series.html">🎬 Séries</a> · <a class="voltar" href="esportes.html">⚽ Esportes</a>
+<h1>🎮 Games</h1><div id="at" class="m">carregando…</div>
+<nav><a href="#aovivo">🔴 Ao vivo</a><a href="#trailers">🎬 Trailers e anúncios</a><a href="#exclusivos">⭐ Possíveis exclusivos</a><a href="#confirmados">✅ Confirmados</a><a href="#opiniao">🗣️ Opinião/Review</a><a href="#brasil">🇧🇷 Brasil</a><a href="#mundo">🌎 Mundo</a><a href="#fontes">Fontes</a></nav>
+<div class="mods" id="mods"></div><input id="q" type="search" placeholder="Filtrar nesta página (ex.: GTA 6, PS5, Nintendo Switch 2, Xbox Game Pass)" aria-label="Filtrar">
+<div id="r"></div></main>
+<script>
+const nt=s=>{const p=s&&s.pot;if(!p)return'';const C={'nao-deixe':['#d4af37','#0d0b08','#d4af37'],vale:['#0d0b08','#d4af37','#d4af37'],opcional:['#0d0b08','#bfa775','#5a5040']}[p.faixa]||['#0d0b08','#bfa775','#5a5040'];return '<div class="nota" data-qa="nota" style="margin:2px 0 6px"><span style="display:inline-block;font:700 13px/1.2 system-ui,sans-serif;letter-spacing:.02em;padding:5px 10px;border-radius:999px;border:1.5px solid '+C[2]+';background:'+C[0]+';color:'+C[1]+'">'+e(p.rotulo)+'</span><div style="font:500 12px/1.35 system-ui,sans-serif;color:#bfa775;margin-top:3px">'+e(p.motivo)+'</div></div>'};  // 📊 nota de potencial (17/11): selo preto e dourado
+
+const e=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dt=p=>p.slice(8,10)+'/'+p.slice(5,7)+' '+p.slice(11,16);
+const item=(s,cls)=>{const st=s.confirmado?'<span class="ok">✅ '+s.fontes+' veículos: pode virar post</span>':'<span class="esp" title="Só 1 site deu até agora. Sem post até aparecer a 2ª fonte.">🔎 em apuração: só 1 fonte, sem post até a 2ª</span>';
+ const t=(s.tambemEm||[]).map(x=>'<a href="'+e(x.link)+'" target="_blank" rel="noopener">'+e(x.veiculo)+'</a>'+(x.republicadaDe?' (republicou '+e(x.republicadaDe)+', não conta como 2ª fonte)':'')).join(', ');
+ return '<div class="'+(cls||'i')+'" data-t="'+e((s.titulo+' '+s.veiculo+' '+(s.original||'')+' '+(s.modalidade||'')).toLowerCase())+'" data-mod="'+e(s.modalidade||'')+'">'+
+ nt(s)+(s.selo?'<div><span class="selo">'+(s.selo.tipo==='possivel'?'⭐ POSSÍVEL EXCLUSIVO':'📰 O SITE DIZ QUE É EXCLUSIVO')+'</span></div><div class="m">'+e(s.selo.texto)+'</div>':'')+
+ (s.exclusivoConfirmado?'<div><span class="selo">✅ EXCLUSIVO CONFIRMADO</span></div>':'')+
+ (s.aoVivo?'<span class="vivo">🔴 AO VIVO · </span>':'')+'<a href="'+e(s.link)+'" target="_blank" rel="noopener">'+e(s.titulo)+'</a>'+
+ '<div class="m">'+e(s.veiculo)+' · '+dt(s.publicado)+' (Brasília)'+(s.traduzido?' · '+e(s.traduzido)+' · original: “'+e(s.original)+'”':'')+'</div>'+
+ '<div class="m">'+st+(s.primeiro?' · 🥇 '+e(s.primeiro.veiculo)+' saiu primeiro às '+e(s.primeiro.hora):'')+'</div>'+
+ (t?'<div class="m">também em: '+t+'</div>':'')+(s.modalidade?'<div><span class="pl">'+e(s.modalidade)+'</span></div>':'')+'</div>';};
+const opi=s=>'<div class="op" data-t="'+e((s.titulo+' '+s.veiculo+' '+(s.original||'')+' '+s.modalidade).toLowerCase())+'" data-mod="'+e(s.modalidade)+'"><div><span class="opt">🗣️ OPINIÃO/REVIEW</span></div><a href="'+e(s.link)+'" target="_blank" rel="noopener">'+e(s.titulo)+'</a><div class="m">'+e(s.veiculo)+' · '+dt(s.publicado)+' (Brasília)'+(s.traduzido?' · '+e(s.traduzido):'')+' · review, análise ou coluna do veículo: não é confirmação de fato</div><div><span class="pl">'+e(s.modalidade)+'</span></div></div>';
+const sec=(id,nome,l,cls,vazio)=>'<h2 id="'+id+'">'+nome+'</h2>'+(l.length?l.map(s=>item(s,cls)).join(''):'<div class="vz">'+vazio+'</div>');
+fetch('games.json?'+Date.now()).then(r=>r.json()).then(j=>{
+ document.getElementById('at').textContent='Atualizado '+dt(j.atualizado)+' (Brasília) · '+j.monitorados+' veículos lidos nesta rodada';
+ document.getElementById('r').innerHTML='<div class="exp">'+e(j.explica)+'</div>'+
+ sec('aovivo','🔴 Ao vivo agora (últimas 6 h)',j.aoVivo||[],'i','Nenhuma transmissão ou acompanhamento ao vivo nas últimas 6 h.')+
+ sec('trailers','🎬 Trailers e anúncios (últimas 24 h)',j.trailers||[],'i','Nenhum trailer ou anúncio nas últimas 24 h.')+
+ sec('exclusivos','⭐ Possíveis exclusivos',j.exclusivos,'ex','Nenhum site disse "exclusivo" numa notícia que só ele deu, nas últimas 48 h. Nada é inventado.')+
+ (j.confirmadosExclusivos.length?sec('exclusivos-confirmados','✅ Exclusivos já confirmados por outro veículo',j.confirmadosExclusivos,'ex',''):'')+
+ sec('confirmados','✅ Confirmados (2 ou mais veículos)',j.destaques,'i','Nada confirmado em 2 veículos nas últimas 48 h.')+
+ '<h2 id="opiniao">🗣️ Opinião e Review (análises e colunas)</h2>'+((j.opiniao||[]).length?j.opiniao.map(opi).join(''):'<div class="vz">Nenhuma análise ou coluna marcada pelos veículos nas últimas 48 h.</div>')+
+ sec('brasil','🇧🇷 Brasil (sites em português)',j.brasil,'i','Nada nas últimas 48 h.')+
+ sec('mundo','🌎 Mundo (traduzido do inglês: IGN, GameSpot, Eurogamer, Kotaku, Polygon, VGC, PC Gamer, Push Square, Nintendo Life, PlayStation Blog, Xbox Wire e outros)',j.mundo,'i','Nada nas últimas 48 h.')+
+ '<h2 id="fontes">Fontes desta rodada</h2><div class="m">'+j.fontes.map(f=>(f.ok?'✅ ':'⚠️ ')+e(f.nome)+(f.ok?' ('+f.itens+')':' ('+e(f.erro)+')')).join(' · ')+'</div>';
+ let mod='';const q=document.getElementById('q'),M=document.getElementById('mods');const filtra=()=>{const v=q.value.trim().toLowerCase();document.querySelectorAll('[data-t]').forEach(d=>d.style.display=(!v||d.dataset.t.includes(v))&&(!mod||d.dataset.mod===mod)?'':'none');};
+ M.innerHTML=['Todos',...(j.modalidades||[])].map(m=>'<button data-m="'+(m==='Todos'?'':e(m))+'"'+(m==='Todos'?' class="on"':'')+'>'+e(m)+'</button>').join('');
+ M.onclick=ev=>{const b=ev.target.closest('button');if(!b)return;mod=b.dataset.m;M.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));filtra();};q.oninput=filtra;
+}).catch(()=>{document.getElementById('at').textContent='Não consegui carregar agora. Tente de novo em instantes.';});
+</script></body></html>

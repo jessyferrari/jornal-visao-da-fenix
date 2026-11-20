@@ -99,12 +99,22 @@ export function itensEsportes(j) {
   return out;
 }
 
+// Itens da seção Games (games.json, 20/11): principais, trailers, "também em" e Opinião/Review, seção 'games'
+export function itensGames(j) {
+  const out = [], vistos = new Set();
+  const add = (x, s, n) => { if (!x || typeof x.titulo !== 'string' || !/^https?:/.test(x.link || '') || !/^\d{4}-\d\d-\d\dT\d\d:\d\d/.test(x.publicado || '')) return; const k = canon(x.link); if (vistos.has(k)) return; vistos.add(k);
+    out.push({ t: x.titulo, s: s || ['Games', x.modalidade || '', x.tipo || ''].filter(Boolean).join(' · '), f: x.veiculo || '', l: x.link, p: x.publicado, c: 'games', n: n || x.fontes || 1, o: x.original || '' }); };
+  for (const lista of ['exclusivos', 'confirmadosExclusivos', 'destaques', 'aoVivo', 'trailers', 'brasil', 'mundo', 'opiniao']) for (const x of (j && j[lista]) || []) { add(x); for (const y of x.tambemEm || []) add({ ...y, publicado: y.publicado || x.publicado }, 'Mesmo fato de: ' + x.titulo, x.fontes); }
+  return out;
+}
+
 // CLI: depois do musica.mjs, arquiva a seção Música e a edição atual
 if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
   let itens = [];
   try { itens = itens.concat(itensMusica(JSON.parse(fs.readFileSync('musica.json', 'utf8')))); } catch (e) { console.log('busca: musica.json não lido', e.message); }
   try { itens = itens.concat(itensSeries(JSON.parse(fs.readFileSync('series.json', 'utf8')))); } catch (e) { console.log('busca: series.json não lido', e.message); }
   try { itens = itens.concat(itensEsportes(JSON.parse(fs.readFileSync('esportes.json', 'utf8')))); } catch (e) { console.log('busca: esportes.json não lido', e.message); }
+  try { itens = itens.concat(itensGames(JSON.parse(fs.readFileSync('games.json', 'utf8')))); } catch (e) { console.log('busca: games.json não lido', e.message); }
   try { const e = JSON.parse(fs.readFileSync('edicao.json', 'utf8')); itens = itens.concat(e.stories.map(s => ({ t: s.title, s: s.sum, f: s.src, l: s.link, p: s.pub, c: s.sec, n: s.cov && s.cov.n, o: s.orig }))); } catch (e) { console.log('busca: edicao.json não lido', e.message); }
   const r = arquivar(itens, new Date(Date.now() - 3 * 3600e3).toISOString());
   console.log('busca: arquivo atualizado', JSON.stringify(r));

@@ -118,7 +118,7 @@ await (async () => {
   // 4ª rodada: Gshow confirma o fato da Deborah Secco: chega "✅ Confirmado" com Sim, publicar e o selo assinado
   recebidos = []; const fontes3 = { ...fontes2, 'Gshow': f('gs3', rss([['Deborah Secco revela papel em nova série da Netflix e comemora', 'https://gshow.globo.com/ds', agora + 25 * 60e3, 'Séries']])) };
   r = await roda(fontes3, 30); assert.equal(r.c, 0, r.o);
-  const cf = recebidos.find((x) => /^⭐ EXCLUSIVO confirmado: Exclusivo: Deborah Secco/.test(x.title)); assert.ok(cf, JSON.stringify(recebidos.map((x) => x.title))); assert.equal(cf.priority, 5);
+  const cf = recebidos.find((x) => /^⭐ EXCLUSIVO confirmado: Exclusivo: Deborah Secco/.test(x.title)); assert.ok(cf, JSON.stringify(recebidos.map((x) => x.title))); assert.equal(cf.priority, 4);
   assert.match(cf.message, /^✅ Confirmado por 2 veículos · Hugo Gloss saiu primeiro às 11:10/); const corpo = JSON.parse(cf.actions[0].body);
   assert.equal(cf.actions[0].label, '✅ Sim, publicar'); assert.equal(corpo.selo.tipo, 'exclusivo'); assert.equal(corpo.ssig, X.assinarSelo(ASS, corpo.id, corpo.selo));
   recebidos = []; r = await roda(fontes3, 40); assert.ok(!recebidos.some((x) => /Confirmado/.test(x.title)), 'não repete a confirmação');

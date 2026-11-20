@@ -9,6 +9,7 @@ export const RAPIDAS = [
   ['Lance!', 'https://www.lance.com.br/sitemap-news.xml'], ['Deadline', 'https://deadline.com/feed/'], ['Variety', 'https://variety.com/feed/'],
   ['Contigo', 'https://contigo.com.br/feed'], ['Notícias da TV', 'https://noticiasdatv.uol.com.br/feed'], ['Hugo Gloss', 'https://hugogloss.uol.com.br/feed/'],
   ['Pipoca Moderna', 'https://pipocamoderna.com.br/feed/'], ['Omelete', 'https://www.omelete.com.br/sitemap-news.xml'],
+  ['IGN Brasil', 'https://br.ign.com/feed.xml'], ['IGN', 'https://feeds.feedburner.com/ign/all'], ['GameSpot', 'https://www.gamespot.com/feeds/news/'],   // 20/11: Games em destaque
 ];
 const UA = 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://github.com)';
 export async function viaRapida({ fontes = RAPIDAS, totalSeg = 180, voltaSeg = 90, buscar = fetch, dormir = (ms) => new Promise((r) => setTimeout(r, ms)), agora = () => Date.now(), log = console.log } = {}) {

@@ -38,11 +38,11 @@ t('nota sempre entre 0 e 100', () => {
   assert.ok(r.nota <= 100 && r.nota >= 0);
 });
 t('prioridade (18/11): Não deixe confirmada toca alto (5), Vale sem som (2), Opcional e provisória não vão ao celular (1)', () => {
-  assert.equal(prioridadeNota({ nota: 95, faixa: 'nao-deixe', provisoria: false }, 2), 5);
+  assert.equal(prioridadeNota({ nota: 95, faixa: 'nao-deixe', provisoria: false }, 2), 4);   // 20/11: nunca 5 (vibra em rajada)
   assert.equal(prioridadeNota({ nota: 95, faixa: 'nao-deixe', provisoria: true }, 2), 1);
-  assert.equal(prioridadeNota({ nota: 85, faixa: 'vale', provisoria: false }, 4), 2);
+  assert.equal(prioridadeNota({ nota: 85, faixa: 'vale', provisoria: false }, 4), 3);   // 20/11: Vale postar toca som
   assert.equal(prioridadeNota({ nota: 61, faixa: 'opcional', provisoria: false }, 5), 1);   // urgente Opcional também não toca
-  assert.equal(prioridadeNota(null, 2), 2); assert.equal(prioridadeNota(null, 4), 4);
+  assert.equal(prioridadeNota(null, 2), 2); assert.equal(prioridadeNota(null, 4), 4); assert.equal(prioridadeNota(null, 5), 4);
 });
 t('título do aviso começa pela nota, bem visível', () => {
   const r = notaPotencial({ titulo: 'Morre cantora aos 91 anos', veiculos: ['g1', 'Folha', 'CNN Brasil'], ts: A - 40 * 60e3, agora: A });
