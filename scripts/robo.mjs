@@ -1,5 +1,6 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
 import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado } from './ntfy-acoes.mjs';
+import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
@@ -362,16 +363,18 @@ const ABRIR = { action: 'view', label: 'Abrir jornal', url: B, clear: false };
 // devolve true/false. O que não saiu NÃO é marcado como avisado e volta na rodada seguinte. 1,5 s entre avisos.
 const espera = ms => new Promise(z => setTimeout(z, ms));
 const FALHAS = [];
+const DISJ = criarDisjuntor();   // 20/11: prazo total para avisos e disjuntor (ver scripts/disjuntor.mjs)
 const post = async m => {
+  if (DISJ.aberto()) { FALHAS.push('ntfy fora nesta rodada: ' + m.title); console.log('ntfy fora nesta rodada, fica para a próxima:', m.title); return false; }
   const corpo = JSON.stringify(toqueNoNtfy({ topic: TOPIC, icon: ICONE, actions: [ABRIR], ...m }));   // 17/11: aviso de uma notícia abre o ntfy com os botões
   for (let t = 0; t < 5; t++) {
     try { const r = await fetch(process.env.NTFY_SERVIDOR || 'https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
       if (r.ok) { await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }
       if (r.status !== 429 && r.status < 500) { FALHAS.push(r.status + ' ' + m.title); console.log('push recusado', r.status, m.title); return false; }
-      const ra = +(r.headers.get('retry-after') || 0); await espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1));
-    } catch (e) { await espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); }
+      const ra = +(r.headers.get('retry-after') || 0); await DISJ.espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break;
+    } catch (e) { await DISJ.espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break; }
   }
-  FALHAS.push('5 tentativas: ' + m.title); console.log('push não saiu depois de 5 tentativas (volta na próxima rodada):', m.title); return false;
+  DISJ.abrir(); FALHAS.push('5 tentativas: ' + m.title); console.log('push não saiu depois de 5 tentativas (volta na próxima rodada):', m.title); return false;
 };
 const hojeBR = brIso(new Date(now)).slice(0, 10), horaBR = +brIso(new Date(now)).slice(11, 13);
 if (!seed && horaBR === 7 && st.edicao1min !== hojeBR) {

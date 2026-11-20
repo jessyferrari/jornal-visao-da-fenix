@@ -2,6 +2,7 @@
 // Só fontes públicas (RSS, páginas públicas, APIs abertas). Sem login, sem cookie, sem chave paga.
 // Uso: node scripts/musica.mjs [--sem-push]   (push só com NTFY_TOPIC_MUSICA e sem --sem-push)
 import { botoesApurar, toqueNoNtfy } from './ntfy-acoes.mjs';
+import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
@@ -373,16 +374,18 @@ const ICONE = 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone
 const TOPIC_SP = topicoSP(TOPIC || 'simulado'); const NOME_CANAL = { sp: 'Música SP', mus: 'Música' };
 const ENVIADOS = { mus: 0, sp: 0 }; const FALHOU = [];   // o que não saiu NÃO é marcado como avisado: volta na próxima rodada
 let OKS = 0;   // envios aceitos pelo ntfy (o ritmo conta só o que chegou)
+const DISJ = criarDisjuntor();
 const envia = async (m, reg = '') => { const canal = reg === 'sp' && TOPIC_SP ? 'sp' : 'mus'; ENVIADOS[canal]++;
+  if (TOPIC && DISJ.aberto()) { ENVIADOS[canal]--; FALHOU.push(m.title); console.log('ntfy fora nesta rodada, fica para a próxima:', m.title); return false; }   // 20/11: disjuntor (scripts/disjuntor.mjs)
   if (TOPIC) { const topic = destino(reg, TOPIC); const corpo = JSON.stringify(toqueNoNtfy({ topic, icon: ICONE, actions: [{ action: 'view', label: 'Abrir Música', url: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', clear: false }], ...m }));
     // sem perder notícia: 5 tentativas com espera crescente (respeita Retry-After), erro de rede não derruba o robô
     for (let t = 0; t < 5; t++) { try { const r = await fetch(NTFY_SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
         console.log('push', r.status, '[' + NOME_CANAL[canal] + ']', m.title);
         if (r.ok) { OKS++; await new Promise(z => setTimeout(z, +(process.env.NTFY_PAUSA_MS || 1500))); return true; }
-        if (r.status !== 429 && r.status < 500) break;
-        const ra = +(r.headers.get('retry-after') || 0); await new Promise(z => setTimeout(z, ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)));
-      } catch (e) { console.log('push erro de rede (' + e.message + '), tentando de novo:', m.title); await new Promise(z => setTimeout(z, (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1))); } }
-    ENVIADOS[canal]--; FALHOU.push(m.title); return false; }
+        if (r.status !== 429 && r.status < 500) { ENVIADOS[canal]--; FALHOU.push(m.title); return false; }   // recusado (não é o ntfy fora): não abre o disjuntor
+        const ra = +(r.headers.get('retry-after') || 0); await DISJ.espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break;
+      } catch (e) { console.log('push erro de rede (' + e.message + '), tentando de novo:', m.title); await DISJ.espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break; } }
+    DISJ.abrir(); ENVIADOS[canal]--; FALHOU.push(m.title); return false; }
   console.log('[push simulado → ' + NOME_CANAL[canal] + ']', m.title, '|', String(m.message || '').replace(/\n/g, ' / '), '| tags', (m.tags || []).join(',') + (m.actions ? ' | botões ' + m.actions.map(a => a.label).join(' / ') : '')); return false; };
 // aviso de uma vez só (no canal Música que ela já assina) com o botão para assinar o canal Música SP; marcado no estado só se o ntfy aceitou
 if (!E.avisoSP && TOPIC_SP) { const a = avisoSP(NTFY_SRV, TOPIC || 'simulado'); if (a && (await envia(a))) E.avisoSP = brIso(new Date(agora)); }

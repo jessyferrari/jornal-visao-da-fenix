@@ -128,4 +128,13 @@ export const avisoCombinado = (servidor, musica) => {
       { action: 'view', label: 'Assinar Esportes', url: 'ntfy://' + host + '/' + esp + '?display=Fenix+Esportes', clear: false },
     ] };
 };
+// 20/11: lembrete ÚNICO do convite (o de 17/11 foi entregue, mas a assinatura dos 2 canais ainda estava pendente do lado dela).
+// Sai uma vez, de dia (7h às 22h, Brasília), a partir de 20/11, só se o convite original é de um dia anterior. Prioridade 3 (som normal, sem alarme).
+export const LEMBRETE_DESDE = Date.parse('2026-11-20T07:00:00-03:00');
+export const deveLembrar = (E, agora, horaBR) => !!(E && E.avisoEsportes && !E.lembreteAssinar && agora >= LEMBRETE_DESDE && horaBR >= 7 && horaBR < 22 && String(E.avisoEsportes).slice(0, 10) < new Date(agora - 3 * 3600e3).toISOString().slice(0, 10));
+export const lembreteCombinado = (servidor, musica) => { const a = avisoCombinado(servidor, musica); if (!a) return null;
+  return { ...a, title: 'Lembrete: assine Séries e Filmes e Esportes', priority: 3,
+    message: 'Os canais Séries e Filmes e Esportes já estão mandando avisos, mas só chegam no seu celular depois de assinar.\n' +
+      'Toque em "Assinar Séries e Filmes", confirme em Inscrever-se, volte aqui e toque em "Assinar Esportes", e confirme em Inscrever-se.\n' +
+      'Se você já assinou os dois, pode ignorar: este lembrete não volta.' }; };
 export { alegaExclusivo, primeiro, hhmm };

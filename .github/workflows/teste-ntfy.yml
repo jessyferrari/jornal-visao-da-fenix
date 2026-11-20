@@ -17,3 +17,5 @@ jobs:
       - run: node scripts/teste-formato.mjs
       - run: node scripts/teste-emalta-e2e.mjs
       - run: node scripts/teste-musica-e2e.mjs
+      - run: node scripts/teste-disjuntor.mjs
+      - run: node scripts/teste-lembrete-assinar.mjs

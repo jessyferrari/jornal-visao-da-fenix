@@ -4,6 +4,7 @@
 // atencao.json (curva de atenção por hora, Wikipedia pt) e manda o canal ntfy "Fenix Em Alta" (<canal Música>-alta).
 // Zero IA, zero login, zero API paga. Uso: node scripts/emalta.mjs [--agora 2026-11-14T07:05-03:00] [--sem-envio]
 import { toqueNoNtfy } from './ntfy-acoes.mjs';
+import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import * as R from './emalta-regras.mjs';
 
@@ -122,16 +123,18 @@ const SRV = (process.env.NTFY_SERVIDOR || 'https://ntfy.sh').replace(/\/$/, '');
 const salvar = () => fs.writeFileSync(ESTF, JSON.stringify(E));
 if (!ALTA || process.argv.includes('--sem-envio')) { console.log(ALTA ? 'sem envio (--sem-envio)' : 'sem NTFY_TOPIC_MUSICA, sem envio'); salvar(); process.exit(0); }
 const espera = (ms) => new Promise((z) => setTimeout(z, ms)); const FALHAS = []; let enviados = 0;
+const DISJ = criarDisjuntor();   // 20/11: prazo total para avisos e disjuntor (ver scripts/disjuntor.mjs)
 const post = async (topic, m) => {   // sem perder aviso: 5 tentativas, respeita Retry-After; o que não sai volta na próxima rodada
+  if (DISJ.aberto()) { FALHAS.push('ntfy fora nesta rodada: ' + m.title); return false; }
   const corpo = JSON.stringify(toqueNoNtfy({ topic, icon: ICONE, ...m }));   // 17/11: aviso de uma notícia abre o ntfy com os botões
   for (let t = 0; t < 5; t++) {
     try { const r = await fetch(SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
       if (r.ok) { enviados++; await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }
       if (r.status !== 429 && r.status < 500) { FALHAS.push(r.status + ' ' + m.title); return false; }
-      const ra = +(r.headers.get('retry-after') || 0); await espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1));
-    } catch { await espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); }
+      const ra = +(r.headers.get('retry-after') || 0); await DISJ.espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break;
+    } catch { await DISJ.espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break; }
   }
-  FALHAS.push('5 tentativas: ' + m.title); return false;
+  DISJ.abrir(); FALHAS.push('5 tentativas: ' + m.title); return false;
 };
 // aviso único para assinar (vai no canal Música, que ela já assina)
 if (!E.avisoAlta) { const a = R.avisoAlta(SRV, MUS); if (a && await post(MUS, a)) E.avisoAlta = R.brIso(AGORA); }

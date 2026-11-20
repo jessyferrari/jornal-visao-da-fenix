@@ -5,6 +5,7 @@
 // Gera series.json (página series.html, busca e painel) e manda o canal ntfy "Fenix Séries e Filmes" (<canal Música>-series).
 // Zero IA, zero login, zero API paga. Uso: node scripts/series.mjs [--agora 2026-11-17T09:05-03:00] [--sem-envio] [--sem-google]
 import { toqueNoNtfy } from './ntfy-acoes.mjs';
+import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import * as S from './series-regras.mjs';
 import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo.mjs';
@@ -82,16 +83,18 @@ const limpar = () => { const vivos = new Set(lidos.map((i) => i.key)); const l =
 if (seed) { for (const g of grupos) marcar(g); for (const c of confirmados) c.t.confirmado = S.brIso(AGORA); for (const i of novosExcl) E.excl[i.key].avisado = 'semente'; for (const x of subindo(grupos, E, { agora: AGORA })) for (const k of x.chaves) E.subindo[k] = 'semente-' + S.brIso(AGORA); limpar(); salvar(); console.log('primeira rodada: estado criado, sem avisos antigos (só o convite para assinar)'); }
 if (!SER || process.argv.includes('--sem-envio')) { console.log(SER ? 'sem envio (--sem-envio)' : 'sem NTFY_TOPIC_MUSICA, sem envio'); salvar(); process.exit(0); }
 const espera = (ms) => new Promise((z) => setTimeout(z, ms)); const FALHAS = []; let enviados = 0;
+const DISJ = criarDisjuntor();   // 20/11: prazo total para avisos e disjuntor (ver scripts/disjuntor.mjs)
 const post = async (topic, m) => {
+  if (DISJ.aberto()) { FALHAS.push('ntfy fora nesta rodada: ' + m.title); return false; }
   const corpo = JSON.stringify(toqueNoNtfy({ topic, icon: ICONE, ...m }));   // 17/11: aviso de uma notícia abre o ntfy com os botões
   for (let t = 0; t < 5; t++) {
     try { const r = await fetch(SRV + '/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, signal: AbortSignal.timeout(20000) });
       if (r.ok) { enviados++; await espera(+(process.env.NTFY_PAUSA_MS || 1500)); return true; }
       if (r.status !== 429 && r.status < 500) { FALHAS.push(r.status + ' ' + m.title); return false; }
-      const ra = +(r.headers.get('retry-after') || 0); await espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1));
-    } catch { await espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); }
+      const ra = +(r.headers.get('retry-after') || 0); await DISJ.espera(ra ? Math.min(ra, 60) * 1000 : (+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break;
+    } catch { await DISJ.espera((+(process.env.NTFY_RETRY_MS || 5000)) * (t + 1)); if (DISJ.aberto()) break; }
   }
-  FALHAS.push('5 tentativas: ' + m.title); return false;
+  DISJ.abrir(); FALHAS.push('5 tentativas: ' + m.title); return false;
 };
 // aviso único para assinar (vai no canal Música, que ela já assina)
 if (!E.avisoSeries && lerJ('esportes-estado.json', {}).avisoEsportes) E.avisoSeries = 'no convite combinado com Esportes';   // o convite de Esportes já leva o botão de Séries: não manda outro
