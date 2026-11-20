@@ -1,6 +1,6 @@
 // 📈 "Subindo agora" (17/11): o mesmo fato chegou em 3 ou mais veículos diferentes em até 30 minutos.
 // É o sinal de assunto ganhando força: hora de postar rápido. Só sai com 3+ veículos (a regra das 2 fontes já está cumprida),
-// uma vez por fato, até 6 por dia por canal, e nunca de madrugada (antes das 7h). Usado pela edição geral, Séries e Esportes.
+// uma vez por fato, até 6 por dia por canal, e de madrugada (antes das 7h) só se for Vale postar (t330). Usado pela edição geral, Séries e Esportes.
 import { hhmm } from './exclusivo.mjs';
 const dom = (u) => { try { return new URL(String(u).replace(/^.*\*(https?:)/, '$1')).hostname.replace(/^www\./, ''); } catch { return ''; } };
 export const LIM_SUBINDO = { dia: 6, janelaMin: 30, minVeiculos: 3, recenteMin: 90 };
@@ -19,8 +19,9 @@ export function subindo(itens, E, { agora, lim = LIM_SUBINDO } = {}) {
   }
   return out.sort((a, b) => b.dentro.length - a.dentro.length || a.minutos - b.minutos);
 }
-export const podeSubindo = (E, { agora, lim = LIM_SUBINDO }) => { const dia = new Date(agora - 3 * 3600e3).toISOString().slice(0, 10), h = new Date(agora - 3 * 3600e3).getUTCHours();
-  if (!E.subindoDia || E.subindoDia.dia !== dia) E.subindoDia = { dia, n: 0 }; return h >= 7 && E.subindoDia.n < lim.dia; };
+// 20/11 (t330): de madrugada só passa o que é Vale postar / Não deixe de postar (vale: true)
+export const podeSubindo = (E, { agora, lim = LIM_SUBINDO, vale = false }) => { const dia = new Date(agora - 3 * 3600e3).toISOString().slice(0, 10), h = new Date(agora - 3 * 3600e3).getUTCHours();
+  if (!E.subindoDia || E.subindoDia.dia !== dia) E.subindoDia = { dia, n: 0 }; return (h >= 7 || vale) && E.subindoDia.n < lim.dia; };
 export const marcarSubindo = (E, s, agora) => { const t = new Date(agora).toISOString(); for (const k of s.chaves) E.subindo[k] = t; E.subindoDia.n++; };
 export const textoSubindo = (s) => '📈 ' + s.dentro.length + ' veículos em ' + s.minutos + ' min: ' + s.dentro.slice(0, 6).map((x) => x.src + ' ' + hhmm(x.ts)).join(', ') +
   '\nAssunto subindo agora: bom momento para postar rápido. Regra das 2 fontes já cumprida.';

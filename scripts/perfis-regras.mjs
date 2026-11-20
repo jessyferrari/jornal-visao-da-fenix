@@ -20,6 +20,14 @@ const limpa = (s) => ent(s).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 const tag = (b, n) => { const m = b.match(new RegExp('<' + n + '(?:\\s[^>]*)?>([\\s\\S]*?)</' + n + '>', 'i')); return m ? limpa(m[1]) : ''; };
 const sem = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 
+/** 20/11: o feed do Hugo Gloss repete a manchete inteira 2 vezes no <title>; fica 1 vez só */
+export const semRepetir = (t) => String(t || '').replace(/^(.{12,}?)\s+\1$/s, '$1');
+/** mesmo assunto que o jornal já avisou? (link de qualquer veículo do grupo ou manchete equivalente nas últimas 24 h) */
+export function jaAvisadoAssunto(i, links, titulos, agora) {
+  if ([i.key, ...(i.grp || []).map((g) => g.key || canon(g.link))].some((k) => k && links.has(k))) return true;
+  const a = { src: '__perfil', title: i.title, ts: i.ts || agora };
+  return titulos.some((x) => agora - x.t < 24 * 3600e3 && mesmo(a, { src: '__jornal', title: x.titulo, ts: x.t }));
+}
 /** RSS 2.0 ou Atom (YouTube). Devolve { canal, itens: [{ src, title, link, key, ts, sum, rota }] } */
 export function lerFeed(xml, perfil, rota) {
   const x = String(xml || '');
@@ -28,7 +36,7 @@ export function lerFeed(xml, perfil, rota) {
   const itens = [];
   for (const b of (x.match(/<(item|entry)[\s>][\s\S]*?<\/(item|entry)>/gi) || []).slice(0, 60)) {
     let link = tag(b, 'link'); if (!/^https?:/.test(link)) { const m = b.match(/<link[^>]*href=["']([^"']+)/i); link = m ? ent(m[1]) : ''; }
-    const title = tag(b, 'title'), ts = Date.parse(tag(b, 'pubDate') || tag(b, 'published') || tag(b, 'dc:date') || tag(b, 'updated'));
+    const title = semRepetir(tag(b, 'title')), ts = Date.parse(tag(b, 'pubDate') || tag(b, 'published') || tag(b, 'dc:date') || tag(b, 'updated'));
     if (!/^https?:\/\//.test(link) || !title || (!ts && !rota.semData)) continue;   // sem horário real, não entra (rota.semData: o site não publica a hora; vale a hora em que o robô viu)
     itens.push({ src: perfil.nome, title, link, key: canon(link), ts: ts || 0, semHora: !ts || undefined, sum: (tag(b, 'description') || tag(b, 'media:description')).slice(0, 300), rota: rota.tipo, lang: perfil.idioma || '' });
   }
@@ -87,7 +95,7 @@ export function classificar(i, { agora }) {
   return { pot, forte, confirmado, prioridade };
 }
 
-/** madrugada (0h a 7h de Brasília): nada toca; o que seria aviso vai só para a Mesa */
+/** madrugada (0h a 7h de Brasília): Vale postar/Não deixe confirmado chega no celular 24 h (t330); o resto vai só para a Mesa */
 export const madrugada = (agora) => +brIso(agora).slice(11, 13) < 7;
 
 /** título e texto do aviso: sempre "<perfil> publicou"; exclusivo só como "<veículo> diz que é exclusivo"; nunca "Olimpia primeiro" */
@@ -130,7 +138,7 @@ export function contadores(E, agora) {
 /** decide o canal de um item já classificado: 'celular' (prioridade 2/3), 'mesa' (1) ou null (nada) */
 export function destino(i, c, D, { agora, rodada }) {
   if (!c.prioridade) return null;
-  const quer = madrugada(agora) && c.prioridade > 1 ? 1 : c.prioridade;
+  const quer = madrugada(agora) && c.prioridade === 2 ? 1 : c.prioridade;   // 20/11 (t330): Vale postar/Não deixe confirmado (3) chega 24 h; só o em apuração (2) vai para a Mesa de madrugada
   if (quer > 1 && rodada < LIM.porRodada && D.celular < LIM.celularDia && (D.porPerfil[i.src] || 0) < LIM.porPerfilDia) return { canal: 'celular', prioridade: quer };
   if (D.mesa < LIM.mesaDia) return { canal: 'mesa', prioridade: 1 };   // passou do teto do celular: vai só para a Mesa
   return null;

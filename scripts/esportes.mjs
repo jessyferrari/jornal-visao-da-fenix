@@ -12,7 +12,7 @@ import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
-import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO, valePostar } from './potencial.mjs';
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)' };
 const PAGINA = 'https://jessyferrari.github.io/jornal-visao-da-fenix/esportes.html';
@@ -116,10 +116,11 @@ for (const c of confirmados) {
   const ok = await post(SER, { title: '⭐ EXCLUSIVO confirmado: ' + g.title.slice(0, 150), message: textoConfirmado(c.p, g.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + g.grp.map((x) => x.src).slice(0, 4).join(', '), click: g.link, priority: PRIORIDADE_EXCLUSIVO, tags: ['white_check_mark', 'soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { c.t.confirmado = S.brIso(AGORA); marcar(g); nConf++; }
 }
-// 4a2) 📈 Subindo agora: o mesmo fato em 3+ veículos em até 30 min (até 6 por dia, nunca de madrugada); já tem 2+ fontes, então vai com Sim, publicar
+// 4a2) 📈 Subindo agora: o mesmo fato em 3+ veículos em até 30 min (até 6 por dia; de madrugada só se for Vale postar, t330); já tem 2+ fontes, então vai com Sim, publicar
 for (const x of subindo(grupos, E, { agora: AGORA })) {
-  if (!podeSubindo(E, { agora: AGORA })) break; const g = x.i;
-  const ok = await post(SER, { title: '📈 Subindo agora: ' + g.title.slice(0, 150), message: textoSubindo(x), click: g.link, priority: 4, tags: ['chart_with_upwards_trend', 'soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const g = x.i, pgs = notaPotencial({ titulo: g.title, resumo: g.sum, veiculos: [g.src, ...g.grp.map((y) => y.src)], ts: Math.min(g.ts, ...g.grp.map((y) => y.ts).filter(Boolean)), agora: AGORA });
+  if (!podeSubindo(E, { agora: AGORA, vale: valePostar(pgs) })) continue;   // 20/11 (t330): Vale postar sai 24 h; o resto, só das 7h em diante
+  const ok = await post(SER, { title: tituloComNota(pgs, '📈 Subindo agora: ' + g.title.slice(0, 140)), message: (valePostar(pgs) ? linhaNota(pgs) + '\n' : '') + textoSubindo(x), click: g.link, priority: valePostar(pgs) ? prioridadeNota(pgs) : 2, tags: ['chart_with_upwards_trend', 'soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { marcarSubindo(E, x, AGORA); marcar(g); }
 }
 // 4b) possível exclusivo (1 fonte, o site diz que é exclusivo): aviso na hora, sem botão de post (em apuração)
@@ -131,8 +132,9 @@ for (const g of grupos.filter((x) => x.n === 1 && E.excl[x.key] && !E.excl[x.key
 // 4c) confirmados novos (2+ veículos): na hora até 3 por rodada e 10 por dia; o resto vai no resumo
 const novosConf = confirmadosL.filter((g) => !visto(g) && AGORA - g.ts < 24 * 3600e3);
 for (const g of novosConf.slice(0, LIM.instPorRodada)) {
-  if (D.instantaneos >= LIM.instDia || madrugada) break; const p = S.primeiro([g, ...g.grp]);
+  if (D.instantaneos >= LIM.instDia) break; const p = S.primeiro([g, ...g.grp]);
   const pg = notaPotencial({ titulo: g.title, resumo: g.sum, veiculos: [g.src, ...g.grp.map((x) => x.src)], ts: Math.min(g.ts, ...g.grp.map((x) => x.ts).filter(Boolean)), agora: AGORA });
+  if (madrugada && !valePostar(pg)) continue;   // 20/11 (t330): de madrugada só Vale postar/Não deixe chega na hora; o resto espera o resumo das 9h
   const ok = await post(SER, { title: tituloComNota(pg, (V.get(g).aoVivo ? '🔴 ' : '⚽ ') + g.title.slice(0, 140)), message: linhaNota(pg) + '\n' + g.src + ' · ' + hhmm(g.ts) + (g.orig ? ' · traduzido do inglês' : '') + '\n✅ ' + g.n + ' veículos: ' + [g.src, ...g.grp.map((x) => x.src)].slice(0, 5).join(', ') + '\n' + p.veiculo + ' saiu primeiro às ' + p.hora + '\n🏅 ' + V.get(g).modalidade, click: g.link, priority: prioridadeNota(pg, 2), tags: ['soccer'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { D.instantaneos++; marcar(g); }
 }

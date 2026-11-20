@@ -8,7 +8,7 @@ import { createHash, createHmac } from 'node:crypto';
 import { montarAgenda } from './musica-agenda.mjs';
 import { alegaExclusivo, selo, primeiro, campoSelo } from './exclusivo.mjs';
 import { ARTISTAS, topicoSP, destino, avisoSP, podePublicar, assinarFontes, mesmoFato, montarDJF, djfNoTexto, buscasDJF, rotuloReal } from './musica-regras.mjs';
-import { notaPotencial, prioridadeNota, tituloComNota, linhaNota } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, valePostar } from './potencial.mjs';
 import { localizarTodos, cidadeDoVeiculo, estadoNoTexto, linksReais, localDoOrgao, paisNoTexto, cidadesNoTexto, decidir } from './musica-local.mjs';
 const T0 = Date.now();
 // Tópico ntfy SÓ da música (segredo NTFY_TOPIC_MUSICA). Nunca usa o NTFY_TOPIC do jornal: as notificações atuais seguem iguais.
@@ -389,7 +389,7 @@ const envia = async (m, reg = '') => { const canal = reg === 'sp' && TOPIC_SP ? 
   console.log('[push simulado → ' + NOME_CANAL[canal] + ']', m.title, '|', String(m.message || '').replace(/\n/g, ' / '), '| tags', (m.tags || []).join(',') + (m.actions ? ' | botões ' + m.actions.map(a => a.label).join(' / ') : '')); return false; };
 // aviso de uma vez só (no canal Música que ela já assina) com o botão para assinar o canal Música SP; marcado no estado só se o ntfy aceitou
 if (!E.avisoSP && TOPIC_SP) { const a = avisoSP(NTFY_SRV, TOPIC || 'simulado'); if (a && (await envia(a))) E.avisoSP = brIso(new Date(agora)); }
-// ===== HORÁRIO DE SILÊNCIO (23h às 7h, Brasília): só passam Quente confirmado e luto confirmado; o resto vira um resumo às 7h =====
+// ===== HORÁRIO DE SILÊNCIO (23h às 7h, Brasília): só passam Quente confirmado, luto confirmado e Vale postar (24 h, t330); o resto vira um resumo às 7h =====
 const hArg = process.argv.indexOf('--hora'); const horaBR = hArg > 0 ? +process.argv[hArg + 1] : new Date(agora - 3 * 3600e3).getUTCHours();
 const silencio = horaBR >= 23 || horaBR < 7; E.madrugada = E.madrugada || [];
 const segura = (c) => { E.madrugada.push({ t: c.t, reg: c.i.reg === 'sp' ? 'sp' : '', titulo: tit(c.i), link: c.i.link, k: (c.alerta ? 'alerta:' : '') + chave(c.i) }); E.notificadas.unshift((c.alerta ? 'alerta:' : '') + chave(c.i)); };
@@ -400,7 +400,7 @@ if (!silencio && E.madrugada.length) { for (const rg of ['sp', '']) { const m = 
     for (const [k, pt] of partes.entries()) { const ok = await envia({ title: '🌅 Música da madrugada' + (rg === 'sp' ? ' SP' : '') + ': ' + m.length + (m.length > 1 ? ' notícias' : ' notícia') + (partes.length > 1 ? ' (' + (k + 1) + '/' + partes.length + ')' : ''), message: pt.map(n => linhas[n]).join('\n'), click: 'https://jessyferrari.github.io/jornal-visao-da-fenix/musica.html', priority: 2, tags: ['sunrise', 'resumo'] }, rg);
       if (ok || !TOPIC) { const sai = new Set(pt.map(n => m[n])); E.madrugada = E.madrugada.filter(x => !sai.has(x)); } } } }
 console.log('SILÊNCIO:', silencio ? 'sim (hora ' + horaBR + 'h Brasília): só Quente confirmado e luto confirmado' : 'não (hora ' + horaBR + 'h Brasília)');
-for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' ? (segura(c), false) : true)) { const i = c.i; await envia({ title: tituloComNota(i.pot, c.t), message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : '') + (i.pot ? '\n📊 ' + i.pot.motivo : ''), click: i.link, priority: prioridadeNota(i.pot, c.p), tags: c.tags, actions: acoesPost(i) }, i.reg).then(ok => ok || !TOPIC ? (E.notificadas.unshift('alerta:' + chave(i), chave(i)), true) : false); }
+for (const c of candAlerta.slice(0, 3).filter(c => silencio && c.i.alerta !== 'luto' && !valePostar(c.i.pot) ? (segura(c), false) : true)) { const i = c.i; await envia({ title: tituloComNota(i.pot, c.t), message: tit(i) + (i.traduzido ? ' (' + i.traduzido + ')' : '') + '\n📍 ' + i.local + '\n' + i.veic + ' · ' + brIso(new Date(i.ts)).slice(11) + ' (Brasília)' + (i.fontes > 1 ? ' · ' + i.fontes + ' fontes' : '') + (i.pot ? '\n📊 ' + i.pot.motivo : ''), click: i.link, priority: prioridadeNota(i.pot, c.p), tags: c.tags, actions: acoesPost(i) }, i.reg).then(ok => ok || !TOPIC ? (E.notificadas.unshift('alerta:' + chave(i), chave(i)), true) : false); }
 // RITMO (17/11, robô a cada ~5 min): no máximo 4 avisos na hora por janela (silenciosos, prioridade 2, para poupar bateria) de 15 min e 1 resumo "+N" a cada 15 min (o mesmo ritmo de antes);
 // o que passar disso NÃO é marcado como notificado e sai na rodada seguinte. Quente confirmado e luto (acima) não esperam.
 const RIT = E.ritmo && agora - E.ritmo.ini < 15 * 60e3 ? E.ritmo : (E.ritmo = { ini: agora, n: 0, resumo: E.ritmo && E.ritmo.resumo });

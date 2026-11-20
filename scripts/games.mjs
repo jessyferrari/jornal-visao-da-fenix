@@ -12,7 +12,7 @@ import { rastrear, googleParaMarcados, textoConfirmado, hhmm } from './exclusivo
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
 
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
-import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO, valePostar } from './potencial.mjs';
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const UA = { 'User-Agent': 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)' };
 const PAGINA = 'https://jessyferrari.github.io/jornal-visao-da-fenix/games.html';
@@ -102,7 +102,10 @@ const post = async (topic, m) => {
   DISJ.abrir(); FALHAS.push('5 tentativas: ' + m.title); return false;
 };
 // convite ÚNICO para assinar o canal Games, no canal Música (que ela já assina): prioridade 2, sem som e sem vibrar; só de dia; não sai de novo depois de entregue
-if (!E.avisoGames && S.podeConvidar(+S.brIso(AGORA).slice(11, 13))) { const a = S.avisoGames(SRV, MUS); if (a && await post(MUS, a)) E.avisoGames = S.brIso(AGORA); }
+const conviteAntes = E.avisoGames;   // 20/11 (t329): o reenvio vale só para o convite que sumiu (mandado antes desta correção)
+if (!E.avisoGames && S.podeConvidar(+S.brIso(AGORA).slice(11, 13))) { const a = S.avisoGames(SRV, MUS); if (a && await post(MUS, a)) { E.avisoGames = S.brIso(AGORA); E.conviteV = 2; } }
+// 20/11 (t329): reenvio ÚNICO do convite (o 1º sumiu da barra do celular); de dia, sem som; marcado só se o ntfy aceitou
+if (conviteAntes && !E.conviteV && !E.avisoGamesReenvio && S.podeConvidar(+S.brIso(AGORA).slice(11, 13))) { const a = S.avisoGames(SRV, MUS, { reenvio: true }); if (a && await post(MUS, a)) { E.avisoGamesReenvio = S.brIso(AGORA); E.conviteV = 2; } }
 if (seed) { salvar(); console.log('PUSH Games: primeira rodada, convite Games', E.avisoGames || 'ainda não (sai de dia)', FALHAS.join(' / ')); process.exit(0); }
 const hoje = S.brIso(AGORA).slice(0, 10), minBR = +S.brIso(AGORA).slice(11, 13) * 60 + +S.brIso(AGORA).slice(14, 16);
 const D = E.envios && E.envios.dia === hoje ? E.envios : (E.envios = { dia: hoje, instantaneos: 0, exclusivos: 0, resumos: {} });
@@ -115,10 +118,11 @@ for (const c of confirmados) {
   const ok = await post(SER, { title: '⭐ EXCLUSIVO confirmado: ' + g.title.slice(0, 150), message: textoConfirmado(c.p, g.n) + '\nO ' + c.t.veiculo + ' tinha dito que era exclusivo.\nTambém em: ' + g.grp.map((x) => x.src).slice(0, 4).join(', '), click: g.link, priority: PRIORIDADE_EXCLUSIVO, tags: ['white_check_mark', 'video_game'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { c.t.confirmado = S.brIso(AGORA); marcar(g); nConf++; }
 }
-// 4a2) 📈 Subindo agora: o mesmo fato em 3+ veículos em até 30 min (até 6 por dia, nunca de madrugada); já tem 2+ fontes, então vai com Sim, publicar
+// 4a2) 📈 Subindo agora: o mesmo fato em 3+ veículos em até 30 min (até 6 por dia; de madrugada só se for Vale postar, t330); já tem 2+ fontes, então vai com Sim, publicar
 for (const x of subindo(grupos, E, { agora: AGORA })) {
-  if (!podeSubindo(E, { agora: AGORA })) break; const g = x.i;
-  const ok = await post(SER, { title: '📈 Subindo agora: ' + g.title.slice(0, 150), message: textoSubindo(x), click: g.link, priority: 4, tags: ['chart_with_upwards_trend', 'video_game'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
+  const g = x.i, pgs = notaPotencial({ titulo: g.title, resumo: g.sum, veiculos: [g.src, ...g.grp.map((y) => y.src)], ts: Math.min(g.ts, ...g.grp.map((y) => y.ts).filter(Boolean)), agora: AGORA });
+  if (!podeSubindo(E, { agora: AGORA, vale: valePostar(pgs) })) continue;   // 20/11 (t330): Vale postar sai 24 h; o resto, só das 7h em diante
+  const ok = await post(SER, { title: tituloComNota(pgs, '📈 Subindo agora: ' + g.title.slice(0, 140)), message: (valePostar(pgs) ? linhaNota(pgs) + '\n' : '') + textoSubindo(x), click: g.link, priority: valePostar(pgs) ? prioridadeNota(pgs) : 2, tags: ['chart_with_upwards_trend', 'video_game'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { marcarSubindo(E, x, AGORA); marcar(g); }
 }
 // 4b) possível exclusivo (1 fonte, o site diz que é exclusivo): aviso na hora, sem botão de post (em apuração)
@@ -130,8 +134,9 @@ for (const g of grupos.filter((x) => x.n === 1 && E.excl[x.key] && !E.excl[x.key
 // 4c) confirmados novos (2+ veículos): na hora até 3 por rodada e 10 por dia; o resto vai no resumo
 const novosConf = confirmadosL.filter((g) => !visto(g) && AGORA - g.ts < 24 * 3600e3);
 for (const g of novosConf.slice(0, LIM.instPorRodada)) {
-  if (D.instantaneos >= LIM.instDia || madrugada) break; const p = S.primeiro([g, ...g.grp]);
+  if (D.instantaneos >= LIM.instDia) break; const p = S.primeiro([g, ...g.grp]);
   const pg = notaPotencial({ titulo: g.title, resumo: g.sum, veiculos: [g.src, ...g.grp.map((x) => x.src)], ts: Math.min(g.ts, ...g.grp.map((x) => x.ts).filter(Boolean)), agora: AGORA });
+  if (madrugada && !valePostar(pg)) continue;   // 20/11 (t330): de madrugada só Vale postar/Não deixe chega na hora; o resto espera o resumo das 9h
   const ok = await post(SER, { title: tituloComNota(pg, (V.get(g).aoVivo ? '🔴 ' : V.get(g).trailer ? '🎬🎮 ' : '🎮 ') + g.title.slice(0, 140)), message: linhaNota(pg) + '\n' + g.src + ' · ' + hhmm(g.ts) + (g.orig ? ' · traduzido do inglês' : '') + '\n✅ ' + g.n + ' veículos: ' + [g.src, ...g.grp.map((x) => x.src)].slice(0, 5).join(', ') + '\n' + p.veiculo + ' saiu primeiro às ' + p.hora + '\n🕹️ ' + V.get(g).modalidade, click: g.link, priority: prioridadeNota(pg, 2), tags: ['video_game'], actions: S.botoes(g, { CMD, ASS, SRV, pagina: PAGINA }) });
   if (ok) { D.instantaneos++; marcar(g); }
 }
@@ -153,4 +158,4 @@ for (const r of ['09:00', '14:00', '20:00']) {
 // fora da janela de 24 h e nunca avisado: sai da fila em silêncio (notícia velha não vira aviso)
 for (const g of grupos) if (!visto(g) && AGORA - g.ts >= 24 * 3600e3) marcar(g);
 limpar(); salvar();
-console.log('PUSH Games: enviados', enviados, '| confirmações', nConf, '| exclusivos hoje', D.exclusivos, '| subindo hoje', (E.subindoDia || {}).n || 0, '| na hora hoje', D.instantaneos, '| resumos', JSON.stringify(D.resumos), '| convite Games', E.avisoGames || 'ainda não', FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');
+console.log('PUSH Games: enviados', enviados, '| confirmações', nConf, '| exclusivos hoje', D.exclusivos, '| subindo hoje', (E.subindoDia || {}).n || 0, '| na hora hoje', D.instantaneos, '| resumos', JSON.stringify(D.resumos), '| convite Games', E.avisoGames || 'ainda não', '| reenvio', E.avisoGamesReenvio || 'ainda não', FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');

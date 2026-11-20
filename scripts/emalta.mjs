@@ -172,8 +172,8 @@ E.avisados = (E.avisados || []).filter((x) => AGORA - x.t < 48 * 3600e3);
 if (!seed) for (const i of itens) {
   if (N.instantaneos >= 6) break;
   const T = E.topicos[i.chave]; if (i.etiqueta !== 'subindo' || i.tipos.length < 2 || !T || T.seed || AGORA - T.primeiro > 60 * 60e3 || E.avisados.some((x) => x.id === i.id)) continue;
-  const noite = R.brHora(AGORA) < 7;
-  if (await post(ALTA, { title: tituloComNota(i.pot, '🚀 Subindo agora: ' + i.nome.slice(0, 90)), message: (i.pot ? linhaNota(i.pot) + '\n' : '') + (i.motivo.join(', ') || 'apareceu agora') + '\n' + i.numerosTexto + '\n' + (i.publicavel ? '✅ ' + i.veiculos.length + ' veículos: pode postar' + (prox ? ' (ou agende para ' + prox.hora + ', próximo horário forte)' : '') : '🔎 Em apuração: menos de 2 veículos, sem botão de post até a 2ª fonte'), click: i.link || PAGINA, priority: prioridadeNota(i.pot, noite ? 2 : 4), tags: ['rocket'], actions: R.botoesItem(i, { SRV, CMD, ASS, slot: prox, dia: hoje, pagina: PAGINA }) })) { N.instantaneos++; E.avisados.push({ id: i.id, t: AGORA }); }
+  // 20/11 (t330): sem bloqueio de madrugada; a nota decide o som (Vale postar 3, Não deixe 4), o resto chega sem som (2)
+  if (await post(ALTA, { title: tituloComNota(i.pot, '🚀 Subindo agora: ' + i.nome.slice(0, 90)), message: (i.pot ? linhaNota(i.pot) + '\n' : '') + (i.motivo.join(', ') || 'apareceu agora') + '\n' + i.numerosTexto + '\n' + (i.publicavel ? '✅ ' + i.veiculos.length + ' veículos: pode postar' + (prox ? ' (ou agende para ' + prox.hora + ', próximo horário forte)' : '') : '🔎 Em apuração: menos de 2 veículos, sem botão de post até a 2ª fonte'), click: i.link || PAGINA, priority: prioridadeNota(i.pot, 2), tags: ['rocket'], actions: R.botoesItem(i, { SRV, CMD, ASS, slot: prox, dia: hoje, pagina: PAGINA }) })) { N.instantaneos++; E.avisados.push({ id: i.id, t: AGORA }); }
 }
 salvar();
 console.log('PUSH Em Alta: enviados', enviados, '| resumos hoje', JSON.stringify(N.resumos), '| na hora hoje', N.instantaneos, FALHAS.length ? '| NÃO SAÍRAM (voltam na próxima rodada): ' + FALHAS.join(' / ') : '');

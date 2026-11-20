@@ -1,5 +1,7 @@
 /* Busca universal (20/11): quando a Jessyca busca qualquer palavra ou frase no jornal, além do Arquivo do Jornal (app.js),
-   este script busca AO VIVO na internet (Google Notícias pt-BR e Bing Notícias pt-BR), de graça, por rotas com CORS testadas,
+   este script busca AO VIVO na internet, de graça, por rotas com CORS testadas: Google Notícias (pt-BR e en-US, inclusive só das últimas 24 h),
+   Bing Notícias (pt-BR, en-US, es) e GDELT (índice mundial, 65 idiomas, sem proxy). Lista da mais recente para a mais antiga (20/11, t328).
+  
    e mostra num bloco separado "Encontrado agora na internet". Fora do app (não mexe no app.js), como o nota.js.
    Regra de verdade: agrupa a mesma notícia por veículo REAL (nunca "news.google.com"); 2+ veículos distintos = Confirmado;
    1 veículo = Em apuração. Nunca marca exclusivo. Nada é inventado: só aparece o que as fontes devolveram agora. */
@@ -61,6 +63,17 @@
     });
     return out;
   }
+  // GDELT (20/11, t328): índice mundial de notícias em 65 idiomas, atualizado a cada 15 min, com CORS aberto (sem proxy).
+  // seendate = hora em que o GDELT viu a matéria (UTC); o veículo vem do domínio.
+  function lerGdelt(js) {
+    var out = [];
+    ((js && js.articles) || []).forEach(function (a) {
+      var m = String(a.seendate || '').match(/^(\d{4})(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)Z$/), p = m ? m[1] + '-' + m[2] + '-' + m[3] + 'T' + m[4] + ':' + m[5] + ':' + m[6] + '.000Z' : '';
+      var d = host(a.url) || String(a.domain || '').replace(/^www\./, ''), t = ent(String(a.title || '')).replace(/\s+([,.:;!?])/g, '$1').replace(/\s+-\s+/g, '-').replace(/\s+/g, ' ').trim();
+      if (t && /^https?:/.test(a.url || '') && d) out.push({ t: t, v: nomeDe(d), l: a.url, p: p, d: d, r: 'GDELT (mundo)', idioma: a.language || '' });
+    });
+    return out;
+  }
   // só fica o que fala do assunto pesquisado (todas as palavras da busca no título/resumo/veículo)
   function relevante(q, x) { var qt = toks(q); if (!qt.length) return false; var h = ' ' + toks(x.t + ' ' + (x.s || '') + ' ' + x.v).join(' ') + ' '; return qt.every(function (t) { return t.length <= 2 ? h.indexOf(' ' + t + ' ') >= 0 : h.indexOf(t) >= 0; }); }
   // veículo = domínio base (uol.com.br, globo.com); conta para menos, nunca para mais (g1 e O Globo contam como 1)
@@ -108,19 +121,29 @@
       var orig = g.itens.filter(function (x) { return !AGREG[chaveVeiculo(x.v, x.d)]; });
       if (orig.length && orig[0] !== g.itens[0]) { g.itens.splice(g.itens.indexOf(orig[0]), 1); g.itens.unshift(orig[0]); }
     });
-    // confirmadas (2+ veículos) primeiro; depois as mais recentes
-    gs.sort(function (a, b) { return (b.confirmado - a.confirmado) || (a.itens[0].p < b.itens[0].p ? 1 : a.itens[0].p > b.itens[0].p ? -1 : 0); });
+    // 20/11 (t328): mais recente primeiro (antes, as confirmadas iam na frente e a notícia de hoje ficava escondida embaixo)
+    ordenar(gs);
     var todosV = {}; lista.forEach(function (x) { var c = chaveVeiculo(x.v, x.d); if (!AGREG[c] && !todosV[c]) todosV[c] = x.v; });
     return { grupos: gs, itens: lista, veiculos: Object.keys(todosV).map(function (c) { return todosV[c]; }) };
   }
-  var api = { filtrar: filtrar, temFrase: temFrase, nomeDe: nomeDe, base: base, chaveVeiculo: chaveVeiculo, lerGoogle: lerGoogle, lerBing: lerBing, lerRss2json: lerRss2json, relevante: relevante, agrupar: agrupar, toks: toks, norm: norm };
+  function recente(g) { return g.itens.reduce(function (m, x) { return x.p > m ? x.p : m; }, ''); }
+  function ordenar(gs) { gs.sort(function (a, b) { var pa = recente(a), pb = recente(b); return pa < pb ? 1 : pa > pb ? -1 : (b.confirmado - a.confirmado); }); return gs; }
+  // dia de hoje em Brasília (AAAA-MM-DD) de um ISO UTC
+  function hojeBR(iso) { try { return new Date(new Date(iso).getTime() - 3 * 3600e3).toISOString().slice(0, 10); } catch (e) { return ''; } }
+  var api = { filtrar: filtrar, temFrase: temFrase, nomeDe: nomeDe, base: base, chaveVeiculo: chaveVeiculo, lerGoogle: lerGoogle, lerBing: lerBing, lerGdelt: lerGdelt, ordenar: ordenar, hojeBR: hojeBR, lerRss2json: lerRss2json, relevante: relevante, agrupar: agrupar, toks: toks, norm: norm };
   if (typeof module !== 'undefined' && module.exports) { module.exports = api; return; }
   raiz.__jfBuscaWeb = api;
 
   /* ---------- navegador ---------- */
   var OURO = '#d4af37', FUNDO = '#0d0b08', TXT = '#efe6cf', SUAVE = '#bfa775', LINHA = '#3a3122';
-  function urlG(q) { return 'https://news.google.com/rss/search?q=' + encodeURIComponent(q) + '&hl=pt-BR&gl=BR&ceid=BR:pt-419'; }
-  function urlB(q) { return 'https://www.bing.com/news/search?q=' + encodeURIComponent(q) + '&format=rss&setlang=pt-BR&cc=BR'; }
+  // 20/11 (t328): Brasil E mundo. Google Notícias em pt-BR e en-US; Bing em pt-BR, en-US e es; GDELT no mundo inteiro.
+  // "_" muda a cada 5 min: obriga o rss2json a buscar o feed de novo (o cache dele devolvia lista de ontem).
+  var EDG = { 'pt': 'hl=pt-BR&gl=BR&ceid=BR:pt-419', 'en': 'hl=en-US&gl=US&ceid=US:en' };
+  var MKB = { 'pt': 'setlang=pt-BR&cc=BR', 'en': 'setlang=en-US&cc=US', 'es': 'setlang=es-ES&cc=ES' };
+  function fresco() { return Math.floor(Date.now() / 300e3); }
+  function urlG(q, ed, extra) { return 'https://news.google.com/rss/search?q=' + encodeURIComponent(q + (extra || '')) + '&' + EDG[ed || 'pt']; }
+  function urlB(q, mk) { return 'https://www.bing.com/news/search?q=' + encodeURIComponent(q) + '&format=rss&' + MKB[mk || 'pt'] + '&_=' + fresco(); }
+  function urlD(q) { return 'https://api.gdeltproject.org/api/v2/doc/doc?query=' + encodeURIComponent(/\s/.test(q) ? '"' + q + '"' : q) + '&mode=artlist&format=json&sort=datedesc&maxrecords=75&timespan=3d'; }
   function pega(u, ms, json) {
     var c = typeof AbortController !== 'undefined' ? new AbortController() : null, tm = setTimeout(function () { if (c) c.abort(); }, ms);
     return fetch(u, { signal: c ? c.signal : undefined, cache: 'no-store', credentials: 'omit' }).then(function (r) {
@@ -133,21 +156,28 @@
   function primeiro(ps) { return new Promise(function (ok, nao) { var n = ps.length; ps.forEach(function (p) { p.then(ok, function () { if (--n === 0) nao(new Error('todas as rotas falharam')); }); }); }); }
   // Bing Notícias (motor principal, testado 20/11: rss2json responde 200 com CORS da origem do jornal em < 1,5 s);
   // 3 recortes em paralelo: relevância, mais recentes e últimos 7 dias. Plano B: api.cors.lol.
-  function motorB(q, v) {
-    var u = urlB(q) + (v || '');
+  function motorB(q, v, mk) {
+    var u = urlB(q, mk) + (v || '');
     return rss2json(u).then(function (j) { return lerRss2json(j, 'b'); }).catch(function () { return corslol(u).then(lerBing); });
   }
   // Google Notícias pt-BR (bônus, quando as rotas gratuitas deixam): corrida entre api.cors.lol e allorigins; plano C rss2json
-  function motorG(q) {
-    var u = urlG(q);
+  function motorG(q, ed, extra) {
+    var u = urlG(q, ed, extra);
     return primeiro([corslol(u), allorigins(u)]).then(lerGoogle).catch(function () { return rss2json(u).then(function (j) { return lerRss2json(j, 'g'); }); });
   }
-  // Google Notícias depende de proxies gratuitos que às vezes bloqueiam: se falhar, pausa 30 min (não atrasa nem suja o console a cada busca)
+  // GDELT: CORS aberto, sem proxy; pede 1 consulta a cada 5 s por aparelho (a busca faz 1 só)
+  function motorD(q) { return pega(urlD(q), 15000, true).then(lerGdelt); }
+  // Google Notícias depende de proxies gratuitos que às vezes bloqueiam: se falharem todas as rotas, pausa 10 min (não atrasa nem suja o console a cada busca)
   function googleLiberado() { try { return Date.now() > +(localStorage.getItem('jvf-google-pausa') || 0); } catch (e) { return true; } }
-  function googlePausa() { try { localStorage.setItem('jvf-google-pausa', String(Date.now() + 30 * 60e3)); } catch (e) {} }
+  function googlePausa() { try { localStorage.setItem('jvf-google-pausa', String(Date.now() + 10 * 60e3)); } catch (e) {} }
   function hora(p) {
     if (!p) return '';
     try { return new Date(p).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', ' às') + ' (Brasília)'; } catch (e) { return ''; }
+  }
+  function resumoHoje(res) {
+    var hoje = hojeBR(new Date().toISOString()), n = res.grupos.filter(function (g) { return g.itens.some(function (x) { return x.p && hojeBR(x.p) === hoje; }); }).length;
+    var mais = res.itens.reduce(function (m, x) { return x.p > m ? x.p : m; }, '');
+    return n + (n === 1 ? ' notícia de hoje' : ' notícias de hoje') + (mais ? ' · mais recente: ' + hora(mais) : '');
   }
   function el(t, css, txt) { var e = document.createElement(t); if (css) e.style.cssText = css; if (txt != null) e.textContent = txt; return e; }
   var cache = {}, atual = '', seq = 0, box = null, ultimo = null;
@@ -169,7 +199,7 @@
     var b = caixa(); b.textContent = ''; b.setAttribute('data-q', q); b.setAttribute('data-estado', estado.carregando ? 'carregando' : 'pronto');
     var h = el('h3', 'margin:0 0 6px;font:700 13px/1.2 system-ui,sans-serif;letter-spacing:.06em;color:' + OURO + ';text-transform:uppercase', '🌐 Encontrado agora na internet');
     b.appendChild(h);
-    if (estado.carregando && !estado.res) { b.appendChild(el('div', 'color:' + SUAVE, 'Buscando “' + q + '” agora no Bing Notícias e no Google Notícias…')); encaixar(); return; }
+    if (estado.carregando && !estado.res) { b.appendChild(el('div', 'color:' + SUAVE, 'Buscando “' + q + '” agora no Google Notícias, Bing Notícias e GDELT, no Brasil e no mundo…')); encaixar(); return; }
     var res = estado.res;
     if (!res || !res.itens.length) {
       b.appendChild(el('div', 'color:' + SUAVE, estado.carregando ? 'Buscando…' : (estado.falhou === estado.total ? 'As fontes da internet não responderam agora. Tente de novo em instantes (o arquivo do jornal abaixo continua valendo).' : 'Nenhuma notícia com “' + q + '” nas fontes da internet agora.')));
@@ -179,10 +209,10 @@
     var resumo = res.veiculos.length >= 2 ? '📡 ' + res.veiculos.length + ' veículos distintos citam “' + q + '” · ' + (nConf ? nConf + (nConf === 1 ? ' notícia confirmada' : ' notícias confirmadas') + ' por 2+ veículos' : 'nenhuma notícia confirmada por 2 veículos ainda')
       : res.veiculos.length === 1 ? '🔎 Só 1 veículo cita “' + q + '” (' + res.veiculos[0] + '): em apuração' : '🔎 Só agregadores (MSN/Yahoo) citam: em apuração';
     b.appendChild(el('div', 'font-weight:700;color:' + (nConf ? OURO : SUAVE) + ';margin-bottom:2px', resumo));
-    b.appendChild(el('div', 'font-size:12px;color:' + SUAVE + ';margin-bottom:6px', res.itens.length + ' matérias · fontes: ' + estado.fontes.join(' e ') + (estado.carregando ? ' · buscando mais…' : '') + ' · ' + (estado.ms / 1000).toFixed(1).replace('.', ',') + ' s'));
+    b.appendChild(el('div', 'font-size:12px;color:' + SUAVE + ';margin-bottom:6px', res.itens.length + ' matérias · ' + resumoHoje(res) + ' · responderam: ' + estado.fontes.join(', ') + (!estado.carregando && estado.semResposta.length ? ' · sem resposta agora: ' + estado.semResposta.filter(function (n, i, a) { return a.indexOf(n) === i && estado.fontes.indexOf(n) < 0; }).join(', ') : '') + (estado.carregando ? ' · buscando mais…' : '') + ' · ' + (estado.ms / 1000).toFixed(1).replace('.', ',') + ' s'));
     if (!estado.exata) b.appendChild(el('div', 'font-size:12px;color:' + SUAVE + ';margin-bottom:6px', 'Nenhuma matéria com a frase exata “' + q + '”: mostrando as que têm todas as palavras.'));
     var ul = el('ul', 'list-style:none;margin:0;padding:0');
-    res.grupos.slice(0, 25).forEach(function (g) {
+    res.grupos.slice(0, 40).forEach(function (g) {
       var x = g.itens[0], li = el('li', 'padding:9px 0;border-top:1px solid ' + LINHA + ';display:flex;flex-direction:column;gap:4px');
       li.setAttribute('data-qa', 'web-item');
       var selo = el('span', 'align-self:flex-start;font:700 12px/1.2 system-ui,sans-serif;padding:4px 9px;border-radius:999px;border:1.5px solid ' + OURO + ';' + (g.confirmado ? 'background:' + OURO + ';color:' + FUNDO : 'background:' + FUNDO + ';color:' + OURO),
@@ -209,17 +239,22 @@
   function buscar(q) {
     var mine = ++seq, t0 = Date.now(), ck = norm(q);
     if (cache[ck] && Date.now() - cache[ck].em < 5 * 60e3) { ultimo = cache[ck].estado; desenhar(q, ultimo); return; }
-    var MOT = [['Bing Notícias', function () { return motorB(q); }], ['Bing Notícias', function () { return motorB(q, '&qft=sortbydate%3d%221%22'); }],
-      ['Bing Notícias', function () { return motorB(q, '&qft=interval%3d%227%22'); }]];
-    if (/\s/.test(q)) MOT.push(['Bing Notícias', function () { return motorB('"' + q + '"'); }]);
-    if (googleLiberado()) MOT.push(['Google Notícias', function () { return motorG(q).then(function (r) { return r; }, function (e) { googlePausa(); throw e; }); }]);
-    var estado = { q: q, carregando: true, res: null, fontes: [], falhou: 0, total: MOT.length, ms: 0 }, todos = [], feitos = 0;
+    // 20/11 (t328): 5 fontes ao mesmo tempo, Brasil e mundo (antes: 3 recortes do Bing pt-BR, que só tinha até ontem, e o Google pt-BR quando o proxy deixava).
+    // Poucas chamadas de propósito: os proxies grátis bloqueiam (429) quem pede demais. A lista sai da mais recente para a mais antiga.
+    var MOT = [['Bing Notícias', function () { return motorB(q, '&qft=sortbydate%3d%221%22'); }],
+      ['Bing Notícias (mundo)', function () { return motorB(q, '&qft=sortbydate%3d%221%22', 'en'); }],
+      ['GDELT (mundo)', function () { return motorD(q); }]];
+    if (googleLiberado()) {
+      var gFalhas = 0, gErro = function (e) { if (++gFalhas === 2) googlePausa(); throw e; };
+      MOT.unshift(['Google Notícias', function () { return motorG(q, 'pt', ' when:3d').catch(gErro); }], ['Google Notícias (mundo)', function () { return motorG(q, 'en', ' when:1d').catch(gErro); }]);
+    }
+    var estado = { q: q, carregando: true, res: null, fontes: [], semResposta: [], falhou: 0, total: MOT.length, ms: 0 }, todos = [], feitos = 0;
     ultimo = estado; desenhar(q, estado);
-    MOT.forEach(function (m) {
-      m[1]().then(function (its) {
+    MOT.forEach(function (m, i) {
+      new Promise(function (ok) { setTimeout(ok, i * 200); }).then(m[1]).then(function (its) {
         if (mine !== seq) return;
         todos = todos.concat(its); if (its.some(function (x) { return relevante(q, x); }) && estado.fontes.indexOf(m[0]) < 0) estado.fontes.push(m[0]);
-      }, function () { estado.falhou++; }).then(function () {
+      }, function () { estado.falhou++; estado.semResposta.push(m[0]); }).then(function () {
         if (mine !== seq) return;
         feitos++; estado.carregando = feitos < MOT.length; estado.ms = Date.now() - t0; var f = filtrar(q, todos); estado.exata = f.exata; estado.res = f.itens.length ? agrupar(q, f.itens) : null;
         if (!estado.carregando) cache[ck] = { em: Date.now(), estado: estado };
@@ -234,7 +269,7 @@
     if (q === atual) return; atual = q; clearTimeout(tmr);
     seq++;
     if (q.length < 2) { if (box && box.parentNode) box.parentNode.removeChild(box); return; }
-    desenhar(q, { q: q, carregando: true, res: null, fontes: [], falhou: 0, total: 3, ms: 0 });
+    desenhar(q, { q: q, carregando: true, res: null, fontes: [], semResposta: [], falhou: 0, total: 3, ms: 0 });
     tmr = setTimeout(function () { buscar(q); }, 700);
   }
   document.addEventListener('input', function (e) { if (e.target && e.target.matches && e.target.matches('input[data-qa="search"]')) aoDigitar(); }, true);

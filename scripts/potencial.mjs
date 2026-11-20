@@ -60,6 +60,8 @@ export function notaPotencial(x) {
  *  Nunca 5 (máxima): no ntfy a 5 vibra em rajada e insiste. Sem nota (resumos, avisos de canal): vale a base de quem chamou, no máximo 4.
  *  Vibração: quem decide é o canal de notificação do Android; no app ntfy ela desliga a vibração de cada prioridade (o servidor não consegue). */
 export const prioridadeNota = (p, base = 2) => (!p ? Math.min(base, 4) : p.provisoria || p.faixa === 'opcional' ? 1 : p.faixa === 'nao-deixe' ? 4 : p.faixa === 'vale' ? 3 : 2);
+/** 20/11 (t330): "Vale postar" e "Não deixe de postar" (nota firme, não provisória) chegam no celular 24 horas, inclusive de 0h a 7h */
+export const valePostar = (p) => !!p && !p.provisoria && (p.faixa === 'vale' || p.faixa === 'nao-deixe');
 /** exclusivo confirmado (o site disse que era exclusivo e um 2º veículo confirmou): toca som, igual a Não deixe de postar (4, nunca 5) */
 export const PRIORIDADE_EXCLUSIVO = 4;
 /** selo curto do título (17/11: o selo longo comia a manchete): 🔥 não deixe, 👍 vale, ⏳ provisória; a faixa por extenso vai na 1ª linha da mensagem */

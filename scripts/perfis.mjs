@@ -4,7 +4,7 @@
 // O estudo de estilo pelo Instagram logado dela continua no agente (reel-olimpia), devagar (20 min entre leituras, 20 por dia).
 // Gera perfis.json (página referencias.html#perfis) e avisa no canal geral do jornal (o mesmo que a Mesa do agente já lê):
 //   confirmado (2+ veículos) e Vale postar/Não deixe: prioridade 3 (som, nunca 4/5); forte em apuração (1 fonte): 2 (silencioso);
-//   o resto: 1 (só a Mesa, canal <tópico>-mesa). Madrugada (0h-7h): tudo só na Mesa. Tetos: 3 por rodada, 12 por dia no celular.
+//   o resto: 1 (só a Mesa, canal <tópico>-mesa). Madrugada (0h-7h): Vale postar/Não deixe confirmado chega 24 h (t330); o resto só na Mesa. Tetos: 3 por rodada, 12 por dia no celular.
 // Uso: node scripts/perfis.mjs [--agora 2026-11-20T12:00-03:00] [--sem-envio] [--sem-google] [--sem-traducao]
 import fs from 'node:fs';
 import { toqueNoNtfy } from './ntfy-acoes.mjs';
@@ -81,6 +81,7 @@ for (const f of ['edicao.json', 'series.json', 'esportes.json', 'games.json', 'm
 const poolTotal = () => [...pool, ...itens, ...mencoes];
 // já avisado por outra seção do jornal: não repete no celular
 const jaAvisado = new Set([...(lerJ('notificadas.json', {}).vistos || []), ...Object.keys(lerJ('series-estado.json', {}).vistos || {}), ...Object.keys(lerJ('esportes-estado.json', {}).vistos || {}), ...Object.keys(lerJ('games-estado.json', {}).vistos || {})].map(canon));
+const jaTitulos = Object.values(lerJ('notificadas.json', {}).apuracao || {}).filter((x) => x && x.titulo && x.t);   // manchetes que o jornal geral já avisou (em apuração), últimas 24 h
 
 // ----- 4) candidatos: novos (ou que ganharam veículos), dos últimos 3 h; menções do Google entram como notícia SOBRE o perfil
 const candidatos = [...lista, ...mencoes.filter((m) => AGORA - m.ts < 24 * 3600e3)].filter((i) => AGORA - i.ts < P.JANELA_AVISO_MS);
@@ -134,7 +135,7 @@ const D = P.contadores(E, AGORA); let rodada = 0; const saiu = [];
 // confirmados primeiro, depois os de nota maior
 decid.sort((a, b) => (b.c.prioridade - a.c.prioridade) || (b.c.pot.nota - a.c.pot.nota));
 for (const { i, c } of decid) {
-  if (jaAvisado.has(i.key) && (E.vistos[i.key] == null)) { marcar(i); continue; }   // outra seção do jornal já avisou este link
+  if (E.vistos[i.key] == null && P.jaAvisadoAssunto(i, jaAvisado, jaTitulos, AGORA)) { marcar(i); continue; }   // 20/11 (t329): outra seção já avisou o mesmo link, um link do grupo ou a mesma manchete: nunca o mesmo assunto 2 vezes
   const d = P.destino(i, c, D, { agora: AGORA, rodada });
   if (!d) { marcar(i); continue; }
   const av = P.montarAviso(i, c, { agora: AGORA });

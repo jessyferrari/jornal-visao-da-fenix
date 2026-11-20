@@ -147,14 +147,19 @@ export const topicoGames = (musica) => { const t = String(musica || '') + '-game
 // convite ÚNICO para assinar o canal Games, no canal Música (que ela já assina). Prioridade 2: chega sem som e sem vibrar (bateria).
 // Sai de dia (7h às 22h, Brasília); de madrugada espera a manhã.
 export const podeConvidar = (horaBR) => horaBR >= 7 && horaBR < 22;
-export const avisoGames = (servidor, musica) => {
+export const avisoGames = (servidor, musica, { reenvio = false } = {}) => {
   const gm = topicoGames(musica); if (!gm) return null;
   const host = String(servidor || 'https://ntfy.sh').replace(/^https?:\/\//, '').replace(/\/$/, '');
-  return { title: 'Fênix: assine o canal Games', priority: 2, tags: ['video_game'],
+  // 20/11 (t329): o 1º convite (11h47) sumiu da barra do celular. O robô mandou 1 vez só e nada no servidor apaga avisos;
+  // no app ntfy, abrir um canal limpa da barra as notificações daquele canal (ela abriu o canal Música para desligar a Entrega instantânea).
+  // Por isso o reenvio leva o toque no próprio aviso direto para a tela de assinar (click), além do botão.
+  const assinar = 'ntfy://' + host + '/' + gm + '?display=Fenix+Games';
+  return { title: 'Fênix: assine o canal Games' + (reenvio ? ' (de novo)' : ''), priority: 2, tags: ['video_game'], click: assinar,
     message: 'Canal novo 🎮 Games: jogos, PlayStation e PS5, Xbox, Nintendo, PC, celular, eSports, lançamentos (como GTA 6), trailers e estúdios, do Brasil e de fora.\n' +
       'Regra de sempre: ✅ "Sim, publicar" só com 2 veículos ou mais; 🔎 1 fonte fica em apuração; ⭐ "exclusivo" só quando o próprio site diz.\n' +
-      'Toque em "Assinar Games" e confirme em Inscrever-se. Este convite chega sem som e não volta.\n' +
+      (reenvio ? 'O primeiro convite sumiu da barra de notificações. Este fica guardado no canal Música do app ntfy.\n' : '') +
+      'Toque neste aviso (ou em "Assinar Games") e confirme em Inscrever-se. Chega sem som e não volta.\n' +
       'Se o botão não abrir: no app ntfy toque em + e digite o mesmo nome do canal Fenix Musica com -games no final.',
-    actions: [{ action: 'view', label: 'Assinar Games', url: 'ntfy://' + host + '/' + gm + '?display=Fenix+Games', clear: false }] };
+    actions: [{ action: 'view', label: 'Assinar Games', url: assinar, clear: false }] };
 };
 export { alegaExclusivo, primeiro, hhmm };

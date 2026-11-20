@@ -1,11 +1,12 @@
 // Robô gratuito do Jornal Visão da Fênix: lê RSS reais, gera edicao.json/feed.xml/sitemap.xml e envia push ntfy.
+import { aplicarAtalhos } from './atalhos.mjs';
 import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado } from './ntfy-acoes.mjs';
 import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
 import { alegaExclusivo, rastrear, googleParaMarcados, selo, textoConfirmado, primeiro, campoSelo } from './exclusivo.mjs';
 import { subindo, podeSubindo, marcarSubindo, textoSubindo } from './subindo.mjs';
-import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO } from './potencial.mjs';
+import { notaPotencial, prioridadeNota, tituloComNota, linhaNota, PRIORIDADE_EXCLUSIVO, valePostar } from './potencial.mjs';
 import { estudarFormato, linhaFormato, iconeFormato } from './formato.mjs';
 const B = 'https://jessyferrari.github.io/jornal-visao-da-fenix/';
 const TOPIC = process.env.NTFY_TOPIC || '';
@@ -247,15 +248,7 @@ if (changed) {
       }
       return '<script type="application/ld+json">' + JSON.stringify(ld) + '</script>';
     });
-    // atalho fixo para a seção Música (fora do #root do app, não mexe no app.js)
-    const MUS = '<a id="jf-musica" href="musica.html" style="position:fixed;right:14px;bottom:14px;z-index:9999;background:#d4af37;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎵 Música</a>';
-    const ALTA = '<a id="jf-emalta" href="emalta.html" style="position:fixed;right:14px;bottom:62px;z-index:9999;background:#5fd38d;color:#111;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🚀 Em Alta</a>';
-    const SER = '<a id="jf-series" href="series.html" style="position:fixed;right:14px;bottom:110px;z-index:9999;background:#e0413a;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎬 Séries</a>';
-    const ESP = '<a id="jf-esportes" href="esportes.html" style="position:fixed;right:14px;bottom:158px;z-index:9999;background:#0d0b08;color:#d4af37;border:1.5px solid #d4af37;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">⚽ Esportes</a>';
-    const REF = '<a id="jf-referencias" href="referencias.html" style="position:fixed;right:14px;bottom:206px;z-index:9999;background:#0d0b08;color:#d4af37;border:1.5px solid #d4af37;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0006">📚 Referências</a>';
-    const GAM = '<a id="jf-games" href="games.html" style="position:fixed;right:14px;bottom:254px;z-index:9999;background:#0d0b08;color:#d4af37;border:1.5px solid #d4af37;font:600 14px/1 system-ui,sans-serif;padding:10px 14px;border-radius:22px;text-decoration:none;box-shadow:0 2px 10px #0008">🎮 Games</a>';   // 20/11: seção Games, mesmo estilo do botão Esportes
-    html = html.replace(/<a id="jf-games"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-referencias"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-musica"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-emalta"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-series"[^>]*>[\s\S]*?<\/a>/, '').replace(/<a id="jf-esportes"[^>]*>[\s\S]*?<\/a>/, '');
-    html = html.replace(/(<body[^>]*>)/, '$1' + MUS + ALTA + SER + ESP + REF + GAM);
+    html = aplicarAtalhos(html);   // 20/11 (t328): barra de atalhos no rodapé, sem cobrir conteúdo (scripts/atalhos.mjs)
     // 📊 selo da nota de potencial (17/11): script fora do app (nota.js), incluído uma vez só
     if (!html.includes('src="nota.js"')) html = html.replace(/<\/body>/, '<script src="nota.js" defer></script></body>');
     // 🌐 busca universal (20/11): jornal + internet ao vivo (busca-web.js, fora do app), incluída uma vez só
@@ -407,11 +400,12 @@ if (!seed) {
   for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (pt.some(x => x[0].pot && x[0].pot.nota >= 70) ? ' · ' + pt.filter(x => x[0].pot && x[0].pot.nota >= 70).length + ' vale postar' : '') + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
     if (ok) { enviados++; R.resumo = now; for (const [i] of pt) if (((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) }; } else for (const [i] of pt) naoSaiu.add(i.key); }
 }
-// 📈 Subindo agora (17/11): o mesmo fato em 3+ veículos em até 30 min; até 6 por dia, nunca de madrugada, com Sim, publicar (já tem 2+ fontes)
+// 📈 Subindo agora (17/11): o mesmo fato em 3+ veículos em até 30 min; até 6 por dia (de madrugada só Vale postar, t330), com Sim, publicar (já tem 2+ fontes)
 const SUB = subindo(all.filter(i => (!i.lang || i.tr) && i.cov && i.cov.n >= 3), st, { agora: now }); let subEnv = 0;
 if (seed) { for (const x of SUB) for (const k of x.chaves) st.subindo[k] = 'semente'; }
-else for (const x of SUB) { if (!podeSubindo(st, { agora: now })) break; const i = x.i;
-  const ok = await post({ title: '📈 Subindo agora: ' + i.title.slice(0, 150), message: textoSubindo(x), click: i.link, priority: 4, tags: ['chart_with_upwards_trend', 'newspaper'], ...botoes(i) });
+else for (const x of SUB) { const i = x.i, vs = valePostar(i.pot);
+  if (!podeSubindo(st, { agora: now, vale: vs })) continue;   // 20/11 (t330): Vale postar sai 24 h; o resto, só das 7h em diante; sem nota de Vale postar chega sem som (2)
+  const ok = await post({ title: vs ? tituloComNota(i.pot, '📈 Subindo agora: ' + i.title.slice(0, 140)) : '📈 Subindo agora: ' + i.title.slice(0, 150), message: (vs ? linhaNota(i.pot) + '\n' : '') + textoSubindo(x), click: i.link, priority: vs ? prioridadeNota(i.pot) : 2, tags: ['chart_with_upwards_trend', 'newspaper'], ...botoes(i) });
   if (ok) { marcarSubindo(st, x, now); subEnv++; limparApuracao(i); } }
 console.log('subindo agora:', SUB.length, 'fatos com 3+ veículos em 30 min | enviados', subEnv, '| hoje', (st.subindoDia || {}).n || 0);
 // ✅ confirmação de um "possível exclusivo": um 2º veículo publicou; chega com Sim, publicar (no máximo 3 por rodada)
