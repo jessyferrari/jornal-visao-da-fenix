@@ -3,6 +3,7 @@
 // Uso: node scripts/diagnostico-rotas.mjs
 const UA_BOT = 'Mozilla/5.0 (compatible; JornalVisaoDaFenix/1.0; +https://jessyferrari.github.io/jornal-visao-da-fenix/)';
 const UA_NAV = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36';
+const APP = '936619743392459';
 const espera = (ms) => new Promise((z) => setTimeout(z, ms));
 const br = (t) => t ? new Date(t - 3 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') + ' (Brasília)' : '-';
 async function testa(nome, url, { headers = {}, ua = UA_BOT } = {}) {
@@ -20,6 +21,8 @@ async function testa(nome, url, { headers = {}, ua = UA_BOT } = {}) {
     return { ...linha, txt };
   } catch (e) { const linha = { nome, erro: String(e.cause?.code || e.message || e).slice(0, 80), ms: Date.now() - t0 }; console.log(JSON.stringify(linha)); return linha; }
 }
+const SO_IG = process.argv.includes('--instagram');
+if (!SO_IG) {
 console.log('== The Enemy');
 for (const u of ['https://www.theenemy.com.br/', 'https://www.theenemy.com.br/feed', 'https://www.theenemy.com.br/feed/', 'https://www.theenemy.com.br/rss', 'https://www.theenemy.com.br/rss.xml', 'https://www.theenemy.com.br/feed.xml',
   'https://www.theenemy.com.br/news-sitemap.xml', 'https://www.theenemy.com.br/sitemap-news.xml', 'https://www.theenemy.com.br/sitemap.xml', 'https://www.theenemy.com.br/sitemap_index.xml', 'https://www.theenemy.com.br/robots.txt',
@@ -30,8 +33,22 @@ await testa('TheEnemy Google Notícias (nome)', 'https://news.google.com/rss/sea
 console.log('== Voxel');
 await testa('Voxel Arc', 'https://www.estadao.com.br/arc/outboundfeeds/feeds/rss/sections/tecmundo/voxel/?body=%7B%22layout%22%3A%22google-news%22%7D');
 await testa('Voxel voxel.com.br/feed', 'https://www.voxel.com.br/feed');
+}
+if (SO_IG) {
+  console.log('== Instagram rodada 2 (outras rotas sem conta, pausa de 6 s)');
+  for (const u of ['hugogloss', 'cazetv']) {
+    await testa('IG ?__a=1 ' + u, 'https://www.instagram.com/' + u + '/?__a=1&__d=dis', { ua: UA_NAV, headers: { 'x-ig-app-id': APP } }); await espera(6000);
+    await testa('IG feed/user username ' + u, 'https://i.instagram.com/api/v1/feed/user/' + u + '/username/?count=6', { ua: 'Instagram 219.0.0.12.117 Android', headers: { 'x-ig-app-id': APP } }); await espera(6000);
+  }
+  for (const h of ['rsshub.ktachibana.party', 'hub.slarker.me', 'rsshub.woodland.cafe', 'rsshub.rssforever.com'])
+    for (const r of ['/picnob/user/hugogloss', '/picnob.info/user/hugogloss', '/instagram/2/user/hugogloss', '/instagram/user/hugogloss'])
+      { await testa('RSSHub ' + h + r, 'https://' + h + r); await espera(1500); }
+  for (const [n, u] of [['picnob', 'https://www.picnob.com/profile/hugogloss/'], ['pixnoy', 'https://www.pixnoy.com/profile/hugogloss/'], ['instanavigation', 'https://instanavigation.com/user-profile/hugogloss'], ['storiesig', 'https://storiesig.info/en/'], ['bibliogram', 'https://bibliogram.art/u/hugogloss']])
+    { await testa('Espelho ' + n, u, { ua: UA_NAV }); await espera(1500); }
+  process.exit(0);
+}
+const APP0 = 1;
 console.log('== Instagram (sem conta, 1 leitura por rota e perfil, pausa de 4 s)');
-const APP = '936619743392459';
 for (const u of ['hugogloss', 'forbesbr', 'f1', 'cazetv']) {
   await testa('IG i.instagram web_profile_info ' + u, 'https://i.instagram.com/api/v1/users/web_profile_info/?username=' + u, { ua: UA_NAV, headers: { 'x-ig-app-id': APP, Accept: '*/*' } }); await espera(4000);
   await testa('IG www web_profile_info ' + u, 'https://www.instagram.com/api/v1/users/web_profile_info/?username=' + u, { ua: UA_NAV, headers: { 'x-ig-app-id': APP, 'X-Requested-With': 'XMLHttpRequest', Referer: 'https://www.instagram.com/' + u + '/' } }); await espera(4000);

@@ -1,5 +1,8 @@
 name: Diagnóstico de rotas públicas (só leitura, manual)
-on: { workflow_dispatch: {} }
+on:
+  workflow_dispatch:
+    inputs:
+      modo: { description: "vazio = tudo; --instagram = só a rodada 2 do Instagram", required: false, default: "" }
 permissions: { contents: read }
 jobs:
   diag:
@@ -9,4 +12,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - run: node scripts/diagnostico-rotas.mjs
+      - run: node scripts/diagnostico-rotas.mjs ${{ inputs.modo }}
