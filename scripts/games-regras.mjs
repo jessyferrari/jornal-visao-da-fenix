@@ -57,7 +57,17 @@ export const FONTES = [
   ['Omelete', 'https://www.omelete.com.br/sitemap-news.xml', 'dedicada', '', 'Omelete Games (The Enemy)', { caminho: /^https:\/\/www\.omelete\.com\.br\/(games|gta-6)\// }],
 ];
 /** lê uma fonte e, se ela tiver o 6º campo { caminho }, fica só com os links daquela editoria */
-export function lerFonte(xml, f) { const its = lerFeed(xml, f); const c = f[5] && f[5].caminho; return c ? its.filter((i) => c.test(i.link)) : its; }
+export function lerFonte(xml, f) { const its = lerFeed(xml, f); const c = f[5] && f[5].caminho; return c ? its.filter((i) => c.test(i.link)).map((i) => ({ ...i, editoria: true })) : its; }
+/** mesmo link em 2 feeds (ex.: matéria do Voxel que também sai no feed geral do TecMundo): fica 1 só, com o veículo da editoria
+ *  (fonte com filtro de caminho) e o horário mais cedo */
+export function juntarPorLink(lista) {
+  const m = new Map();
+  for (const i of lista) { const o = m.get(i.key);
+    if (!o) { m.set(i.key, i); continue; }
+    const fica = (i.editoria && !o.editoria) || (!!i.editoria === !!o.editoria && i.ts < o.ts) ? i : o;
+    m.set(i.key, { ...fica, ts: Math.min(i.ts, o.ts) }); }
+  return [...m.values()];
+}
 export const VEICULOS = [...new Set(FONTES.map((f) => f[0]))];
 export { lerFeed, canon, brIso, agrupar, idNoticia, partes };
 

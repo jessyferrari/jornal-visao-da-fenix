@@ -34,8 +34,7 @@ for (let x = 0; x < S.FONTES.length; x += 6) await Promise.all(S.FONTES.slice(x,
 }));
 const N = new Set(STATUS.filter((s) => s.ok).map((s) => s.veiculo)).size;   // "só 1 de N veículos monitorados": N = veículos (não feeds) lidos com sucesso nesta rodada
 const tudo48 = lidos.filter((i) => AGORA - i.ts < 48 * 3600e3 && i.ts <= AGORA + 5 * 60e3);
-const porLink = new Map(); for (const i of tudo48) { const o = porLink.get(i.key); if (!o || i.ts < o.ts) porLink.set(i.key, i); }
-let itens = [...porLink.values()].filter(S.ehGame);
+let itens = S.juntarPorLink(tudo48).filter(S.ehGame);
 console.log('GAMES: veículos ok', N, 'de', S.VEICULOS.length, '| feeds ok', STATUS.filter((s) => s.ok).length, 'de', S.FONTES.length, '| lidos 48h', tudo48.length, '| de games', itens.length, '| falharam:', STATUS.filter((s) => !s.ok).map((s) => s.nome + ' (' + s.erro + ')').join('; ') || 'nenhuma');
 
 // ----- 2) tradução (inglês -> português), com cache: gtx do Google e depois MyMemory, gratuitos

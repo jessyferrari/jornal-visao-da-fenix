@@ -25,6 +25,9 @@ ok('Voxel e Omelete Games: só a editoria certa entra, com o nome certo do veíc
   const sm = '<?xml version="1.0"?><urlset xmlns:news="x">' + [['https://www.omelete.com.br/games/gta-6-musicas', 'GTA 6 e as músicas brasileiras'], ['https://www.omelete.com.br/gta-6/carro-brian', 'Carro de Brian está no GTA 6'], ['https://www.omelete.com.br/series-tv/terra-da-mafia', 'Terra da Máfia 3ª temporada']].map(([u, t]) => '<url><loc>' + u + '</loc><news:news><news:publication_date>2026-11-20T11:00:00-03:00</news:publication_date><news:title>' + t + '</news:title></news:news></url>').join('') + '</urlset>';
   const o = S.lerFonte(sm, om); assert.equal(o.length, 2); assert.ok(o.every((i) => i.src === 'Omelete')); assert.ok(!o.some((i) => /series-tv/.test(i.link)));
   assert.equal(S.lerFonte(xml, ['X', '', 'dedicada', '']).length, 3);   // fonte sem filtro: tudo entra, como antes
+  // a mesma matéria do Voxel também vem no feed geral do TecMundo: fica 1 só, como Voxel, com o horário mais cedo
+  const tec = S.lerFonte(rss([['GTA 6 tem quantas missões? Veja a lista', 'https://www.estadao.com.br/tecmundo/voxel/gta-6-missoes/', T0 - 60e3]]), ['TecMundo', '', 'geral', '']);
+  for (const ordem of [[...tec, ...l], [...l, ...tec]]) { const j = S.juntarPorLink(ordem); assert.equal(j.length, 1); assert.equal(j[0].src, 'Voxel'); assert.equal(j[0].ts, T0 - 60e3); }
 });
 ok('filtro: site geral só entra com assunto de game; guia, código e aposta ficam de fora', () => {
   assert.ok(S.ehGame(it('TecMundo', 'Sony anuncia novo PS5 Pro mais barato', 'https://tecmundo.com.br/a', T0, { tipo: 'geral' })));
