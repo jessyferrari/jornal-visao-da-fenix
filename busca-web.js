@@ -167,9 +167,9 @@
   }
   // GDELT: CORS aberto, sem proxy; pede 1 consulta a cada 5 s por aparelho (a busca faz 1 só)
   function motorD(q) { return pega(urlD(q), 15000, true).then(lerGdelt); }
-  // Google Notícias depende de proxies gratuitos que às vezes bloqueiam: se falharem todas as rotas, pausa 10 min (não atrasa nem suja o console a cada busca)
+  // Google Notícias depende de proxies gratuitos que às vezes bloqueiam: se falharem todas as rotas, pausa 2 min (é a única fonte com as notícias de hoje) (não atrasa nem suja o console a cada busca)
   function googleLiberado() { try { return Date.now() > +(localStorage.getItem('jvf-google-pausa') || 0); } catch (e) { return true; } }
-  function googlePausa() { try { localStorage.setItem('jvf-google-pausa', String(Date.now() + 10 * 60e3)); } catch (e) {} }
+  function googlePausa() { try { localStorage.setItem('jvf-google-pausa', String(Date.now() + 2 * 60e3)); } catch (e) {} }
   function hora(p) {
     if (!p) return '';
     try { return new Date(p).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }).replace(',', ' às') + ' (Brasília)'; } catch (e) { return ''; }
