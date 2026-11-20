@@ -29,7 +29,7 @@ async function baixa(f) {
   try { return new TextDecoder(cs.trim().toLowerCase()).decode(buf); } catch { return buf.toString('utf8'); }
 }
 for (let x = 0; x < S.FONTES.length; x += 6) await Promise.all(S.FONTES.slice(x, x + 6).map(async (f) => {
-  try { const its = S.lerFeed(await baixa(f), f); lidos.push(...its); STATUS.push({ nome: f[4] || f[0], veiculo: f[0], ok: its.length > 0, itens: its.length, erro: its.length ? undefined : 'sem itens' }); }
+  try { const its = S.lerFonte(await baixa(f), f); lidos.push(...its); STATUS.push({ nome: f[4] || f[0], veiculo: f[0], ok: its.length > 0, itens: its.length, erro: its.length ? undefined : 'sem itens' }); }
   catch (e) { STATUS.push({ nome: f[4] || f[0], veiculo: f[0], ok: false, itens: 0, erro: String(e.message || e).slice(0, 80) }); }
 }));
 const N = new Set(STATUS.filter((s) => s.ok).map((s) => s.veiculo)).size;   // "só 1 de N veículos monitorados": N = veículos (não feeds) lidos com sucesso nesta rodada

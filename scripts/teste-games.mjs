@@ -13,10 +13,18 @@ const rss = (itens) => '<?xml version="1.0" encoding="UTF-8"?><rss><channel>' + 
 const T0 = Date.parse('2026-11-20T12:00:00-03:00'), CMD = 'cmd-teste', ASS = 'k'.repeat(48);
 const it = (src, title, link, ts = T0, extra = {}) => ({ src, title, link, key: S.canon(link), ts, sum: '', tipo: 'dedicada', lang: '', ...extra });
 
-ok('fontes: 32 feeds de 28 veículos; edições do mesmo veículo (IGN e IGN Brasil etc.) contam como 1', () => {
-  assert.equal(S.FONTES.length, 32); assert.equal(S.VEICULOS.length, 28);
+ok('fontes: 34 feeds de 30 veículos; edições do mesmo veículo (IGN e IGN Brasil etc.) contam como 1', () => {
+  assert.equal(S.FONTES.length, 34); assert.equal(S.VEICULOS.length, 30);
   assert.equal(S.FONTES.filter((f) => f[0] === 'IGN').length, 2); assert.equal(S.FONTES.filter((f) => f[0] === 'PlayStation Blog').length, 2);
   for (const v of ['IGN', 'GameSpot', 'Eurogamer', 'Kotaku', 'Polygon', 'PlayStation Blog', 'Xbox Wire', 'Nintendo Life', 'g1 Games']) assert.ok(S.VEICULOS.includes(v), v);
+});
+ok('Voxel e Omelete Games: só a editoria certa entra, com o nome certo do veículo (TecMundo e séries ficam de fora)', () => {
+  const vx = S.FONTES.find((f) => f[0] === 'Voxel'), om = S.FONTES.find((f) => f[0] === 'Omelete');
+  const xml = rss([['GTA 6 tem quantas missões? Veja a lista', 'https://www.estadao.com.br/tecmundo/voxel/gta-6-missoes/', T0], ['O que comprar na Black Friday', 'https://www.estadao.com.br/tecmundo/guia-de-compras/black-friday/', T0], ['Falhas no nginx', 'https://www.estadao.com.br/tecmundo/ciberseguranca/nginx/', T0]]);
+  const l = S.lerFonte(xml, vx); assert.equal(l.length, 1); assert.equal(l[0].src, 'Voxel'); assert.match(l[0].link, /\/tecmundo\/voxel\//);
+  const sm = '<?xml version="1.0"?><urlset xmlns:news="x">' + [['https://www.omelete.com.br/games/gta-6-musicas', 'GTA 6 e as músicas brasileiras'], ['https://www.omelete.com.br/gta-6/carro-brian', 'Carro de Brian está no GTA 6'], ['https://www.omelete.com.br/series-tv/terra-da-mafia', 'Terra da Máfia 3ª temporada']].map(([u, t]) => '<url><loc>' + u + '</loc><news:news><news:publication_date>2026-11-20T11:00:00-03:00</news:publication_date><news:title>' + t + '</news:title></news:news></url>').join('') + '</urlset>';
+  const o = S.lerFonte(sm, om); assert.equal(o.length, 2); assert.ok(o.every((i) => i.src === 'Omelete')); assert.ok(!o.some((i) => /series-tv/.test(i.link)));
+  assert.equal(S.lerFonte(xml, ['X', '', 'dedicada', '']).length, 3);   // fonte sem filtro: tudo entra, como antes
 });
 ok('filtro: site geral só entra com assunto de game; guia, código e aposta ficam de fora', () => {
   assert.ok(S.ehGame(it('TecMundo', 'Sony anuncia novo PS5 Pro mais barato', 'https://tecmundo.com.br/a', T0, { tipo: 'geral' })));

@@ -12,7 +12,14 @@ import { alegaExclusivo, primeiro, selo, campoSelo, hhmm } from './exclusivo.mjs
 // tipo 'dedicada' = site só de games; 'geral' = tecnologia/cultura pop, entra só o que fala de game.
 // Edições do mesmo veículo têm o mesmo nome (IGN e IGN Brasil, Eurogamer e Eurogamer Portugal, PlayStation Blog e PS Blog BR,
 // Xbox Wire e Xbox Wire Brasil): contam como 1 veículo na regra das 2 fontes, porque uma edição traduz a outra.
-// Fora por enquanto: The Enemy (o site não respondeu daqui), Voxel (feed vazio), PlayStation Blast (erro 500), Nintendo Blast (links do feed apontam para comentários).
+// 6º campo (opcional) { caminho: RegExp }: o feed traz mais de uma editoria; só entra o link cujo caminho bate (o veículo fica certo).
+// 20/11 (Jessyca t331): The Enemy e Voxel voltaram por outros endereços, testados daqui e do GitHub Actions:
+//   Voxel: voxel.com.br/feed responde 204 vazio e o site virou estadao.com.br/tecmundo/voxel; o RSS do Estadão (Arc) dessa seção traz
+//     também outras editorias do TecMundo, então só entra link com /tecmundo/voxel/ (o resto já vem pelo feed do TecMundo).
+//   The Enemy: theenemy.com.br entrega certificado de outro domínio (Akamai) em todas as rotas, daqui e do Actions; a Omelete&Co diz que
+//     "o portal The Enemy passou a integrar nossas editorias com foco em games". Entra a editoria de games do Omelete (sitemap de notícias,
+//     só /games/ e /gta-6/), com o nome certo do veículo: Omelete.
+// Fora por enquanto: PlayStation Blast (erro 500), Nintendo Blast (links do feed apontam para comentários).
 export const FONTES = [
   ['IGN', 'https://br.ign.com/feed.xml', 'dedicada', '', 'IGN Brasil'],
   ['g1 Games', 'https://g1.globo.com/rss/g1/pop-arte/games/', 'dedicada', ''],
@@ -46,7 +53,11 @@ export const FONTES = [
   ['Xbox Wire', 'https://news.xbox.com/en-us/feed/', 'dedicada', 'inglês', 'Xbox Wire (EUA)'],
   ['The Verge Games', 'https://www.theverge.com/rss/games/index.xml', 'dedicada', 'inglês'],
   ['Dexerto', 'https://www.dexerto.com/feed/', 'geral', 'inglês'],
+  ['Voxel', 'https://www.estadao.com.br/arc/outboundfeeds/feeds/rss/sections/tecmundo/voxel/?body=%7B%22layout%22%3A%22google-news%22%7D', 'dedicada', '', 'Voxel (Estadão)', { caminho: /^https:\/\/www\.estadao\.com\.br\/tecmundo\/voxel\// }],
+  ['Omelete', 'https://www.omelete.com.br/sitemap-news.xml', 'dedicada', '', 'Omelete Games (The Enemy)', { caminho: /^https:\/\/www\.omelete\.com\.br\/(games|gta-6)\// }],
 ];
+/** lê uma fonte e, se ela tiver o 6º campo { caminho }, fica só com os links daquela editoria */
+export function lerFonte(xml, f) { const its = lerFeed(xml, f); const c = f[5] && f[5].caminho; return c ? its.filter((i) => c.test(i.link)) : its; }
 export const VEICULOS = [...new Set(FONTES.map((f) => f[0]))];
 export { lerFeed, canon, brIso, agrupar, idNoticia, partes };
 
