@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-11-21T20:14",
+ "atualizado": "2026-11-21T20:19",
  "ordem": [
   "samba",
   "sambaPagode",
@@ -128,7 +128,7 @@
   "periodo": "últimas 48 h",
   "furos": 12,
   "chegaramDepois": 13,
-  "aindaSoNoJornal": 249,
+  "aindaSoNoJornal": 248,
   "medianaAntes": "6 h 26",
   "melhores": [
    {
@@ -174,48 +174,9 @@
     "termos": 84
    }
   },
-  "samba": [
-   {
-    "termo": "festival",
-    "fonte": "Google Trends Brasil",
-    "trafego": "200+",
-    "noticias": [
-     {
-      "titulo": "Veja o que fazer em SP: Festival Consciência Negra, Caetano Veloso, ExpoCannabis, Orgulho Nerd e Monobloco",
-      "link": "https://g1.globo.com/guia/guia-sp/noticia/2026/11/20/veja-o-que-fazer-em-sp-festival-consciencia-negra-expocannabis-orgulho-nerd-e-monobloco.ghtml",
-      "veiculo": "G1",
-      "local": "São Paulo, SP"
-     },
-     {
-      "titulo": "Festival Afrominuto premia 12 escolas estaduais de SP",
-      "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxNdTE5WXdIcGdWOXUzV2IwbndJWkZ6RFVuTzk0VWNMNDRudHdxVTFRNUlPTVhteC1uVmVjSXBXcWpvdWdSY0hGVHY5alo3eFM2UGFxcG9Wc3dKUUlBeE5ndXlyaVV1dWR4YkRwb1ZPZkhoSVJTei1kS3VQckhyZ1dSYlBXRUdybFk5YlEwc2FoSTI1N2tKWXowRC03UXo5d25ZdEdIZUtXaDE?oc=5",
-      "veiculo": "Jornal Diário do Povo",
-      "local": "São Paulo, SP"
-     },
-     {
-      "titulo": "Alok leva projeto Rave The World ao Museu do Amanhã no Festival de Verão do Rio",
-      "link": "https://poltronavip.com/alok-rave-the-world-museu-do-amanha-rio-de-janeiro",
-      "veiculo": "Poltrona Vip",
-      "local": "Rio de Janeiro, RJ"
-     }
-    ]
-   }
-  ],
+  "samba": [],
   "pagode": [],
   "musica": [
-   {
-    "termo": "nacional",
-    "fonte": "Google Trends Brasil",
-    "trafego": "1000+",
-    "noticias": [
-     {
-      "titulo": "Daniel leva versão ao vivo de ‘Viver sertanejo’ aos palcos em turnê nacional",
-      "link": "https://extra.globo.com/blogs/telinha/post/2026/11/daniel-leva-versao-ao-vivo-de-viver-sertanejo-aos-palcos-em-turne-nacional.ghtml",
-      "veiculo": "Extra online",
-      "local": "Pontal, SP"
-     }
-    ]
-   },
    {
     "termo": "Newcastle",
     "fonte": "X (trends24 Brasil)",
@@ -369,7 +330,7 @@
    }
   ],
   "est": {
-   "noticias": 10,
+   "noticias": 9,
    "bing": 7,
    "bilheteria": 1,
    "bingConsultas": 5,
@@ -454,21 +415,17 @@
   {
    "tipo": "homenagem",
    "nome": "Nei Lopes",
-   "primeiroANoticiar": {
-    "veiculo": "bra1.com.br",
-    "hora": "18:11"
-   },
    "id": "1835fcf01c73",
    "pot": {
-    "nota": 49,
+    "nota": 43,
     "faixa": "opcional",
-    "provisoria": false,
-    "rotulo": "49% · opcional",
-    "motivo": "2 veículos · tema: prêmio · pessoa famosa: Nei Lopes"
+    "provisoria": true,
+    "rotulo": "⏳ 43% provisória · opcional",
+    "motivo": "tema: prêmio · pessoa famosa: Nei Lopes · nota provisória: só 1 veículo até agora"
    },
-   "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=49&faixa=opcional&titulo=Garo+de+14+anos+de+cidade+do+interior+conquista+pr%C3%AAmio+estadual+com+samba+em+homenagem+a+Nei+Lopes&noticia=https%3A%2F%2Fwww.bra1.com.br%2Fgeral%2Fid-729751%2Fgaro_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes&texto=Garo+de+14+anos+de+cidade+do+interior+conquista+pr%C3%AAmio+estadual+com+samba+em+homenagem+a+Nei+Lopes%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+bra1.com.br+%C2%B7+2026-11-20+18%3A11+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fmthoje.com.br%2Feducacao%2Fid-729751%2Fgaro_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes",
+   "emApuracao": true,
    "furo": {
-    "semPortalHa": "26 h 04"
+    "semPortalHa": "26 h 09"
    },
    "local": "São Paulo, SP",
    "localComo": "matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
@@ -478,20 +435,14 @@
    "dominio": "bra1.com.br",
    "publicado": "2026-11-20T18:11",
    "primeiroVisto": "2026-11-20T18:18",
-   "fontes": 2,
-   "confirmado": true,
+   "fontes": 1,
+   "confirmado": false,
    "quente": false,
    "regiao": "sp",
    "regiaoMotivo": "cidade: matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
    "categoria": "Música",
    "linkDireto": true,
-   "tambemEm": [
-    {
-     "veiculo": "MT HOJE",
-     "titulo": "Garo de 14 anos de cidade do interior conquista prêmio estadual com samba em homenagem a Nei Lopes",
-     "link": "https://mthoje.com.br/educacao/id-729751/garo_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes"
-    }
-   ],
+   "tambemEm": [],
    "via": "Google Notícias: samba em SP"
   },
   {
@@ -507,7 +458,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "4 h 42"
+    "semPortalHa": "4 h 47"
    },
    "local": "Nacional (sem cidade)",
    "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -590,7 +541,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "29 h 55"
+    "semPortalHa": "30 h"
    },
    "local": "Assunto geral (sem cidade)",
    "semCidadeMotivo": "matéria lida (7 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -628,7 +579,7 @@
    },
    "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=68&faixa=opcional&titulo=Murilo+Huff+e+Ludmilla+gravam+parceria+in%C3%A9dita+que+mistura+sertanejo+e+pagode&noticia=https%3A%2F%2Fobuxixo.com.br%2Fmurilo-huff-e-ludmilla-gravam-parceria-inedita-que-mistura-sertanejo-e-pagode%2F&texto=Murilo+Huff+e+Ludmilla+gravam+parceria+in%C3%A9dita+que+mistura+sertanejo+e+pagode%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+O+Buxixo+%C2%B7+2026-11-20+05%3A24+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fespacodopovo.com.br%2Fmurilo-huff-ludmilla-18-parceria-sertanejo-pagode%2F%0Ahttps%3A%2F%2Fegobrazil.com.br%2Fmurilo-huff-e-ludmilla-gravam-parceria-inedita-que-mistura-sertanejo-e-pagode-2%2F",
    "furo": {
-    "semPortalHa": "39 h 11"
+    "semPortalHa": "39 h 16"
    },
    "local": "Rio de Janeiro, RJ",
    "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -672,7 +623,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "47 h 26"
+    "semPortalHa": "47 h 31"
    },
    "local": "Rio de Janeiro, RJ",
    "localComo": "matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
@@ -711,7 +662,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 45"
+        "semPortalHa": "11 h 50"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (lugar: bixiga); resumo (lugar: bixiga)",
@@ -729,7 +680,7 @@
        "categoria": "Cultura",
        "linkDireto": true,
        "tambemEm": [],
-       "via": "Google Notícias: samba em SP"
+       "via": "Google Notícias: samba (Portugal)"
       }
      ],
      "itens": [
@@ -744,9 +695,9 @@
         "faixa": "vale",
         "provisoria": false,
         "rotulo": "🔥 78% · vale postar",
-        "motivo": "veículo grande (G1) · 7 veículos · tema forte: grávida"
+        "motivo": "veículo grande (G1) · 5 veículos · tema forte: grávida"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=6&nota=78&faixa=vale&titulo=Gr%C3%A1vida+de+8+meses%2C+Sabrina+Sato+cai+no+samba+com+barrig%C3%A3o+em+ensaio+da+Gavi%C3%B5es&noticia=https%3A%2F%2Fsurgiu.com.br%2F2026%2F11%2F21%2Fsabrina-sato-gravida-samba-ensaio-gavioes%2F&texto=Gr%C3%A1vida+de+8+meses%2C+Sabrina+Sato+cai+no+samba+com+barrig%C3%A3o+em+ensaio+da+Gavi%C3%B5es%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Surgiu+%C2%B7+2026-11-21+17%3A37+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fsp%2Fsao-paulo%2Fcarnaval%2F2027%2Fnoticia%2F2026%2F11%2F21%2Fgravida-de-oito-meses-sabrina-sato-cai-no-samba-com-barrigao-em-ensaio-da-gavioes-da-fiel.ghtml%0Ahttps%3A%2F%2Fwww.terra.com.br%2Fdiversao%2Fvideos%2Fgravida-de-oito-meses-sabrina-sato-samba-em-ensaio-da-gavioes-da-fiel-e-exibe-barrigao-shorts%2Cf313f3c371b924b31d4af323add3cae0jfkltpob.html%0Ahttps%3A%2F%2Fwww.purepeople.com.br%2Fnoticia%2Fsabrina-sato-gravida-de-8-meses-idade-aos-45-anos-samba-com-look-ousado-dourado-e-impressiona-para-carnaval-2027_a426673%2F1",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=5&nota=78&faixa=vale&titulo=Gr%C3%A1vida+de+8+meses%2C+Sabrina+Sato+cai+no+samba+com+barrig%C3%A3o+em+ensaio+da+Gavi%C3%B5es&noticia=https%3A%2F%2Fsurgiu.com.br%2F2026%2F11%2F21%2Fsabrina-sato-gravida-samba-ensaio-gavioes%2F&texto=Gr%C3%A1vida+de+8+meses%2C+Sabrina+Sato+cai+no+samba+com+barrig%C3%A3o+em+ensaio+da+Gavi%C3%B5es%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Surgiu+%C2%B7+2026-11-21+17%3A37+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fsp%2Fsao-paulo%2Fcarnaval%2F2027%2Fnoticia%2F2026%2F11%2F21%2Fgravida-de-oito-meses-sabrina-sato-cai-no-samba-com-barrigao-em-ensaio-da-gavioes-da-fiel.ghtml%0Ahttps%3A%2F%2Fwww.purepeople.com.br%2Fnoticia%2Fsabrina-sato-gravida-de-8-meses-idade-aos-45-anos-samba-com-look-ousado-dourado-e-impressiona-para-carnaval-2027_a426673%2F1%0Ahttps%3A%2F%2Fwww.msn.com%2Fpt-br%2Fentretenimento%2Fmusica%2Fgr%25C3%25A1vida-de-oito-meses-sabrina-sato-cai-no-samba-com-barrig%25C3%25A3o-em-ensaio-da-gavi%25C3%25B5es-da-fiel%2Far-AA2hVoQ3",
        "furo": {
         "antes": null,
         "portal": "Gshow"
@@ -759,7 +710,7 @@
        "dominio": "surgiu.com.br",
        "publicado": "2026-11-21T17:37",
        "primeiroVisto": "2026-11-21T08:27",
-       "fontes": 6,
+       "fontes": 5,
        "confirmado": true,
        "quente": false,
        "regiao": "sp",
@@ -773,60 +724,19 @@
          "link": "https://g1.globo.com/sp/sao-paulo/carnaval/2027/noticia/2026/11/21/gravida-de-oito-meses-sabrina-sato-cai-no-samba-com-barrigao-em-ensaio-da-gavioes-da-fiel.ghtml"
         },
         {
-         "veiculo": "Terra",
-         "titulo": "Grávida de oito meses, Sabrina Sato samba em ensaio da Gaviões da Fiel e exibe barrigão #shorts",
-         "link": "https://www.terra.com.br/diversao/videos/gravida-de-oito-meses-sabrina-sato-samba-em-ensaio-da-gavioes-da-fiel-e-exibe-barrigao-shorts,f313f3c371b924b31d4af323add3cae0jfkltpob.html"
-        },
-        {
          "veiculo": "Purepeople",
          "titulo": "Nem o barrigão de 8 meses segurou Sabrina Sato! De top com decotão a saia de franjas, apresentadora samba de salto alto e impressiona com look dourado em encontro de escolas",
          "link": "https://www.purepeople.com.br/noticia/sabrina-sato-gravida-de-8-meses-idade-aos-45-anos-samba-com-look-ousado-dourado-e-impressiona-para-carnaval-2027_a426673/1"
         },
         {
-         "veiculo": "www.purepeople.com.br",
-         "titulo": "Fotos: Nem o barrigão de 8 meses segurou Sabrina Sato! De top com decotão a saia de franjas, apresentadora samba de salto alto e impressiona com look dourado em encontro de escolas",
-         "link": "https://www.purepeople.com.br/noticia/sabrina-sato-gravida-de-8-meses-idade-aos-45-anos-samba-com-look-ousado-dourado-e-impressiona-para-carnaval-2027_a426673/1"
-        }
-       ],
-       "via": "Google Notícias: samba em SP"
-      },
-      {
-       "primeiroANoticiar": {
-        "veiculo": "bra1.com.br",
-        "hora": "18:11"
-       },
-       "id": "1835fcf01c73",
-       "pot": {
-        "nota": 49,
-        "faixa": "opcional",
-        "provisoria": false,
-        "rotulo": "49% · opcional",
-        "motivo": "2 veículos · tema: prêmio · pessoa famosa: Nei Lopes"
-       },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=49&faixa=opcional&titulo=Garo+de+14+anos+de+cidade+do+interior+conquista+pr%C3%AAmio+estadual+com+samba+em+homenagem+a+Nei+Lopes&noticia=https%3A%2F%2Fwww.bra1.com.br%2Fgeral%2Fid-729751%2Fgaro_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes&texto=Garo+de+14+anos+de+cidade+do+interior+conquista+pr%C3%AAmio+estadual+com+samba+em+homenagem+a+Nei+Lopes%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+bra1.com.br+%C2%B7+2026-11-20+18%3A11+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fmthoje.com.br%2Feducacao%2Fid-729751%2Fgaro_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes",
-       "furo": {
-        "semPortalHa": "26 h 04"
-       },
-       "local": "São Paulo, SP",
-       "localComo": "matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
-       "titulo": "Garo de 14 anos de cidade do interior conquista prêmio estadual com samba em homenagem a Nei Lopes",
-       "link": "https://www.bra1.com.br/geral/id-729751/garo_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes",
-       "veiculo": "bra1.com.br",
-       "dominio": "bra1.com.br",
-       "publicado": "2026-11-20T18:11",
-       "primeiroVisto": "2026-11-20T18:18",
-       "fontes": 2,
-       "confirmado": true,
-       "quente": false,
-       "regiao": "sp",
-       "regiaoMotivo": "cidade: matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [
+         "veiculo": "Gshow",
+         "titulo": "Grávida de oito meses, Sabrina Sato samba muito em cima de saltão em encontro da Gaviões com a Vila Isabel",
+         "link": "https://news.google.com/rss/articles/CBMi2wFBVV95cUxQM01FOXQ0VmV0c3FjNnduOWotSGpwUU4zd2lWZ3VfUGgzeEo4UWxUckUyVE1lSHkxcEtsNGNhVVNpeVlWdFFQbEduTXFGd2lvT0lIZjUtOHdXSkpEUXVTM3RhX2JxSEJBRkZxMGtjQlczYjZ0Z0tMeVJOTl9FdV9hNmdFSjF2dzFSRXp1bkdkYllvRXVLeUVXRFRRaU42LXBBMHpDcDhPZDI3MTlaRy1hM092aGo3Y0swdmxzYkFBUHhiQk5CaEVjS3RSWmo1ZHJuX2UydWpCRWUzRWvSAeoBQVVfeXFMT3FCeG0zWDdiemhOdk1oZVBaeFJxb0dLYkJtOWx1MXdhVU5aNGx3NlZNcHlyN21hRXQzTVQ1NGRRdDhkNHB5b2JPeVJuVHJSYlpvejlneHh1Vjk4ODZ4eUVibndmY3R6dTRFS2xJZExXN09KQU84R2RaOWhsNFhwcDJLLVB2OTJ6eDdLWmVRYldkZmNfS1NQTVdJQk9maG50OHFOaTl4Vm9kRUN1V1ZJbmxZZDMtYWhDX1lYN0l5NVFpb1E1djMzNkhnTFlDTUtINGYyaGx6eTJuNURlT3JzSjZlT3p3ejZOeXFR?oc=5"
+        },
         {
-         "veiculo": "MT HOJE",
-         "titulo": "Garo de 14 anos de cidade do interior conquista prêmio estadual com samba em homenagem a Nei Lopes",
-         "link": "https://mthoje.com.br/educacao/id-729751/garo_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes"
+         "veiculo": "msn.com",
+         "titulo": "Grávida de oito meses, Sabrina Sato samba em ensaio da Gaviões da Fiel e exibe barrigão",
+         "link": "https://www.msn.com/pt-br/entretenimento/musica/gr%C3%A1vida-de-oito-meses-sabrina-sato-cai-no-samba-com-barrig%C3%A3o-em-ensaio-da-gavi%C3%B5es-da-fiel/ar-AA2hVoQ3"
         }
        ],
        "via": "Google Notícias: samba em SP"
@@ -852,9 +762,6 @@
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "Festival União das Batalhas reúne rap e samba no feriado da Consciência Negra em Marília",
        "link": "https://news.google.com/rss/articles/CBMitgFBVV95cUxOcUJ3OUxOX3c1cW80ZzJVNnQ2QjZQU2dQem1HNHNmSmhUU3U5SlFFTWc4WE8tc05rYTZtWHF5QVlOOUhnVlNKWVBoOVk5bWZid1lXTFJtdzdrXzFxb25fa01VcVdXZHdsT3Q2NFM2Q1I5ZDl4akxnYzFTcDhzYVQteGNMbzA2WVZYV2RIanR3WHB6eHR3V19YcXlYVTVtSWw1a0NXZkRqNzl0X1Nzc2ZvTW83WTJYQQ?oc=5",
        "veiculo": "Giro Marília Notícias",
@@ -905,6 +812,37 @@
        "via": "Google Notícias: samba em SP"
       },
       {
+       "id": "1835fcf01c73",
+       "pot": {
+        "nota": 43,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 43% provisória · opcional",
+        "motivo": "tema: prêmio · pessoa famosa: Nei Lopes · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "26 h 09"
+       },
+       "local": "São Paulo, SP",
+       "localComo": "matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
+       "titulo": "Garo de 14 anos de cidade do interior conquista prêmio estadual com samba em homenagem a Nei Lopes",
+       "link": "https://www.bra1.com.br/geral/id-729751/garo_de_14_anos_de_cidade_do_interior_conquista_premio_estadual_com_samba_em_homenagem_a_nei_lopes",
+       "veiculo": "bra1.com.br",
+       "dominio": "bra1.com.br",
+       "publicado": "2026-11-20T18:11",
+       "primeiroVisto": "2026-11-20T18:18",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "sp",
+       "regiaoMotivo": "cidade: matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: samba em SP"
+      },
+      {
        "id": "6ef60e5f3c84",
        "pot": {
         "nota": 16,
@@ -915,7 +853,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "26 h 36"
+        "semPortalHa": "26 h 41"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (escola de samba: aguia de ouro); resumo (escola de samba: aguia de ouro)",
@@ -946,13 +884,10 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "29 h 40"
+        "semPortalHa": "29 h 45"
        },
        "local": "Caraguatatuba, SP",
        "localComo": "título/resumo: título; resumo",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "Caraguatatuba recebe o 3º Festival e Concurso de Sambas Autorais Lua & Rodrigo 'Samba é Reza'",
        "link": "https://novaimprensa.com/2026/11/caraguatatuba-recebe-o-3o-festival-e-concurso-de-sambas-autorais-lua-rodrigo-samba-e-reza.html",
        "veiculo": "Nova Imprensa",
@@ -980,7 +915,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "39 h 15"
+        "semPortalHa": "39 h 20"
        },
        "local": "Campinas, SP",
        "localComo": "título/resumo: resumo",
@@ -1016,7 +951,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "1 h 50"
+        "semPortalHa": "1 h 55"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -1047,7 +982,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 08"
+        "semPortalHa": "5 h 13"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: leblon); resumo (lugar: leblon)",
@@ -1078,7 +1013,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "8 h 27"
+        "semPortalHa": "8 h 32"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (lugar: botafogo)",
@@ -1109,7 +1044,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 43"
+        "semPortalHa": "10 h 48"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): descrição da página",
@@ -1193,7 +1128,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Daniela+Mercury+leva+samba+da+Mangueira+ao+trio+el%C3%A9trico&noticia=https%3A%2F%2Fdiariodamidia.com.br%2Fdaniela-mercury-leva-samba-da-mangueira-ao-trio-eletrico&texto=Daniela+Mercury+leva+samba+da+Mangueira+ao+trio+el%C3%A9trico%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+diariodamidia.com.br+%C2%B7+2026-11-20+21%3A22+%28Bras%C3%ADlia%29&links=https%3A%2F%2Faloalobahia.com%2Fnoticias%2F2026%2F11%2F20%2Fdaniela-mercury-lanca-aposta-para-o-carnaval-2027-inspirada-em-samba-da-mangueira-ouca-oya-por-nos%2F",
        "furo": {
-        "semPortalHa": "26 h 52"
+        "semPortalHa": "26 h 57"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (escola de samba: mangueira); resumo (escola de samba: mangueira)",
@@ -1301,7 +1236,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "13 h 51"
+        "semPortalHa": "13 h 56"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: madureira); resumo (lugar: madureira)",
@@ -1332,7 +1267,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "24 h 15"
+        "semPortalHa": "24 h 20"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 2; parágrafo 6 (escola de samba: estacio de sa)",
@@ -1391,13 +1326,10 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "29 h 43"
+        "semPortalHa": "29 h 48"
        },
        "local": "Niterói, RJ",
        "localComo": "título/resumo: título; resumo",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "Niterói tem 17º Festival Viva Zumbi com Diogo Nogueira e Marvvila no Caminho Niemeyer, em 20/11",
        "link": "https://abihrj.com.br/noticias/niteroi-festival-viva-zumbi-caminho-niemeyer-20-novembro-2026",
        "veiculo": "ABIH-RJ",
@@ -1425,7 +1357,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "32 h 05"
+        "semPortalHa": "32 h 10"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"no Rio\"); resumo (\"no Rio\")",
@@ -1456,7 +1388,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "33 h 50"
+        "semPortalHa": "33 h 55"
        },
        "local": "Cabo Frio, RJ",
        "localComo": "matéria (Bing Notícias (título exato)): parágrafo 1; parágrafo 3",
@@ -1543,7 +1475,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "46 h 34"
+        "semPortalHa": "46 h 39"
        },
        "local": "Niterói, RJ",
        "localComo": "título/resumo: título; resumo",
@@ -1589,7 +1521,7 @@
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [],
-       "via": "Google Notícias: samba em SP"
+       "via": "Google Notícias: sambista"
       },
       {
        "id": "3d8db1a4c513",
@@ -1602,7 +1534,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "23 h 07"
+        "semPortalHa": "23 h 12"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: sapucai); resumo (lugar: sapucai)",
@@ -1641,7 +1573,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=25&faixa=opcional&titulo=Kareen+Mendes+e+Samba+de+M%C3%A3es+levam+ancestralidade+e+protagonismo+feminino+%C3%A0+Micareta+de+Feira+2026&noticia=https%3A%2F%2Fjornalgrandebahia.com.br%2F2026%2F11%2Fkareen-mendes-e-samba-de-maes-levam-ancestralidade-e-protagonismo-feminino-a-micareta-de-feira-2026%2F&texto=Kareen+Mendes+e+Samba+de+M%C3%A3es+levam+ancestralidade+e+protagonismo+feminino+%C3%A0+Micareta+de+Feira+2026%0ALocal%3A+Feira+de+Santana%2C+BA%0AVe%C3%ADculo%3A+Jornal+Grande+Bahia+%C2%B7+2026-11-21+14%3A23+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "20 h 57"
+        "semPortalHa": "21 h 02"
        },
        "local": "Feira de Santana, BA",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 4",
@@ -1678,7 +1610,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "2 h 18"
+        "semPortalHa": "2 h 23"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -1709,13 +1641,10 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 48"
+        "semPortalHa": "5 h 53"
        },
        "local": "Pelotas, RS",
        "localComo": "título/resumo: resumo",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "Manhã é de debates e samba no 2º Festival da Igualdade Racial",
        "link": "https://pelotas.com.br/noticia/manha-e-de-debates-e-samba-no-2o-festival-da-igualdade-racial",
        "veiculo": "Prefeitura de Pelotas",
@@ -1743,7 +1672,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "8 h 14"
+        "semPortalHa": "8 h 19"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -1774,7 +1703,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 41"
+        "semPortalHa": "10 h 46"
        },
        "local": "Salvador, BA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1; parágrafo 4",
@@ -1805,7 +1734,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "36 min"
+        "semPortalHa": "41 min"
        },
        "local": "Bahia (estado; cidade não citada)",
        "localComo": "site oficial do estado (ba.gov.br)",
@@ -1836,7 +1765,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "4 h 08"
+        "semPortalHa": "4 h 13"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (10 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -1868,7 +1797,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "8 h 14"
+        "semPortalHa": "8 h 19"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (13 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -1900,7 +1829,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "8 h 53"
+        "semPortalHa": "8 h 58"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (8 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -1932,7 +1861,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 14"
+        "semPortalHa": "10 h 19"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (18 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -2299,7 +2228,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "12 h 15"
+        "semPortalHa": "12 h 20"
        },
        "local": "Salvador, BA",
        "localComo": "matéria (sitemap do veículo): parágrafo 1; parágrafo 2",
@@ -2330,7 +2259,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "27 h 53"
+        "semPortalHa": "27 h 58"
        },
        "local": "Salvador, BA",
        "localComo": "matéria (Bing Notícias (título exato)): parágrafo 15 (com UF)",
@@ -2361,7 +2290,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "32 h 34"
+        "semPortalHa": "32 h 39"
        },
        "local": "Maceió, AL",
        "localComo": "matéria (RSS do veículo): parágrafo 7 (com UF)",
@@ -2392,7 +2321,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "33 h 23"
+        "semPortalHa": "33 h 28"
        },
        "local": "Manaus, AM",
        "localComo": "título/resumo: título; resumo",
@@ -2479,7 +2408,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "45 h 20"
+        "semPortalHa": "45 h 25"
        },
        "local": "Bandeira, MG",
        "localComo": "título/resumo: título; resumo",
@@ -2510,7 +2439,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "23 h 24"
+        "semPortalHa": "23 h 29"
        },
        "local": "Sacramento, MG",
        "localComo": "título/resumo: título; resumo",
@@ -2545,7 +2474,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "1 h 33"
+        "semPortalHa": "1 h 38"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2578,14 +2507,11 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "3 h 15"
+        "semPortalHa": "3 h 20"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "O Festival de Samba começa hoje em Koza, em Chatan.",
        "tituloOriginal": "コザでサンバ祭り開幕きょうは北谷",
        "traduzido": "traduzido do japonês",
@@ -2614,7 +2540,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "9 h 33"
+        "semPortalHa": "9 h 38"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2649,7 +2575,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "27 h"
+        "semPortalHa": "27 h 05"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "matéria (Bing Notícias (título exato, outro veículo)): país citado \"サンバ\", cidade não citada",
@@ -2683,7 +2609,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "34 h 19"
+        "semPortalHa": "34 h 24"
        },
        "local": "Reino Unido (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"reino unido\", cidade não citada",
@@ -2715,7 +2641,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "14 h 39"
+        "semPortalHa": "14 h 44"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2748,7 +2674,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "47 h 29"
+        "semPortalHa": "47 h 34"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2849,7 +2775,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "46 h 01"
+        "semPortalHa": "46 h 06"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (12 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -2885,7 +2811,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "4 h 51"
+        "semPortalHa": "4 h 56"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (sitemap do veículo): parágrafo 5 (\"do Rio\"); parágrafo 6",
@@ -2922,7 +2848,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=55&faixa=opcional&titulo=Murilo+Huff+e+Ludmilla+gravam+%E2%80%98%2B18%E2%80%99%2C+parceria+entre+sertanejo+e+pagode&noticia=https%3A%2F%2Fespacodopovo.com.br%2Fmurilo-huff-ludmilla-18-parceria-sertanejo-pagode%2F&texto=Murilo+Huff+e+Ludmilla+gravam+%E2%80%98%2B18%E2%80%99%2C+parceria+entre+sertanejo+e+pagode%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+Espa%C3%A7o+do+Povo+%C2%B7+2026-11-20+13%3A50+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fobuxixo.com.br%2Fmurilo-huff-e-ludmilla-gravam-parceria-inedita-que-mistura-sertanejo-e-pagode%2F%0Ahttps%3A%2F%2Fegobrazil.com.br%2Fmurilo-huff-e-ludmilla-gravam-parceria-inedita-que-mistura-sertanejo-e-pagode-2%2F",
        "furo": {
-        "semPortalHa": "39 h 11"
+        "semPortalHa": "39 h 16"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 5 (\"no Rio\")",
@@ -2992,7 +2918,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "27 h 45"
+        "semPortalHa": "27 h 50"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 7; parágrafo 8",
@@ -3051,7 +2977,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "47 h 26"
+        "semPortalHa": "47 h 31"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): parágrafo 1; parágrafo 2",
@@ -3087,7 +3013,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "8 h 17"
+        "semPortalHa": "8 h 22"
        },
        "local": "Bahia (estado; cidade não citada)",
        "localComo": "estado citado no texto: \"da bahia\"",
@@ -3119,7 +3045,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "9 h 13"
+        "semPortalHa": "9 h 18"
        },
        "local": "Andaraí, BA",
        "localComo": "título/resumo: título; resumo",
@@ -3150,7 +3076,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "4 h 42"
+        "semPortalHa": "4 h 47"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -3413,7 +3339,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "34 h 25"
+        "semPortalHa": "34 h 30"
        },
        "local": "João Pessoa, PB",
        "localComo": "título/resumo: título; resumo",
@@ -3434,37 +3360,6 @@
        "via": "Google Notícias: pagode em SP"
       },
       {
-       "id": "8ad6fa26aeed",
-       "pot": {
-        "nota": 16,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 16% provisória · opcional",
-        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "furo": {
-        "semPortalHa": "34 h 44"
-       },
-       "local": "Feira de Santana, BA",
-       "localComo": "título/resumo: título; resumo",
-       "titulo": "Micareta 2026 de Feira de Santana reúne Robyssão, John Robert, Milsinho Toque Dez e Pagode do Segredo em noite de diversidade musical",
-       "link": "https://jornalgrandebahia.com.br/2026/11/micareta-2026-de-feira-de-santana-reune-robyssao-john-robert-milsinho-toque-dez-e-pagode-do-segredo-em-noite-de-diversidade-musical/",
-       "veiculo": "Jornal Grande Bahia",
-       "dominio": "jornalgrandebahia.com.br",
-       "publicado": "2026-11-20T09:30",
-       "primeiroVisto": "2026-11-19T22:56",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade: título/resumo: título; resumo",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: pagode"
-      },
-      {
        "id": "d6c03a2ccf95",
        "pot": {
         "nota": 31,
@@ -3475,7 +3370,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "34 h 55"
+        "semPortalHa": "35 h"
        },
        "local": "Santa Cruz do Sul, RS",
        "localComo": "matéria (Bing Notícias (título exato)): parágrafo 3; parágrafo 15",
@@ -3506,7 +3401,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "45 h 10"
+        "semPortalHa": "45 h 15"
        },
        "local": "São Vicente, RN",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -3537,7 +3432,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "45 h 10"
+        "semPortalHa": "45 h 15"
        },
        "local": "Salvador, BA (pelo veículo)",
        "localComo": "cidade do veículo regional (portalsalvadorfm.com.br); a matéria não cita a cidade",
@@ -3568,7 +3463,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "45 h 14"
+        "semPortalHa": "45 h 19"
        },
        "local": "Curitiba, PR",
        "localComo": "título/resumo: título; resumo",
@@ -3599,7 +3494,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "31 h 15"
+        "semPortalHa": "31 h 20"
        },
        "local": "Cuiabá, MT",
        "localComo": "título/resumo: título; resumo",
@@ -3629,7 +3524,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "37 h 15"
+        "semPortalHa": "37 h 20"
        },
        "local": "Fortaleza, CE",
        "localComo": "título/resumo: título; resumo",
@@ -3659,7 +3554,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "30 h 12"
+        "semPortalHa": "30 h 17"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (6 parágrafos, Bing Notícias (título exato)), nenhuma cidade citada no texto",
@@ -3669,6 +3564,35 @@
        "dominio": "atl.clicrbs.com.br",
        "publicado": "2026-11-20T14:02",
        "primeiroVisto": "2026-11-20T14:48",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "sem local no texto, padrão Brasil",
+       "localIncerto": true,
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: artistas anunciam"
+      },
+      {
+       "id": "46c8cf70da90",
+       "pot": {
+        "nota": 31,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 31% provisória · opcional",
+        "motivo": "pessoa famosa: Péricles · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "local": "Nacional (sem cidade)",
+       "semCidadeMotivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+       "titulo": "Péricles vai além de histórias de superação em programa com artistas negros",
+       "link": "https://noticiasdatv.uol.com.br/noticia/televisao/pericles-vai-alem-de-historias-de-superacao-em-programa-com-artistas-negros-159635",
+       "veiculo": "Notícias da TV",
+       "dominio": "noticiasdatv.uol.com.br",
+       "publicado": "2026-11-20T14:00",
+       "primeiroVisto": "2026-11-20T14:17",
        "fontes": 1,
        "confirmado": false,
        "quente": false,
@@ -3712,7 +3636,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Jo%C3%A3o+Rock+confirma+edi%C3%A7%C3%A3o+de+2027+para+31+de+julho&noticia=https%3A%2F%2Fratodeshow.com.br%2Fjoao-rock-confirma-edicao-de-2027-para-31-de-julho&texto=Jo%C3%A3o+Rock+confirma+edi%C3%A7%C3%A3o+de+2027+para+31+de+julho%0ALocal%3A+Ribeir%C3%A3o+Preto%2C+SP%0AVe%C3%ADculo%3A+Rato+de+Show+%C2%B7+2026-11-20+03%3A25+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fsaocarlosnotoque.com%2Fjoao-rock-confirma-nova-edicao-para-31-de-julho-de-2027%2F",
        "djf": "festival: João Rock",
        "furo": {
-        "semPortalHa": "41 h 57"
+        "semPortalHa": "42 h 02"
        },
        "local": "Ribeirão Preto, SP",
        "localComo": "matéria (página inicial do veículo): descrição da página",
@@ -3750,7 +3674,7 @@
        "emApuracao": true,
        "djf": "festival: João Rock",
        "furo": {
-        "semPortalHa": "14 h 08"
+        "semPortalHa": "14 h 13"
        },
        "local": "Ribeirão Preto, SP",
        "localComo": "título/resumo: título (com UF); resumo (com UF)",
@@ -3782,7 +3706,7 @@
        "emApuracao": true,
        "djf": "festival: João Rock",
        "furo": {
-        "semPortalHa": "15 h 49"
+        "semPortalHa": "15 h 54"
        },
        "local": "Ribeirão Preto, SP",
        "localComo": "matéria (Bing Notícias (título exato, outro veículo)): descrição da página",
@@ -3814,7 +3738,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "20 h 15"
+        "semPortalHa": "20 h 20"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (página inicial do veículo): parágrafo 16; parágrafo 17",
@@ -3846,7 +3770,7 @@
        "emApuracao": true,
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "35 h 04"
+        "semPortalHa": "35 h 09"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1",
@@ -3878,7 +3802,7 @@
        "emApuracao": true,
        "djf": "dj: Daft Punk",
        "furo": {
-        "semPortalHa": "35 h 13"
+        "semPortalHa": "35 h 18"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título; resumo",
@@ -3916,7 +3840,7 @@
        "emApuracao": true,
        "djf": "dj: Mochakk",
        "furo": {
-        "semPortalHa": "30 h 45"
+        "semPortalHa": "30 h 50"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (\"do Rio\"); parágrafo 2 (lugar: praca maua)",
@@ -3948,13 +3872,10 @@
        "emApuracao": true,
        "djf": "festival: Festival de Verão Salvador",
        "furo": {
-        "semPortalHa": "33 h 27"
+        "semPortalHa": "33 h 32"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"do Rio\"); resumo (\"do Rio\")",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "Alok leva projeto Rave The World ao Museu do Amanhã no Festival de Verão do Rio",
        "link": "https://poltronavip.com/alok-rave-the-world-museu-do-amanha-rio-de-janeiro",
        "veiculo": "Poltrona Vip",
@@ -3983,7 +3904,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "46 h 53"
+        "semPortalHa": "46 h 58"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -4019,7 +3940,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "2 h 26"
+        "semPortalHa": "2 h 31"
        },
        "local": "Tauá, CE",
        "localComo": "título/resumo: título; resumo",
@@ -4050,7 +3971,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "4 h 45"
+        "semPortalHa": "4 h 50"
        },
        "local": "Fortaleza, CE",
        "localComo": "título/resumo: título; resumo",
@@ -4082,7 +4003,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "8 h 25"
+        "semPortalHa": "8 h 30"
        },
        "local": "Manaus, AM",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -4114,7 +4035,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "11 h 29"
+        "semPortalHa": "11 h 34"
        },
        "local": "Recife, PE",
        "localComo": "matéria (Bing Notícias (título exato)): parágrafo 2; descrição da página (lugar: classic hall)",
@@ -4150,7 +4071,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=25&faixa=opcional&titulo=Alok+e+Zeeba+lan%C3%A7am+%3FMonday%3F+e+criticam+m%C3%BAsica+feita+por+IA%3A+%3FEnlatado%3F&noticia=https%3A%2F%2Fwww.bra1.com.br%2Fgeral%2Fid-730185%2Falok_e_zeeba_lancam_e_63mondaye_63_e_criticam_musica_feita_por_ia__e_63enlatadoe_63&texto=Alok+e+Zeeba+lan%C3%A7am+%3FMonday%3F+e+criticam+m%C3%BAsica+feita+por+IA%3A+%3FEnlatado%3F%0ALocal%3A+Nacional+%28sem+cidade%29%0AVe%C3%ADculo%3A+bra1.com.br+%C2%B7+2026-11-21+16%3A50+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fportalpopline.com.br%2Falok-zeeba-parceria-ep-nostalgia-entrevista-ia%2F",
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "10 h 15"
+        "semPortalHa": "10 h 20"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (16 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -4189,7 +4110,7 @@
        "emApuracao": true,
        "djf": "dj: Diplo",
        "furo": {
-        "semPortalHa": "2 h 47"
+        "semPortalHa": "2 h 52"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -4285,7 +4206,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=DJ+goiano+Illusionize+retorna+a+Goi%C3%A2nia+com+festa+de+m%C3%BAsica+eletr%C3%B4nica&noticia=https%3A%2F%2Fcurtamais.com.br%2Fgoiania%2Fillusionize-em-goiania%2F&texto=DJ+goiano+Illusionize+retorna+a+Goi%C3%A2nia+com+festa+de+m%C3%BAsica+eletr%C3%B4nica%0ALocal%3A+Goi%C3%A2nia%2C+GO%0AVe%C3%ADculo%3A+Curta+Mais+-+Goi%C3%A2nia+%C2%B7+2026-11-20+12%3A45+%28Bras%C3%ADlia%29",
        "djf": "dj: Illusionize",
        "furo": {
-        "semPortalHa": "32 h 15"
+        "semPortalHa": "32 h 20"
        },
        "local": "Goiânia, GO",
        "localComo": "título/resumo: título; resumo",
@@ -4327,7 +4248,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Alok+faz+doa%C3%A7%C3%A3o+e+se+emociona+em+visita+ao+Hospital+Pequeno+Pr%C3%ADncipe&noticia=https%3A%2F%2Fwww.areavip.com.br%2Ffamosos%2Falok-faz-doacao-e-se-emociona-em-visita-ao-hospital-pequeno-principe%2F&texto=Alok+faz+doa%C3%A7%C3%A3o+e+se+emociona+em+visita+ao+Hospital+Pequeno+Pr%C3%ADncipe%0ALocal%3A+Curitiba%2C+PR%0AVe%C3%ADculo%3A+%C3%81rea+VIP+%C2%B7+2026-11-20+11%3A19+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fportaltucuma.com.br%2Falok-faz-visita-a-hospital-em-curitiba-e-anuncia-doacao-de-equipamentos-para-cirurgias-cardiacas-video%2F",
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "47 h 55"
+        "semPortalHa": "48 h"
        },
        "local": "Curitiba, PR",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -4365,7 +4286,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "16 h 41"
+        "semPortalHa": "16 h 46"
        },
        "local": "Pouso Alegre, MG",
        "localComo": "título/resumo: título; resumo",
@@ -4396,7 +4317,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "34 h 46"
+        "semPortalHa": "34 h 51"
        },
        "local": "Curitiba, PR",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (com UF); descrição da página (com UF)",
@@ -4428,7 +4349,7 @@
        "emApuracao": true,
        "djf": "dj: Diplo",
        "furo": {
-        "semPortalHa": "17 h"
+        "semPortalHa": "17 h 05"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (16 parágrafos, Bing Notícias (título exato, outro veículo)), nenhuma cidade citada no texto",
@@ -4461,7 +4382,7 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "27 h 29"
+        "semPortalHa": "27 h 34"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -4493,7 +4414,7 @@
        "emApuracao": true,
        "djf": "dj: Illusionize",
        "furo": {
-        "semPortalHa": "29 h 06"
+        "semPortalHa": "29 h 11"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (10 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -4526,7 +4447,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "39 h 36"
+        "semPortalHa": "39 h 41"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (11 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -4559,7 +4480,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "44 h 04"
+        "semPortalHa": "44 h 09"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "erro ao abrir a matéria: HTTP 403",
@@ -4631,13 +4552,10 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Third+Annual+Coachella+Valley+Filipino+Festival+Underway&noticia=https%3A%2F%2Fmynewsla.com%2Fhollywood%2F2026%2F11%2F21%2Fthird-annual-coachella-valley-filipino-festival-underway%2F&texto=Third+Annual+Coachella+Valley+Filipino+Festival+Underway%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+MyNewsLA.com+%C2%B7+2026-11-21+17%3A42+%28Bras%C3%ADlia%29",
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "29 h 46"
+        "semPortalHa": "29 h 51"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (7 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "Third Annual Coachella Valley Filipino Festival Underway",
        "link": "https://mynewsla.com/hollywood/2026/11/21/third-annual-coachella-valley-filipino-festival-underway/",
        "veiculo": "MyNewsLA.com",
@@ -4676,7 +4594,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Line-up+do+Glastonbury+2027%3A+Fender%2C+Styles+e+Eilish+como+headliners&noticia=https%3A%2F%2Fdeeparrival.com%2Fnews%2Fglastonbury-2027-lineup-sam-fender-harry-styles-billie-eilish-cher%2F&texto=Line-up+do+Glastonbury+2027%3A+Fender%2C+Styles+e+Eilish+como+headliners%0ALocal%3A+Reino+Unido+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+deeparrival.com+%C2%B7+2026-11-21+12%3A05+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.msn.com%2Fen-us%2Fentertainment%2Fmusic%2Fharry-styles-billie-eilish-and-cher-lead-glastonbury-2027-s-epic-lineup%2Fvi-AA2hQVB0",
        "djf": "festival: Glastonbury",
        "furo": {
-        "semPortalHa": "36 h 40"
+        "semPortalHa": "36 h 45"
        },
        "local": "Reino Unido (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"uk\", cidade não citada",
@@ -4717,7 +4635,7 @@
        "emApuracao": true,
        "djf": "dj: Peggy Gou",
        "furo": {
-        "semPortalHa": "4 h 04"
+        "semPortalHa": "4 h 09"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "página lida, mas sem texto de matéria acessível (Bing Notícias (título exato, outro veículo))",
@@ -4751,7 +4669,7 @@
        "emApuracao": true,
        "djf": "festival: Green Valley",
        "furo": {
-        "semPortalHa": "4 h 44"
+        "semPortalHa": "4 h 49"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (16 parágrafos, Bing Notícias (título exato)), nenhuma cidade citada no texto",
@@ -4783,7 +4701,7 @@
        "emApuracao": true,
        "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "6 h 37"
+        "semPortalHa": "6 h 42"
        },
        "local": "Reino Unido (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"uk\", cidade não citada",
@@ -4816,13 +4734,10 @@
        "emApuracao": true,
        "djf": "festival: Glastonbury",
        "furo": {
-        "semPortalHa": "10 h 30"
+        "semPortalHa": "10 h 35"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "A DeafZone no Festival de Glastonbury foi homenageada no Hall da Fama da Signature pela comunicação com surdos",
        "tituloOriginal": "DeafZone at Glastonbury Festival honoured in Signature’s Hall of Fame for Deaf communication",
        "traduzido": "traduzido do inglês",
@@ -4858,13 +4773,10 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=5&nota=52&faixa=opcional&titulo=O+Tomorrowland+pode+voltar+aos+EUA+com+o+Colorado+Winter+Festival&noticia=https%3A%2F%2Fwww.edmtunes.com%2F2026%2F11%2F20%2Ftomorrowland-could-return-to-us-with-colorado-winter-festival%2F%3Futm_source%3Drss%26utm_medium%3Drss%26utm_campaign%3Dtomorrowland-could-return-to-us-with-colorado-winter-festival&texto=O+Tomorrowland+pode+voltar+aos+EUA+com+o+Colorado+Winter+Festival%0ALocal%3A+Atlanta%2C+EUA%0AVe%C3%ADculo%3A+EDMTunes+%C2%B7+2026-11-20+11%3A32+%28Bras%C3%ADlia%29&links=https%3A%2F%2F303magazine.com%2F2026%2F11%2Ftomorrowland-winter-colorado%2F%0Ahttps%3A%2F%2Fwww.denverpost.com%2F2026%2F11%2F20%2Ftomorrowland-colorado-edm-festival%2F%0Ahttps%3A%2F%2Fedm.com%2Fnews%2Ftomorrowland-festival-colorado-mountains%2F",
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "34 h 30"
+        "semPortalHa": "34 h 35"
        },
        "local": "Atlanta, EUA",
        "localComo": "matéria (RSS do veículo): parágrafo 3 (atlanta)",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "O Tomorrowland pode voltar aos EUA com o Colorado Winter Festival",
        "tituloOriginal": "Tomorrowland Could Return to US With Colorado Winter Festival",
        "traduzido": "traduzido do inglês",
@@ -4920,7 +4832,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=38&faixa=opcional&titulo=Steve+Aoki+destaca+impacto+de+%27MIC+Drop%27+ao+lado+do+BTS&noticia=https%3A%2F%2Fdiariodamidia.com.br%2Fsteve-aoki-destaca-impacto-de-mic-drop-ao-lado-do-bts&texto=Steve+Aoki+destaca+impacto+de+%27MIC+Drop%27+ao+lado+do+BTS%0ALocal%3A+Las+Vegas%2C+EUA%0AVe%C3%ADculo%3A+diariodamidia.com.br+%C2%B7+2026-11-20+18%3A12+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fbillboard.com.br%2Fsteve-aoki-parceria-com-bts-e-sucesso-de-mic-drop%2F",
        "djf": "dj: Steve Aoki",
        "furo": {
-        "semPortalHa": "30 h 14"
+        "semPortalHa": "30 h 19"
        },
        "local": "Las Vegas, EUA",
        "localComo": "mesmo fato em Billboard Brasil: matéria (busca WordPress do veículo): parágrafo 11 (las vegas); parágrafo 12 (las vegas)",
@@ -4993,13 +4905,10 @@
        "emApuracao": true,
        "djf": "festival: Ultra Music Festival",
        "furo": {
-        "semPortalHa": "17 h 32"
+        "semPortalHa": "17 h 37"
        },
        "local": "Miami, EUA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1 (miami); parágrafo 2 (miami)",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "O Ultra Music Festival anuncia o line-up de 2027 com Calvin Harris, Martin Garrix e Dom Dolla",
        "tituloOriginal": "Ultra Music Festival Announces 2027 Lineup With Calvin Harris, Martin Garrix and Dom Dolla",
        "traduzido": "traduzido do inglês",
@@ -5030,7 +4939,7 @@
        "emApuracao": true,
        "djf": "dj: Tiësto",
        "furo": {
-        "semPortalHa": "19 h 07"
+        "semPortalHa": "19 h 12"
        },
        "local": "Lisboa, Portugal",
        "localComo": "título/resumo: título (lisbon); resumo (lisbon)",
@@ -5063,14 +4972,11 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "24 h 05"
+        "semPortalHa": "24 h 10"
        },
        "local": "México (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"mexico\", cidade não citada",
        "semCidadeMotivo": "matéria lida (11 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "52 anos de música: como o Festival de Bluegrass de Telluride moldou a cidade",
        "tituloOriginal": "52 Years of Music: How Telluride’s Bluegrass Festival Shaped the Town",
        "traduzido": "traduzido do inglês",
@@ -5101,7 +5007,7 @@
        "emApuracao": true,
        "djf": "dj: Martin Garrix",
        "furo": {
-        "semPortalHa": "24 h 11"
+        "semPortalHa": "24 h 16"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -5134,7 +5040,7 @@
        "emApuracao": true,
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "24 h 59"
+        "semPortalHa": "25 h 04"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -5167,13 +5073,10 @@
        "emApuracao": true,
        "djf": "dj: Swedish House Mafia",
        "furo": {
-        "semPortalHa": "25 h 32"
+        "semPortalHa": "25 h 37"
        },
        "local": "San Francisco, EUA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1 (san francisco); parágrafo 8 (san francisco)",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "O Portola Festival 2026 anuncia Robyn, Swedish House Mafia e DOG BLOOD",
        "tituloOriginal": "Portola Festival 2026 Announces Robyn, Swedish House Mafia and DOG BLOOD",
        "traduzido": "traduzido do inglês",
@@ -5204,14 +5107,11 @@
        "emApuracao": true,
        "djf": "dj: Anyma",
        "furo": {
-        "semPortalHa": "25 h 38"
+        "semPortalHa": "25 h 43"
        },
        "local": "Canadá (cidade não citada)",
        "localComo": "matéria (busca WordPress do veículo): país citado \"canada\", cidade não citada",
        "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "ANYMA faz sua estreia no Canadá com o AEDEN Takeover no Soulrise Music Festival de Vancouver",
        "tituloOriginal": "ANYMA Sets Canadian Debut with AEDEN Takeover at Vancouver’s Soulrise Music Festival",
        "traduzido": "traduzido do inglês",
@@ -5242,7 +5142,7 @@
        "emApuracao": true,
        "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "25 h 41"
+        "semPortalHa": "25 h 46"
        },
        "local": "Espanha (cidade não citada)",
        "localComo": "matéria (busca WordPress do veículo): país citado \"spain\", cidade não citada",
@@ -5277,7 +5177,7 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "25 h 43"
+        "semPortalHa": "25 h 48"
        },
        "local": "EUA (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"united states\", cidade não citada",
@@ -5312,13 +5212,10 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "25 h 57"
+        "semPortalHa": "26 h 02"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (8 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-       "emAlta": [
-        "Google Trends Brasil: festival"
-       ],
        "titulo": "O Tomorrowland divulga o line-up completo para o festival de estreia na Tailândia",
        "tituloOriginal": "Tomorrowland Releases Full Lineup for Thailand Debut Festival",
        "traduzido": "traduzido do inglês",
@@ -5349,7 +5246,7 @@
        "emApuracao": true,
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "26 h 18"
+        "semPortalHa": "26 h 23"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -5383,7 +5280,7 @@
        "emApuracao": true,
        "djf": "festival: Glastonbury",
        "furo": {
-        "semPortalHa": "28 h 12"
+        "semPortalHa": "28 h 17"
        },
        "local": "Londres, Reino Unido",
        "localComo": "título/resumo: título (london); resumo (london)",
@@ -5427,7 +5324,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=50&faixa=opcional&titulo=Dave+Matthews+Band+anuncia+quatro+shows+no+Brasil+em+2027&noticia=https%3A%2F%2Fbillboard.com.br%2Fdave-matthews-band-quatro-shows-no-brasil-2027%2F&texto=Dave+Matthews+Band+anuncia+quatro+shows+no+Brasil+em+2027%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Billboard+Brasil+%C2%B7+2026-11-21+13%3A37+%28Bras%C3%ADlia%29&links=https%3A%2F%2Frollingstone.com.br%2Fmusica%2Fdave-matthews-band-sera-atracao-do-best-of-blues-and-rock-em-2027%2F",
      "furo": {
-      "semPortalHa": "25 h 29"
+      "semPortalHa": "25 h 34"
      },
      "local": "São Paulo, SP",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 1; parágrafo 4",
@@ -5719,6 +5616,47 @@
      "via": "Terra Música"
     },
     {
+     "primeiroANoticiar": {
+      "veiculo": "Portal Rap Dab",
+      "hora": "12:15"
+     },
+     "id": "7689dec39d13",
+     "pot": {
+      "nota": 32,
+      "faixa": "opcional",
+      "provisoria": false,
+      "rotulo": "32% · opcional",
+      "motivo": "veículo grande (Billboard Brasil) · 2 veículos"
+     },
+     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=32&faixa=opcional&titulo=Mu540+%C3%A9+atra%C3%A7%C3%A3o+do+Beats+Esquenta+Fest%3B+saiba+mais+sobre+o+DJ&noticia=https%3A%2F%2Fbillboard.com.br%2Fbeats-mu540-dj%2F&texto=Mu540+%C3%A9+atra%C3%A7%C3%A3o+do+Beats+Esquenta+Fest%3B+saiba+mais+sobre+o+DJ%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Billboard+Brasil+%C2%B7+2026-11-20+19%3A15+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.rapdab.com.br%2F2026%2F11%2F20%2Fmu540-beats-esquenta-fest%2F",
+     "furo": {
+      "semPortalHa": "32 h 05"
+     },
+     "local": "São Paulo, SP",
+     "localComo": "matéria (busca WordPress do veículo): parágrafo 5",
+     "titulo": "Mu540 é atração do Beats Esquenta Fest; saiba mais sobre o DJ",
+     "link": "https://billboard.com.br/beats-mu540-dj/",
+     "veiculo": "Billboard Brasil",
+     "dominio": "billboard.com.br",
+     "publicado": "2026-11-20T19:15",
+     "primeiroVisto": "2026-11-20T23:24",
+     "fontes": 2,
+     "confirmado": true,
+     "quente": false,
+     "regiao": "sp",
+     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): parágrafo 5",
+     "categoria": "DJ",
+     "linkDireto": true,
+     "tambemEm": [
+      {
+       "veiculo": "Portal Rap Dab",
+       "titulo": "MU540 leva funk, grime, drill e trap ao Beats Esquenta Fest nesta sexta-feira (20)",
+       "link": "https://www.rapdab.com.br/2026/11/20/mu540-beats-esquenta-fest/"
+      }
+     ],
+     "via": "Google Notícias: DJs"
+    },
+    {
      "id": "84dc408e19a4",
      "pot": {
       "nota": 26,
@@ -5729,7 +5667,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "45 min"
+      "semPortalHa": "50 min"
      },
      "local": "Natal, RN",
      "localComo": "matéria (RSS do veículo): parágrafo 13 (com UF)",
@@ -5760,13 +5698,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "1 h 46"
+      "semPortalHa": "1 h 51"
      },
      "local": "Juazeiro, BA",
      "localComo": "título/resumo: título; resumo",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Seu Jorge é atração do Festival A Bossa! 2026 em Juazeiro",
      "link": "https://niddedigital.com/seu-jorge-e-atracao-do-festival-a-bossa-2026-em-juazeiro/",
      "veiculo": "niddedigital.com",
@@ -5794,7 +5729,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "3 h 15"
+      "semPortalHa": "3 h 20"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -5854,7 +5789,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "3 h 57"
+      "semPortalHa": "4 h 02"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (15 parágrafos, link direto), nenhuma cidade citada no texto",
@@ -5886,13 +5821,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "4 h 02"
+      "semPortalHa": "4 h 07"
      },
      "local": "Rio de Janeiro, RJ",
      "localComo": "título/resumo: título (escola de samba: portela); resumo (escola de samba: portela)",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Bateria da Portela encerra festival gratuito no Passeio Público neste domingo",
      "link": "https://tribunadosertao.com.br/rj-em-foco/2026/11/21/1027062-bateria-da-portela-encerra-festival-gratuito-no-passeio-publico-neste-domingo",
      "veiculo": "Tribuna do Sertão",
@@ -5920,7 +5852,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "4 h 12"
+      "semPortalHa": "4 h 17"
      },
      "local": "Rio de Janeiro, RJ",
      "localComo": "título/resumo: título (lugar: copacabana); resumo (lugar: copacabana)",
@@ -5951,7 +5883,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "5 h 06"
+      "semPortalHa": "5 h 11"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (9 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -5983,7 +5915,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "5 h 43"
+      "semPortalHa": "5 h 48"
      },
      "local": "Itajaí, SC",
      "localComo": "título/resumo: título; resumo",
@@ -6042,7 +5974,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 28"
+      "semPortalHa": "7 h 33"
      },
      "local": "Brasília, DF",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 1",
@@ -6073,7 +6005,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 31"
+      "semPortalHa": "7 h 36"
      },
      "local": "Bahia (estado; cidade não citada)",
      "localComo": "estado citado no texto: \"da bahia\"",
@@ -6134,14 +6066,11 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "9 h 46"
+      "semPortalHa": "9 h 51"
      },
      "local": "Bahia (estado; cidade não citada)",
      "localComo": "estado citado no texto: \"na bahia\"",
      "semCidadeMotivo": "matéria lida (12 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Festival A Bossa",
      "link": "https://billboard.com.br/festival-a-bossa-joao-bosco-seu-jorge-juazeiro/",
      "veiculo": "Billboard Brasil",
@@ -6169,7 +6098,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "9 h 59"
+      "semPortalHa": "10 h 04"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (11 parágrafos, link direto), nenhuma cidade citada no texto",
@@ -6201,7 +6130,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "10 h 05"
+      "semPortalHa": "10 h 10"
      },
      "local": "Cambé, PR",
      "localComo": "título/resumo: título; resumo",
@@ -6232,7 +6161,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "11 h 45"
+      "semPortalHa": "11 h 50"
      },
      "local": "Ilhéus, BA",
      "localComo": "matéria (página inicial do veículo): parágrafo 1; descrição da página",
@@ -6263,7 +6192,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "12 h 12"
+      "semPortalHa": "12 h 17"
      },
      "local": "Belo Horizonte, MG",
      "localComo": "título/resumo: título (lugar: mineirinho); resumo (lugar: mineirinho)",
@@ -6295,9 +6224,6 @@
      "emApuracao": true,
      "local": "Juiz de Fora, MG",
      "localComo": "matéria (sitemap do veículo): parágrafo 1; parágrafo 2",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Festival Botecar Juiz de Fora: veja quais artistas inspiram os pratos",
      "link": "https://g1.globo.com/mg/zona-da-mata/noticia/2026/11/21/ana-carolina-onze20-e-mamao-veja-quais-artistas-inspiraram-os-petiscos-do-festival-botecar-2026-em-juiz-de-fora.ghtml",
      "veiculo": "G1",
@@ -6325,7 +6251,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "14 h 15"
+      "semPortalHa": "14 h 20"
      },
      "local": "Lançamento/assunto sem cidade (pelo título; matéria não aberta)",
      "semCidadeMotivo": "matéria marcada como paga (isAccessibleForFree=false), não lida",
@@ -6401,37 +6327,6 @@
      "linkDireto": true,
      "tambemEm": [],
      "via": "g1 Pop & Arte"
-    },
-    {
-     "id": "b89d2b2c91a4",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: turnê · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "22 h 42"
-     },
-     "local": "Assunto geral (sem cidade)",
-     "semCidadeMotivo": "matéria lida (8 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-     "titulo": "Christian Chávez confirma afastamento de Anahí após turnê do RBD: “Não tenho comunicação com ela”",
-     "link": "https://aloalobahia.com/noticias/2026/11/20/christian-chavez-confirma-afastamento-de-anahi-apos-turne-do-rbd-nao-tenho-comunicacao-com-ela/",
-     "veiculo": "Alô Alô Bahia",
-     "dominio": "aloalobahia.com",
-     "publicado": "2026-11-20T21:32",
-     "primeiroVisto": "2026-11-20T22:18",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "Brasil: bahia; Brasil: fonte aloalobahia.com",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: música lançamento"
     }
    ],
    "fora": [
@@ -6506,9 +6401,6 @@
      },
      "local": "Miami, EUA",
      "localComo": "título/resumo: título (miami); resumo (miami)",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "GTA 6: festival em Miami terá Travis Scott e Cardi B",
      "link": "https://folhadoleste.com.br/gta-6-festival-miami-travis-scott-cardi-b/",
      "veiculo": "Folha do Leste",
@@ -6588,7 +6480,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=DJ+Maphorisa+Ft.+Xduppy+-+%C3%81lbum+The+Lawd%E2%80%99s+Selection+Vol+-1+%28EP%29&noticia=https%3A%2F%2Fweb.voxtrendy.net%2Falbums%2Fdj-maphorisa-ft-xduppy-the-lawds-selection-vol-1-ep-album%2F&texto=DJ+Maphorisa+Ft.+Xduppy+-+%C3%81lbum+The+Lawd%E2%80%99s+Selection+Vol+-1+%28EP%29%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+Voxtrendy+%C2%B7+2026-11-20+21%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww2.trendyhiphop.com%2Falbums%2Fdj-maphorisa-the-lawds-selection-vol-1-ep-album%2F",
      "furo": {
-      "semPortalHa": "23 h 15"
+      "semPortalHa": "23 h 20"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
@@ -6631,7 +6523,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Pedro+Sampaio+far%C3%A1+primeiro+show+de+intervalo+da+hist%C3%B3ria+da+Libertadores&noticia=https%3A%2F%2Fgpsbrasilia.com.br%2Fpedro-sampaio-fara-primeiro-show-de-intervalo%2F&texto=Pedro+Sampaio+far%C3%A1+primeiro+show+de+intervalo+da+hist%C3%B3ria+da+Libertadores%0ALocal%3A+Montevid%C3%A9u%2C+Uruguai%0AVe%C3%ADculo%3A+GPS+Bras%C3%ADlia+Portal+de+Not%C3%ADcias+do+DF+%C2%B7+2026-11-20+16%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Frede98.com.br%2Fesportes%2Ffinal-da-libertadores-2026-vai-ter-show-de-pedro-sampaio-no-intervalo%2F",
      "furo": {
-      "semPortalHa": "47 h 21"
+      "semPortalHa": "47 h 26"
      },
      "local": "Montevidéu, Uruguai",
      "localComo": "matéria (RSS do veículo): parágrafo 1 (montevideu)",
@@ -6668,7 +6560,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "1 h 38"
+      "semPortalHa": "1 h 50"
      },
      "local": "Lisboa, Portugal",
      "localComo": "mesmo fato em noticiasaominuto.com (achado no Bing Notícias): parágrafo 1 (lisboa); descrição da página (lisboa)",
@@ -6676,7 +6568,7 @@
      "link": "https://expresso.pt/blitz/agenda/2026-11-19-todos-os-concertos-marcados-para-2026-e-2027-em-portugal-53436cea",
      "veiculo": "Expresso",
      "dominio": "expresso.pt",
-     "publicado": "2026-11-21T18:36",
+     "publicado": "2026-11-21T18:30",
      "primeiroVisto": "2026-11-16T06:09",
      "fontes": 1,
      "confirmado": false,
@@ -6689,6 +6581,73 @@
      "via": "Google Notícias: festivais 1"
     },
     {
+     "id": "eddeb68af219",
+     "pot": {
+      "nota": 34,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 34% provisória · opcional",
+      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "1 h 53"
+     },
+     "local": "Nova York, EUA",
+     "localComo": "matéria (RSS do veículo): parágrafo 1 (new york); parágrafo 14 (new york)",
+     "titulo": "Malaya Sol lança álbum e livro de receitas ao mesmo tempo: \"Ambos preservam memórias e comunicam identidade\"",
+     "tituloOriginal": "Malaya Sol debuts album, cookbook at the same time: ‘Both preserve memories, communicate identity’",
+     "traduzido": "traduzido do inglês",
+     "link": "https://thefilam.net/archives/47544?utm_source=rss&utm_medium=rss&utm_campaign=malaya-sol-debuts-album-cookbook-at-the-same-time-both-preserve-memories-communicate-identity",
+     "veiculo": "The FilAm",
+     "dominio": "thefilam.net",
+     "publicado": "2026-11-21T18:26",
+     "primeiroVisto": "2026-11-21T19:46",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": true,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1 (new york); parágrafo 14 (new york)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: samba (EUA)"
+    },
+    {
+     "id": "3a4975919a8c",
+     "pot": {
+      "nota": 22,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 22% provisória · opcional",
+      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "3 h 41"
+     },
+     "local": "África do Sul (cidade não citada)",
+     "localComo": "matéria (link direto): país citado \"south africa\", cidade não citada",
+     "semCidadeMotivo": "matéria lida (18 parágrafos, link direto), nenhuma cidade citada no texto",
+     "titulo": "A Via Expressa de Nairóbi perdeu US$ 39,5 milhões em 2023",
+     "tituloOriginal": "Nairobi Expressway Lost US$39.5M in 2025",
+     "traduzido": "traduzido do inglês",
+     "link": "https://www.riotimesonline.com/nairobi-expressway-loss-2025-treasury-ppp-report/",
+     "veiculo": "The Rio Times",
+     "dominio": "riotimesonline.com",
+     "publicado": "2026-11-21T16:38",
+     "primeiroVisto": "2026-11-21T17:30",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": true,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (link direto): país citado \"south africa\", cidade não citada",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "The Rio Times"
+    },
+    {
      "id": "c8383f3076e1",
      "pot": {
       "nota": 22,
@@ -6699,7 +6658,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "4 h 38"
+      "semPortalHa": "4 h 43"
      },
      "local": "cidade não identificada",
      "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -6732,7 +6691,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "4 h 39"
+      "semPortalHa": "4 h 44"
      },
      "local": "cidade não identificada",
      "semCidadeMotivo": "matéria marcada como paga (isAccessibleForFree=false), não lida",
@@ -6791,7 +6750,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 15"
+      "semPortalHa": "7 h 20"
      },
      "local": "África do Sul (cidade não citada)",
      "localComo": "matéria (RSS do veículo): país citado \"south africa\", cidade não citada",
@@ -6823,7 +6782,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "10 h 12"
+      "semPortalHa": "10 h 17"
      },
      "local": "Londres, Reino Unido",
      "localComo": "matéria (RSS do veículo): parágrafo 1 (londres)",
@@ -6854,13 +6813,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "12 h 55"
+      "semPortalHa": "13 h"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Programações de festivais que você pode ter perdido: Bonanza, Boardmasters, Lightning In A Bottle",
      "tituloOriginal": "Festival line-ups you might have missed: Bonanza, Boardmasters, Lightning In A Bottle",
      "traduzido": "traduzido do inglês",
@@ -6890,13 +6846,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "13 h 30"
+      "semPortalHa": "13 h 35"
      },
      "local": "Lisboa, Portugal",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 2 (lisboa); parágrafo 3 (lisboa)",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Festival Penguin Kids 2026: livros, oficinas e cinema em família",
      "link": "https://pumpkin.pt/eventos/festival-penguin-kids/",
      "veiculo": "Pumpkin.pt",
@@ -6924,13 +6877,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "21 h 38"
+      "semPortalHa": "21 h 43"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (13 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Moradores locais celebram a herança brasileira em festival anual em Santa Bárbara | Fotos",
      "tituloOriginal": "Locals celebrate Brazilian heritage at annual festival in Santa Barbara | Photos",
      "traduzido": "traduzido do inglês",
@@ -6960,13 +6910,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "22 h 06"
+      "semPortalHa": "22 h 11"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Festival de Música Pitchfork: The Avalanches",
      "tituloOriginal": "Pitchfork Music Festival: The Avalanches",
      "traduzido": "traduzido do inglês",
@@ -6996,7 +6943,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "23 h 15"
+      "semPortalHa": "23 h 20"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -7027,7 +6974,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "23 h 15"
+      "semPortalHa": "23 h 20"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (2 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -7058,13 +7005,10 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "25 h 35"
+      "semPortalHa": "25 h 40"
      },
      "local": "Nashville, EUA",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 2 (nashville)",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
      "titulo": "Festival de música e cultura de peregrinação marca retorno em abril de 2027",
      "tituloOriginal": "Pilgrimage Music & Cultural Festival Sets April 2027 Return",
      "traduzido": "traduzido do inglês",
@@ -7082,79 +7026,6 @@
      "linkDireto": true,
      "tambemEm": [],
      "via": "Google Notícias: festivais (EUA) 5"
-    },
-    {
-     "id": "e4cc6fc807f2",
-     "pot": {
-      "nota": 28,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 28% provisória · opcional",
-      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "25 h 47"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (11 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "emAlta": [
-      "Google Trends Brasil: festival"
-     ],
-     "titulo": "O Out of the Blue Festival de Noah Kahan retorna a Cancún com Hayley Williams e Mt. Joy",
-     "tituloOriginal": "Noah Kahan’s Out of the Blue Festival Returns to Cancún With Hayley Williams, Mt. Joy",
-     "traduzido": "traduzido do inglês",
-     "link": "https://www.ticketnews.com/2026/05/noah-kahan-out-of-the-blue-festival-cancun-2027/",
-     "veiculo": "TicketNews",
-     "dominio": "ticketnews.com",
-     "publicado": "2026-11-20T18:27",
-     "primeiroVisto": "2026-11-21T13:36",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "83e1e4884bb2",
-     "pot": {
-      "nota": 28,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 28% provisória · opcional",
-      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "26 h 14"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (11 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "emAlta": [
-      "Google Trends Brasil: festival",
-      "X (trends24 Brasil): Palmer"
-     ],
-     "titulo": "O ESSENCE Festival apresenta a programação diurna de 2026 com Keke Palmer e Octavia Spencer",
-     "tituloOriginal": "ESSENCE Festival Unveils 2026 Daytime Lineup With Keke Palmer, Octavia Spencer",
-     "traduzido": "traduzido do inglês",
-     "link": "https://www.ticketnews.com/2026/06/essence-festival-daytime-lineup-keke-palmer/",
-     "veiculo": "TicketNews",
-     "dominio": "ticketnews.com",
-     "publicado": "2026-11-20T18:00",
-     "primeiroVisto": "2026-11-15T04:15",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
     }
    ]
   }
@@ -7166,12 +7037,6 @@
     "veiculo": "Guia Folha",
     "dominio": "guia.folha.uol.com.br",
     "motivo": "veículo com paywall (guia.folha.uol.com.br), não lido"
-   },
-   {
-    "titulo": "Samba ganha série documental na TV Cultura em 13 canções",
-    "veiculo": "Billboard Brasil",
-    "dominio": "billboard.com.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
     "titulo": "'Em Cena': fim de semana tem festas, pagode e funk na região",
@@ -7192,15 +7057,15 @@
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Vai sair no fim de semana? Agendão tem feira, música e evento geek em Campo Grande",
-    "veiculo": "Primeira Página",
-    "dominio": "primeirapagina.com.br",
+    "titulo": "Pagod’art e Naldo Benny anunciam parceria musical inédita",
+    "veiculo": "MundoBA",
+    "dominio": "mundoba.com.br",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Casarão dos Bina reúne literatura, música e memória em noite especial de celebração à cultura",
-    "veiculo": "Vale Notícia",
-    "dominio": "valenoticia.jor.br",
+    "titulo": "Vai sair no fim de semana? Agendão tem feira, música e evento geek em Campo Grande",
+    "veiculo": "Primeira Página",
+    "dominio": "primeirapagina.com.br",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
