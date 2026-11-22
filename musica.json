@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-11-22T11:58",
+ "atualizado": "2026-11-22T12:02",
  "ordem": [
   "samba",
   "sambaPagode",
@@ -127,9 +127,9 @@
  "placar": {
   "periodo": "últimas 48 h",
   "furos": 9,
-  "chegaramDepois": 16,
-  "aindaSoNoJornal": 235,
-  "medianaAntes": "8 h 36",
+  "chegaramDepois": 14,
+  "aindaSoNoJornal": 185,
+  "medianaAntes": "34 min",
   "melhores": [
    {
     "titulo": "Primavera Sound 2026: confira todos os horários e palcos dos shows",
@@ -150,16 +150,16 @@
     "portal": "G1"
    },
    {
-    "titulo": "Eddie Vedder corta excessos do rock em show no Best of Blues and Rock 2026",
-    "veiculo": "Wikimetal",
-    "antes": "14 h 04",
-    "portal": "Terra Música"
-   },
-   {
     "titulo": "Morre integrante do grupo de pagode Nosso Sentimento aos 43 anos",
     "veiculo": "OFuxico",
     "antes": "8 h 36",
     "portal": "Metrópoles"
+   },
+   {
+    "titulo": "5 discos de Rock que queremos muito ouvir em 2027",
+    "veiculo": "Tenho Mais Discos Que Amigos",
+    "antes": "34 min",
+    "portal": "Terra Música"
    }
   ]
  },
@@ -212,6 +212,19 @@
     ]
    },
    {
+    "cidade": "Andaraí, BA",
+    "eventos": [
+     {
+      "data": "2026-11-22",
+      "quando": "domingo (22)",
+      "titulo": "Suel esquenta o Pagode do Coruja o Renascença Clube, no Andaraí, nesse domingo (22)",
+      "cidade": "Andaraí, BA",
+      "link": "https://grandetijuca.com.br/noticia/10504/suel-esquenta-o-pagode-do-coruja-o-renascenca-clube-no-andarai-nesse-domingo-22.html?utm_source=rss&utm_medium=feed&utm_campaign=distribuicao-rss&utm_content=noticia-suel-esquenta-o-pagode-do-coruja-o-renascenca-clube-no-andarai-nesse-domingo-22",
+      "fonte": "Portal Grande Tijuca (notícia)"
+     }
+    ]
+   },
+   {
     "cidade": "Rio de Janeiro, RJ",
     "eventos": [
      {
@@ -242,8 +255,8 @@
    }
   ],
   "est": {
-   "noticias": 7,
-   "bing": 7,
+   "noticias": 8,
+   "bing": 6,
    "bilheteria": 1,
    "bingConsultas": 5,
    "bilheteriaOk": true
@@ -337,7 +350,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "20 h 26"
+    "semPortalHa": "20 h 29"
    },
    "local": "Nacional (sem cidade)",
    "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -401,7 +414,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "45 h 39"
+    "semPortalHa": "45 h 43"
    },
    "local": "Assunto geral (sem cidade)",
    "semCidadeMotivo": "matéria lida (7 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -441,7 +454,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 23"
+        "semPortalHa": "11 h 27"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título; resumo",
@@ -571,7 +584,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "27 h 29"
+        "semPortalHa": "27 h 32"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (lugar: bixiga); resumo (lugar: bixiga)",
@@ -630,7 +643,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "42 h 20"
+        "semPortalHa": "42 h 24"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (escola de samba: aguia de ouro); resumo (escola de samba: aguia de ouro)",
@@ -661,7 +674,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "45 h 24"
+        "semPortalHa": "45 h 28"
        },
        "local": "Caraguatatuba, SP",
        "localComo": "título/resumo: título; resumo",
@@ -724,7 +737,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 28"
+        "semPortalHa": "11 h 32"
        },
        "local": "São João da Barra, RJ",
        "localComo": "título/resumo: título; resumo",
@@ -746,15 +759,24 @@
      ],
      "itens": [
       {
+       "primeiroANoticiar": {
+        "veiculo": "LeiaJá",
+        "hora": "11:26"
+       },
        "id": "3db477f8b0e5",
        "pot": {
-        "nota": 36,
+        "nota": 48,
         "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 36% provisória · opcional",
-        "motivo": "veículo grande (Extra online) · acabou de sair · nota provisória: só 1 veículo até agora"
+        "provisoria": false,
+        "rotulo": "48% · opcional",
+        "motivo": "veículo grande (Extra online) · 2 veículos em 36 min · acabou de sair"
        },
-       "emApuracao": true,
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=48&faixa=opcional&titulo=Juju+Salimeni+deixa+supercoxas+%C3%A0+mostra+em+look+para+noite+de+samba&noticia=https%3A%2F%2Fextra.globo.com%2Ffamosos%2Fnoticia%2F2026%2F11%2Fjuju-salimeni-deixa-supercoxas-a-mostra-em-look-para-noite-de-samba.ghtml&texto=Juju+Salimeni+deixa+supercoxas+%C3%A0+mostra+em+look+para+noite+de+samba%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+Extra+online+%C2%B7+2026-11-22+11%3A45+%28Bras%C3%ADlia%29",
+       "furo": {
+        "antes": "19 min",
+        "portal": "Extra online",
+        "jornalAntes": null
+       },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (Bing Notícias (título exato)): parágrafo 1; parágrafo 3 (lugar: tijuca)",
        "titulo": "Juju Salimeni deixa supercoxas à mostra em look para noite de samba",
@@ -763,14 +785,20 @@
        "dominio": "extra.globo.com",
        "publicado": "2026-11-22T11:45",
        "primeiroVisto": "2026-11-22T11:58",
-       "fontes": 1,
-       "confirmado": false,
+       "fontes": 2,
+       "confirmado": true,
        "quente": false,
        "regiao": "rj",
        "regiaoMotivo": "cidade: matéria (Bing Notícias (título exato)): parágrafo 1; parágrafo 3 (lugar: tijuca)",
        "categoria": "Música",
        "linkDireto": true,
-       "tambemEm": [],
+       "tambemEm": [
+        {
+         "veiculo": "LeiaJá",
+         "titulo": "Juju Salimeni ostenta supercoxas em evento de samba",
+         "link": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxPUG1DaEI1X2xZNHFRUjBPQ1ZyTEVuVV9xS1dMeVJ0ZzMwMnZNTW55WWlTVVh2ZmU1RXJtbUhvRnJxcU9ZZUZrTk9iMXJlYnFtUHEzaDA1SDdRVnIxTXg4bzRBYmdUWEUzRzA2SEtnNUhZb3lRRHhUcFo0Q1RKdmtmUnpNLUN0dkdJUVh1ZngzVXc1N1NSNFJwbWkwN1NqV1k3ME9hd0FkLUs?oc=5"
+        }
+       ],
        "via": "Google Notícias: samba (Portugal)"
       },
       {
@@ -840,7 +868,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "15 h 26"
+        "semPortalHa": "15 h 30"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"do Rio\"); resumo (\"do Rio\")",
@@ -871,7 +899,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "17 h 33"
+        "semPortalHa": "17 h 37"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -902,7 +930,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "20 h 52"
+        "semPortalHa": "20 h 56"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: leblon); resumo (lugar: leblon)",
@@ -961,7 +989,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "26 h 26"
+        "semPortalHa": "26 h 30"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): descrição da página",
@@ -992,7 +1020,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "29 h 34"
+        "semPortalHa": "29 h 38"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: madureira); resumo (lugar: madureira)",
@@ -1023,7 +1051,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "30 h 59"
+        "semPortalHa": "31 h 02"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"do Rio\"); resumo (\"do Rio\")",
@@ -1082,7 +1110,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "38 h 36"
+        "semPortalHa": "38 h 40"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (escola de samba: mangueira); resumo (escola de samba: mangueira)",
@@ -1113,7 +1141,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "39 h 59"
+        "semPortalHa": "40 h 02"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 2; parágrafo 6 (escola de samba: estacio de sa)",
@@ -1172,7 +1200,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "45 h 27"
+        "semPortalHa": "45 h 30"
        },
        "local": "Niterói, RJ",
        "localComo": "título/resumo: título; resumo",
@@ -1208,7 +1236,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "46 min"
+        "semPortalHa": "49 min"
        },
        "local": "São Luís, MA",
        "localComo": "matéria (RSS do veículo): parágrafo 1; descrição da página",
@@ -1231,15 +1259,15 @@
       {
        "id": "c37c81d8f897",
        "pot": {
-        "nota": 47,
+        "nota": 44,
         "faixa": "opcional",
         "provisoria": true,
-        "rotulo": "⏳ 47% provisória · opcional",
+        "rotulo": "⏳ 44% provisória · opcional",
         "motivo": "tema forte: vitória · nota provisória: só 1 veículo até agora"
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 59"
+        "semPortalHa": "6 h 02"
        },
        "local": "Vila Velha, ES",
        "localComo": "matéria (RSS do veículo): parágrafo 2; parágrafo 8",
@@ -1270,7 +1298,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "2 h 57"
+        "semPortalHa": "3 h 01"
        },
        "local": "Manaus, AM",
        "localComo": "título/resumo: título; resumo",
@@ -1350,6 +1378,64 @@
       },
       {
        "primeiroANoticiar": {
+        "veiculo": "Cidade 091",
+        "hora": "13:45"
+       },
+       "id": "401bf01f178e",
+       "pot": {
+        "nota": 65,
+        "faixa": "opcional",
+        "provisoria": false,
+        "rotulo": "65% · opcional",
+        "motivo": "veículo grande (Gshow) · 14 veículos · pessoa famosa: Alcione"
+       },
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=14&nota=65&faixa=opcional&titulo=Gaby+Amarantos+interpretar%C3%A1+Alcione+em+cinebiografia+da+cantora&noticia=https%3A%2F%2Fvozdabahia.com.br%2Fgaby-amarantos-interpretara-alcione-cinebiografia%2F&texto=Gaby+Amarantos+interpretar%C3%A1+Alcione+em+cinebiografia+da+cantora%0ALocal%3A+S%C3%A3o+Lu%C3%ADs%2C+MA%0AVe%C3%ADculo%3A+Voz+da+Bahia+%C2%B7+2026-11-21+16%3A12+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.reportermt.com%2Fvariedades%2Fgaby-amarantos-e-confirmada-como-alcione-em-cinebiografia-da-cantora%2F246944%0Ahttps%3A%2F%2Fgshow.globo.com%2Fcultura-pop%2Ffilmes%2Fnoticia%2Ffamosos-celebram-escolha-de-gaby-amarantos-para-viver-alcione-nos-cinemas.ghtml%0Ahttps%3A%2F%2Fwww.metropoles.com%2Fcelebridades%2Fgaby-amarantos-vivera-alcione-em-cinebiografia-vem-ai",
+       "furo": {
+        "antes": "6 min",
+        "portal": "Metrópoles",
+        "jornalAntes": null
+       },
+       "local": "São Luís, MA",
+       "localComo": "mesmo fato em Metrópoles: matéria (página inicial do veículo): parágrafo 1 (com UF)",
+       "titulo": "Gaby Amarantos interpretará Alcione em cinebiografia da cantora",
+       "link": "https://vozdabahia.com.br/gaby-amarantos-interpretara-alcione-cinebiografia/",
+       "veiculo": "Voz da Bahia",
+       "dominio": "vozdabahia.com.br",
+       "publicado": "2026-11-21T16:12",
+       "primeiroVisto": "2026-11-20T15:09",
+       "fontes": 14,
+       "confirmado": true,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade herdada de Metrópoles",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [
+        {
+         "veiculo": "RepórterMT",
+         "titulo": "Gaby Amarantos é confirmada como Alcione em cinebiografia da cantora",
+         "link": "https://www.reportermt.com/variedades/gaby-amarantos-e-confirmada-como-alcione-em-cinebiografia-da-cantora/246944"
+        },
+        {
+         "veiculo": "O POVO",
+         "titulo": "Gaby Amarantos é confirmada como protagonista de cinebiografia de Alcione",
+         "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPZm8wTXNtZnNXb0dXdFEzY09aUGZXWkQtQm50dWk4M2ZkR1R5THdxNHRTRmRka0UxTUk3SVhOWlAyQWN0b0dmVzhWZll0V3E4N0VvR01GSjhTNDVqMWlKM2ctVDFxSWN2clJpbHRlS0hhaUd2SzdraUJCNmJWX1RvQloteGlHY0tnNkZMRk1mY3lyYTRmZXdSVWpFaEJCSk9uQUsxZTZGcnFiZFlSamtXdld4amR0QlNJekE?oc=5"
+        },
+        {
+         "veiculo": "Gshow",
+         "titulo": "Famosos celebram escolha de Gaby Amarantos para viver Alcione nos cinemas",
+         "link": "https://gshow.globo.com/cultura-pop/filmes/noticia/famosos-celebram-escolha-de-gaby-amarantos-para-viver-alcione-nos-cinemas.ghtml"
+        },
+        {
+         "veiculo": "Metrópoles",
+         "titulo": "Gaby Amarantos viverá Alcione em cinebiografia: \"Vem aí\"",
+         "link": "https://www.metropoles.com/celebridades/gaby-amarantos-vivera-alcione-em-cinebiografia-vem-ai"
+        }
+       ],
+       "via": "Google Notícias: sambista"
+      },
+      {
+       "primeiroANoticiar": {
         "veiculo": "ge",
         "hora": "01:45"
        },
@@ -1404,64 +1490,6 @@
         }
        ],
        "via": "Google Notícias: roda de samba"
-      },
-      {
-       "primeiroANoticiar": {
-        "veiculo": "Cidade 091",
-        "hora": "13:45"
-       },
-       "id": "5588b2086238",
-       "pot": {
-        "nota": 65,
-        "faixa": "opcional",
-        "provisoria": false,
-        "rotulo": "65% · opcional",
-        "motivo": "veículo grande (Gshow) · 9 veículos · pessoa famosa: Alcione"
-       },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=9&nota=65&faixa=opcional&titulo=Gaby+Amarantos+vai+interpretar+Alcione+em+cinebiografia+sobre+a+cantora&noticia=https%3A%2F%2Fpoltronavip.com%2Fgaby-amarantos-vai-interpretar-alcione-em-cinebiografia-sobre-a-cantora&texto=Gaby+Amarantos+vai+interpretar+Alcione+em+cinebiografia+sobre+a+cantora%0ALocal%3A+Belo+Horizonte%2C+MG%0AVe%C3%ADculo%3A+Poltrona+Vip+%C2%B7+2026-11-20+15%3A17+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.reportermt.com%2Fvariedades%2Fgaby-amarantos-e-confirmada-como-alcione-em-cinebiografia-da-cantora%2F246944%0Ahttps%3A%2F%2Fgshow.globo.com%2Fcultura-pop%2Ffilmes%2Fnoticia%2Ffamosos-celebram-escolha-de-gaby-amarantos-para-viver-alcione-nos-cinemas.ghtml%0Ahttps%3A%2F%2Fcidade091.com.br%2Fnoticias%2Fgaby-amarantos-e-anunciada-para-viver-alcione-em-cinebiografia",
-       "furo": {
-        "antes": "2 h 10",
-        "portal": "Gshow",
-        "jornalAntes": "45 min"
-       },
-       "local": "Belo Horizonte, MG",
-       "localComo": "mesmo fato em BH 24 Horas: título/resumo: resumo",
-       "titulo": "Gaby Amarantos vai interpretar Alcione em cinebiografia sobre a cantora",
-       "link": "https://poltronavip.com/gaby-amarantos-vai-interpretar-alcione-em-cinebiografia-sobre-a-cantora",
-       "veiculo": "Poltrona Vip",
-       "dominio": "poltronavip.com",
-       "publicado": "2026-11-20T15:17",
-       "primeiroVisto": "2026-11-20T15:09",
-       "fontes": 9,
-       "confirmado": true,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade herdada de BH 24 Horas",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [
-        {
-         "veiculo": "RepórterMT",
-         "titulo": "Gaby Amarantos é confirmada como Alcione em cinebiografia da cantora",
-         "link": "https://www.reportermt.com/variedades/gaby-amarantos-e-confirmada-como-alcione-em-cinebiografia-da-cantora/246944"
-        },
-        {
-         "veiculo": "O POVO",
-         "titulo": "Gaby Amarantos é confirmada como protagonista de cinebiografia de Alcione",
-         "link": "https://news.google.com/rss/articles/CBMiugFBVV95cUxPZm8wTXNtZnNXb0dXdFEzY09aUGZXWkQtQm50dWk4M2ZkR1R5THdxNHRTRmRka0UxTUk3SVhOWlAyQWN0b0dmVzhWZll0V3E4N0VvR01GSjhTNDVqMWlKM2ctVDFxSWN2clJpbHRlS0hhaUd2SzdraUJCNmJWX1RvQloteGlHY0tnNkZMRk1mY3lyYTRmZXdSVWpFaEJCSk9uQUsxZTZGcnFiZFlSamtXdld4amR0QlNJekE?oc=5"
-        },
-        {
-         "veiculo": "Gshow",
-         "titulo": "Famosos celebram escolha de Gaby Amarantos para viver Alcione nos cinemas",
-         "link": "https://gshow.globo.com/cultura-pop/filmes/noticia/famosos-celebram-escolha-de-gaby-amarantos-para-viver-alcione-nos-cinemas.ghtml"
-        },
-        {
-         "veiculo": "Cidade 091",
-         "titulo": "Gaby Amarantos é anunciada para viver Alcione em cinebiografia",
-         "link": "https://cidade091.com.br/noticias/gaby-amarantos-e-anunciada-para-viver-alcione-em-cinebiografia"
-        }
-       ],
-       "via": "Google Notícias: festivais 4"
       },
       {
        "primeiroANoticiar": {
@@ -1590,7 +1618,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Maryz%C3%A9lia+transforma+o+Circuito+Maneca+Ferreira+em+um+verdadeiro+reduto+do+samba+na+Micareta+de+Feira&noticia=https%3A%2F%2Fwww.deolhonacidade.net%2Fmaryzelia-transforma-o-circuito-maneca-ferreira-em-um-verdadeiro-reduto-do-samba-na-micareta-de-feira&texto=Maryz%C3%A9lia+transforma+o+Circuito+Maneca+Ferreira+em+um+verdadeiro+reduto+do+samba+na+Micareta+de+Feira%0ALocal%3A+Bras%C3%ADlia%2C+DF%0AVe%C3%ADculo%3A+deolhonacidade.net+%C2%B7+2026-11-21+23%3A11+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fconectadonews.com.br%2Fnoticia%2F19335%2Fa-diversidade-musical-tambem-marca-presenca-na-micareta-de-feira-de-santana-2026-depois-da-apresentacao-de-edson-gomes-o-circuito-maneca-ferreira-recebeu-o-trio-balada-dos-djs-reunindo-quatro-profissionais-da-musica-eletronica-da-cidade-em-uma-apresentacao-que-levou-diferentes-ritmos-e-batidas-para-a-avenida-a-iniciativa-e-uma-realizacao-da-associacao-de-djs-da-bahia-e-representa-uma-oportunidade-para-os-artistas-locais-mostrarem-seu-trabalho-em-um-dos-maiores-eventos-populares-do-pais-durante-e",
        "furo": {
-        "semPortalHa": "38 h 59"
+        "semPortalHa": "39 h 03"
        },
        "local": "Brasília, DF",
        "localComo": "matéria (página inicial do veículo): parágrafo 1",
@@ -1631,7 +1659,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Kareen+Mendes+e+Samba+de+M%C3%A3es+levam+ancestralidade+e+protagonismo+feminino+%C3%A0+Micareta+de+Feira+2026&noticia=https%3A%2F%2Fjornalgrandebahia.com.br%2F2026%2F11%2Fkareen-mendes-e-samba-de-maes-levam-ancestralidade-e-protagonismo-feminino-a-micareta-de-feira-2026%2F&texto=Kareen+Mendes+e+Samba+de+M%C3%A3es+levam+ancestralidade+e+protagonismo+feminino+%C3%A0+Micareta+de+Feira+2026%0ALocal%3A+Feira+de+Santana%2C+BA%0AVe%C3%ADculo%3A+Jornal+Grande+Bahia+%C2%B7+2026-11-21+14%3A23+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "36 h 41"
+        "semPortalHa": "36 h 45"
        },
        "local": "Feira de Santana, BA",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 4",
@@ -1715,7 +1743,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=25&faixa=opcional&titulo=Unidos+pelo+Samba+valoriza+tradi%C3%A7%C3%A3o+do+g%C3%AAnero+musical+no+Pranch%C3%A3o+da+Micareta+de+Feira&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMivAFBVV95cUxNekdyZTE1eGtPdUpPQnRHaUJLTDB6cnVwTnVoWEpTR1JQbW5zSFpweFE4SHZIeXhoTE5nX3ZzOElzS0lHREZkUFFiUEdyZU16anBaVW1IaUZRTXpKN1Jka1pBcF9xX2VGTzBDVzdSRUgzaFZTWmFaQ0RfMXJuX3JYZ3lwdVBpakNVRmRVeWRhVmdNcWFSU19vTm5leE1xaTkwS3g5ajgxS2RaNGxtRmRnRlVlZkpKbS0yZDgzeA%3Foc%3D5&texto=Unidos+pelo+Samba+valoriza+tradi%C3%A7%C3%A3o+do+g%C3%AAnero+musical+no+Pranch%C3%A3o+da+Micareta+de+Feira%0ALocal%3A+Feira+de+Santana%2C+BA%0AVe%C3%ADculo%3A+ba.gov.br+%C2%B7+2026-11-21+22%3A55+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fjornalgrandebahia.com.br%2F2026%2F11%2Fmicareta-de-feira-2026-pranchao-nilton-rasta-valoriza-artistas-locais-cultura-afro-brasileira-e-diversidade-musical-confira-programacao%2F",
        "furo": {
-        "semPortalHa": "13 h 03"
+        "semPortalHa": "13 h 07"
        },
        "local": "Feira de Santana, BA",
        "localComo": "mesmo fato em Jornal Grande Bahia: matéria (RSS do veículo): parágrafo 1; parágrafo 3",
@@ -1783,7 +1811,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "18 h 01"
+        "semPortalHa": "18 h 05"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -1814,7 +1842,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "21 h 32"
+        "semPortalHa": "21 h 35"
        },
        "local": "Pelotas, RS",
        "localComo": "título/resumo: resumo",
@@ -1835,45 +1863,17 @@
        "via": "Google Notícias: roda de samba"
       },
       {
-       "id": "24335c3d1e5f",
-       "pot": {
-        "nota": 29,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 29% provisória · opcional",
-        "motivo": "veículo grande (Folha BV) · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "local": "Manaus, AM",
-       "localComo": "matéria (RSS do veículo): parágrafo 2",
-       "titulo": "“Todos Cantam Samba” reúne grupos em evento gratuito na Praça Fábio Paracat",
-       "link": "https://www.folhabv.com.br/variedades/todos-cantam-samba-reune-grupos-em-evento-gratuito-na-praca-fabio-paracat/",
-       "veiculo": "Folha BV",
-       "dominio": "folhabv.com.br",
-       "publicado": "2026-11-21T12:51",
-       "primeiroVisto": "2026-11-21T12:54",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 2",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: samba (Portugal)"
-      },
-      {
        "id": "4d15e802ae43",
        "pot": {
-        "nota": 19,
+        "nota": 16,
         "faixa": "opcional",
         "provisoria": true,
-        "rotulo": "⏳ 19% provisória · opcional",
+        "rotulo": "⏳ 16% provisória · opcional",
         "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "23 h 58"
+        "semPortalHa": "24 h 02"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -1904,7 +1904,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "24 h 44"
+        "semPortalHa": "24 h 47"
        },
        "local": "Bahia (estado; cidade não citada)",
        "localComo": "estado citado no texto: \"da bahia\"",
@@ -1924,6 +1924,37 @@
        "linkDireto": true,
        "tambemEm": [],
        "via": "Google Notícias: samba de mesa"
+      },
+      {
+       "id": "ecfd40de9310",
+       "pot": {
+        "nota": 41,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 41% provisória · opcional",
+        "motivo": "tema forte: estreia · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "26 h 29"
+       },
+       "local": "Salvador, BA",
+       "localComo": "matéria (busca WordPress do veículo): parágrafo 1; parágrafo 4",
+       "titulo": "Pep Guardiola dança samba em estreia de documentário do Bahia",
+       "link": "https://tmc.com.br/esporte/guardiola-salvador-samba-gilberto-gil-bahia-documentario/",
+       "veiculo": "tmc.com.br",
+       "dominio": "tmc.com.br",
+       "publicado": "2026-11-21T09:33",
+       "primeiroVisto": "2026-11-21T09:36",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): parágrafo 1; parágrafo 4",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: roda de samba"
       }
      ]
     },
@@ -1946,7 +1977,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=31&faixa=opcional&titulo=O+samba+n%C3%A3o+para%3A+primeiro+carnaval+solo+para+dar+continuidade+%C3%A0+tradi%C3%A7%C3%A3o.+Kosa+anima+Chatan+hoje+em+Okinawa+%28Ryukyu+Shimpo%29&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMijgFBVV95cUxPUVlic3plY0k4Zmd2Q2FkcEtvc2wtVWxmVXdpN2xhY0wwSDE0bFFxT3R3dTFtM2RwSWdRMjhUTVp2SDlmZHl5MDZmTzlVWHZQUE5jM2FfQ2xraWNvdEFKYS1zOVI0aWtpbWlmT2FJMWhFQUtuRFRJQzJkVGdBa1hvOEdNV2ZsT0o3M3h6WkJn%3Foc%3D5&texto=O+samba+n%C3%A3o+para%3A+primeiro+carnaval+solo+para+dar+continuidade+%C3%A0+tradi%C3%A7%C3%A3o.+Kosa+anima+Chatan+hoje+em+Okinawa+%28Ryukyu+Shimpo%29%0ALocal%3A+Jap%C3%A3o+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+Yahoo%21%E3%83%8B%E3%83%A5%E3%83%BC%E3%82%B9+%C2%B7+2026-11-21+18%3A40+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "18 h 59"
+        "semPortalHa": "19 h 02"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -1990,7 +2021,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "25 h 16"
+        "semPortalHa": "25 h 20"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2023,7 +2054,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "30 h 22"
+        "semPortalHa": "30 h 26"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2066,7 +2097,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 13"
+        "semPortalHa": "5 h 16"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título; resumo",
@@ -2229,7 +2260,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "19 h 09"
+        "semPortalHa": "19 h 12"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: sapucai); resumo (lugar: sapucai)",
@@ -2260,7 +2291,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "20 h 34"
+        "semPortalHa": "20 h 38"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (sitemap do veículo): parágrafo 5 (\"do Rio\"); parágrafo 6",
@@ -2319,7 +2350,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "43 h 28"
+        "semPortalHa": "43 h 32"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 7; parágrafo 8",
@@ -2350,7 +2381,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "46 h 08"
+        "semPortalHa": "46 h 12"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 5 (\"no Rio\")",
@@ -2386,7 +2417,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "2 h 36"
+        "semPortalHa": "2 h 40"
        },
        "local": "Belo Horizonte, MG",
        "localComo": "título/resumo: título; resumo",
@@ -2407,6 +2438,37 @@
        "via": "Google Notícias: DJs"
       },
       {
+       "id": "cef08d477591",
+       "pot": {
+        "nota": 37,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 37% provisória · opcional",
+        "motivo": "pessoa famosa: Péricles · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "3 h 13"
+       },
+       "local": "São Cristóvão, SE",
+       "localComo": "título/resumo: título; resumo",
+       "titulo": "Fasc 2026 termina em São Cristóvão com Péricles e Duda Beat",
+       "link": "https://tvsimbrasil.com.br/se/sao-cristovao/pop/noticia/2026/11/22/fasc-2026-termina-sao-cristovao-pericles-duda-beat",
+       "veiculo": "TV Sim Brasil",
+       "dominio": "tvsimbrasil.com.br",
+       "publicado": "2026-11-22T08:49",
+       "primeiroVisto": "2026-11-22T08:55",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": true,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: artistas anunciam"
+      },
+      {
        "id": "3a585596c9ad",
        "pot": {
         "nota": 47,
@@ -2417,7 +2479,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "3 h 49"
+        "semPortalHa": "3 h 53"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (4 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -2449,7 +2511,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "2 h 45"
+        "semPortalHa": "2 h 49"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -2531,45 +2593,55 @@
       },
       {
        "primeiroANoticiar": {
-        "veiculo": "G1",
-        "hora": "08:00"
+        "veiculo": "Terra",
+        "hora": "17:12"
        },
-       "id": "cef08d477591",
+       "id": "8e9d3ad79583",
        "pot": {
-        "nota": 53,
+        "nota": 66,
         "faixa": "opcional",
         "provisoria": false,
-        "rotulo": "53% · opcional",
-        "motivo": "veículo grande (G1) · 2 veículos · pessoa famosa: Péricles"
+        "rotulo": "66% · opcional",
+        "motivo": "veículo grande (Terra) · 3 veículos · tema forte: dies"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=53&faixa=opcional&titulo=Fasc+2026+termina+em+S%C3%A3o+Crist%C3%B3v%C3%A3o+com+P%C3%A9ricles+e+Duda+Beat&noticia=https%3A%2F%2Ftvsimbrasil.com.br%2Fse%2Fsao-cristovao%2Fpop%2Fnoticia%2F2026%2F11%2F22%2Ffasc-2026-termina-sao-cristovao-pericles-duda-beat&texto=Fasc+2026+termina+em+S%C3%A3o+Crist%C3%B3v%C3%A3o+com+P%C3%A9ricles+e+Duda+Beat%0ALocal%3A+S%C3%A3o+Crist%C3%B3v%C3%A3o%2C+SE%0AVe%C3%ADculo%3A+TV+Sim+Brasil+%C2%B7+2026-11-22+08%3A49+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fse%2Fsergipe%2Fnoticia%2F2026%2F11%2F22%2Ffasc-domingo-programacao.ghtml",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=66&faixa=opcional&titulo=Jos%C3%A9+Carlos+Resende%2C+do+grupo+de+pagode%2C+morre+aos+43+anos&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMijwFBVV95cUxOeDhrbkR4UFdqOGRjX1cwTloyMVVRSnVpeUdtNG5ZR2pmdUJTV1BtV21UQk9mSnZSbmFCNm5OcGE3ZVU4TmptX292ME1LNXIyNVRFdlRfSmJWMjVQQ3E4VjloTUlWLUl0S3FTdkZfbVIwTnVxRTRPekE5QnFrYXg4cVRzM2xlcW05QUJzZTNCOA%3Foc%3D5&texto=Jos%C3%A9+Carlos+Resende%2C+do+grupo+de+pagode%2C+morre+aos+43+anos%0ALocal%3A+Santos+Dumont%2C+MG%0AVe%C3%ADculo%3A+bntonline.com.br+%C2%B7+2026-11-21+17%3A29+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.redetv.uol.com.br%2Ftvfama%2Fblog%2Fcelebridades%2Fintegrante-do-grupo-nosso-sentimento-jose-carlos-resende-morre-aos-43-anos",
        "furo": {
         "antes": null,
-        "portal": "G1"
+        "portal": "Terra"
        },
-       "local": "São Cristóvão, SE",
-       "localComo": "título/resumo: título; resumo",
-       "titulo": "Fasc 2026 termina em São Cristóvão com Péricles e Duda Beat",
-       "link": "https://tvsimbrasil.com.br/se/sao-cristovao/pop/noticia/2026/11/22/fasc-2026-termina-sao-cristovao-pericles-duda-beat",
-       "veiculo": "TV Sim Brasil",
-       "dominio": "tvsimbrasil.com.br",
-       "publicado": "2026-11-22T08:49",
-       "primeiroVisto": "2026-11-22T08:55",
-       "fontes": 2,
+       "local": "Santos Dumont, MG",
+       "localComo": "mesmo fato em redetv.uol.com.br: matéria (Bing Notícias (título exato, outro veículo)): parágrafo 2; parágrafo 6",
+       "titulo": "José Carlos Resende, do grupo de pagode, morre aos 43 anos",
+       "tituloOriginal": "José Carlos Resende, of the pagode group, dies at 43",
+       "traduzido": "traduzido do inglês",
+       "link": "https://news.google.com/rss/articles/CBMijwFBVV95cUxOeDhrbkR4UFdqOGRjX1cwTloyMVVRSnVpeUdtNG5ZR2pmdUJTV1BtV21UQk9mSnZSbmFCNm5OcGE3ZVU4TmptX292ME1LNXIyNVRFdlRfSmJWMjVQQ3E4VjloTUlWLUl0S3FTdkZfbVIwTnVxRTRPekE5QnFrYXg4cVRzM2xlcW05QUJzZTNCOA?oc=5",
+       "veiculo": "bntonline.com.br",
+       "dominio": "bntonline.com.br",
+       "publicado": "2026-11-21T17:29",
+       "primeiroVisto": "2026-11-21T14:04",
+       "fontes": 3,
        "confirmado": true,
        "quente": false,
        "regiao": "br",
-       "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "regiaoMotivo": "cidade herdada de redetv.uol.com.br",
        "categoria": "Música",
-       "linkDireto": true,
+       "linkAlternativo": {
+        "veiculo": "redetv.uol.com.br",
+        "link": "https://www.redetv.uol.com.br/tvfama/blog/celebridades/integrante-do-grupo-nosso-sentimento-jose-carlos-resende-morre-aos-43-anos"
+       },
        "tambemEm": [
         {
-         "veiculo": "G1",
-         "titulo": "Péricles, Duda Beat e Ponto de Equilíbrio encerram programação do Fasc neste domingo",
-         "link": "https://g1.globo.com/se/sergipe/noticia/2026/11/22/fasc-domingo-programacao.ghtml"
+         "veiculo": "Terra",
+         "titulo": "Morre José Carlos Resende de famoso grupo de pagode aos 43 anos",
+         "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxOenYzaDFLVUZFVjJkMXhIUzBsVWFqYTdkbkt6WGtDNlhuZmdJdkxXanVjcUt4Qm1pQ2VCOUhOYTZ6dHEtOW43aTZTVFNKRHB3azItbGhDcTFmc3p6YjlfR3hjTVVCSmhKY0MwQi1Bak5IcGNONjRoQ2kwbjNwYlZRLVRTSTdTV2tGVWFMSlgwRUZ5OWpXZ3BWUjZFSG00YjBxSHFDZFk0NVJDSkUwY3NkQngwWGJKcWhacjZ1TjdiaGhyNjNyOXhrTjhPSnVHTmhnazVSZ2pPQWtTakdlSU1haWFPSQ?oc=5"
+        },
+        {
+         "veiculo": "redetv.uol.com.br",
+         "titulo": "Morre José Carlos Resende, do grupo de pagode, aos 43 anos",
+         "link": "https://www.redetv.uol.com.br/tvfama/blog/celebridades/integrante-do-grupo-nosso-sentimento-jose-carlos-resende-morre-aos-43-anos"
         }
        ],
-       "via": "Google Notícias: artistas anunciam"
+       "via": "Google Notícias: pagode"
       },
       {
        "primeiroANoticiar": {
@@ -2615,45 +2687,42 @@
       },
       {
        "primeiroANoticiar": {
-        "veiculo": "Terra",
-        "hora": "17:12"
+        "veiculo": "Hugo Gloss",
+        "hora": "17:13"
        },
-       "id": "67adfcd3c2b4",
+       "id": "19f54585a191",
        "pot": {
-        "nota": 60,
+        "nota": 32,
         "faixa": "opcional",
         "provisoria": false,
-        "rotulo": "60% · opcional",
-        "motivo": "veículo grande (Terra) · 2 veículos · tema forte: morre"
+        "rotulo": "32% · opcional",
+        "motivo": "veículo grande (Hugo Gloss) · 2 veículos"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=60&faixa=opcional&titulo=Morre+Jos%C3%A9+Carlos+Resende+de+famoso+grupo+de+pagode+aos+43+anos&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMi4wFBVV95cUxOenYzaDFLVUZFVjJkMXhIUzBsVWFqYTdkbkt6WGtDNlhuZmdJdkxXanVjcUt4Qm1pQ2VCOUhOYTZ6dHEtOW43aTZTVFNKRHB3azItbGhDcTFmc3p6YjlfR3hjTVVCSmhKY0MwQi1Bak5IcGNONjRoQ2kwbjNwYlZRLVRTSTdTV2tGVWFMSlgwRUZ5OWpXZ3BWUjZFSG00YjBxSHFDZFk0NVJDSkUwY3NkQngwWGJKcWhacjZ1TjdiaGhyNjNyOXhrTjhPSnVHTmhnazVSZ2pPQWtTakdlSU1haWFPSQ%3Foc%3D5&texto=Morre+Jos%C3%A9+Carlos+Resende+de+famoso+grupo+de+pagode+aos+43+anos%0ALocal%3A+Santos+Dumont%2C+MG%0AVe%C3%ADculo%3A+Terra+%C2%B7+2026-11-21+17%3A12+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.redetv.uol.com.br%2Ftvfama%2Fblog%2Fcelebridades%2Fintegrante-do-grupo-nosso-sentimento-jose-carlos-resende-morre-aos-43-anos",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=32&faixa=opcional&titulo=V%C3%ADdeo+mostra+cantor+de+pagode+denunciado+por+estupro+chegando+a+hotel+com+mulher+em+MG&noticia=https%3A%2F%2Fhugogloss.uol.com.br%2Fbrasil%2Fgemeos-estupro-mg%2F&texto=V%C3%ADdeo+mostra+cantor+de+pagode+denunciado+por+estupro+chegando+a+hotel+com+mulher+em+MG%0ALocal%3A+Barbacena%2C+MG%0AVe%C3%ADculo%3A+Hugo+Gloss+%C2%B7+2026-11-20+17%3A13+%28Bras%C3%ADlia%29",
        "furo": {
         "antes": null,
-        "portal": "Terra"
+        "portal": "Hugo Gloss"
        },
-       "local": "Santos Dumont, MG",
-       "localComo": "mesmo fato em redetv.uol.com.br: matéria (Bing Notícias (título exato, outro veículo)): parágrafo 2; parágrafo 6",
-       "titulo": "Morre José Carlos Resende de famoso grupo de pagode aos 43 anos",
-       "link": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxOenYzaDFLVUZFVjJkMXhIUzBsVWFqYTdkbkt6WGtDNlhuZmdJdkxXanVjcUt4Qm1pQ2VCOUhOYTZ6dHEtOW43aTZTVFNKRHB3azItbGhDcTFmc3p6YjlfR3hjTVVCSmhKY0MwQi1Bak5IcGNONjRoQ2kwbjNwYlZRLVRTSTdTV2tGVWFMSlgwRUZ5OWpXZ3BWUjZFSG00YjBxSHFDZFk0NVJDSkUwY3NkQngwWGJKcWhacjZ1TjdiaGhyNjNyOXhrTjhPSnVHTmhnazVSZ2pPQWtTakdlSU1haWFPSQ?oc=5",
-       "veiculo": "Terra",
-       "dominio": "terra.com.br",
-       "publicado": "2026-11-21T17:12",
-       "primeiroVisto": "2026-11-21T14:04",
+       "local": "Barbacena, MG",
+       "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 3",
+       "titulo": "Vídeo mostra cantor de pagode denunciado por estupro chegando a hotel com mulher em MG",
+       "link": "https://hugogloss.uol.com.br/brasil/gemeos-estupro-mg/",
+       "veiculo": "Hugo Gloss",
+       "dominio": "hugogloss.uol.com.br",
+       "publicado": "2026-11-20T17:13",
+       "primeiroVisto": "2026-11-20T17:20",
        "fontes": 2,
        "confirmado": true,
        "quente": false,
        "regiao": "br",
-       "regiaoMotivo": "cidade herdada de redetv.uol.com.br",
+       "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1; parágrafo 3",
        "categoria": "Música",
-       "linkAlternativo": {
-        "veiculo": "redetv.uol.com.br",
-        "link": "https://www.redetv.uol.com.br/tvfama/blog/celebridades/integrante-do-grupo-nosso-sentimento-jose-carlos-resende-morre-aos-43-anos"
-       },
+       "linkDireto": true,
        "tambemEm": [
         {
-         "veiculo": "redetv.uol.com.br",
-         "titulo": "Morre José Carlos Resende, do grupo de pagode, aos 43 anos",
-         "link": "https://www.redetv.uol.com.br/tvfama/blog/celebridades/integrante-do-grupo-nosso-sentimento-jose-carlos-resende-morre-aos-43-anos"
+         "veiculo": "Instagram",
+         "titulo": "Novas imagens de câmeras de segurança mostram Thiago Paiva, um dos cantores de pagode denunciados por estupro, chegando a um hotel em Barbacena, Minas Gerais, acompanhado da mulher de 30 anos que o denunciou. O registro, obtido pela @rec",
+         "link": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9IWE82Y2lIWnNYeHlwWXdnLUtlUXRpX2lrMGctWnhPc3VISDFERkpYQTJJT3hNT1RrNVFkRlljRU13SVhyam4tT1NCQWdDZjZFRUE?oc=5"
         }
        ],
        "via": "Google Notícias: pagode"
@@ -2669,7 +2738,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "24 h 01"
+        "semPortalHa": "24 h 05"
        },
        "local": "Bahia (estado; cidade não citada)",
        "localComo": "estado citado no texto: \"da bahia\"",
@@ -2691,6 +2760,37 @@
        "via": "Google Notícias: pagode em SP"
       },
       {
+       "id": "2b52415ffb0f",
+       "pot": {
+        "nota": 31,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 31% provisória · opcional",
+        "motivo": "pessoa famosa: Suel · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "25 h 01"
+       },
+       "local": "Andaraí, BA",
+       "localComo": "título/resumo: título; resumo",
+       "titulo": "Suel esquenta o Pagode do Coruja o Renascença Clube, no Andaraí, nesse domingo (22)",
+       "link": "https://grandetijuca.com.br/noticia/10504/suel-esquenta-o-pagode-do-coruja-o-renascenca-clube-no-andarai-nesse-domingo-22.html?utm_source=rss&utm_medium=feed&utm_campaign=distribuicao-rss&utm_content=noticia-suel-esquenta-o-pagode-do-coruja-o-renascenca-clube-no-andarai-nesse-domingo-22",
+       "veiculo": "Portal Grande Tijuca",
+       "dominio": "grandetijuca.com.br",
+       "publicado": "2026-11-21T11:01",
+       "primeiroVisto": "2026-11-21T11:19",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: pagode"
+      },
+      {
        "id": "e484a19daf21",
        "pot": {
         "nota": 28,
@@ -2701,7 +2801,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "27 h 44"
+        "semPortalHa": "27 h 48"
        },
        "local": "Curitiba, PR",
        "localComo": "título/resumo: título; resumo",
@@ -2716,6 +2816,34 @@
        "quente": false,
        "regiao": "br",
        "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: pagode"
+      },
+      {
+       "id": "91c68498737f",
+       "pot": {
+        "nota": 51,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 51% provisória · opcional",
+        "motivo": "veículo grande (G1) · tema forte: morte · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "local": "Mata, RS",
+       "localComo": "matéria (sitemap do veículo): parágrafo 1; parágrafo 2",
+       "titulo": "Você viu? Morte de mulher durante tratamento de canal, prisão de gêmeos pagodeiros suspeitos de estupro e cervejaria premiada",
+       "link": "https://g1.globo.com/mg/zona-da-mata/noticia/2026/11/21/voce-viu-morte-de-mulher-durante-tratamento-de-canal-prisao-de-gemeos-pagodeiros-suspeitos-de-estupro-e-cervejaria-premiada.ghtml",
+       "veiculo": "G1",
+       "dominio": "g1.globo.com",
+       "publicado": "2026-11-21T00:05",
+       "primeiroVisto": "2026-11-21T01:37",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: matéria (sitemap do veículo): parágrafo 1; parágrafo 2",
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [],
@@ -2744,34 +2872,6 @@
        "quente": false,
        "regiao": "br",
        "regiaoMotivo": "cidade: mesmo fato em g1.globo.com (achado no Bing Notícias): parágrafo 1; parágrafo 2",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: pagode"
-      },
-      {
-       "id": "19f54585a191",
-       "pot": {
-        "nota": 26,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 26% provisória · opcional",
-        "motivo": "veículo grande (Hugo Gloss) · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "local": "Barbacena, MG",
-       "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 3",
-       "titulo": "Vídeo mostra cantor de pagode denunciado por estupro chegando a hotel com mulher em MG",
-       "link": "https://hugogloss.uol.com.br/brasil/gemeos-estupro-mg/",
-       "veiculo": "Hugo Gloss",
-       "dominio": "hugogloss.uol.com.br",
-       "publicado": "2026-11-20T17:13",
-       "primeiroVisto": "2026-11-20T17:20",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1; parágrafo 3",
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [],
@@ -2815,7 +2915,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "46 h 59"
+        "semPortalHa": "47 h 02"
        },
        "local": "Cuiabá, MT",
        "localComo": "título/resumo: título; resumo",
@@ -2832,7 +2932,37 @@
        "regiaoMotivo": "cidade: título/resumo: título; resumo",
        "categoria": "Música",
        "tambemEm": [],
-       "via": "Google Notícias: gravação de DVD/audiovisual"
+       "via": "Google Notícias: pagode"
+      },
+      {
+       "id": "1ae54b568573",
+       "pot": {
+        "nota": 31,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 31% provisória · opcional",
+        "motivo": "pessoa famosa: Thiaguinho · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "47 h 34"
+       },
+       "local": "Curitiba, PR",
+       "localComo": "título/resumo: título; resumo",
+       "titulo": "Belo e Thiaguinho juntos em Curitiba hoje; veja programação completa",
+       "link": "https://news.google.com/rss/articles/CBMif0FVX3lxTE5oLUlYdi1qU3FIRlpCSERFSnpWR3lxcldCaUZibTYtUWNZNkhoVzVFN2hEdVVGdzdDb0FIbXVPclpuV2Y4TlZ3ZlJ4Sm44eFk3MmotX0pVRTcxOHI3ZWY4STJIcU1SQ0ZDLWxHemU5SjMtenVtMWxiMWJMbFZUMWvSAYQBQVVfeXFMTVktMC0zT2dUcjN5RUhhZDFVZm4zbjVnVzlPbFZ0dkthRFRpTEpJQndoYnF6TnEteXlhdGpSbnBSRk96Z0VuYndyVU53STk5X0J1M0NEeHZtS05TalVIVzJ3WDBvZ1BzWFo2bG84bWlVRk9Id0xWY0h5OVBUSDhjWG9ocGY1?oc=5",
+       "veiculo": "Tribuna do Paraná",
+       "dominio": "tribunapr.com.br",
+       "publicado": "2026-11-20T12:28",
+       "primeiroVisto": "2026-11-18T14:50",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "categoria": "Música",
+       "tambemEm": [],
+       "via": "Google Notícias: artistas anunciam"
       },
       {
        "id": "58952c19950b",
@@ -2874,7 +3004,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "20 h 26"
+        "semPortalHa": "20 h 29"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -2896,23 +3026,26 @@
        "via": "Google Notícias: artistas anunciam"
       },
       {
-       "id": "46c8cf70da90",
+       "id": "7fe76f0b8cea",
        "pot": {
         "nota": 31,
         "faixa": "opcional",
         "provisoria": true,
         "rotulo": "⏳ 31% provisória · opcional",
-        "motivo": "pessoa famosa: Péricles · nota provisória: só 1 veículo até agora"
+        "motivo": "pessoa famosa: Thiaguinho · nota provisória: só 1 veículo até agora"
        },
        "emApuracao": true,
+       "furo": {
+        "semPortalHa": "46 h"
+       },
        "local": "Nacional (sem cidade)",
-       "semCidadeMotivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "titulo": "Péricles vai além de histórias de superação em programa com artistas negros",
-       "link": "https://noticiasdatv.uol.com.br/noticia/televisao/pericles-vai-alem-de-historias-de-superacao-em-programa-com-artistas-negros-159635",
-       "veiculo": "Notícias da TV",
-       "dominio": "noticiasdatv.uol.com.br",
-       "publicado": "2026-11-20T14:00",
-       "primeiroVisto": "2026-11-20T14:17",
+       "semCidadeMotivo": "matéria lida (6 parágrafos, Bing Notícias (título exato)), nenhuma cidade citada no texto",
+       "titulo": "Thiaguinho retorna ao Planeta Atlântida 2027 com grandes sucessos do pagode",
+       "link": "https://atl.clicrbs.com.br/musica/shows-e-eventos/noticia/2026/11/thiaguinho-retorna-ao-planeta-atlantida-2027-com-grandes-sucessos-do-pagode-cmwoa14d001nu015uyklb4hrj.html",
+       "veiculo": "Rede Atlântida",
+       "dominio": "atl.clicrbs.com.br",
+       "publicado": "2026-11-20T14:02",
+       "primeiroVisto": "2026-11-20T14:48",
        "fontes": 1,
        "confirmado": false,
        "quente": false,
@@ -2923,62 +3056,6 @@
        "linkDireto": true,
        "tambemEm": [],
        "via": "Google Notícias: artistas anunciam"
-      },
-      {
-       "id": "ae56c4de01e8",
-       "pot": {
-        "nota": 54,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 54% provisória · opcional",
-        "motivo": "veículo grande (Terra) · tema forte: luto · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "local": "cidade não identificada",
-       "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "titulo": "LUTO: Integrante de famoso grupo de pagode passa mal e morre aos 43 anos",
-       "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxOVDZ0a0tXWWhvQU5aUjJhNVFiRXAtNm92YVc2UDV3TTJadms4NFB3ckM3RDNack1hVmkta3lhZTNFS0x3V1BheUxUV2FObU9hY0JQWC1hTUhXalJmT0lYRnBmVVZBdVN5S1UzbXJPSS1ZejN3dkY1Rl94aEU0cmNiclVRYm81ZWFiUnktZWN4Q0YzQ19JTVp6WG82MElvQ0xURFJZQkJWN0RGQlZ5cm8tUHIwMmliMVFkVG9XNFluQlBYbUEzRU42TDFnZ20yUm1nX0U0dGlyazdTZ19KaHZUNjdQWGRQd19pcVF0c2dR?oc=5",
-       "veiculo": "Terra",
-       "dominio": "terra.com.br",
-       "publicado": "2026-11-21T16:52",
-       "primeiroVisto": "2026-11-21T14:04",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "sem local no texto, padrão Brasil",
-       "localIncerto": true,
-       "categoria": "Música",
-       "tambemEm": [],
-       "via": "Google Notícias: pagode"
-      },
-      {
-       "id": "dabc6c53eab8",
-       "pot": {
-        "nota": 29,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 29% provisória · opcional",
-        "motivo": "veículo grande (G1) · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "local": "cidade não identificada",
-       "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "titulo": "'Em Cena': fim de semana tem festas, pagode e funk na região",
-       "link": "https://news.google.com/rss/articles/CBMi5AFBVV95cUxQRG5YT2oxZlNpVGZsYUdrcWl4Q1FkMXQxZFY5ZnlfSHN4R1g0aFNQN1BiUjdFSlFTa29UaWcxTERkalVieGYzZHY5Q0RWYVUzd1B1UWllUjJZOGJUWU5zTXNwU0dldkQ5c2JGeXpxV1NlTkhLM0Voa3NJSjBXeFpNYTV4eHk0UmllcFJvNGdnbDY0SEM1VlhqazJKaXJhNk1lWmkyMnNiTWl2NHMtQndEZ0E2SnRuSDRSLVdrZXlHODZsRkFRNDdkckVOLXFOSDdmSDJRWmtiYk1jdnZEdzhMaWk5MVfSAfMBQVVfeXFMUDV4dzZMTklUNXdtZnpHc1FJTjhXT1NZRmZjWXlXRHo4VmJWNDVsdTR5R1lNR2FGbllRWGFLbTdvczNuODZ6aElaY2owQXh1R2dmak1oakF6WGg4Wk5nNGZzcjNFSTVROF9aUXFHaHBuaExuQ2xtc3RtZUFYVDJYQW56dTBCSXpFLVdJR1FCQWxNQ2ppeFBQX2Z4T1k4bElLVEhxLUZGMEw0ZXVNODdKemJuMlhZQ09GUnh6bUxVMGw5aDRzRERJelFrR1JEUlBMb0UxX3pHQ0dxVlNRT1pmLV9LaldtZ1lmek5wN3NPdXhyQmo4?oc=5",
-       "veiculo": "G1",
-       "dominio": "g1.globo.com",
-       "publicado": "2026-11-21T14:09",
-       "primeiroVisto": "2026-11-21T15:42",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "sem local no texto, padrão Brasil (SP: busca pagode em SP)",
-       "localIncerto": true,
-       "categoria": "Música",
-       "tambemEm": [],
-       "via": "Google Notícias: pagode em SP"
       }
      ]
     },
@@ -2996,7 +3073,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 56"
+        "semPortalHa": "11 h 59"
        },
        "local": "Las Vegas, EUA",
        "localComo": "mesmo fato em hojemais.com.br (achado no Bing Notícias): parágrafo 2 (las vegas); descrição da página (las vegas)",
@@ -3040,7 +3117,7 @@
        "emApuracao": true,
        "djf": "festival: João Rock",
        "furo": {
-        "semPortalHa": "29 h 51"
+        "semPortalHa": "29 h 55"
        },
        "local": "Ribeirão Preto, SP",
        "localComo": "título/resumo: título (com UF); resumo (com UF)",
@@ -3072,7 +3149,7 @@
        "emApuracao": true,
        "djf": "festival: João Rock",
        "furo": {
-        "semPortalHa": "31 h 33"
+        "semPortalHa": "31 h 36"
        },
        "local": "Ribeirão Preto, SP",
        "localComo": "matéria (Bing Notícias (título exato, outro veículo)): descrição da página",
@@ -3104,7 +3181,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "35 h 59"
+        "semPortalHa": "36 h 02"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (página inicial do veículo): parágrafo 16; parágrafo 17",
@@ -3142,7 +3219,7 @@
        "emApuracao": true,
        "djf": "dj: Mochakk",
        "furo": {
-        "semPortalHa": "46 h 29"
+        "semPortalHa": "46 h 32"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (\"do Rio\"); parágrafo 2 (lugar: praca maua)",
@@ -3183,7 +3260,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=31&faixa=opcional&titulo=Alok+leva+FestBerro+%C3%A0+lota%C3%A7%C3%A3o+m%C3%A1xima+em+noite+de+shows+em+Tau%C3%A1&noticia=https%3A%2F%2Fbh24horas.com.br%2Fsertanejo%2Falok-leva-festberro-a-lotacao-maxima-em-noite-de-shows-em-taua%2F&texto=Alok+leva+FestBerro+%C3%A0+lota%C3%A7%C3%A3o+m%C3%A1xima+em+noite+de+shows+em+Tau%C3%A1%0ALocal%3A+Tau%C3%A1%2C+CE%0AVe%C3%ADculo%3A+BH+24+Horas+%C2%B7+2026-11-22+09%3A22+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fportalleodias.com%2Fmusica%2Falok-agita-um-dos-maiores-festivais-do-ceara-com-lotacao-maxima-em-taua",
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "18 h 10"
+        "semPortalHa": "18 h 13"
        },
        "local": "Tauá, CE",
        "localComo": "título/resumo: título; resumo",
@@ -3232,7 +3309,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Alok+faz+doa%C3%A7%C3%A3o+a+hospital+infantil+e+ajuda+58+crian%C3%A7as+que+precisam+de+cirurgia+card%C3%ADaca&noticia=https%3A%2F%2Fgrandeponto.com.br%2Fnoticia%2Falok-faz-doacao-a-hospital-infantil-e-ajuda-58-criancas-que-precisam-de-cirurgia-cardiaca&texto=Alok+faz+doa%C3%A7%C3%A3o+a+hospital+infantil+e+ajuda+58+crian%C3%A7as+que+precisam+de+cirurgia+card%C3%ADaca%0ALocal%3A+Curitiba%2C+PR%0AVe%C3%ADculo%3A+Grande+Ponto+%C2%B7+2026-11-20+16%3A59+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.canaltadeuramos.com.br%2F2026%2F11%2Falok-visita-hospital-pequeno-principe-doacao-curitiba.html",
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "44 h 32"
+        "semPortalHa": "44 h 35"
        },
        "local": "Curitiba, PR",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (com UF); descrição da página (com UF)",
@@ -3259,48 +3336,6 @@
        "via": "Google Notícias: DJs 1"
       },
       {
-       "primeiroANoticiar": {
-        "veiculo": "Mais Goiás",
-        "hora": "12:00"
-       },
-       "id": "a8c5a989b56b",
-       "pot": {
-        "nota": 22,
-        "faixa": "opcional",
-        "provisoria": false,
-        "rotulo": "22% · opcional",
-        "motivo": "2 veículos"
-       },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=DJ+goiano+Illusionize+retorna+a+Goi%C3%A2nia+com+festa+de+m%C3%BAsica+eletr%C3%B4nica&noticia=https%3A%2F%2Fcurtamais.com.br%2Fgoiania%2Fillusionize-em-goiania%2F&texto=DJ+goiano+Illusionize+retorna+a+Goi%C3%A2nia+com+festa+de+m%C3%BAsica+eletr%C3%B4nica%0ALocal%3A+Goi%C3%A2nia%2C+GO%0AVe%C3%ADculo%3A+Curta+Mais+-+Goi%C3%A2nia+%C2%B7+2026-11-20+12%3A45+%28Bras%C3%ADlia%29",
-       "djf": "dj: Illusionize",
-       "furo": {
-        "semPortalHa": "47 h 59"
-       },
-       "local": "Goiânia, GO",
-       "localComo": "título/resumo: título; resumo",
-       "titulo": "DJ goiano Illusionize retorna a Goiânia com festa de música eletrônica",
-       "link": "https://curtamais.com.br/goiania/illusionize-em-goiania/",
-       "veiculo": "Curta Mais - Goiânia",
-       "dominio": "curtamais.com.br",
-       "publicado": "2026-11-20T12:45",
-       "primeiroVisto": "2026-11-20T12:10",
-       "fontes": 2,
-       "confirmado": true,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade: título/resumo: título; resumo",
-       "categoria": "DJ",
-       "linkDireto": true,
-       "tambemEm": [
-        {
-         "veiculo": "Mais Goiás",
-         "titulo": "Illusionize retorna a Goiânia em novembro",
-         "link": "https://news.google.com/rss/articles/CBMikgFBVV95cUxNM3J3Sm5mN1JlZjFialcyQlZRMHBrQnFYamwyS25sMlFDcUp6UjJzZ21LVGo3VFhBSU9IY19razVmVjZkUExBUExTWnFXanA0MG9XVXJCd244UGVnRVItWUZGd3VlMFFndnJ2bzRtSVVON1NkbUt6S3dsZjdBR1pNWjB0c1dENW9zd3pmOGF2U0Z5Zw?oc=5"
-        }
-       ],
-       "via": "Google Notícias: DJs"
-      },
-      {
        "id": "dc4e11a69f89",
        "pot": {
         "nota": 34,
@@ -3312,7 +3347,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "20 h 28"
+        "semPortalHa": "20 h 32"
        },
        "local": "Fortaleza, CE",
        "localComo": "título/resumo: título; resumo",
@@ -3344,7 +3379,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "24 h 09"
+        "semPortalHa": "24 h 13"
        },
        "local": "Manaus, AM",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -3376,7 +3411,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "32 h 25"
+        "semPortalHa": "32 h 29"
        },
        "local": "Pouso Alegre, MG",
        "localComo": "título/resumo: título; resumo",
@@ -3396,6 +3431,38 @@
        "via": "Google Notícias: festivais 1"
       },
       {
+       "id": "a8c5a989b56b",
+       "pot": {
+        "nota": 16,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 16% provisória · opcional",
+        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "djf": "dj: Illusionize",
+       "furo": {
+        "semPortalHa": "47 h 17"
+       },
+       "local": "Goiânia, GO",
+       "localComo": "título/resumo: título; resumo",
+       "titulo": "DJ goiano Illusionize retorna a Goiânia com festa de música eletrônica",
+       "link": "https://curtamais.com.br/goiania/illusionize-em-goiania/",
+       "veiculo": "Curta Mais - Goiânia",
+       "dominio": "curtamais.com.br",
+       "publicado": "2026-11-20T12:45",
+       "primeiroVisto": "2026-11-20T12:10",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "categoria": "DJ",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: DJs"
+      },
+      {
        "primeiroANoticiar": {
         "veiculo": "POPLine",
         "hora": "10:00"
@@ -3411,7 +3478,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Alok+e+Zeeba+lan%C3%A7am+%3FMonday%3F+e+criticam+m%C3%BAsica+feita+por+IA%3A+%3FEnlatado%3F&noticia=https%3A%2F%2Fwww.bra1.com.br%2Fgeral%2Fid-730185%2Falok_e_zeeba_lancam_e_63mondaye_63_e_criticam_musica_feita_por_ia__e_63enlatadoe_63&texto=Alok+e+Zeeba+lan%C3%A7am+%3FMonday%3F+e+criticam+m%C3%BAsica+feita+por+IA%3A+%3FEnlatado%3F%0ALocal%3A+Nacional+%28sem+cidade%29%0AVe%C3%ADculo%3A+bra1.com.br+%C2%B7+2026-11-21+16%3A50+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fportalpopline.com.br%2Falok-zeeba-parceria-ep-nostalgia-entrevista-ia%2F",
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "25 h 59"
+        "semPortalHa": "26 h 02"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (16 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -3450,7 +3517,7 @@
        "emApuracao": true,
        "djf": "dj: Diplo",
        "furo": {
-        "semPortalHa": "14 h 06"
+        "semPortalHa": "14 h 10"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (5 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -3483,7 +3550,7 @@
        "emApuracao": true,
        "djf": "dj: Diplo",
        "furo": {
-        "semPortalHa": "18 h 31"
+        "semPortalHa": "18 h 34"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -3515,7 +3582,7 @@
        "emApuracao": true,
        "djf": "dj: Diplo",
        "furo": {
-        "semPortalHa": "32 h 44"
+        "semPortalHa": "32 h 48"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (16 parágrafos, Bing Notícias (título exato, outro veículo)), nenhuma cidade citada no texto",
@@ -3548,7 +3615,7 @@
        "emApuracao": true,
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "42 h 56"
+        "semPortalHa": "43 h"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -3580,7 +3647,7 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "43 h 13"
+        "semPortalHa": "43 h 16"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -3607,6 +3674,50 @@
      "quentes": [
       {
        "primeiroANoticiar": {
+        "veiculo": "TicketNews",
+        "hora": "13:17"
+       },
+       "id": "0e8c4ebdd4ee",
+       "pot": {
+        "nota": 25,
+        "faixa": "opcional",
+        "provisoria": false,
+        "rotulo": "25% · opcional",
+        "motivo": "2 veículos"
+       },
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=25&faixa=opcional&titulo=Calvin+Harris+no+Mallorca+Live+2027%3A+festa+de+encerramento+e+ingressos&noticia=https%3A%2F%2Fmodofestival.es%2Fmallorca-live-2027-calvin-harris-closing-party-13-junio-entradas%2F&texto=Calvin+Harris+no+Mallorca+Live+2027%3A+festa+de+encerramento+e+ingressos%0ALocal%3A+Los+Angeles%2C+EUA%0AVe%C3%ADculo%3A+modofestival.es+%C2%B7+2026-11-22+08%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.ticketnews.com%2F2026%2F10%2Fcalvin-harris-inglewood-tickets-on-sale-at-kia-forum%2F",
+       "djf": "dj: Calvin Harris",
+       "furo": {
+        "semPortalHa": "22 h 45"
+       },
+       "local": "Los Angeles, EUA",
+       "localComo": "mesmo fato em TicketNews: matéria (busca WordPress do veículo): parágrafo 1 (los angeles); parágrafo 10 (los angeles)",
+       "titulo": "Calvin Harris no Mallorca Live 2027: festa de encerramento e ingressos",
+       "tituloOriginal": "Calvin Harris at Mallorca Live 2027: Closing Party and tickets",
+       "traduzido": "traduzido do inglês",
+       "link": "https://modofestival.es/mallorca-live-2027-calvin-harris-closing-party-13-junio-entradas/",
+       "veiculo": "modofestival.es",
+       "dominio": "modofestival.es",
+       "publicado": "2026-11-22T08:00",
+       "primeiroVisto": "2026-11-22T09:32",
+       "fontes": 2,
+       "confirmado": true,
+       "quente": true,
+       "regiao": "int",
+       "regiaoMotivo": "cidade herdada de TicketNews",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [
+        {
+         "veiculo": "TicketNews",
+         "titulo": "Ingressos para Calvin Harris em Inglewood à venda no Kia Forum",
+         "link": "https://www.ticketnews.com/2026/10/calvin-harris-inglewood-tickets-on-sale-at-kia-forum/"
+        }
+       ],
+       "via": "Google Notícias: DJs (EUA)"
+      },
+      {
+       "primeiroANoticiar": {
         "veiculo": "mxdwn Music",
         "hora": "03:26"
        },
@@ -3621,7 +3732,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=Glastonbury+2027+Lineup%3A+Every+Dance+Act+Announced+So+Far&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMicEFVX3lxTFBDek8wY0hqdnpZTEUxU1lkSmpUN1ZkcjE0eXZfOF9PckUyanpwRkE4amtTT3dCdkppdmtWR1JVN0pPWlpXOXkxdG1IMTZkdzdmLUdyMXBCZG5mTmhuYUprdTUwM0JsM2QyWDQ5ekE1WXU%3Foc%3D5&texto=Glastonbury+2027+Lineup%3A+Every+Dance+Act+Announced+So+Far%0ALocal%3A+Miami%2C+EUA%0AVe%C3%ADculo%3A+MNEEMO+%C2%B7+2026-11-22+05%3A08+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fmusic.mxdwn.com%2F2026%2F11%2F21%2Fnews%2Flightning-in-a-bottle-2027-lineup-announced-featuring-sofi-tukker-justice-basement-jaxx-more%2F",
        "djf": "festival: Glastonbury",
        "furo": {
-        "semPortalHa": "8 h 32"
+        "semPortalHa": "8 h 36"
        },
        "local": "Miami, EUA",
        "localComo": "mesmo fato em mxdwn Music: matéria (RSS do veículo): parágrafo 3 (miami)",
@@ -3651,6 +3762,40 @@
        "via": "Google Notícias: festivais (EUA) 2"
       },
       {
+       "id": "a5c04f0e6aae",
+       "pot": {
+        "nota": 26,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 26% provisória · opcional",
+        "motivo": "acabou de sair · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "djf": "festival: The Town",
+       "furo": {
+        "semPortalHa": "5 min"
+       },
+       "local": "Exterior (cidade não citada)",
+       "semCidadeMotivo": "matéria lida (18 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
+       "titulo": "Como uma igreja de St. Johnsbury se tornou a casa de shows da cidade",
+       "tituloOriginal": "How a St. Johnsbury Church Became the Town's Music Hall",
+       "traduzido": "traduzido do inglês",
+       "link": "https://www.northstarmonthly.com/features/how-a-st-johnsbury-church-became-the-towns-music-hall/article_a09b5d6c-a16e-43a1-89cb-ede4dead35ad.html",
+       "veiculo": "The North Star Monthly",
+       "dominio": "northstarmonthly.com",
+       "publicado": "2026-11-22T11:57",
+       "primeiroVisto": "2026-11-22T12:02",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": true,
+       "regiao": "int",
+       "regiaoMotivo": "Internacional: busca festivais (EUA) 1",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: festivais (EUA) 1"
+      },
+      {
        "id": "5dc43f01f87c",
        "pot": {
         "nota": 26,
@@ -3662,7 +3807,7 @@
        "emApuracao": true,
        "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "45 min"
+        "semPortalHa": "49 min"
        },
        "local": "Miami, EUA",
        "localComo": "título/resumo: título (miami); resumo (miami)",
@@ -3696,7 +3841,7 @@
        "emApuracao": true,
        "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "1 h 20"
+        "semPortalHa": "1 h 23"
        },
        "local": "Lançamento/assunto sem cidade (pelo título; matéria não aberta)",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -3727,7 +3872,7 @@
        "emApuracao": true,
        "djf": "festival: Afterlife",
        "furo": {
-        "semPortalHa": "2 h 58"
+        "semPortalHa": "3 h 02"
        },
        "local": "Lançamento/assunto sem cidade (pelo título; matéria não aberta)",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -3760,7 +3905,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "3 h 43"
+        "semPortalHa": "3 h 47"
        },
        "local": "Chicago, EUA",
        "localComo": "título/resumo: resumo (chicago)",
@@ -3782,40 +3927,6 @@
        "via": "Google Notícias: festivais (EUA) 1"
       },
       {
-       "id": "0e8c4ebdd4ee",
-       "pot": {
-        "nota": 22,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 22% provisória · opcional",
-        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "djf": "dj: Calvin Harris",
-       "furo": {
-        "semPortalHa": "3 h 59"
-       },
-       "local": "Exterior (cidade não citada)",
-       "semCidadeMotivo": "matéria lida (16 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "titulo": "Calvin Harris no Mallorca Live 2027: festa de encerramento e ingressos",
-       "tituloOriginal": "Calvin Harris at Mallorca Live 2027: Closing Party and tickets",
-       "traduzido": "traduzido do inglês",
-       "link": "https://modofestival.es/mallorca-live-2027-calvin-harris-closing-party-13-junio-entradas/",
-       "veiculo": "modofestival.es",
-       "dominio": "modofestival.es",
-       "publicado": "2026-11-22T08:00",
-       "primeiroVisto": "2026-11-22T09:32",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": true,
-       "regiao": "int",
-       "regiaoMotivo": "Internacional: busca DJs (EUA)",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: DJs (EUA)"
-      },
-      {
        "id": "8a63f099ec3f",
        "pot": {
         "nota": 19,
@@ -3827,7 +3938,7 @@
        "emApuracao": true,
        "djf": "festival: Afterlife",
        "furo": {
-        "semPortalHa": "6 h 38"
+        "semPortalHa": "6 h 42"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (9 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -3861,7 +3972,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "9 h 11"
+        "semPortalHa": "9 h 15"
        },
        "local": "Chicago, EUA",
        "localComo": "título/resumo: resumo (chicago)",
@@ -3960,7 +4071,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Third+Annual+Coachella+Valley+Filipino+Festival+Underway&noticia=https%3A%2F%2Fmynewsla.com%2Fhollywood%2F2026%2F11%2F21%2Fthird-annual-coachella-valley-filipino-festival-underway%2F&texto=Third+Annual+Coachella+Valley+Filipino+Festival+Underway%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+MyNewsLA.com+%C2%B7+2026-11-21+17%3A42+%28Bras%C3%ADlia%29",
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "45 h 30"
+        "semPortalHa": "45 h 34"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (7 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -4002,7 +4113,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=32&faixa=opcional&titulo=Steve+Aoki+destaca+impacto+de+%27MIC+Drop%27+ao+lado+do+BTS&noticia=https%3A%2F%2Fdiariodamidia.com.br%2Fsteve-aoki-destaca-impacto-de-mic-drop-ao-lado-do-bts&texto=Steve+Aoki+destaca+impacto+de+%27MIC+Drop%27+ao+lado+do+BTS%0ALocal%3A+Las+Vegas%2C+EUA%0AVe%C3%ADculo%3A+diariodamidia.com.br+%C2%B7+2026-11-20+18%3A12+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fbillboard.com.br%2Fsteve-aoki-parceria-com-bts-e-sucesso-de-mic-drop%2F",
        "djf": "dj: Steve Aoki",
        "furo": {
-        "semPortalHa": "45 h 58"
+        "semPortalHa": "46 h 02"
        },
        "local": "Las Vegas, EUA",
        "localComo": "mesmo fato em Billboard Brasil: matéria (busca WordPress do veículo): parágrafo 11 (las vegas); parágrafo 12 (las vegas)",
@@ -4040,7 +4151,7 @@
        "emApuracao": true,
        "djf": "dj: Peggy Gou",
        "furo": {
-        "semPortalHa": "19 h 48"
+        "semPortalHa": "19 h 52"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "página lida, mas sem texto de matéria acessível (Bing Notícias (título exato, outro veículo))",
@@ -4074,7 +4185,7 @@
        "emApuracao": true,
        "djf": "festival: Green Valley",
        "furo": {
-        "semPortalHa": "20 h 28"
+        "semPortalHa": "20 h 32"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (16 parágrafos, Bing Notícias (título exato)), nenhuma cidade citada no texto",
@@ -4106,7 +4217,7 @@
        "emApuracao": true,
        "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "22 h 21"
+        "semPortalHa": "22 h 25"
        },
        "local": "Reino Unido (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"uk\", cidade não citada",
@@ -4139,7 +4250,7 @@
        "emApuracao": true,
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "22 h 44"
+        "semPortalHa": "22 h 48"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -4160,39 +4271,6 @@
        "linkDireto": true,
        "tambemEm": [],
        "via": "Google Notícias: festivais (EUA) 2"
-      },
-      {
-       "id": "610a27875d6f",
-       "pot": {
-        "nota": 19,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 19% provisória · opcional",
-        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "djf": "dj: Alesso",
-       "furo": {
-        "semPortalHa": "22 h 51"
-       },
-       "local": "Reino Unido (cidade não citada)",
-       "localComo": "matéria (RSS do veículo): país citado \"uk\", cidade não citada",
-       "semCidadeMotivo": "matéria lida (8 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "titulo": "Alesso’s ‘Titanium’ Remix Marks 15 Years Today",
-       "link": "https://edmhousenetwork.com/alessos-titanium-remix-marks-15-years-today/",
-       "veiculo": "EDM House Network",
-       "dominio": "edmhousenetwork.com",
-       "publicado": "2026-11-21T13:07",
-       "primeiroVisto": "2026-11-21T17:07",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "int",
-       "regiaoMotivo": "cidade: matéria (RSS do veículo): país citado \"uk\", cidade não citada",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: DJs (EUA)"
       },
       {
        "id": "de4ad4542476",
@@ -4236,7 +4314,7 @@
        "emApuracao": true,
        "djf": "festival: Rolling Loud",
        "furo": {
-        "semPortalHa": "31 h 17"
+        "semPortalHa": "31 h 21"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -4270,7 +4348,7 @@
        "emApuracao": true,
        "djf": "dj: Tiësto",
        "furo": {
-        "semPortalHa": "34 h 51"
+        "semPortalHa": "34 h 55"
        },
        "local": "Lisboa, Portugal",
        "localComo": "título/resumo: título (lisbon); resumo (lisbon)",
@@ -4303,7 +4381,7 @@
        "emApuracao": true,
        "djf": "festival: Ultra Music Festival",
        "furo": {
-        "semPortalHa": "35 h"
+        "semPortalHa": "35 h 04"
        },
        "local": "Miami, EUA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1 (miami); parágrafo 2 (miami)",
@@ -4337,7 +4415,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "39 h 48"
+        "semPortalHa": "39 h 52"
        },
        "local": "México (cidade não citada)",
        "localComo": "matéria (RSS do veículo): país citado \"mexico\", cidade não citada",
@@ -4372,7 +4450,7 @@
        "emApuracao": true,
        "djf": "dj: Martin Garrix",
        "furo": {
-        "semPortalHa": "39 h 55"
+        "semPortalHa": "39 h 59"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -4405,7 +4483,7 @@
        "emApuracao": true,
        "djf": "dj: Swedish House Mafia",
        "furo": {
-        "semPortalHa": "41 h 16"
+        "semPortalHa": "41 h 20"
        },
        "local": "San Francisco, EUA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1 (san francisco); parágrafo 8 (san francisco)",
@@ -4426,6 +4504,41 @@
        "linkDireto": true,
        "tambemEm": [],
        "via": "Google Notícias: DJs (EUA)"
+      },
+      {
+       "id": "94f22fc00aff",
+       "pot": {
+        "nota": 28,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 28% provisória · opcional",
+        "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "djf": "dj: Anyma",
+       "furo": {
+        "semPortalHa": "41 h 25"
+       },
+       "local": "Canadá (cidade não citada)",
+       "localComo": "matéria (busca WordPress do veículo): país citado \"canada\", cidade não citada",
+       "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
+       "titulo": "ANYMA faz sua estreia no Canadá com o AEDEN Takeover no Soulrise Music Festival de Vancouver",
+       "tituloOriginal": "ANYMA Sets Canadian Debut with AEDEN Takeover at Vancouver’s Soulrise Music Festival",
+       "traduzido": "traduzido do inglês",
+       "link": "https://www.ticketnews.com/2026/06/anyma-sets-canadian-debut-aeden-takeover/",
+       "veiculo": "TicketNews",
+       "dominio": "ticketnews.com",
+       "publicado": "2026-11-20T18:37",
+       "primeiroVisto": "2026-11-21T18:56",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "int",
+       "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"canada\", cidade não citada",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: DJs (EUA)"
       }
      ]
     }
@@ -4436,51 +4549,50 @@
    "brasil": [
     {
      "primeiroANoticiar": {
-      "veiculo": "Wikimetal",
-      "hora": "09:21"
+      "veiculo": "ba.gov.br",
+      "hora": "00:37"
      },
-     "id": "180d70bc36ea",
+     "id": "7cc763cd2d65",
      "pot": {
-      "nota": 50,
+      "nota": 40,
       "faixa": "opcional",
       "provisoria": false,
-      "rotulo": "50% · opcional",
-      "motivo": "veículo grande (Terra Música) · 3 veículos · tema: show"
+      "rotulo": "40% · opcional",
+      "motivo": "3 veículos · tema: show"
      },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=50&faixa=opcional&titulo=Setlist+de+Roger+Daltrey+no+Best+of+Blues+%26+Rock+2026%3A+veja+m%C3%BAsicas+do+show+do+cantor+do+The+Who&noticia=https%3A%2F%2Fwww.terra.com.br%2Fdiversao%2Fmusica%2Fsetlist-de-roger-daltrey-no-best-of-blues-rock-2026-veja-musicas-do-show-do-cantor-do-the-who%2C98c2cfb72c7ad0859d069760c4e7fac97xu03zgu.html&texto=Setlist+de+Roger+Daltrey+no+Best+of+Blues+%26+Rock+2026%3A+veja+m%C3%BAsicas+do+show+do+cantor+do+The+Who%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Terra+M%C3%BAsica+%C2%B7+2026-11-21+23%3A25+%28Bras%C3%ADlia%29%0AO+vocalista+do+The+Who%2C+Roger+Daltrey%2C+sobe+ao+palco+neste+s%C3%A1bado%2C+21%2C+do+festival+Best+of+Blues+...&links=https%3A%2F%2Fwww.wikimetal.com.br%2Feddie-vedder-best-of-blues-and-rock-2026%2F%0Ahttps%3A%2F%2Frollingstone.com.br%2Fmusica%2Froger-daltrey-best-of-blues-and-rock-2026-resenha-show%2F",
+     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=40&faixa=opcional&titulo=Mazinho+encerra+segundo+dia+do+Pranch%C3%A3o+na+Micareta+de+Feira+com+show+embalado+por+grandes+sucessos&noticia=https%3A%2F%2Farenadenoticias.com.br%2Fnoticia%2F186449%2Fmazinho-encerra-segundo-dia-do-pranchao-na-micareta-de-feira-com-show-embalado-por-grandes-sucessos&texto=Mazinho+encerra+segundo+dia+do+Pranch%C3%A3o+na+Micareta+de+Feira+com+show+embalado+por+grandes+sucessos%0ALocal%3A+Bahia+%28estado%3B+cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+Arena+de+Not%C3%ADcias+%C2%B7+2026-11-21+12%3A06+%28Bras%C3%ADlia%29&links=https%3A%2F%2Frbtv.com.br%2Fnoticia%2F34155%2Fmazinho-encerra-segundo-dia-do-pranchao-na-micareta-de-feira-com-show-embalado-por-grandes-sucessos",
      "furo": {
-      "antes": "14 h 04",
-      "portal": "Terra Música",
-      "jornalAntes": "28 h 52"
+      "semPortalHa": "35 h 25"
      },
-     "local": "São Paulo, SP",
-     "localComo": "matéria (link direto): parágrafo 3 (lugar: ibirapuera); descrição da página (lugar: parque ibirapuera)",
-     "titulo": "Setlist de Roger Daltrey no Best of Blues & Rock 2026: veja músicas do show do cantor do The Who",
-     "link": "https://www.terra.com.br/diversao/musica/setlist-de-roger-daltrey-no-best-of-blues-rock-2026-veja-musicas-do-show-do-cantor-do-the-who,98c2cfb72c7ad0859d069760c4e7fac97xu03zgu.html",
-     "veiculo": "Terra Música",
-     "dominio": "terra.com.br",
-     "publicado": "2026-11-21T23:25",
-     "primeiroVisto": "2026-11-20T18:33",
+     "local": "Bahia (estado; cidade não citada)",
+     "localComo": "estado citado no texto: \"da bahia\"",
+     "semCidadeMotivo": "matéria lida (6 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
+     "titulo": "Mazinho encerra segundo dia do Pranchão na Micareta de Feira com show embalado por grandes sucessos",
+     "link": "https://arenadenoticias.com.br/noticia/186449/mazinho-encerra-segundo-dia-do-pranchao-na-micareta-de-feira-com-show-embalado-por-grandes-sucessos",
+     "veiculo": "Arena de Notícias",
+     "dominio": "arenadenoticias.com.br",
+     "publicado": "2026-11-21T12:06",
+     "primeiroVisto": "2026-11-21T12:05",
      "fontes": 3,
      "confirmado": true,
      "quente": false,
-     "regiao": "sp",
-     "regiaoMotivo": "cidade: matéria (link direto): parágrafo 3 (lugar: ibirapuera); descrição da página (lugar: parque ibirapuera)",
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
      "categoria": "Música",
      "linkDireto": true,
      "tambemEm": [
       {
-       "veiculo": "Wikimetal",
-       "titulo": "Eddie Vedder corta excessos do rock em show no Best of Blues and Rock 2026",
-       "link": "https://www.wikimetal.com.br/eddie-vedder-best-of-blues-and-rock-2026/"
+       "veiculo": "REDE BRASIL DE TELEVISÃO",
+       "titulo": "Mazinho encerra segundo dia do Pranchão na Micareta de Feira com show embalado por grandes sucessos",
+       "link": "https://rbtv.com.br/noticia/34155/mazinho-encerra-segundo-dia-do-pranchao-na-micareta-de-feira-com-show-embalado-por-grandes-sucessos"
       },
       {
-       "veiculo": "Rolling Stone Brasil",
-       "titulo": "Roger Daltrey faz show histórico para público reduzido no Best of Blues and Rock",
-       "link": "https://rollingstone.com.br/musica/roger-daltrey-best-of-blues-and-rock-2026-resenha-show/"
+       "veiculo": "ba.gov.br",
+       "titulo": "Mazinho encerra segundo dia do Pranchão na Micareta de Feira com show embalado por grandes sucessos",
+       "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNZ2FqRnJJTTVLdHlXZ2M2bDhDb3FwOEF3MFNiZnRRU2ljb19jMERqbGFrdTFJcTIyOTRYRlBTNmxMVVVKeTBTSEg5dlowU0Q2UUdzc1ZlekJsaFlnajcwR1FFWFUwU0pfbVFJeld5STNmMGNlZUQwRGdtRVFMdGdldndQdjFnV3Iyd1JEWEQ4TnRmX3lQQ2ZMMjZad2VZMWxUc2stZWstRi1xaGI3akJPaVNzS19rQm1kVHROQTlB?oc=5"
       }
      ],
-     "via": "Terra Música"
+     "via": "Google Notícias: pagode"
     },
     {
      "primeiroANoticiar": {
@@ -4527,53 +4639,6 @@
     },
     {
      "primeiroANoticiar": {
-      "veiculo": "G1",
-      "hora": "06:00"
-     },
-     "id": "c58e41ee150b",
-     "pot": {
-      "nota": 69,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "69% · opcional",
-      "motivo": "veículo grande (G1) · 3 veículos · tema forte: lança"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=69&faixa=opcional&titulo=PC+Silva+lan%C3%A7a+%C3%A1lbum+ao+vivo+%E2%80%98Eu+vou+ganhar+o+mundo%E2%80%99+em+Olinda&noticia=https%3A%2F%2Fconexao424.com.br%2Fcantor-pc-silva-movimenta-a-propria-engrenagem-no-show-que-gera-o-album-ao-vivo-autoral-eu-vou-ganhar-o-mundo%2F&texto=PC+Silva+lan%C3%A7a+%C3%A1lbum+ao+vivo+%E2%80%98Eu+vou+ganhar+o+mundo%E2%80%99+em+Olinda%0ALocal%3A+Olinda%2C+PE%0AVe%C3%ADculo%3A+Conex%C3%A3o+424+%C2%B7+2026-11-22+07%3A53+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fpop-arte%2Fmusica%2Fblog%2Fmauro-ferreira%2Fpost%2F2026%2F11%2F22%2Fcantor-pc-silva-movimenta-a-propria-engrenagem-no-show-que-gera-o-album-ao-vivo-autoral-eu-vou-ganhar-o-mundo.ghtml",
-     "furo": {
-      "antes": null,
-      "portal": "G1"
-     },
-     "local": "Olinda, PE",
-     "localComo": "título/resumo: título; resumo",
-     "titulo": "PC Silva lança álbum ao vivo ‘Eu vou ganhar o mundo’ em Olinda",
-     "link": "https://conexao424.com.br/cantor-pc-silva-movimenta-a-propria-engrenagem-no-show-que-gera-o-album-ao-vivo-autoral-eu-vou-ganhar-o-mundo/",
-     "veiculo": "Conexão 424",
-     "dominio": "conexao424.com.br",
-     "publicado": "2026-11-22T07:53",
-     "primeiroVisto": "2026-11-22T07:17",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "cidade: título/resumo: título; resumo",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "G1",
-       "titulo": "Cantor PC Silva movimenta a própria engrenagem no show que gera o álbum ao vivo autoral 'Eu vou ganhar o mundo'",
-       "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/22/cantor-pc-silva-movimenta-a-propria-engrenagem-no-show-que-gera-o-album-ao-vivo-autoral-eu-vou-ganhar-o-mundo.ghtml"
-      },
-      {
-       "veiculo": "g1 Pop & Arte",
-       "titulo": "Cantor PC Silva movimenta a própria engrenagem no show que gera o álbum ao vivo autoral 'Eu vou ganhar o mundo'",
-       "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/22/cantor-pc-silva-movimenta-a-propria-engrenagem-no-show-que-gera-o-album-ao-vivo-autoral-eu-vou-ganhar-o-mundo.ghtml"
-      }
-     ],
-     "via": "Google Notícias: música lançamento"
-    },
-    {
-     "primeiroANoticiar": {
       "veiculo": "Rolling Stone Brasil",
       "hora": "01:05"
      },
@@ -4613,48 +4678,6 @@
       }
      ],
      "via": "Terra Música"
-    },
-    {
-     "primeiroANoticiar": {
-      "veiculo": "g1 Pop & Arte",
-      "hora": "14:11"
-     },
-     "id": "393d35c1352c",
-     "pot": {
-      "nota": 62,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "62% · opcional",
-      "motivo": "veículo grande (g1 Pop & Arte) · 2 veículos · tema: clipe · pessoa famosa: Roberto Carlos"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=62&faixa=opcional&titulo=Roberto+Carlos+e+Maria+Beth%C3%A2nia+se+reunem+para+clipe+especial&noticia=https%3A%2F%2Fconexao424.com.br%2Froberto-carlos-e-maria-bethania-gravam-clipe-em-estudio-para-especial-do-cantor%2F&texto=Roberto+Carlos+e+Maria+Beth%C3%A2nia+se+reunem+para+clipe+especial%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+Conex%C3%A3o+424+%C2%B7+2026-11-21+19%3A38+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fpop-arte%2Fmusica%2Fblog%2Fmauro-ferreira%2Fpost%2F2026%2F11%2F21%2Froberto-carlos-e-maria-bethania-gravam-clipe-em-estudio-para-exibicao-no-especial-do-cantor.ghtml",
-     "furo": {
-      "antes": null,
-      "portal": "g1 Pop & Arte"
-     },
-     "local": "Rio de Janeiro, RJ",
-     "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 2 (lugar: farmasi arena)",
-     "titulo": "Roberto Carlos e Maria Bethânia se reunem para clipe especial",
-     "link": "https://conexao424.com.br/roberto-carlos-e-maria-bethania-gravam-clipe-em-estudio-para-especial-do-cantor/",
-     "veiculo": "Conexão 424",
-     "dominio": "conexao424.com.br",
-     "publicado": "2026-11-21T19:38",
-     "primeiroVisto": "2026-11-21T14:23",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "rj",
-     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1; parágrafo 2 (lugar: farmasi arena)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "g1 Pop & Arte",
-       "titulo": "Roberto Carlos e Maria Bethânia gravam clipe em estúdio para especial do cantor",
-       "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/21/roberto-carlos-e-maria-bethania-gravam-clipe-em-estudio-para-exibicao-no-especial-do-cantor.ghtml"
-      }
-     ],
-     "via": "Google Notícias: música lançamento"
     },
     {
      "primeiroANoticiar": {
@@ -4790,131 +4813,6 @@
     },
     {
      "primeiroANoticiar": {
-      "veiculo": "VEJA SÃO PAULO",
-      "hora": "15:00"
-     },
-     "id": "1f1fd8fb2988",
-     "pot": {
-      "nota": 47,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "47% · opcional",
-      "motivo": "veículo grande (VEJA SÃO PAULO) · 2 veículos · tema: turnê"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=47&faixa=opcional&titulo=Fagner+inicia+turn%C3%AA+de+cinquenten%C3%A1rio+com+cl%C3%A1ssicos+em+S%C3%A3o+Paulo&noticia=https%3A%2F%2Ffatopaulista.com.br%2Ffagner-estreia-nova-turne-em-sao-paulo%2F&texto=Fagner+inicia+turn%C3%AA+de+cinquenten%C3%A1rio+com+cl%C3%A1ssicos+em+S%C3%A3o+Paulo%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Fato+Paulista+%C2%B7+2026-11-21+15%3A31+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fvejasp.abril.com.br%2Fcoluna%2Ftudo-de-som%2Ffagner-show-sp-alem-desse-futuro%2F",
-     "furo": {
-      "antes": null,
-      "portal": "VEJA SÃO PAULO"
-     },
-     "local": "São Paulo, SP",
-     "localComo": "título/resumo: título; resumo",
-     "titulo": "Fagner inicia turnê de cinquentenário com clássicos em São Paulo",
-     "link": "https://fatopaulista.com.br/fagner-estreia-nova-turne-em-sao-paulo/",
-     "veiculo": "Fato Paulista",
-     "dominio": "fatopaulista.com.br",
-     "publicado": "2026-11-21T15:31",
-     "primeiroVisto": "2026-11-21T15:07",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "sp",
-     "regiaoMotivo": "cidade: título/resumo: título; resumo",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "VEJA SÃO PAULO",
-       "titulo": "Fagner estreia nova turnê em São Paulo com clássicos da carreira",
-       "link": "https://vejasp.abril.com.br/coluna/tudo-de-som/fagner-show-sp-alem-desse-futuro/"
-      }
-     ],
-     "via": "Google Notícias: música lançamento"
-    },
-    {
-     "primeiroANoticiar": {
-      "veiculo": "Alô Alô Bahia",
-      "hora": "21:32"
-     },
-     "id": "a40d69835c75",
-     "pot": {
-      "nota": 34,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "34% · opcional",
-      "motivo": "2 veículos · tema: turnê"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Christian+Ch%C3%A1vez+confirma+rompimento+com+Anah%C3%AD+ap%C3%B3s+turn%C3%AA+do+RBD+e+diz+que+n%C3%A3o+fala+mais+com+a+ex-colega&noticia=https%3A%2F%2Fwww.maisregiao.com.br%2Fnoticia%2F96190%2Fchristian-chavez-confirma-rompimento-com-anahi-apos-turne-do-rbd-e-diz-que-nao-fala-mais-com-a-ex-colega&texto=Christian+Ch%C3%A1vez+confirma+rompimento+com+Anah%C3%AD+ap%C3%B3s+turn%C3%AA+do+RBD+e+diz+que+n%C3%A3o+fala+mais+com+a+ex-colega%0ALocal%3A+Assunto+geral+%28sem+cidade%29%0AVe%C3%ADculo%3A+Mais+Regi%C3%A3o+%C2%B7+2026-11-21+13%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Faloalobahia.com%2Fnoticias%2F2026%2F11%2F20%2Fchristian-chavez-confirma-afastamento-de-anahi-apos-turne-do-rbd-nao-tenho-comunicacao-com-ela%2F",
-     "furo": {
-      "semPortalHa": "38 h 26"
-     },
-     "local": "Assunto geral (sem cidade)",
-     "semCidadeMotivo": "matéria lida (5 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
-     "titulo": "Christian Chávez confirma rompimento com Anahí após turnê do RBD e diz que não fala mais com a ex-colega",
-     "link": "https://www.maisregiao.com.br/noticia/96190/christian-chavez-confirma-rompimento-com-anahi-apos-turne-do-rbd-e-diz-que-nao-fala-mais-com-a-ex-colega",
-     "veiculo": "Mais Região",
-     "dominio": "maisregiao.com.br",
-     "publicado": "2026-11-21T13:00",
-     "primeiroVisto": "2026-11-20T22:18",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "Brasil: herdado de Alô Alô Bahia (Brasil: bahia)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "Alô Alô Bahia",
-       "titulo": "Christian Chávez confirma afastamento de Anahí após turnê do RBD: “Não tenho comunicação com ela”",
-       "link": "https://aloalobahia.com/noticias/2026/11/20/christian-chavez-confirma-afastamento-de-anahi-apos-turne-do-rbd-nao-tenho-comunicacao-com-ela/"
-      }
-     ],
-     "via": "Google Notícias: música lançamento"
-    },
-    {
-     "primeiroANoticiar": {
-      "veiculo": "ba.gov.br",
-      "hora": "00:37"
-     },
-     "id": "7de1ab52f744",
-     "pot": {
-      "nota": 34,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "34% · opcional",
-      "motivo": "2 veículos · tema: show"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Mazinho+encerra+segundo+dia+do+Pranch%C3%A3o+na+Micareta+de+Feira+com+show+embalado+por+grandes+sucessos&noticia=https%3A%2F%2Frbtv.com.br%2Fnoticia%2F34155%2Fmazinho-encerra-segundo-dia-do-pranchao-na-micareta-de-feira-com-show-embalado-por-grandes-sucessos&texto=Mazinho+encerra+segundo+dia+do+Pranch%C3%A3o+na+Micareta+de+Feira+com+show+embalado+por+grandes+sucessos%0ALocal%3A+Bahia+%28estado%3B+cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+REDE+BRASIL+DE+TELEVIS%C3%83O+%C2%B7+2026-11-21+12%3A01+%28Bras%C3%ADlia%29",
-     "furo": {
-      "semPortalHa": "35 h 21"
-     },
-     "local": "Bahia (estado; cidade não citada)",
-     "localComo": "estado citado no texto: \"da bahia\"",
-     "semCidadeMotivo": "matéria lida (6 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
-     "titulo": "Mazinho encerra segundo dia do Pranchão na Micareta de Feira com show embalado por grandes sucessos",
-     "link": "https://rbtv.com.br/noticia/34155/mazinho-encerra-segundo-dia-do-pranchao-na-micareta-de-feira-com-show-embalado-por-grandes-sucessos",
-     "veiculo": "REDE BRASIL DE TELEVISÃO",
-     "dominio": "rbtv.com.br",
-     "publicado": "2026-11-21T12:01",
-     "primeiroVisto": "2026-11-21T12:05",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "sem local no texto, padrão Brasil (SP: busca pagode em SP)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "ba.gov.br",
-       "titulo": "Mazinho encerra segundo dia do Pranchão na Micareta de Feira com show embalado por grandes sucessos",
-       "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxNZ2FqRnJJTTVLdHlXZ2M2bDhDb3FwOEF3MFNiZnRRU2ljb19jMERqbGFrdTFJcTIyOTRYRlBTNmxMVVVKeTBTSEg5dlowU0Q2UUdzc1ZlekJsaFlnajcwR1FFWFUwU0pfbVFJeld5STNmMGNlZUQwRGdtRVFMdGdldndQdjFnV3Iyd1JEWEQ4TnRmX3lQQ2ZMMjZad2VZMWxUc2stZWstRi1xaGI3akJPaVNzS19rQm1kVHROQTlB?oc=5"
-      }
-     ],
-     "via": "Google Notícias: pagode em SP"
-    },
-    {
-     "primeiroANoticiar": {
       "veiculo": "Portal Rap Dab",
       "hora": "12:15"
      },
@@ -4928,7 +4826,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=32&faixa=opcional&titulo=Mu540+%C3%A9+atra%C3%A7%C3%A3o+do+Beats+Esquenta+Fest%3B+saiba+mais+sobre+o+DJ&noticia=https%3A%2F%2Fbillboard.com.br%2Fbeats-mu540-dj%2F&texto=Mu540+%C3%A9+atra%C3%A7%C3%A3o+do+Beats+Esquenta+Fest%3B+saiba+mais+sobre+o+DJ%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Billboard+Brasil+%C2%B7+2026-11-20+19%3A15+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.rapdab.com.br%2F2026%2F11%2F20%2Fmu540-beats-esquenta-fest%2F",
      "furo": {
-      "semPortalHa": "47 h 44"
+      "semPortalHa": "47 h 47"
      },
      "local": "São Paulo, SP",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 5",
@@ -4955,37 +4853,6 @@
      "via": "Google Notícias: DJs"
     },
     {
-     "id": "f633aa5a23a6",
-     "pot": {
-      "nota": 38,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 38% provisória · opcional",
-      "motivo": "tema: turnê · acabou de sair · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "23 min"
-     },
-     "local": "Aracaju, SE",
-     "localComo": "título/resumo: título; resumo",
-     "titulo": "Guilherme Arantes traz turnê de 50 anos de carreira para Aracaju",
-     "link": "https://aracajumagazine.com.br/guilherme-arantes-aracaju-novembro/",
-     "veiculo": "Aracaju Magazine",
-     "dominio": "aracajumagazine.com.br",
-     "publicado": "2026-11-22T11:35",
-     "primeiroVisto": "2026-11-22T11:40",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": true,
-     "regiao": "br",
-     "regiaoMotivo": "cidade: título/resumo: título; resumo",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: música lançamento"
-    },
-    {
      "id": "2e92852199b3",
      "pot": {
       "nota": 26,
@@ -4996,7 +4863,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "34 min"
+      "semPortalHa": "38 min"
      },
      "local": "São Paulo, SP",
      "localComo": "matéria (Bing Notícias (título exato, outro veículo)): parágrafo 10; parágrafo 11",
@@ -5027,7 +4894,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "1 h 01"
+      "semPortalHa": "1 h 05"
      },
      "local": "São Paulo, SP",
      "localComo": "matéria (sitemap do veículo): parágrafo 1; parágrafo 5",
@@ -5048,38 +4915,6 @@
      "via": "Google Notícias: samba em SP"
     },
     {
-     "id": "ed67e93a8788",
-     "pot": {
-      "nota": 44,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 44% provisória · opcional",
-      "motivo": "veículo grande (Billboard Brasil) · tema: show · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "2 h 17"
-     },
-     "local": "Assunto geral (sem cidade)",
-     "semCidadeMotivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Vote no melhor show do Caldas Country Festival 2026",
-     "link": "https://billboard.com.br/vote-melhor-show-caldas-country-2026/",
-     "veiculo": "Billboard Brasil",
-     "dominio": "billboard.com.br",
-     "publicado": "2026-11-22T09:41",
-     "primeiroVisto": "2026-11-22T10:02",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": true,
-     "regiao": "br",
-     "regiaoMotivo": "sem local no texto, padrão Brasil",
-     "localIncerto": true,
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: festivais 2"
-    },
-    {
      "id": "adb3c863edb2",
      "pot": {
       "nota": 22,
@@ -5090,7 +4925,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "2 h 49"
+      "semPortalHa": "2 h 53"
      },
      "local": "São Paulo, SP",
      "localComo": "título/resumo: título; resumo",
@@ -5121,7 +4956,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "2 h 49"
+      "semPortalHa": "2 h 53"
      },
      "local": "Rio de Janeiro, RJ",
      "localComo": "título/resumo: título; resumo",
@@ -5171,49 +5006,20 @@
      "via": "Google Notícias: artistas anunciam"
     },
     {
-     "id": "60c3745a9b25",
-     "pot": {
-      "nota": 44,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 44% provisória · opcional",
-      "motivo": "veículo grande (VEJA RIO) · tema: turnê · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "local": "Assunto geral (sem cidade)",
-     "semCidadeMotivo": "matéria lida (6 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-     "titulo": "Jorge Vercillo encerra turnê comemorativa de três décadas de carreira",
-     "link": "https://vejario.abril.com.br/programe-se/jorge-vercillo-encerra-turne/",
-     "veiculo": "VEJA RIO",
-     "dominio": "vejario.abril.com.br",
-     "publicado": "2026-11-22T08:38",
-     "primeiroVisto": "2026-11-22T08:44",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "sem local no texto, padrão Brasil",
-     "localIncerto": true,
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: música lançamento"
-    },
-    {
      "id": "a426fc0fc1e2",
      "pot": {
-      "nota": 44,
+      "nota": 57,
       "faixa": "opcional",
       "provisoria": true,
-      "rotulo": "⏳ 44% provisória · opcional",
-      "motivo": "veículo grande (G1) · tema: álbum · nota provisória: só 1 veículo até agora"
+      "rotulo": "⏳ 57% provisória · opcional",
+      "motivo": "veículo grande (g1 Pop & Arte) · tema forte: lança · nota provisória: só 1 veículo até agora"
      },
      "emApuracao": true,
      "local": "Assunto geral (sem cidade)",
-     "semCidadeMotivo": "matéria lida (6 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
+     "semCidadeMotivo": "matéria lida (6 parágrafos, link direto), nenhuma cidade citada no texto",
      "titulo": "Priscila Tossan programa para 2027 o álbum 'Onze', produzido por Iuri Rio Branco com 'sonoridades diferentes'",
      "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/22/priscila-tossan-programa-para-2027-o-album-onze-produzido-por-iuri-rio-branco-com-sonoridades-diferentes.ghtml",
-     "veiculo": "G1",
+     "veiculo": "g1 Pop & Arte",
      "dominio": "g1.globo.com",
      "publicado": "2026-11-22T08:11",
      "primeiroVisto": "2026-11-22T08:16",
@@ -5226,7 +5032,35 @@
      "categoria": "Música",
      "linkDireto": true,
      "tambemEm": [],
-     "via": "Google Notícias: música lançamento"
+     "via": "g1 Pop & Arte"
+    },
+    {
+     "id": "3170b3ae5255",
+     "pot": {
+      "nota": 54,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 54% provisória · opcional",
+      "motivo": "veículo grande (g1 Pop & Arte) · tema forte: lança · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "local": "Olinda, PE",
+     "localComo": "título/resumo: resumo (com UF)",
+     "titulo": "Cantor PC Silva movimenta a própria engrenagem no show que gera o álbum ao vivo autoral 'Eu vou ganhar o mundo'",
+     "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/22/cantor-pc-silva-movimenta-a-propria-engrenagem-no-show-que-gera-o-album-ao-vivo-autoral-eu-vou-ganhar-o-mundo.ghtml",
+     "veiculo": "g1 Pop & Arte",
+     "dominio": "g1.globo.com",
+     "publicado": "2026-11-22T06:00",
+     "primeiroVisto": "2026-11-22T07:17",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "cidade: título/resumo: resumo (com UF)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "g1 Pop & Arte"
     },
     {
      "id": "a487e04e923d",
@@ -5267,7 +5101,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "9 h 35"
+      "semPortalHa": "9 h 39"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (2 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -5289,37 +5123,6 @@
      "via": "Google Notícias: DJs 5"
     },
     {
-     "id": "3a1f2a9d9008",
-     "pot": {
-      "nota": 19,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "12 h 33"
-     },
-     "local": "Sobral, CE",
-     "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 5",
-     "titulo": "Escola de Música de Sobral abre inscrições para novos alunos",
-     "link": "https://sobralonline.com.br/escola-de-musica-de-sobral-abre-inscricoes/",
-     "veiculo": "Sobral Online",
-     "dominio": "sobralonline.com.br",
-     "publicado": "2026-11-21T23:25",
-     "primeiroVisto": "2026-11-21T23:30",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1; parágrafo 5",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: cultura e editais"
-    },
-    {
      "id": "857b89c01a4e",
      "pot": {
       "nota": 31,
@@ -5330,7 +5133,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "16 h 03"
+      "semPortalHa": "16 h 07"
      },
      "local": "Pelotas, RS",
      "localComo": "título/resumo: título; resumo",
@@ -5351,68 +5154,6 @@
      "via": "Google Notícias: roda de samba"
     },
     {
-     "id": "84dc408e19a4",
-     "pot": {
-      "nota": 19,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "16 h 28"
-     },
-     "local": "Natal, RN",
-     "localComo": "matéria (RSS do veículo): parágrafo 13 (com UF)",
-     "titulo": "FIM DE SEMANA TEM TEATRO GRATUITO NA CASA DA RIBEIRA, QUE SEGUE COM PROGRAMAÇÃO DE CINEMA E MÚSICA EM NOVEMBRO",
-     "link": "https://hilnethcorreia.com.br/2026/11/21/fim-de-semana-tem-teatro-gratuito-na-casa-da-ribeira-que-segue-com-programacao-de-cinema-e-musica-em-novembro/",
-     "veiculo": "Hilneth Correia -",
-     "dominio": "hilnethcorreia.com.br",
-     "publicado": "2026-11-21T19:30",
-     "primeiroVisto": "2026-11-21T19:30",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 13 (com UF)",
-     "categoria": "Cultura",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: cultura e editais"
-    },
-    {
-     "id": "c8ebca937979",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "17 h 13"
-     },
-     "local": "Patos de Minas, MG",
-     "localComo": "título/resumo: título; resumo",
-     "titulo": "Festival gratuito valoriza a cultura hip-hop com diversas atrações em Patos de Minas",
-     "link": "https://patoshoje.com.br/noticias/festival-gratuito-valoriza-a-cultura-hip-hop-com-diversas-atracoes-em-patos-de-minas-98478.html",
-     "veiculo": "Patos Hoje",
-     "dominio": "patoshoje.com.br",
-     "publicado": "2026-11-21T18:46",
-     "primeiroVisto": "2026-11-21T19:24",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "cidade: título/resumo: título; resumo",
-     "categoria": "Cultura",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: cultura e editais"
-    },
-    {
      "id": "9a35a6606f11",
      "pot": {
       "nota": 46,
@@ -5423,7 +5164,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "17 h 30"
+      "semPortalHa": "17 h 33"
      },
      "local": "Juazeiro, BA",
      "localComo": "título/resumo: título; resumo",
@@ -5483,7 +5224,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "18 h 28"
+      "semPortalHa": "18 h 32"
      },
      "local": "Florianópolis, SC",
      "localComo": "matéria (RSS do veículo): parágrafo 2; parágrafo 12",
@@ -5502,6 +5243,313 @@
      "linkDireto": true,
      "tambemEm": [],
      "via": "Google Notícias: DJs"
+    },
+    {
+     "id": "c751cbb63edf",
+     "pot": {
+      "nota": 41,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 41% provisória · opcional",
+      "motivo": "veículo grande (Terra Música) · tema: festival · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "local": "Assunto geral (sem cidade)",
+     "semCidadeMotivo": "matéria lida (5 parágrafos, link direto), nenhuma cidade citada no texto",
+     "titulo": "Sensacional: Mano Brown chama jovem fã de Racionais ao palco para cantar \"Jesus Chorou\"",
+     "link": "https://www.terra.com.br/diversao/musica/meu-sonora/rap-e-hip-hop/sensacional-mano-brown-chama-jovem-fa-de-racionais-ao-palco-para-cantar-jesus-chorou,1f7d731c2b97ff51e4141c99a0e0f59a9an0mr2p.html",
+     "veiculo": "Terra Música",
+     "dominio": "terra.com.br",
+     "publicado": "2026-11-21T16:26",
+     "primeiroVisto": "2026-11-21T16:40",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "localIncerto": true,
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Terra Música"
+    },
+    {
+     "id": "f89ee7b4e438",
+     "pot": {
+      "nota": 19,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 19% provisória · opcional",
+      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "19 h 44"
+     },
+     "local": "Assunto geral (sem cidade)",
+     "semCidadeMotivo": "matéria lida (15 parágrafos, link direto), nenhuma cidade citada no texto",
+     "titulo": "Pesado: Willie Nelson diz que pediu para morrer duas vezes durante a pandemia",
+     "link": "https://www.tenhomaisdiscosqueamigos.com/2026/11/21/willie-nelson-pandemia/",
+     "veiculo": "Tenho Mais Discos Que Amigos",
+     "dominio": "tenhomaisdiscosqueamigos.com",
+     "publicado": "2026-11-21T16:18",
+     "primeiroVisto": "2026-11-21T16:23",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "localIncerto": true,
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Tenho Mais Discos Que Amigos"
+    },
+    {
+     "id": "c261c594a6ff",
+     "pot": {
+      "nota": 31,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 31% provisória · opcional",
+      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "19 h 49"
+     },
+     "local": "Rio de Janeiro, RJ",
+     "localComo": "título/resumo: título (escola de samba: portela); resumo (escola de samba: portela)",
+     "titulo": "Bateria da Portela encerra festival gratuito no Passeio Público neste domingo",
+     "link": "https://tribunadosertao.com.br/rj-em-foco/2026/11/21/1027062-bateria-da-portela-encerra-festival-gratuito-no-passeio-publico-neste-domingo",
+     "veiculo": "Tribuna do Sertão",
+     "dominio": "tribunadosertao.com.br",
+     "publicado": "2026-11-21T16:13",
+     "primeiroVisto": "2026-11-21T16:23",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "rj",
+     "regiaoMotivo": "cidade: título/resumo: título (escola de samba: portela); resumo (escola de samba: portela)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: roda de samba"
+    },
+    {
+     "id": "53d4f098fae8",
+     "pot": {
+      "nota": 54,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 54% provisória · opcional",
+      "motivo": "veículo grande (Billboard Brasil) · tema forte: lança · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "20 h 54"
+     },
+     "local": "Assunto geral (sem cidade)",
+     "semCidadeMotivo": "matéria lida (9 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
+     "titulo": "JISOO do BLACKPINK lança ‘Sun Showers’, música de ‘Angry Birds 3’",
+     "link": "https://billboard.com.br/jisoo-blackpink-sun-showers-de-angry-birds-3/",
+     "veiculo": "Billboard Brasil",
+     "dominio": "billboard.com.br",
+     "publicado": "2026-11-21T15:08",
+     "primeiroVisto": "2026-11-21T15:14",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "localIncerto": true,
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais 2"
+    },
+    {
+     "id": "c6d48815e063",
+     "pot": {
+      "nota": 69,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 69% provisória · opcional",
+      "motivo": "veículo grande (g1 Pop & Arte) · tema forte: oficial · pessoa famosa: Roberto Carlos · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "local": "Rio de Janeiro, RJ",
+     "localComo": "matéria (link direto): parágrafo 2 (com UF); parágrafo 3 (com UF)",
+     "titulo": "Roberto Carlos e Maria Bethânia gravam clipe em estúdio para especial do cantor",
+     "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/21/roberto-carlos-e-maria-bethania-gravam-clipe-em-estudio-para-exibicao-no-especial-do-cantor.ghtml",
+     "veiculo": "g1 Pop & Arte",
+     "dominio": "g1.globo.com",
+     "publicado": "2026-11-21T14:11",
+     "primeiroVisto": "2026-11-21T14:23",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "rj",
+     "regiaoMotivo": "cidade: matéria (link direto): parágrafo 2 (com UF); parágrafo 3 (com UF)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "g1 Pop & Arte"
+    },
+    {
+     "id": "ab118943dbb0",
+     "pot": {
+      "nota": 41,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 41% provisória · opcional",
+      "motivo": "veículo grande (Billboard Brasil) · tema: clipe · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "23 h 16"
+     },
+     "local": "Brasília, DF",
+     "localComo": "matéria (busca WordPress do veículo): parágrafo 1",
+     "titulo": "Stray Kids chega a 200 milhões de views com clipe de ‘Christmas EveL’",
+     "link": "https://billboard.com.br/stray-kids-200-milhoes-views-clipe-christmas-evel/",
+     "veiculo": "Billboard Brasil",
+     "dominio": "billboard.com.br",
+     "publicado": "2026-11-21T12:46",
+     "primeiroVisto": "2026-11-21T17:35",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): parágrafo 1",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais 1"
+    },
+    {
+     "id": "07b50931e97b",
+     "pot": {
+      "nota": 41,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 41% provisória · opcional",
+      "motivo": "veículo grande (g1 Pop & Arte) · tema: álbum · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "local": "Assunto geral (sem cidade)",
+     "semCidadeMotivo": "matéria lida (11 parágrafos, link direto), nenhuma cidade citada no texto",
+     "titulo": "Sobre a arte da capa de Alaíde Costa...",
+     "link": "https://g1.globo.com/pop-arte/musica/blog/mauro-ferreira/post/2026/11/21/sobre-a-arte-da-capa-de-alaide-costa.ghtml",
+     "veiculo": "g1 Pop & Arte",
+     "dominio": "g1.globo.com",
+     "publicado": "2026-11-21T12:14",
+     "primeiroVisto": "2026-11-21T12:17",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "localIncerto": true,
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "g1 Pop & Arte"
+    },
+    {
+     "id": "d834f95ff91a",
+     "pot": {
+      "nota": 41,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 41% provisória · opcional",
+      "motivo": "veículo grande (Rolling Stone Brasil) · pessoa famosa: Taylor Swift · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "25 h 02"
+     },
+     "local": "Barcelona, RN",
+     "localComo": "matéria (link direto): parágrafo 3",
+     "titulo": "A melhor música da carreira de Taylor Swift, segundo Rosalía",
+     "link": "https://rollingstone.com.br/musica/a-melhor-musica-da-carreria-de-taylor-swift-segundo-rosalia/",
+     "veiculo": "Rolling Stone Brasil",
+     "dominio": "rollingstone.com.br",
+     "publicado": "2026-11-21T11:00",
+     "primeiroVisto": "2026-11-21T11:12",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "cidade: matéria (link direto): parágrafo 3",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Rolling Stone Brasil"
+    },
+    {
+     "id": "191af9f3c78b",
+     "pot": {
+      "nota": 38,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 38% provisória · opcional",
+      "motivo": "veículo grande (Billboard Brasil) · tema: festival · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "25 h 34"
+     },
+     "local": "Bahia (estado; cidade não citada)",
+     "localComo": "estado citado no texto: \"na bahia\"",
+     "semCidadeMotivo": "matéria lida (12 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
+     "titulo": "Festival A Bossa",
+     "link": "https://billboard.com.br/festival-a-bossa-joao-bosco-seu-jorge-juazeiro/",
+     "veiculo": "Billboard Brasil",
+     "dominio": "billboard.com.br",
+     "publicado": "2026-11-21T10:28",
+     "primeiroVisto": "2026-11-21T13:43",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais 2"
+    },
+    {
+     "id": "5ca1889e1855",
+     "pot": {
+      "nota": 51,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 51% provisória · opcional",
+      "motivo": "veículo grande (Rolling Stone Brasil) · tema forte: lançamento · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "25 h 46"
+     },
+     "local": "Assunto geral (sem cidade)",
+     "semCidadeMotivo": "matéria lida (11 parágrafos, link direto), nenhuma cidade citada no texto",
+     "titulo": "‘GTA 6’ se torna o “maior lançamento da história do entretenimento” com quase US$ 4 bilhões em vendas",
+     "link": "https://rollingstone.com.br/rs-gaming/gta-6-se-torna-o-maior-lancamento-da-historia-do-entretenimento-com-quase-us-4-bilhoes-em-vendas/",
+     "veiculo": "Rolling Stone Brasil",
+     "dominio": "rollingstone.com.br",
+     "publicado": "2026-11-21T10:16",
+     "primeiroVisto": "2026-11-21T10:27",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "localIncerto": true,
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Rolling Stone Brasil"
     }
    ],
    "fora": [
@@ -5518,7 +5566,7 @@
       "rotulo": "56% · opcional",
       "motivo": "veículo grande (Terra Música) · 4 veículos · tema: album"
      },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=56&faixa=opcional&titulo=%22Grand+Theft+Auto+VI%3A+The+Album%22+passeia+por+todos+os+estilos+%28e+isso+%C3%A9+%C3%B3timo%29&noticia=https%3A%2F%2Fwww.terra.com.br%2Fdiversao%2Fmusica%2Fgrand-theft-auto-vi-the-album-passeia-por-todos-os-estilos-e-isso-e-otimo%2C1ef84e119af97fd5fcc0b3cef38b038977ftxdr5.html&texto=%22Grand+Theft+Auto+VI%3A+The+Album%22+passeia+por+todos+os+estilos+%28e+isso+%C3%A9+%C3%B3timo%29%0ALocal%3A+Miami%2C+EUA%0AVe%C3%ADculo%3A+Terra+M%C3%BAsica+%C2%B7+2026-11-22+11%3A09+%28Bras%C3%ADlia%29%0AO+aguardado+game+Grand+Theft+Auto+VI%2C+que+levou+13+anos+para+ficar+pronto%2C+vem+sendo+elogiado+...&links=https%3A%2F%2Fwww.complex.com%2Fmusic%2Fa%2Fdimassanfiorenzo%2Fgrand-theft-auto-vi-album-tracklist-features%0Ahttps%3A%2F%2Frollingstone.com.br%2Fmusica%2Fgrand-theft-auto-vi-the-album-passeia-por-todos-os-estilos-e-isso-e-otimo%2F%0Ahttps%3A%2F%2Fpizzafria.ig.com.br%2Fnews%2Fgrand-theft-auto-vi-album-trilha-lancada%2F",
+     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=56&faixa=opcional&titulo=%22Grand+Theft+Auto+VI%3A+The+Album%22+passeia+por+todos+os+estilos+%28e+isso+%C3%A9+%C3%B3timo%29&noticia=https%3A%2F%2Fwww.terra.com.br%2Fdiversao%2Fmusica%2Fgrand-theft-auto-vi-the-album-passeia-por-todos-os-estilos-e-isso-e-otimo%2C1ef84e119af97fd5fcc0b3cef38b038977ftxdr5.html&texto=%22Grand+Theft+Auto+VI%3A+The+Album%22+passeia+por+todos+os+estilos+%28e+isso+%C3%A9+%C3%B3timo%29%0ALocal%3A+Miami%2C+EUA%0AVe%C3%ADculo%3A+Terra+M%C3%BAsica+%C2%B7+2026-11-22+11%3A49+%28Bras%C3%ADlia%29%0AO+aguardado+game+Grand+Theft+Auto+VI%2C+que+levou+13+anos+para+ficar+pronto%2C+vem+sendo+elogiado+...&links=https%3A%2F%2Fwww.complex.com%2Fmusic%2Fa%2Fdimassanfiorenzo%2Fgrand-theft-auto-vi-album-tracklist-features%0Ahttps%3A%2F%2Frollingstone.com.br%2Fmusica%2Fgrand-theft-auto-vi-the-album-passeia-por-todos-os-estilos-e-isso-e-otimo%2F%0Ahttps%3A%2F%2Fpizzafria.ig.com.br%2Fnews%2Fgrand-theft-auto-vi-album-trilha-lancada%2F",
      "furo": {
       "antes": null,
       "portal": "Pizza Fria"
@@ -5531,7 +5579,7 @@
      "link": "https://www.terra.com.br/diversao/musica/grand-theft-auto-vi-the-album-passeia-por-todos-os-estilos-e-isso-e-otimo,1ef84e119af97fd5fcc0b3cef38b038977ftxdr5.html",
      "veiculo": "Terra Música",
      "dominio": "terra.com.br",
-     "publicado": "2026-11-22T11:09",
+     "publicado": "2026-11-22T11:49",
      "primeiroVisto": "2026-11-18T19:52",
      "fontes": 4,
      "confirmado": true,
@@ -5574,7 +5622,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=DJ+Maphorisa+Ft.+Xduppy+-+%C3%81lbum+The+Lawd%E2%80%99s+Selection+Vol+-1+%28EP%29&noticia=https%3A%2F%2Fweb.voxtrendy.net%2Falbums%2Fdj-maphorisa-ft-xduppy-the-lawds-selection-vol-1-ep-album%2F&texto=DJ+Maphorisa+Ft.+Xduppy+-+%C3%81lbum+The+Lawd%E2%80%99s+Selection+Vol+-1+%28EP%29%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+Voxtrendy+%C2%B7+2026-11-21+21%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww2.trendyhiphop.com%2Falbums%2Fdj-maphorisa-the-lawds-selection-vol-1-ep-album%2F",
      "furo": {
-      "semPortalHa": "38 h 59"
+      "semPortalHa": "39 h 02"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
@@ -5601,47 +5649,6 @@
       }
      ],
      "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "primeiroANoticiar": {
-      "veiculo": "Billboard Brasil",
-      "hora": "18:00"
-     },
-     "id": "22c893324ba4",
-     "pot": {
-      "nota": 47,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "47% · opcional",
-      "motivo": "veículo grande (Billboard Brasil) · 2 veículos · tema: anuncia"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=47&faixa=opcional&titulo=Don+Toliver+anuncia+%27Nitrous%27%2C+seu+segundo+%C3%A1lbum+e+novo+ciclo&noticia=https%3A%2F%2Fdiariodamidia.com.br%2Fdon-toliver-anuncia-nitrous-seu-segundo-album-e-novo-ciclo&texto=Don+Toliver+anuncia+%27Nitrous%27%2C+seu+segundo+%C3%A1lbum+e+novo+ciclo%0ALocal%3A+cidade+n%C3%A3o+identificada%0AVe%C3%ADculo%3A+diariodamidia.com.br+%C2%B7+2026-11-21+20%3A30+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fbillboard.com.br%2Fdon-toliver-nitrous-segundo-album-2026%2F",
-     "furo": {
-      "semPortalHa": "17 h 58"
-     },
-     "local": "cidade não identificada",
-     "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-     "titulo": "Don Toliver anuncia 'Nitrous', seu segundo álbum e novo ciclo",
-     "link": "https://diariodamidia.com.br/don-toliver-anuncia-nitrous-seu-segundo-album-e-novo-ciclo",
-     "veiculo": "diariodamidia.com.br",
-     "dominio": "diariodamidia.com.br",
-     "publicado": "2026-11-21T20:30",
-     "primeiroVisto": "2026-11-21T20:46",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: herdado de Billboard Brasil (cidade: matéria (busca WordPress do veículo): país citado \"alemanha\", cidade não citada)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "Billboard Brasil",
-       "titulo": "Don Toliver anuncia ‘Nitrous’, seu segundo álbum em 2026",
-       "link": "https://billboard.com.br/don-toliver-nitrous-segundo-album-2026/"
-      }
-     ],
-     "via": "Google Notícias: música lançamento"
     },
     {
      "primeiroANoticiar": {
@@ -5689,15 +5696,15 @@
     {
      "id": "f80aac81cb88",
      "pot": {
-      "nota": 38,
+      "nota": 34,
       "faixa": "opcional",
       "provisoria": true,
-      "rotulo": "⏳ 38% provisória · opcional",
-      "motivo": "tema: album · acabou de sair · nota provisória: só 1 veículo até agora"
+      "rotulo": "⏳ 34% provisória · opcional",
+      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "59 min"
+      "semPortalHa": "1 h 02"
      },
      "local": "Londres, Reino Unido",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 2 (london); parágrafo 3 (london)",
@@ -5728,7 +5735,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "1 h 58"
+      "semPortalHa": "2 h 02"
      },
      "local": "EUA (cidade não citada)",
      "localComo": "matéria (página inicial do veículo): país citado \"usa\", cidade não citada",
@@ -5762,7 +5769,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "4 h 47"
+      "semPortalHa": "4 h 50"
      },
      "local": "Chicago, EUA",
      "localComo": "título/resumo: resumo (chicago)",
@@ -5795,7 +5802,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 39"
+      "semPortalHa": "7 h 43"
      },
      "local": "Miami, EUA",
      "localComo": "matéria (RSS do veículo): parágrafo 1 (miami); descrição da página (miami)",
@@ -5828,7 +5835,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "10 h 58"
+      "semPortalHa": "11 h 02"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (1 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -5861,7 +5868,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "13 h 40"
+      "semPortalHa": "13 h 43"
      },
      "local": "Miami, EUA",
      "localComo": "matéria (RSS do veículo): parágrafo 1 (miami); parágrafo 4 (miami)",
@@ -5884,133 +5891,6 @@
      "via": "Google Notícias: DJs (EUA)"
     },
     {
-     "id": "37e363a76732",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 59"
-     },
-     "local": "Lançamento/assunto sem cidade (pelo título; matéria não aberta)",
-     "semCidadeMotivo": "página lida, mas sem texto de matéria acessível (Bing Notícias (título exato, outro veículo))",
-     "titulo": "Woza Bakzin – Gqom In Black (álbum) com Goldmax",
-     "tituloOriginal": "Woza Bakzin – Gqom In Black (Album) Ft. Goldmax",
-     "traduzido": "traduzido do inglês",
-     "link": "https://www.msn.com/en-za/entertainment/music/woza-bakzin-and-goldmax-release-collaborative-album-gib-gqom-in-black/ar-AA2amMiS",
-     "veiculo": "msn.com",
-     "dominio": "msn.com",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-18T21:15",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "30916f3db838",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 59"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "N T S A K O XVI – XVI’s Diary Album",
-     "link": "https://web.voxtrendy.net/south-african/n-t-s-a-k-o-xvi-xvis-diary-album/",
-     "veiculo": "Voxtrendy",
-     "dominio": "web.voxtrendy.net",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-22T02:31",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "86d160043882",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 59"
-     },
-     "local": "Nigéria (cidade não citada)",
-     "localComo": "matéria (busca WordPress do veículo): país citado \"nigeria\", cidade não citada",
-     "semCidadeMotivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Tyla – WWP (We Wanna Party) (Album) EP (Mp3 Download)",
-     "link": "https://web.voxtrendy.net/hottest-songs/tyla-wwp-we-wanna-party-album-ep/",
-     "veiculo": "Voxtrendy",
-     "dominio": "web.voxtrendy.net",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-19T21:03",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"nigeria\", cidade não citada",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "cf71233c128e",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 59"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Young Stunna – Busisiwe (Album)",
-     "link": "https://www2.trendyhiphop.com/albums/young-stunna-busisiwe-album/",
-     "veiculo": "TrendyHipHop",
-     "dominio": "www2.trendyhiphop.com",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-21T09:48",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
      "id": "41b7cfbcaac0",
      "pot": {
       "nota": 19,
@@ -6021,7 +5901,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "14 h 59"
+      "semPortalHa": "15 h 02"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -6042,7 +5922,7 @@
      "via": "Google Notícias: DJs (EUA)"
     },
     {
-     "id": "b4dd91e302dd",
+     "id": "e1d3584a30e7",
      "pot": {
       "nota": 19,
       "faixa": "opcional",
@@ -6052,59 +5932,28 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "14 h 59"
+      "semPortalHa": "17 h 32"
      },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "DJ Maphorisa – Ma Wake Up Ft. Xduppy, Focalistic, Optimist Music ZA & Madumane",
-     "link": "https://www2.trendyhiphop.com/songs/dj-maphorisa-ma-wake-up-ft-xduppy-focalistic-optimist-music-za-madumane/",
-     "veiculo": "TrendyHipHop",
-     "dominio": "www2.trendyhiphop.com",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-20T18:33",
+     "local": "Lisboa, Portugal",
+     "localComo": "mesmo fato em noticiasaominuto.com (achado no Bing Notícias): parágrafo 1 (lisboa); descrição da página (lisboa)",
+     "titulo": "Todos os concertos marcados para 2026 e 2027 em Portugal",
+     "link": "https://expresso.pt/blitz/agenda/2026-11-19-todos-os-concertos-marcados-para-2026-e-2027-em-portugal-53436cea",
+     "veiculo": "Expresso",
+     "dominio": "expresso.pt",
+     "publicado": "2026-11-21T18:30",
+     "primeiroVisto": "2026-11-16T06:09",
      "fontes": 1,
      "confirmado": false,
      "quente": false,
      "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "DJ",
+     "regiaoMotivo": "cidade: mesmo fato em noticiasaominuto.com (achado no Bing Notícias): parágrafo 1 (lisboa); descrição da página (lisboa)",
+     "categoria": "Música",
      "linkDireto": true,
      "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
+     "via": "Google Notícias: festivais 1"
     },
     {
-     "id": "5f1b67033c59",
-     "pot": {
-      "nota": 19,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 59"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (4 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Uncool MC – Setla ft. DJ Maphorisa, N T S A K O XVI, Focalistic & Shaun 101",
-     "link": "https://www2.trendyhiphop.com/songs/uncool-mc-setla-ft-dj-maphorisa-n-t-s-a-k-o-xvi-focalistic-shaun-101/",
-     "veiculo": "TrendyHipHop",
-     "dominio": "www2.trendyhiphop.com",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-18T21:15",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "DJ",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "eafdff619d45",
+     "id": "eddeb68af219",
      "pot": {
       "nota": 31,
       "faixa": "opcional",
@@ -6114,16 +5963,246 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "14 h 59"
+      "semPortalHa": "17 h 35"
+     },
+     "local": "Nova York, EUA",
+     "localComo": "matéria (RSS do veículo): parágrafo 1 (new york); parágrafo 14 (new york)",
+     "titulo": "Malaya Sol lança álbum e livro de receitas ao mesmo tempo: \"Ambos preservam memórias e comunicam identidade\"",
+     "tituloOriginal": "Malaya Sol debuts album, cookbook at the same time: ‘Both preserve memories, communicate identity’",
+     "traduzido": "traduzido do inglês",
+     "link": "https://thefilam.net/archives/47544?utm_source=rss&utm_medium=rss&utm_campaign=malaya-sol-debuts-album-cookbook-at-the-same-time-both-preserve-memories-communicate-identity",
+     "veiculo": "The FilAm",
+     "dominio": "thefilam.net",
+     "publicado": "2026-11-21T18:26",
+     "primeiroVisto": "2026-11-21T19:46",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1 (new york); parágrafo 14 (new york)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: samba (EUA)"
+    },
+    {
+     "id": "6cb26b2fb838",
+     "pot": {
+      "nota": 31,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 31% provisória · opcional",
+      "motivo": "tema: album · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "20 h 14"
+     },
+     "local": "Israel (cidade não citada)",
+     "localComo": "país citado no título: \"israel\"",
+     "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
+     "titulo": "Indignação com DJ que lançou álbum com discurso anti-Israel e ganhou prêmio de £ 20 mil de organização autônoma não governamental de artes",
+     "tituloOriginal": "Fury as DJ behind album featuring anti-Israel rant gets £20,000 arts quango prize",
+     "traduzido": "traduzido do inglês",
+     "link": "https://www.dailymail.com/news/article-16311739/Fury-DJ-album-featuring-anti-Israel-rant-arts-quango-prize.html",
+     "veiculo": "Daily Mail",
+     "dominio": "dailymail.com",
+     "publicado": "2026-11-21T15:48",
+     "primeiroVisto": "2026-11-21T15:55",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "Internacional: busca DJs (EUA)",
+     "categoria": "DJ",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: DJs (EUA)"
+    },
+    {
+     "id": "c8383f3076e1",
+     "pot": {
+      "nota": 19,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 19% provisória · opcional",
+      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "20 h 25"
+     },
+     "local": "cidade não identificada",
+     "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
+     "titulo": "A Playbill pede desculpas após a referência ao musical George Floyd gerar críticas",
+     "tituloOriginal": "Playbill apologizes after George Floyd the Musical reference sparks criticism",
+     "traduzido": "traduzido do inglês",
+     "link": "https://www.primetimer.com/features/playbill-apologizes-after-george-floyd-the-musical-reference-sparks-criticism",
+     "veiculo": "primetimer.com",
+     "dominio": "primetimer.com",
+     "publicado": "2026-11-21T15:37",
+     "primeiroVisto": "2026-11-21T18:20",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "Internacional: busca festivais (EUA) 5",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais (EUA) 5"
+    },
+    {
+     "id": "b17aaa56b571",
+     "pot": {
+      "nota": 19,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 19% provisória · opcional",
+      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "20 h 27"
+     },
+     "local": "cidade não identificada",
+     "semCidadeMotivo": "matéria marcada como paga (isAccessibleForFree=false), não lida",
+     "titulo": "Town critiques courthouse proposal",
+     "link": "https://www.rappnews.com/land-use/town-critiques-courthouse-proposal-33c81a5f",
+     "veiculo": "Rappahannock News",
+     "dominio": "rappnews.com",
+     "publicado": "2026-11-21T15:35",
+     "primeiroVisto": "2026-11-21T15:38",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "Internacional: busca festivais (EUA) 1",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais (EUA) 1"
+    },
+    {
+     "id": "8fb42e979677",
+     "pot": {
+      "nota": 54,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 54% provisória · opcional",
+      "motivo": "veículo grande (Rolling Stone Brasil) · tema forte: estreia · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "23 h 02"
+     },
+     "local": "Los Angeles, EUA",
+     "localComo": "matéria (link direto): parágrafo 2 (los angeles)",
+     "brasileiroFora": true,
+     "titulo": "Michael Stipe revela novidades sobre aguardado álbum solo",
+     "link": "https://rollingstone.com.br/musica/michael-stipe-revela-novidades-sobre-aguardado-album-solo/",
+     "veiculo": "Rolling Stone Brasil",
+     "dominio": "rollingstone.com.br",
+     "publicado": "2026-11-21T13:00",
+     "primeiroVisto": "2026-11-21T13:10",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (link direto): parágrafo 2 (los angeles)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Rolling Stone Brasil"
+    },
+    {
+     "id": "e5a878e41ee1",
+     "pot": {
+      "nota": 31,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 31% provisória · opcional",
+      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "23 h 07"
+     },
+     "local": "Reino Unido (cidade não citada)",
+     "localComo": "matéria (busca WordPress do veículo): país citado \"uk\", cidade não citada",
+     "semCidadeMotivo": "matéria lida (11 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
+     "titulo": "Charli XCX, RÜFÜS DU SOL, Twenty One Pilots e Lorde são as atrações principais do 25º aniversário do Austin City Limits Festival",
+     "tituloOriginal": "Charli XCX, RÜFÜS DU SOL, Twenty One Pilots, Lorde Headline Austin City Limits Festival's 25th Anniversary",
+     "traduzido": "traduzido do inglês",
+     "link": "https://www.ticketnews.com/2026/05/charli-xcx-rufus-du-sol-twenty-one-pilots-lorde-headline-austin-city-limits-festivals-25th-anniversary/",
+     "veiculo": "TicketNews",
+     "dominio": "ticketnews.com",
+     "publicado": "2026-11-21T12:55",
+     "primeiroVisto": "2026-11-21T21:59",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"uk\", cidade não citada",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: DJs (EUA)"
+    },
+    {
+     "id": "61f4f5ee4faa",
+     "pot": {
+      "nota": 28,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 28% provisória · opcional",
+      "motivo": "tema: show · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "26 h"
+     },
+     "local": "Londres, Reino Unido",
+     "localComo": "matéria (RSS do veículo): parágrafo 1 (londres)",
+     "titulo": "PETIÇÃO pede retirada de MARILYN MANSON de show do SLIPKNOT e alcança 20 mil assinaturas",
+     "link": "https://roadiecrew.com/peticao-pede-retirada-de-marilyn-manson-de-show-do-slipknot-e-alcanca-20-mil-assinaturas/",
+     "veiculo": "Roadie Crew",
+     "dominio": "roadiecrew.com",
+     "publicado": "2026-11-21T10:02",
+     "primeiroVisto": "2026-11-21T10:23",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1 (londres)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais 1"
+    },
+    {
+     "id": "70a247fcca1e",
+     "pot": {
+      "nota": 28,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 28% provisória · opcional",
+      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "28 h 43"
      },
      "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (7 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Fally Ipupa – XX : Délirium (Album)",
-     "link": "https://www1.six9ja.net/music/fally-ipupa-xx-delirium-album/",
-     "veiculo": "Six9ja",
-     "dominio": "www1.six9ja.net",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-19T03:56",
+     "semCidadeMotivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+     "titulo": "Programações de festivais que você pode ter perdido: Bonanza, Boardmasters, Lightning In A Bottle",
+     "tituloOriginal": "Festival line-ups you might have missed: Bonanza, Boardmasters, Lightning In A Bottle",
+     "traduzido": "traduzido do inglês",
+     "link": "https://mixmag.net/read/festival-line-ups-you-might-have-missed-bonanza-boardmasters-lightning-in-a-bottle-news",
+     "veiculo": "Mixmag",
+     "dominio": "mixmag.net",
+     "publicado": "2026-11-21T07:19",
+     "primeiroVisto": "2026-11-21T12:54",
      "fontes": 1,
      "confirmado": false,
      "quente": false,
@@ -6135,66 +6214,35 @@
      "via": "Google Notícias: DJs (EUA)"
     },
     {
-     "id": "7c8dba508429",
+     "id": "cdc8b43dab4f",
      "pot": {
-      "nota": 19,
+      "nota": 28,
       "faixa": "opcional",
       "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+      "rotulo": "⏳ 28% provisória · opcional",
+      "motivo": "tema: festival · nota provisória: só 1 veículo até agora"
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "14 h 59"
+      "semPortalHa": "29 h 17"
      },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (4 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Djy Mow Sa – Busa Ft. Vibekulture Sa, Jayy Scott, Lethabile 012 & Pop Diller",
-     "link": "https://www2.trendyhiphop.com/songs/djy-mow-sa-busa-ft-vibekulture-sa-jayy-scott-lethabile-012-pop-diller/",
-     "veiculo": "TrendyHipHop",
-     "dominio": "www2.trendyhiphop.com",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-21T20:58",
+     "local": "Lisboa, Portugal",
+     "localComo": "matéria (busca WordPress do veículo): parágrafo 2 (lisboa); parágrafo 3 (lisboa)",
+     "titulo": "Festival Penguin Kids 2026: livros, oficinas e cinema em família",
+     "link": "https://pumpkin.pt/eventos/festival-penguin-kids/",
+     "veiculo": "Pumpkin.pt",
+     "dominio": "pumpkin.pt",
+     "publicado": "2026-11-21T06:45",
+     "primeiroVisto": "2026-11-21T07:53",
      "fontes": 1,
      "confirmado": false,
      "quente": false,
      "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
+     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): parágrafo 2 (lisboa); parágrafo 3 (lisboa)",
      "categoria": "Música",
      "linkDireto": true,
      "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "2b78e4a28862",
-     "pot": {
-      "nota": 19,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 59"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (9 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "titulo": "Focalistic – Gumba Fire ft. Optimist Music ZA, Benzoo, Mellow & Sleazy",
-     "link": "https://www2.trendyhiphop.com/songs/focalistic-gumba-fire-mr-jazziq/",
-     "veiculo": "TrendyHipHop",
-     "dominio": "www2.trendyhiphop.com",
-     "publicado": "2026-11-21T21:00",
-     "primeiroVisto": "2026-11-21T22:18",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
+     "via": "Google Notícias: DJs"
     }
    ]
   }
@@ -6244,42 +6292,6 @@
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Casarão dos Bina reúne literatura, música e memória em noite especial de celebração à cultura",
-    "veiculo": "Vale Notícia",
-    "dominio": "valenoticia.jor.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "Vai sair no fim de semana? Agendão tem feira, música e evento geek em Campo Grande",
-    "veiculo": "Primeira Página",
-    "dominio": "primeirapagina.com.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "Fim de semana em Campo Grande reúne música, teatro, feiras e atrações gratuitas",
-    "veiculo": "A Notícia Digital",
-    "dominio": "anoticiadigital.com.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "DJ JUNIOR HASSA - Nassanga Remix | MP3 Download",
-    "veiculo": "Voxtrendy",
-    "dominio": "web.voxtrendy.net",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "Tyla - Game Time Ft. Future | 2026 Music | MP3 Download",
-    "veiculo": "Voxtrendy",
-    "dominio": "web.voxtrendy.net",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "MENZI MUSIC – Izinkinga Zami | MP3 Download",
-    "veiculo": "Voxtrendy",
-    "dominio": "web.voxtrendy.net",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
     "titulo": "DJ Snake at Chambord Castle in 2027: The Return After the Heatwave",
     "veiculo": "Ecostylia",
     "dominio": "ecostylia.com",
@@ -6290,12 +6302,6 @@
     "veiculo": "otempo.com.br",
     "dominio": "otempo.com.br",
     "motivo": "erro ao abrir a matéria: HTTP 404"
-   },
-   {
-    "titulo": "Famosos celebram escolha de Gaby Amarantos para viver Alcione nos cinemas",
-    "veiculo": "Gshow",
-    "dominio": "gshow.globo.com",
-    "motivo": "página lida, mas sem texto de matéria acessível (sitemap do veículo)"
    },
    {
     "titulo": "Amaury Jr - Samba do Trabalhador volta ao Pirajá",
@@ -6319,12 +6325,6 @@
     "titulo": "LUTO: Integrante de famoso grupo de pagode passa mal e morre aos 43 anos",
     "veiculo": "Terra",
     "dominio": "terra.com.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "Don Toliver anuncia 'Nitrous', seu segundo álbum e novo ciclo",
-    "veiculo": "diariodamidia.com.br",
-    "dominio": "diariodamidia.com.br",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
@@ -6358,13 +6358,13 @@
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Dave Matthews Band no Brasil: todas as vindas, de 1998 a 2027",
+    "titulo": "Bruce Dickinson: a entrevista completa à 89 sobre \"PsychoGod\"",
     "veiculo": "89 A Rádio Rock",
     "dominio": "radiorock.com.br",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Bruce Dickinson: a entrevista completa à 89 sobre \"PsychoGod\"",
+    "titulo": "Dave Matthews Band no Brasil: todas as vindas, de 1998 a 2027",
     "veiculo": "89 A Rádio Rock",
     "dominio": "radiorock.com.br",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
@@ -6444,16 +6444,6 @@
   ],
   "nacional": [
    {
-    "titulo": "Prefeitura de São Sebastião abre inscrições para 40 vagas do Programa Bolsa-Música 2027 no município",
-    "veiculo": "fundass",
-    "motivo": "matéria lida (16 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Música: Festival Bento leva música boa para a Praça da Igreja Redonda",
-    "veiculo": "NB Notícias",
-    "motivo": "matéria lida (7 parágrafos, página inicial do veículo), nenhuma cidade citada no texto"
-   },
-   {
     "titulo": "Quintal das Pretas no Museu realiza segunda edição com roda de samba neste sábado em Rio Claro",
     "veiculo": "Jornal Cidade",
     "motivo": "matéria lida (8 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
@@ -6477,31 +6467,6 @@
     "titulo": "Samba e consciência negra",
     "veiculo": "Hora do Povo",
     "motivo": "matéria lida (13 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Jorge Vercillo encerra turnê comemorativa de três décadas de carreira",
-    "veiculo": "VEJA RIO",
-    "motivo": "matéria lida (6 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Vitor Kley vem a Natal com show da nova turnê",
-    "veiculo": "Tribuna do Norte",
-    "motivo": "matéria lida (5 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Priscila Tossan programa para 2027 o álbum 'Onze', produzido por Iuri Rio Branco com 'sonoridades diferentes'",
-    "veiculo": "G1",
-    "motivo": "matéria lida (6 parágrafos, sitemap do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Christian Chávez confirma afastamento de Anahí após turnê do RBD: “Não tenho comunicação com ela”",
-    "veiculo": "Alô Alô Bahia",
-    "motivo": "matéria lida (8 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Christian Chávez confirma rompimento com Anahí após turnê do RBD e diz que não fala mais com a ex-colega",
-    "veiculo": "Mais Região",
-    "motivo": "matéria lida (5 parágrafos, página inicial do veículo), nenhuma cidade citada no texto"
    },
    {
     "titulo": "Di Propósito lança terceiro bloco de “Feliz no Simples 2” com Diego & Victor Hugo",
@@ -6532,6 +6497,11 @@
     "titulo": "Péricles vai além de histórias de superação em programa com artistas negros",
     "veiculo": "Notícias da TV",
     "motivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
+   },
+   {
+    "titulo": "Thiaguinho retorna ao Planeta Atlântida 2027 com grandes sucessos do pagode",
+    "veiculo": "Rede Atlântida",
+    "motivo": "matéria lida (6 parágrafos, Bing Notícias (título exato)), nenhuma cidade citada no texto"
    },
    {
     "titulo": "Como foi criação de ‘The Black Parade’, do My Chemical Romance, segundo produtor",
@@ -6637,11 +6607,6 @@
     "titulo": "JISOO do BLACKPINK lança ‘Sun Showers’, música de ‘Angry Birds 3’",
     "veiculo": "Billboard Brasil",
     "motivo": "matéria lida (9 parágrafos, página inicial do veículo), nenhuma cidade citada no texto"
-   },
-   {
-    "titulo": "Vote no melhor show do Caldas Country Festival 2026",
-    "veiculo": "Billboard Brasil",
-    "motivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto"
    }
   ]
  }
