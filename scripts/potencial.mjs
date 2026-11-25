@@ -78,18 +78,19 @@ export function notaPotencial(x) {
 
 const VAZIAS = new Set('a o as os um uma uns umas de da do das dos em no na nos nas por para pra com sem sob sobre e ou que se ao aos à às após ante até contra entre diz dizem afirma após mais menos muito já ainda como seu sua seus suas ele ela eles elas isso este esta esse essa the of to in on for and is are was with from by at as after over'.split(' '));
 const palavrasDe = (t) => semAc(t).replace(/[^a-z0-9 ]+/g, ' ').split(/\s+/).filter((w) => w.length > 2 && !VAZIAS.has(w));
-const nomesDe = (t) => new Set((String(t).match(/(?<![\p{L}])\p{Lu}[\p{L}\p{N}]+/gu) || []).map(semAc).filter((w) => w.length > 2 && !VAZIAS.has(w)));
+// nomes próprios: palavra com maiúscula que NÃO abre o título (a 1ª palavra sempre tem maiúscula: 'Professor', 'Black', 'VÍDEOS' não são nome)
+const nomesDe = (t) => { const ws = String(t).replace(/["“”‘’'«»]/g, ' ').split(/\s+/).filter(Boolean); return new Set(ws.slice(1).filter((w) => /^\p{Lu}[\p{L}\p{N}]+/u.test(w) && !/^\p{Lu}+$/u.test(w.replace(/[^\p{L}]/gu, '')) || /^[A-Z]{2,5}$/.test(w)).map((w) => semAc(w).replace(/[^a-z0-9]/g, '')).filter((w) => w.length > 2 && !VAZIAS.has(w))); };
 /** 25/11: compara o título com o histórico ({titulo, t} de rodadas anteriores). Fato repetido = 2+ nomes iguais e 55%+ das palavras iguais, há mais de 20 h;
  *  desdobramento = 2+ nomes iguais com fato diferente, assunto visto há mais de 20 h. Devolve {tipo, quando} ou null. */
 export function compararHistorico(titulo, historico = [], agora = Date.now()) {
-  const pw = new Set(palavrasDe(titulo)), nm = nomesDe(titulo); if (pw.size < 3 || nm.size < 1) return null;
+  const pw = new Set(palavrasDe(titulo)), nm = nomesDe(titulo); if (pw.size < 3 || nm.size < 2) return null;
   let rep = null, des = null;
   for (const hh of historico) {
     if (!hh || !hh.titulo || !(+hh.t) || agora - hh.t < 20 * 3600e3) continue;
     const ow = new Set(palavrasDe(hh.titulo)), on = nomesDe(hh.titulo);
-    const nomesIguais = [...nm].filter((w) => on.has(w)).length; if (nomesIguais < Math.min(2, nm.size)) continue;
+    const nomesIguais = [...nm].filter((w) => on.has(w)).length; if (nomesIguais < 2) continue;   // 25/11: sempre 2 nomes próprios em comum
     const iguais = [...pw].filter((w) => ow.has(w)).length / Math.max(1, Math.min(pw.size, ow.size));
-    if (iguais >= 0.55) { if (!rep || hh.t < rep.t) rep = hh; } else if (iguais >= 0.15) { if (!des || hh.t < des.t) des = hh; }
+    if (iguais >= 0.55) { if (!rep || hh.t < rep.t) rep = hh; } else if (iguais >= 0.25) { if (!des || hh.t < des.t) des = hh; }
   }
   const dt = (t) => new Date(t - 3 * 3600e3).toISOString().replace(/^\d{4}-(\d{2})-(\d{2})T(\d{2}):(\d{2}).*/, '$2/$1 às $3:$4');
   return rep ? { tipo: 'repetido', quando: dt(rep.t) } : des ? { tipo: 'desdobramento', quando: dt(des.t) } : null;
