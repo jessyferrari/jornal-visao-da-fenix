@@ -44,7 +44,8 @@ export function notaPotencial(x) {
   c.repeticao = Math.min(PESO.repeticao, 6 * n + (n >= 2 && horas !== null && horas <= 3 ? 6 : 0));
   if (n >= 2) motivo.push(n + ' veículos' + (horas !== null && horas <= 3 ? ' em ' + (horas < 1 ? Math.max(1, Math.round(horas * 60)) + ' min' : Math.round(horas) + ' h') : ''));
   // tema
-  const mf = titulo.match(FORTE) || texto.match(FORTE), mm = !mf && (titulo.match(MEDIO) || texto.match(MEDIO));
+  // 25/11: tema forte só pelo TÍTULO (o resumo cita 'presidente', 'decisão' de passagem e inflava a nota); o resumo vale no máximo como tema médio
+  const mf = titulo.match(FORTE), mm = !mf && (titulo.match(MEDIO) || texto.match(MEDIO) || texto.match(FORTE));
   c.tema = mf ? PESO.tema : mm ? 12 : 0;
   if (mf) motivo.push('tema forte: ' + mf[0].toLowerCase()); else if (mm) motivo.push('tema: ' + mm[0].toLowerCase());
   // pessoa famosa
