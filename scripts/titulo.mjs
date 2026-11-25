@@ -4,11 +4,14 @@
 const ent = s => String(s || '').replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;|&apos;/g, "'")
   .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(+n)).replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)));
 const esp = s => String(s || '').replace(/\s+/g, ' ').trim();
+// 25/11 (Jessyca: "Bomba d a2ª Guerra" chegou no celular; o erro veio do próprio título da DW): erro de digitação de espaço do veículo
+// corrigido na entrada: "d a2ª" = "da 2ª", "n o3º" = "no 3º", espaço antes de vírgula/ponto, espaço dobrado. Nada além disso é mexido.
+export const digitacao = (t) => String(t || '').replace(/(?<![\p{L}])([dDnN])\s+([aAoO])(\d)/gu, '$1$2 $3').replace(/\s+([,.;:!?])(?=\s|$)/g, '$1').replace(/\s{2,}/g, ' ');
 const FOTO = /\s*\((?:fotos?|imagens?|reprodução|crédito|divulgação)\s*[:_/][^()]*\)?\s*$/i;
 
 // título + 2ª cópia (igual ou quase igual) e/ou "(Foto: ...)" no fim: fica só a 1ª cópia
 export function semRepetir(t) {
-  let s = esp(t).replace(FOTO, '').trim();
+  let s = digitacao(esp(t)).replace(FOTO, '').trim();
   const w = s.split(' ');
   const n = Math.min(5, Math.floor(w.length / 2));
   if (n >= 3) {
