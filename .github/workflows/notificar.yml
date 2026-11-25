@@ -129,7 +129,10 @@ jobs:
           # espera até 180 s; se uma fonte rápida publicar antes, a próxima edição começa já. Não notifica nada daqui.
           VIA_RAPIDA_SEG=180 VIA_RAPIDA_VOLTA=90 timeout 260 node scripts/via-rapida.mjs || { echo "via rápida falhou, espera simples"; sleep 120; }
           outras=$(gh api "repos/${{ github.repository }}/actions/workflows/notificar.yml/runs?per_page=20" --jq '[.workflow_runs[] | select(.id != ${{ github.run_id }}) | select(.status=="queued" or .status=="in_progress" or .status=="waiting" or .status=="pending")] | length' || echo "ERR")
-          if [ "$outras" != "0" ] && [ "$outras" != "ERR" ]; then echo "já há rodada na fila ($outras), não encadeia"; exit 0; fi
+          # 25/11: a API do GitHub respondeu 502 e o texto do erro foi lido como "rodada na fila": a corrente parou às 15:56 e o jornal ficou 1 h sem edição.
+          # Só um número inteiro maior que 0 conta como fila; qualquer outra resposta (erro, vazio) encadeia a próxima.
+          case "$outras" in ''|*[!0-9]*) echo "contagem da fila ilegível ($(echo "$outras" | head -c 80)): encadeia mesmo assim"; outras=0;; esac
+          if [ "$outras" -gt 0 ]; then echo "já há rodada na fila ($outras), não encadeia"; exit 0; fi
           ok=0
           for i in 1 2 3 4 5; do
             if gh workflow run notificar.yml --repo ${{ github.repository }} --ref main; then
