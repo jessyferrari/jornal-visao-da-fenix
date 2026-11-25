@@ -6,6 +6,7 @@
 // Lê edicao.json, musica.json, series.json, esportes.json e emalta.json. Gera hoje.json e manda 2 avisos por dia (7h e 19h, prioridade 2).
 // Uso: node scripts/hoje.mjs [--agora 2026-11-17T07:05-03:00] [--sem-envio]
 import fs from 'node:fs';
+import { createHash, createHmac } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
@@ -33,6 +34,19 @@ export function itensDe(dados, secao) {
   andar(dados); return out;
 }
 
+// 25/11 (Jessyca: "Dia Internacional pela Eliminação da Violência contra as Mulheres" e "...para a Eliminação da Violência Contra as Mulheres" vieram
+// como 2 datas): a mesma data escrita de jeitos diferentes conta uma vez só (fica a de fonte do governo brasileiro, se houver)
+const LIGA = new Set('dia de da do das dos e a o as os pela pelo para internacional nacional mundial contra'.split(' '));
+const chaveData = (n) => new Set(String(n || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9 ]/g, ' ').split(/\s+/).filter((w) => w.length > 2 && !LIGA.has(w)));
+export function semDatasRepetidas(lista) {
+  const out = [];
+  for (const d of [...lista].sort((a, b) => (/gov\.br/.test(b.link || '') ? 1 : 0) - (/gov\.br/.test(a.link || '') ? 1 : 0))) {
+    const k = chaveData(d.nome); if (!k.size) { out.push(d); continue; }
+    const igual = out.some((o) => { const ko = chaveData(o.nome); const com = [...k].filter((w) => ko.has(w)).length; return com / Math.max(k.size, ko.size) >= 0.8; });
+    if (!igual) out.push(d);
+  }
+  return lista.filter((d) => out.includes(d));
+}
 export function montar({ secoes, datas, meses = [], agora = AGORA }) {
   const hoje = brIso(agora).slice(0, 10), ddmm = hoje.slice(8, 10) + '/' + hoje.slice(5, 7);
   const vistos = new Map();
@@ -46,10 +60,27 @@ export function montar({ secoes, datas, meses = [], agora = AGORA }) {
   const exclusivos = todos.filter((i) => i.selo);
   const usados = new Set([...valePostar, ...exclusivos].map((i) => i.link));
   const importantes = todos.filter((i) => !usados.has(i.link) && i.fontes >= 3).sort((a, b) => b.fontes - a.fontes || b.nota - a.nota).slice(0, 12);
-  const doDia = (datas || []).filter((d) => d.dia === ddmm && d.fonte && /^https?:\/\//.test(d.link || ''));
+  const doDia = semDatasRepetidas((datas || []).filter((d) => d.dia === ddmm && d.fonte && /^https?:\/\//.test(d.link || '')));
   const doMes = (meses || []).filter((m) => m.mes === hoje.slice(5, 7) && m.fonte && /^https?:\/\//.test(m.link || ''));
   return { atualizado: brIso(agora), dia: hoje, datas: { nacionais: doDia.filter((d) => d.ambito === 'nacional'), internacionais: doDia.filter((d) => d.ambito !== 'nacional'), mes: doMes },
     valePostar: porPeriodo, totalVale: valePostar.length, naoDeixe: valePostar.filter((i) => i.faixa === 'nao-deixe').length, exclusivos, importantes, meta: 5 };
+}
+
+/** 25/11 (Jessyca: "do painel do dia eu não consigo mandar fazer o post; tenho que abrir notícia por notícia, copiar o link e colar na Mesa"):
+ *  até 2 botões "📝 Post: <data>" que mandam a data direto ao agente (comando assinado); o celular pergunta o formato e a produção começa no toque.
+ *  O 3º botão abre o painel do dia. Sem comando configurado, fica só o botão do painel. */
+export function botoesDatas(h, { CMD = process.env.NTFY_TOPIC_COMANDO || '', ASS = process.env.NTFY_ASSINATURA || '', SRV = process.env.NTFY_SERVIDOR || 'https://ntfy.sh' } = {}) {
+  const painel = { action: 'view', label: 'Abrir painel do dia', url: PAGINA, clear: false };
+  if (!CMD || !ASS) return [painel];
+  const url = SRV.replace(/\/$/, '') + '/' + CMD, hoje = h.dia.slice(8, 10) + '/' + h.dia.slice(5, 7);
+  const todas = [...h.datas.nacionais, ...h.datas.internacionais, ...(h.datas.mes || [])].filter((d) => /^https?:\/\//.test(d.link || ''));
+  const bt = todas.slice(0, 2).map((d) => {
+    const id = createHash('sha1').update('data|' + h.dia + '|' + d.nome).digest('hex').slice(0, 12), sig = createHmac('sha256', String(ASS)).update(id).digest('hex').slice(0, 32);
+    const curto = String(d.nome).replace(/^(Dia|Semana|Mês)\s+(Nacional|Internacional|Mundial)?\s*(d[aeo]s?|pela|pelo|para a|para o)?\s*/i, '').split(/\s+/).slice(0, 6).join(' ').replace(/\s+(d[aeo]s?|e|a|o|as|os|contra|para|pela|pelo)$/i, '');
+    const texto = (d.mes ? 'Campanha do mês: ' : 'Hoje, ' + hoje + ', é ') + d.nome + '. ' + String(d.descricao || d.resumo || '').slice(0, 600);
+    return { action: 'http', label: '📝 Post: ' + curto, url, method: 'POST', clear: false, body: JSON.stringify({ acao: 'data', id, sig, titulo: d.nome, link: d.link, texto }) };
+  });
+  return [...bt, painel];
 }
 
 /** texto do aviso do dia (um só, cabe no limite do ntfy) */
@@ -81,7 +112,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   const m = aviso(h, { quando: vez });
   const r = await fetch(process.env.NTFY_SERVIDOR || 'https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(20000),
     body: JSON.stringify({ topic: TOPIC, title: m.title, message: m.message, click: PAGINA, priority: 2, tags: ['calendar'], icon: 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png',
-      actions: [{ action: 'view', label: 'Abrir painel do dia', url: PAGINA, clear: false }] }) }).catch((e) => ({ ok: false, status: String(e.message) }));
+      actions: botoesDatas(h) }) }).catch((e) => ({ ok: false, status: String(e.message) }));
   console.log('aviso do dia', vez, r.ok ? 'enviado' : 'falhou: ' + r.status);
   if (r.ok) { E[chave] = brIso(AGORA); for (const k of Object.keys(E)) if (k < brIso(AGORA - 7 * 86400e3).slice(0, 10)) delete E[k]; fs.writeFileSync(EF, JSON.stringify(E)); }
 }
