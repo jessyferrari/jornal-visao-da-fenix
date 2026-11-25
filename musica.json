@@ -1,5 +1,5 @@
 {
- "atualizado": "2026-11-25T04:33",
+ "atualizado": "2026-11-25T04:38",
  "ordem": [
   "samba",
   "sambaPagode",
@@ -127,8 +127,8 @@
  "placar": {
   "periodo": "últimas 48 h",
   "furos": 7,
-  "chegaramDepois": 10,
-  "aindaSoNoJornal": 307,
+  "chegaramDepois": 11,
+  "aindaSoNoJornal": 305,
   "medianaAntes": "20 h 07",
   "melhores": [
    {
@@ -432,7 +432,7 @@
    },
    "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=65&faixa=opcional&titulo=Not%C3%ADcia%3A+Com+Homenagem+A+Beth+Carvalho%2C+Bloco+Engrossa+O+Caldo+Faz+Sua+Estreia+Em+Bh&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMivwFBVV95cUxNV2pCTWM4QlZJOXFsQVp5dTBuRXphaFdFVUJYcER5aE5CM1RFYW9PMHpOYUtoam1ETXVxOUJVdXAybkNWUGpVZ1oyQUFWXzhCLWlGLWVqUVdRTkdzT01jdTRDeWxZQTFPLWR4cHpaa3kyN2VXX3pqdzN6VVZucXFvU3oyQlVjMUJUVFEzMEVKbmV2aXFHZnBoMXhQZXBOMWs1MjZXc0xVV0EydUdySTgtRUROXzZsUU5NQ21PaGFGYw%3Foc%3D5&texto=Not%C3%ADcia%3A+Com+Homenagem+A+Beth+Carvalho%2C+Bloco+Engrossa+O+Caldo+Faz+Sua+Estreia+Em+Bh%0ALocal%3A+Belo+Horizonte%2C+MG%0AVe%C3%ADculo%3A+BH+Eventos+%C2%B7+2026-11-24+20%3A33+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fbhaz.com.br%2Fnoticias%2Fcarnaval-2027-bloco-de-bh-faz-homenagem-a-beth-carvalho%2F",
    "furo": {
-    "semPortalHa": "11 h 11"
+    "semPortalHa": "11 h 16"
    },
    "local": "Belo Horizonte, MG",
    "localComo": "título/resumo: título; resumo",
@@ -474,7 +474,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "11 h 29"
+    "semPortalHa": "11 h 34"
    },
    "local": "Rio de Janeiro, RJ",
    "localComo": "matéria (RSS do veículo): parágrafo 1 (lugar: cacique de ramos); parágrafo 3",
@@ -507,7 +507,7 @@
    },
    "emApuracao": true,
    "furo": {
-    "semPortalHa": "36 h 18"
+    "semPortalHa": "36 h 23"
    },
    "local": "Feira de Santana, BA",
    "localComo": "matéria (RSS do veículo): parágrafo 2",
@@ -530,64 +530,55 @@
   {
    "tipo": "lancamento",
    "nome": "Vitinho",
-   "primeiroANoticiar": {
-    "veiculo": "Tribuna do Sertão",
-    "hora": "16:03"
-   },
-   "id": "902b14a9fbe8",
+   "id": "a768dc800189",
    "pot": {
-    "nota": 65,
+    "nota": 59,
     "faixa": "opcional",
-    "provisoria": false,
-    "rotulo": "65% · opcional",
-    "motivo": "2 veículos · tema forte: lança · pessoa famosa: Vitinho"
+    "provisoria": true,
+    "rotulo": "⏳ 59% provisória · opcional",
+    "motivo": "tema forte: lança · pessoa famosa: Vitinho · nota provisória: só 1 veículo até agora"
    },
-   "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=65&faixa=opcional&titulo=Vitinho+Lan%C3%A7a+%22Casal+Perfeito%22+com+MC+Livinho+e+Apresenta+Novo+Cap%C3%ADtulo+do+Projeto+%22Intensidade%22+em+Parceria+Musical+Surpreendente&noticia=https%3A%2F%2Freportermaceio.com.br%2Fvitinho-lanca-casal-perfeito-com-mc-livinho-e-apresenta-novo-capitulo-do-projeto-intensidade-em-parceria-musical-surpreendente%2F&texto=Vitinho+Lan%C3%A7a+%22Casal+Perfeito%22+com+MC+Livinho+e+Apresenta+Novo+Cap%C3%ADtulo+do+Projeto+%22Intensidade%22+em+Parceria+Musical+Surpreendente%0ALocal%3A+Macei%C3%B3%2C+AL+%28pelo+ve%C3%ADculo%29%0AVe%C3%ADculo%3A+Rep%C3%B3rter+Macei%C3%B3+%C2%B7+2026-11-24+16%3A05+%28Bras%C3%ADlia%29&links=https%3A%2F%2Ftribunadosertao.com.br%2Fvariedades%2F2026%2F11%2F24%2F1028569-vitinho-lanca-terceiro-volume-de-intensidade-com-participacao-de-mc-livinho",
+   "emApuracao": true,
    "furo": {
-    "semPortalHa": "12 h 31"
+    "semPortalHa": "12 h 36"
    },
-   "local": "Maceió, AL (pelo veículo)",
-   "localComo": "cidade do veículo regional (reportermaceio.com.br); a matéria não cita a cidade",
-   "titulo": "Vitinho Lança \"Casal Perfeito\" com MC Livinho e Apresenta Novo Capítulo do Projeto \"Intensidade\" em Parceria Musical Surpreendente",
-   "link": "https://reportermaceio.com.br/vitinho-lanca-casal-perfeito-com-mc-livinho-e-apresenta-novo-capitulo-do-projeto-intensidade-em-parceria-musical-surpreendente/",
-   "veiculo": "Repórter Maceió",
-   "dominio": "reportermaceio.com.br",
-   "publicado": "2026-11-24T16:05",
+   "local": "Assunto geral (sem cidade)",
+   "semCidadeMotivo": "matéria lida (10 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+   "titulo": "Vitinho lança terceiro volume de “Intensidade” com participação de MC Livinho",
+   "link": "https://tribunadosertao.com.br/variedades/2026/11/24/1028569-vitinho-lanca-terceiro-volume-de-intensidade-com-participacao-de-mc-livinho",
+   "veiculo": "Tribuna do Sertão",
+   "dominio": "tribunadosertao.com.br",
+   "publicado": "2026-11-24T16:03",
    "primeiroVisto": "2026-11-24T16:11",
-   "fontes": 2,
-   "confirmado": true,
+   "fontes": 1,
+   "confirmado": false,
    "quente": false,
    "regiao": "br",
-   "regiaoMotivo": "Brasil: maceio; RJ: busca pagode no RJ",
+   "regiaoMotivo": "sem local no texto, padrão Brasil (RJ: busca pagode no RJ)",
+   "localIncerto": true,
    "categoria": "Música",
    "linkDireto": true,
-   "tambemEm": [
-    {
-     "veiculo": "Tribuna do Sertão",
-     "titulo": "Vitinho lança terceiro volume de “Intensidade” com participação de MC Livinho",
-     "link": "https://tribunadosertao.com.br/variedades/2026/11/24/1028569-vitinho-lanca-terceiro-volume-de-intensidade-com-participacao-de-mc-livinho"
-    }
-   ],
+   "tambemEm": [],
    "via": "Google Notícias: pagode no RJ"
   },
   {
    "tipo": "lancamento",
    "nome": "Di Propósito",
    "primeiroANoticiar": {
-    "veiculo": "Tribuna do Agreste",
-    "hora": "15:02"
+    "veiculo": "Virgula",
+    "hora": "09:10"
    },
    "id": "b38491ea53c9",
    "pot": {
-    "nota": 65,
+    "nota": 68,
     "faixa": "opcional",
     "provisoria": false,
-    "rotulo": "65% · opcional",
-    "motivo": "2 veículos · tema forte: lança · pessoa famosa: Di Propósito"
+    "rotulo": "68% · opcional",
+    "motivo": "3 veículos · tema forte: lança · pessoa famosa: Di Propósito"
    },
-   "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=65&faixa=opcional&titulo=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.&noticia=https%3A%2F%2Freportermaceio.com.br%2Fdi-proposito-lanca-novo-bloco-de-feliz-no-simples-2-com-colaboracao-de-diego-e-victor-hugo-em-musica-que-une-pagode-e-sertanejo%2F&texto=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.%0ALocal%3A+Macei%C3%B3%2C+AL+%28pelo+ve%C3%ADculo%29%0AVe%C3%ADculo%3A+Rep%C3%B3rter+Macei%C3%B3+%C2%B7+2026-11-24+15%3A19+%28Bras%C3%ADlia%29",
+   "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=68&faixa=opcional&titulo=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.&noticia=https%3A%2F%2Freportermaceio.com.br%2Fdi-proposito-lanca-novo-bloco-de-feliz-no-simples-2-com-colaboracao-de-diego-e-victor-hugo-em-musica-que-une-pagode-e-sertanejo%2F&texto=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.%0ALocal%3A+Macei%C3%B3%2C+AL+%28pelo+ve%C3%ADculo%29%0AVe%C3%ADculo%3A+Rep%C3%B3rter+Macei%C3%B3+%C2%B7+2026-11-24+15%3A19+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fvirgula.me%2Fmusica%2Fgrupo-di-proposito-lanca-terceiro-bloco-do-projeto-feliz-no-simples-2%2F",
    "furo": {
-    "semPortalHa": "13 h 32"
+    "semPortalHa": "43 h 29"
    },
    "local": "Maceió, AL (pelo veículo)",
    "localComo": "cidade do veículo regional (reportermaceio.com.br); a matéria não cita a cidade",
@@ -597,7 +588,7 @@
    "dominio": "reportermaceio.com.br",
    "publicado": "2026-11-24T15:19",
    "primeiroVisto": "2026-11-23T09:19",
-   "fontes": 2,
+   "fontes": 3,
    "confirmado": true,
    "quente": false,
    "regiao": "br",
@@ -605,6 +596,11 @@
    "categoria": "Música",
    "linkDireto": true,
    "tambemEm": [
+    {
+     "veiculo": "Virgula",
+     "titulo": "Grupo Di Propósito lança terceiro bloco do projeto \"Feliz no Simples 2\"",
+     "link": "https://virgula.me/musica/grupo-di-proposito-lanca-terceiro-bloco-do-projeto-feliz-no-simples-2/"
+    },
     {
      "veiculo": "Tribuna do Agreste",
      "titulo": "Di Propósito lança “Pena” com Diego e Victor Hugo em novo bloco de “Feliz no Simples 2”",
@@ -735,7 +731,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 16"
+        "semPortalHa": "11 h 21"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: resumo",
@@ -771,7 +767,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Liga-SP+divulga+clipes+dos+sambas-enredo+das+escolas+do+Grupo+Especial+para+o+Carnaval+27&noticia=https%3A%2F%2Fegobrazil.com.br%2Fliga-sp-divulga-clipes-dos-sambas-enredo-das-escolas-do-grupo-especial-para-o-carnaval-27%2F&texto=Liga-SP+divulga+clipes+dos+sambas-enredo+das+escolas+do+Grupo+Especial+para+o+Carnaval+27%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+EGOBrazil+%C2%B7+2026-11-23+09%3A39+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "42 h 54"
+        "semPortalHa": "43 h"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 5",
@@ -808,7 +804,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "14 h 41"
+        "semPortalHa": "14 h 46"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (escola de samba: vai-vai); resumo (escola de samba: vai-vai)",
@@ -839,7 +835,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "18 h 28"
+        "semPortalHa": "18 h 34"
        },
        "local": "Santos, SP",
        "localComo": "título/resumo: título; resumo",
@@ -898,7 +894,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "36 h 01"
+        "semPortalHa": "36 h 07"
        },
        "local": "Jundiaí, SP",
        "localComo": "título/resumo: resumo",
@@ -929,7 +925,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "40 h 06"
+        "semPortalHa": "40 h 11"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (sitemap do veículo): parágrafo 1; parágrafo 3 (escola de samba: aguia de ouro)",
@@ -960,7 +956,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "14 h 19"
+        "semPortalHa": "14 h 25"
        },
        "local": "Sorocaba, SP (pelo veículo)",
        "localComo": "cidade do veículo regional (agendasorocaba.com.br); a matéria não cita a cidade",
@@ -990,7 +986,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "26 h 51"
+        "semPortalHa": "26 h 56"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (lugar: bixiga); resumo (lugar: bixiga)",
@@ -1020,7 +1016,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "41 h 50"
+        "semPortalHa": "41 h 55"
        },
        "local": "Itapira, SP (pelo veículo)",
        "localComo": "cidade do veículo regional (itapiranews.com.br); a matéria não cita a cidade",
@@ -1055,7 +1051,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 31"
+        "semPortalHa": "5 h 36"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"do Rio\"); resumo (\"do Rio\")",
@@ -1086,7 +1082,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 34"
+        "semPortalHa": "10 h 39"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: renascenca clube); resumo (lugar: renascenca clube)",
@@ -1122,7 +1118,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=46&faixa=opcional&titulo=Festival+de+cinema+ocupa+quadra+de+escola+de+samba+em+Niter%C3%B3i&noticia=https%3A%2F%2Friopress.com.br%2Ffestival-de-cinema-ocupa-quadra-de-escola-de-samba-em-niteroi%2F&texto=Festival+de+cinema+ocupa+quadra+de+escola+de+samba+em+Niter%C3%B3i%0ALocal%3A+Niter%C3%B3i%2C+RJ%0AVe%C3%ADculo%3A+RioPress+%C2%B7+2026-11-24+12%3A58+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fcidadedeniteroi.com%2Fagenda%2Fquadra-de-escola-de-samba-em-niteroi-vira-cinema-gratuito-nesta-sexta-27%2F%0Ahttps%3A%2F%2Fenfoco.com.br%2Fentretenimento%2Ffestival-de-cinema-invade-quadra-de-escola-de-samba-em-niteroi%2F",
        "furo": {
-        "semPortalHa": "37 h 58"
+        "semPortalHa": "38 h 03"
        },
        "local": "Niterói, RJ",
        "localComo": "título/resumo: título; resumo",
@@ -1273,7 +1269,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=40&faixa=opcional&titulo=Wesley+N%C3%B3og+celebra+20+anos+de+%E2%80%9Creinado+no+Sambasoul%E2%80%9D+com+show+no+Centro+da+M%C3%BAsica+Carioca+Artur+da+T%C3%A1vola%2C+na+Tijuca&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMi1wFBVV95cUxQVXZMOGVvMWdyWVpuek1GRG92elpJVFN2VGZXeVRUVHQ3d0pVZEU2S1BXejZtWlNqLXY2M2QzZ21RNk1JdlZvU19HV0dtalg2X0tlbHVNYTZNWWxPcWNBWTJJNGVMYnViQmVHaFJ1YmFnS3V3MGU3VmNkRTJFdHFjY25NcHk5eVhScDg4NVl6a1pSU1JjNzkta1c1NXNEUUlwU3BON2tOTTlWNS02VFdZVVNtVWNQdjlQT3ZUczVhRi1UTGJZNnJmTDhzTGNwUHdoS3k1STJXTQ%3Foc%3D5&texto=Wesley+N%C3%B3og+celebra+20+anos+de+%E2%80%9Creinado+no+Sambasoul%E2%80%9D+com+show+no+Centro+da+M%C3%BAsica+Carioca+Artur+da+T%C3%A1vola%2C+na+Tijuca%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+Sopa+Cultural+%C2%B7+2026-11-23+21%3A06+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fabihrj.com.br%2Fcultura%2Fwesley-noog-lanca-o-album-mae-africa-com-show-na-tijuca-nesta-sexta-27-11%0Ahttps%3A%2F%2Fwww.canaltadeuramos.com.br%2F2026%2F11%2Fwesley-noog-mae-africa-20-anos-carreira-tijuca.html",
        "furo": {
-        "semPortalHa": "31 h 27"
+        "semPortalHa": "31 h 33"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: tijuca); resumo (lugar: tijuca)",
@@ -1360,7 +1356,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=UNI%C3%83O+DE+MARIC%C3%81+RE%C3%9ANE+SAMBA+E+CULTURA+NA+FEIJOADA+REI+ZUMBI&noticia=https%3A%2F%2Fjornalogoncalense.com.br%2Funiao-de-marica-reune-samba-e-cultura-na-feijoada-rei-zumbi%2F&texto=UNI%C3%83O+DE+MARIC%C3%81+RE%C3%9ANE+SAMBA+E+CULTURA+NA+FEIJOADA+REI+ZUMBI%0ALocal%3A+Maric%C3%A1%2C+RJ%0AVe%C3%ADculo%3A+O+Gon%C3%A7alense+%C2%B7+2026-11-23+13%3A05+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "39 h 28"
+        "semPortalHa": "39 h 34"
        },
        "local": "Maricá, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 2",
@@ -1397,7 +1393,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "12 h 05"
+        "semPortalHa": "12 h 10"
        },
        "local": "São Pedro da Aldeia, RJ",
        "localComo": "título/resumo: resumo",
@@ -1428,7 +1424,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "17 h 06"
+        "semPortalHa": "17 h 11"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (\"do Rio\"); parágrafo 2 (lugar: cidade do samba)",
@@ -1459,7 +1455,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "17 h 08"
+        "semPortalHa": "17 h 13"
        },
        "local": "Rio das Ostras, RJ",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 2",
@@ -1490,7 +1486,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "18 h 22"
+        "semPortalHa": "18 h 27"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"do Rio\"); resumo (\"do Rio\")",
@@ -1521,7 +1517,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "20 h 28"
+        "semPortalHa": "20 h 33"
        },
        "local": "Magé, RJ",
        "localComo": "título/resumo: título; resumo",
@@ -1552,7 +1548,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "29 h 39"
+        "semPortalHa": "29 h 44"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: tijuca); resumo (lugar: tijuca)",
@@ -1583,7 +1579,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "31 h 51"
+        "semPortalHa": "31 h 56"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (escola de samba: mangueira); resumo (escola de samba: mangueira)",
@@ -1614,7 +1610,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "37 h 24"
+        "semPortalHa": "37 h 30"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: parque madureira); resumo (lugar: parque madureira)",
@@ -1645,7 +1641,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "38 h 15"
+        "semPortalHa": "38 h 20"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: resumo (\"do Rio\")",
@@ -1685,7 +1681,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=31&faixa=opcional&titulo=Carnaval+de+BH+2027%3A+veja+a+ordem+dos+desfiles+das+escolas+de+samba&noticia=https%3A%2F%2Fsoubh.uai.com.br%2Fnoticias%2Fcarnaval-2027%2Fcarnaval-de-bh-2027-veja-a-ordem-dos-desfiles-das-escolas-de-samba%2F&texto=Carnaval+de+BH+2027%3A+veja+a+ordem+dos+desfiles+das+escolas+de+samba%0ALocal%3A+Belo+Horizonte%2C+MG%0AVe%C3%ADculo%3A+SouBH+%C2%B7+2026-11-24+19%3A59+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fprefeitura.pbh.gov.br%2Fnoticias%2Fsorteio-define-ordem-dos-desfiles-das-escolas-de-samba-do-carnaval-de-bh-em-2027",
        "furo": {
-        "semPortalHa": "16 h 27"
+        "semPortalHa": "16 h 32"
        },
        "local": "Belo Horizonte, MG",
        "localComo": "título/resumo: título; resumo",
@@ -1731,7 +1727,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=65&faixa=opcional&titulo=Carnaval+BH+2027%3A+Bloco+Engrossa+o+Caldo+estreia+na+folia+com+homenagem+a+Beth+Carvalho&noticia=https%3A%2F%2Fbhaz.com.br%2Fnoticias%2Fcarnaval-2027-bloco-de-bh-faz-homenagem-a-beth-carvalho%2F&texto=Carnaval+BH+2027%3A+Bloco+Engrossa+o+Caldo+estreia+na+folia+com+homenagem+a+Beth+Carvalho%0ALocal%3A+Belo+Horizonte%2C+MG%0AVe%C3%ADculo%3A+BHAZ+%C2%B7+2026-11-24+17%3A23+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "11 h 11"
+        "semPortalHa": "11 h 16"
        },
        "local": "Belo Horizonte, MG",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1; parágrafo 5",
@@ -1768,7 +1764,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 33"
+        "semPortalHa": "5 h 38"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (7 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -1799,7 +1795,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "7 h 51"
+        "semPortalHa": "7 h 56"
        },
        "local": "Brasília, DF",
        "localComo": "título/resumo: título; resumo",
@@ -1820,6 +1816,36 @@
        "via": "Google Notícias: samba (Portugal)"
       },
       {
+       "id": "eb813bc43833",
+       "pot": {
+        "nota": 19,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 19% provisória · opcional",
+        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "8 h 20"
+       },
+       "local": "Joaçaba, SC",
+       "localComo": "mesmo fato em g1.globo.com (achado no Bing Notícias): parágrafo 2",
+       "titulo": "SAMBA CONSCIENTE",
+       "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1xVlRxa0tuWDFzVnI2d05kcS1pdkcxSWU4YWp4eFBhdWpxSHd5em50MThKeTVpQ3g2YXMwYlJvVmhTUUNubmsybFJCWTEwVzZVeGNHMlRnSGVyMkpya3BYbnk3QXBkVDZVcnVlWWZ0QQ?oc=5",
+       "veiculo": "Cultura Marília",
+       "dominio": "cultura.marilia.sp.gov.br",
+       "publicado": "2026-11-24T20:19",
+       "primeiroVisto": "2026-11-24T22:18",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": true,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: mesmo fato em g1.globo.com (achado no Bing Notícias): parágrafo 2",
+       "categoria": "Cultura",
+       "tambemEm": [],
+       "via": "Google Notícias: samba (Portugal)"
+      },
+      {
        "id": "dc630192a6bd",
        "pot": {
         "nota": 19,
@@ -1830,7 +1856,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 13"
+        "semPortalHa": "10 h 18"
        },
        "local": "Uberlândia, MG",
        "localComo": "título/resumo: título; resumo",
@@ -1860,7 +1886,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "6 h 45"
+        "semPortalHa": "6 h 50"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -1955,7 +1981,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=5&nota=55&faixa=opcional&titulo=Zeca+Pagodinho+%26+Alcione+%26+Jorge+Arag%C3%A3o+chegam+a+BH+%E2%80%93+28%2F11&noticia=https%3A%2F%2Fagendabh.com.br%2Fevento%2Fzeca-pagodinho-alcione-jorge-aragao-chegam-a-bh-28-11%2F&texto=Zeca+Pagodinho+%26+Alcione+%26+Jorge+Arag%C3%A3o+chegam+a+BH+%E2%80%93+28%2F11%0ALocal%3A+Belo+Horizonte%2C+MG%0AVe%C3%ADculo%3A+Agenda+BH+%C2%B7+2026-11-24+16%3A30+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fbhaz.com.br%2Fnoticias%2Fzeca-pagoginho-alcione-jorge-aragao-show-bh-neste-sabado%2F%0Ahttps%3A%2F%2F93fmbq.com.br%2Feventos%2Fzeca-pagodinho-alcione-e-jorge-aragao-fazem-show-em-bh-com-participacao-de-gilberto-gil%2F%0Ahttps%3A%2F%2Fwww.itatiaia.com.br%2Fentretenimento%2Fzeca-pagodinho-alcione-e-jorge-aragao-fazem-show-em-bh-com-participacao-de-gilberto-gil%2F",
        "furo": {
-        "semPortalHa": "41 h 44"
+        "semPortalHa": "41 h 49"
        },
        "local": "Belo Horizonte, MG",
        "localComo": "título/resumo: título; resumo",
@@ -1998,20 +2024,66 @@
       },
       {
        "primeiroANoticiar": {
-        "veiculo": "Portal UMBU",
-        "hora": "11:04"
+        "veiculo": "Assembleia Legislativa de Mato Grosso do Sul",
+        "hora": "12:42"
+       },
+       "id": "d964e58edf7a",
+       "pot": {
+        "nota": 31,
+        "faixa": "opcional",
+        "provisoria": false,
+        "rotulo": "31% · opcional",
+        "motivo": "3 veículos"
+       },
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=31&faixa=opcional&titulo=Banda+Samba+Pop+%C3%A9+a+atra%C3%A7%C3%A3o+do+programa+Talento+Regional&noticia=https%3A%2F%2Facritica.net%2Fcultura%2Fbanda-samba-pop-programa-talento-regional-alems%2F&texto=Banda+Samba+Pop+%C3%A9+a+atra%C3%A7%C3%A3o+do+programa+Talento+Regional%0ALocal%3A+Nacional+%28sem+cidade%29%0AVe%C3%ADculo%3A+A+Cr%C3%ADtica+de+Campo+Grande+%C2%B7+2026-11-24+15%3A21+%28Bras%C3%ADlia%29&links=http%3A%2F%2Fwww.al.ms.gov.br%2FNoticias%2F146180%0Ahttps%3A%2F%2Festadomaior.com.br%2Fnoticia%2F212844%2Fsamba-pop-leva-alegria-e-originalidade-ao-programa-talento-regional",
+       "furo": {
+        "semPortalHa": "15 h 57"
+       },
+       "local": "Nacional (sem cidade)",
+       "semCidadeMotivo": "matéria lida (5 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+       "titulo": "Banda Samba Pop é a atração do programa Talento Regional",
+       "link": "https://acritica.net/cultura/banda-samba-pop-programa-talento-regional-alems/",
+       "veiculo": "A Crítica de Campo Grande",
+       "dominio": "acritica.net",
+       "publicado": "2026-11-24T15:21",
+       "primeiroVisto": "2026-11-24T12:55",
+       "fontes": 3,
+       "confirmado": true,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "Brasil: campo grande",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [
+        {
+         "veiculo": "Assembleia Legislativa de Mato Grosso do Sul",
+         "titulo": "Samba Pop leva alegria e originalidade ao programa Talento Regional",
+         "link": "http://www.al.ms.gov.br/Noticias/146180"
+        },
+        {
+         "veiculo": "estadomaior.com.br",
+         "titulo": "Samba Pop leva alegria e originalidade ao programa Talento Regional",
+         "link": "https://estadomaior.com.br/noticia/212844/samba-pop-leva-alegria-e-originalidade-ao-programa-talento-regional"
+        }
+       ],
+       "via": "Google Notícias: samba (Portugal)"
+      },
+      {
+       "primeiroANoticiar": {
+        "veiculo": "Dois Terços",
+        "hora": "11:11"
        },
        "id": "e0c60c8436c8",
        "pot": {
-        "nota": 37,
+        "nota": 31,
         "faixa": "opcional",
         "provisoria": false,
-        "rotulo": "37% · opcional",
-        "motivo": "4 veículos"
+        "rotulo": "31% · opcional",
+        "motivo": "3 veículos"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=37&faixa=opcional&titulo=M%C3%A1rcia+Castro+traz+novidades+para+o+ver%C3%A3o+com+samba+reggae+em+Salvador&noticia=https%3A%2F%2Fatarde.com.br%2Fmusica%2Fmarcia-castro-traz-novidades-para-o-verao-com-samba-reggae-em-salvador-1410549&texto=M%C3%A1rcia+Castro+traz+novidades+para+o+ver%C3%A3o+com+samba+reggae+em+Salvador%0ALocal%3A+Salvador%2C+BA%0AVe%C3%ADculo%3A+A+TARDE+%C2%B7+2026-11-24+13%3A47+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fdoistercos.com.br%2Fsabado-marcia-castro-faz-roda-de-samba-reggae-no-rio-vermelho-e-une-classicos-e-novidades-no-repertorio%2F%0Ahttps%3A%2F%2Fwww.bnews.com.br%2Fnoticias%2Fcultura%2Fmarcia-castro-prepara-noite-de-samba-reggae-em-salvador.html%0Ahttps%3A%2F%2Fportalumbu.com.br%2Fsabado-marcia-castro-faz-roda-de-samba-reggae-no-rio-vermelho-e-une-classicos-e-novidades-no-repertorio%2F",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=31&faixa=opcional&titulo=M%C3%A1rcia+Castro+traz+novidades+para+o+ver%C3%A3o+com+samba+reggae+em+Salvador&noticia=https%3A%2F%2Fatarde.com.br%2Fmusica%2Fmarcia-castro-traz-novidades-para-o-verao-com-samba-reggae-em-salvador-1410549&texto=M%C3%A1rcia+Castro+traz+novidades+para+o+ver%C3%A3o+com+samba+reggae+em+Salvador%0ALocal%3A+Salvador%2C+BA%0AVe%C3%ADculo%3A+A+TARDE+%C2%B7+2026-11-24+13%3A47+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fdoistercos.com.br%2Fsabado-marcia-castro-faz-roda-de-samba-reggae-no-rio-vermelho-e-une-classicos-e-novidades-no-repertorio%2F%0Ahttps%3A%2F%2Fwww.bnews.com.br%2Fnoticias%2Fcultura%2Fmarcia-castro-prepara-noite-de-samba-reggae-em-salvador.html",
        "furo": {
-        "semPortalHa": "17 h 30"
+        "semPortalHa": "17 h 28"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -2021,7 +2093,7 @@
        "dominio": "atarde.com.br",
        "publicado": "2026-11-24T13:47",
        "primeiroVisto": "2026-11-24T11:09",
-       "fontes": 4,
+       "fontes": 3,
        "confirmado": true,
        "quente": false,
        "regiao": "br",
@@ -2038,11 +2110,6 @@
          "veiculo": "Bnews",
          "titulo": "Márcia Castro prepara noite de samba reggae em Salvador",
          "link": "https://www.bnews.com.br/noticias/cultura/marcia-castro-prepara-noite-de-samba-reggae-em-salvador.html"
-        },
-        {
-         "veiculo": "Portal UMBU",
-         "titulo": "Sábado: Marcia Castro faz Roda de Samba Reggae no Rio Vermelho e une clássicos e novidades no repertório",
-         "link": "https://portalumbu.com.br/sabado-marcia-castro-faz-roda-de-samba-reggae-no-rio-vermelho-e-une-classicos-e-novidades-no-repertorio/"
         }
        ],
        "via": "Google Notícias: roda de samba"
@@ -2062,7 +2129,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=56&faixa=opcional&titulo=Caminhada+Nacional+do+Samba+re%C3%BAne+nove+trios+el%C3%A9tricos+em+Salvador+no+domingo+%2829%29&noticia=https%3A%2F%2Faloalobahia.com%2Fnoticias%2F2026%2F11%2F24%2Fcaminhada-nacional-do-samba-reune-nove-trios-eletricos-em-salvador-no-domingo-29%2F&texto=Caminhada+Nacional+do+Samba+re%C3%BAne+nove+trios+el%C3%A9tricos+em+Salvador+no+domingo+%2829%29%0ALocal%3A+Salvador%2C+BA%0AVe%C3%ADculo%3A+Al%C3%B4+Al%C3%B4+Bahia+%C2%B7+2026-11-24+10%3A27+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.metro1.com.br%2Fnoticias%2Fcultura%2F191878%2Cnove-blocos-participam-da-caminhada-nacional-do-samba-em-salvador-veja-atracoes%0Ahttps%3A%2F%2Fbahiaeconomica.com.br%2Fsalvador%2Fcaminhada-do-samba-tera-nove-trios-eletricos-em-salvador-neste-domingo-212422",
        "furo": {
-        "semPortalHa": "18 h 06"
+        "semPortalHa": "18 h 11"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -2145,41 +2212,42 @@
       },
       {
        "primeiroANoticiar": {
-        "veiculo": "Assembleia Legislativa de Mato Grosso do Sul",
-        "hora": "12:42"
+        "veiculo": "VEJA",
+        "hora": "03:13"
        },
-       "id": "d964e58edf7a",
+       "id": "b7298b93ee2e",
        "pot": {
-        "nota": 25,
+        "nota": 59,
         "faixa": "opcional",
         "provisoria": false,
-        "rotulo": "25% · opcional",
-        "motivo": "2 veículos"
+        "rotulo": "59% · opcional",
+        "motivo": "veículo grande (VEJA) · 2 veículos · tema: filme · pessoa famosa: ALCIONE"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=25&faixa=opcional&titulo=Banda+Samba+Pop+%C3%A9+a+atra%C3%A7%C3%A3o+do+programa+Talento+Regional&noticia=https%3A%2F%2Facritica.net%2Fcultura%2Fbanda-samba-pop-programa-talento-regional-alems%2F&texto=Banda+Samba+Pop+%C3%A9+a+atra%C3%A7%C3%A3o+do+programa+Talento+Regional%0ALocal%3A+Nacional+%28sem+cidade%29%0AVe%C3%ADculo%3A+A+Cr%C3%ADtica+de+Campo+Grande+%C2%B7+2026-11-24+15%3A21+%28Bras%C3%ADlia%29&links=http%3A%2F%2Fwww.al.ms.gov.br%2FNoticias%2F146180",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=59&faixa=opcional&titulo=GABY+AMARANTOS+VAI+INTERPRETAR+ALCIONE+EM+FILME+SOBRE+A+HIST%C3%93RIA+DA+RAINHA+DO+SAMBA&noticia=https%3A%2F%2Frevistaraca.com.br%2Fgaby-amarantos-vai-interpretar-alcione-em-filme-sobre-a-historia-da-rainha-do-samba%2F&texto=GABY+AMARANTOS+VAI+INTERPRETAR+ALCIONE+EM+FILME+SOBRE+A+HIST%C3%93RIA+DA+RAINHA+DO+SAMBA%0ALocal%3A+S%C3%A3o+Lu%C3%ADs%2C+MA%0AVe%C3%ADculo%3A+Revista+Ra%C3%A7a+Brasil+%C2%B7+2026-11-24+15%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fveja.abril.com.br%2Fcultura%2Fgaby-amarantos-vai-interpretar-alcione-em-cinebiografia%2F",
        "furo": {
-        "semPortalHa": "15 h 52"
+        "antes": null,
+        "portal": "VEJA"
        },
-       "local": "Nacional (sem cidade)",
-       "semCidadeMotivo": "matéria lida (5 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "titulo": "Banda Samba Pop é a atração do programa Talento Regional",
-       "link": "https://acritica.net/cultura/banda-samba-pop-programa-talento-regional-alems/",
-       "veiculo": "A Crítica de Campo Grande",
-       "dominio": "acritica.net",
-       "publicado": "2026-11-24T15:21",
-       "primeiroVisto": "2026-11-24T12:55",
+       "local": "São Luís, MA",
+       "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 6",
+       "titulo": "GABY AMARANTOS VAI INTERPRETAR ALCIONE EM FILME SOBRE A HISTÓRIA DA RAINHA DO SAMBA",
+       "link": "https://revistaraca.com.br/gaby-amarantos-vai-interpretar-alcione-em-filme-sobre-a-historia-da-rainha-do-samba/",
+       "veiculo": "Revista Raça Brasil",
+       "dominio": "revistaraca.com.br",
+       "publicado": "2026-11-24T15:00",
+       "primeiroVisto": "2026-11-20T15:09",
        "fontes": 2,
        "confirmado": true,
        "quente": false,
        "regiao": "br",
-       "regiaoMotivo": "Brasil: campo grande",
+       "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1; parágrafo 6",
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [
         {
-         "veiculo": "Assembleia Legislativa de Mato Grosso do Sul",
-         "titulo": "Samba Pop leva alegria e originalidade ao programa Talento Regional",
-         "link": "http://www.al.ms.gov.br/Noticias/146180"
+         "veiculo": "VEJA",
+         "titulo": "Gaby Amarantos vai interpretar Alcione em cinebiografia",
+         "link": "https://veja.abril.com.br/cultura/gaby-amarantos-vai-interpretar-alcione-em-cinebiografia/"
         }
        ],
        "via": "Google Notícias: samba (Portugal)"
@@ -2199,7 +2267,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=49&faixa=opcional&titulo=Shows+de+Mumuzinho+e+Zeca+Baleiro+marcam+festival+gratuito+na+antiga+capital&noticia=https%3A%2F%2Fwww.diariodeaparecida.com.br%2F2026%2F11%2F24%2Fshows-de-mumuzinho-e-zeca-baleiro-marcam-festival-gratuito-na-antiga-capital%2F&texto=Shows+de+Mumuzinho+e+Zeca+Baleiro+marcam+festival+gratuito+na+antiga+capital%0ALocal%3A+Goi%C3%A1s%2C+GO%0AVe%C3%ADculo%3A+Diario+de+Aparecida+%C2%B7+2026-11-24+12%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fpanoramagocomunicacao.com.br%2Fcidade-de-goias-reune-gastronomia-mumuzinho-e-zeca-baleiro-em-festival-gratuito%2F",
        "furo": {
-        "semPortalHa": "35 h 54"
+        "semPortalHa": "35 h 59"
        },
        "local": "Goiás, GO",
        "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 7",
@@ -2240,7 +2308,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Estrela+do+Terceiro+Mil%C3%AAnio+abre+vagas+para+nova+ala+com+ensaios+na+F%C3%A1brica+do+Samba%2C+na+Barra+Funda&noticia=https%3A%2F%2Fwww.agitossp.com.br%2Festrela-do-terceiro-milenio-abre-vagas-para-nova-ala-com-ensaios-na-fabrica-do-samba-na-barra-funda%2F&texto=Estrela+do+Terceiro+Mil%C3%AAnio+abre+vagas+para+nova+ala+com+ensaios+na+F%C3%A1brica+do+Samba%2C+na+Barra+Funda%0ALocal%3A+Barra+Funda%2C+RS%0AVe%C3%ADculo%3A+Agitossp+%C2%B7+2026-11-24+10%3A35+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fsrzd.com%2Fblog%2Fcarnaval%2Fsao-paulo%2Fterceiro-milenio-abre-vagas-para-ala-com-ensaios-na-fabrica-do-samba%2F",
        "furo": {
-        "semPortalHa": "38 h 47"
+        "semPortalHa": "38 h 53"
        },
        "local": "Barra Funda, RS",
        "localComo": "título/resumo: título; resumo",
@@ -2281,7 +2349,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=47&faixa=opcional&titulo=Salvador+recebe+encontro+nacional+de+samba+de+gafieira+com+cerca+de+200+participantes&noticia=https%3A%2F%2Fwww.bahianoticias.com.br%2Fbnhall%2Fnoticia%2F11383-salvador-recebe-encontro-nacional-de-samba-de-gafieira-com-cerca-de-200-participantes&texto=Salvador+recebe+encontro+nacional+de+samba+de+gafieira+com+cerca+de+200+participantes%0ALocal%3A+Salvador%2C+BA%0AVe%C3%ADculo%3A+Bahia+Not%C3%ADcias+%C2%B7+2026-11-23+08%3A20+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "44 h 14"
+        "semPortalHa": "44 h 19"
        },
        "local": "Salvador, BA",
        "localComo": "título/resumo: título; resumo",
@@ -2322,7 +2390,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=S%C3%A3o+Vicente%3A+Escola+de+Samba+Tropical+homenageia+Isaura+Gomes+no+Carnaval+202&noticia=https%3A%2F%2Fexpressodasilhas.cv%2Fcultura%2F2026%2F11%2F23%2Fsao-vicente-escola-de-samba-tropical-homenageia-isaura-gomes-no-carnaval-202%2F105653&texto=S%C3%A3o+Vicente%3A+Escola+de+Samba+Tropical+homenageia+Isaura+Gomes+no+Carnaval+202%0ALocal%3A+S%C3%A3o+Vicente%2C+RN%0AVe%C3%ADculo%3A+Expresso+das+Ilhas+%C2%B7+2026-11-23+06%3A21+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "46 h 13"
+        "semPortalHa": "46 h 18"
        },
        "local": "São Vicente, RN",
        "localComo": "título/resumo: título; resumo",
@@ -2377,6 +2445,37 @@
        "via": "Google Notícias: roda de samba"
       },
       {
+       "id": "850a89a0d549",
+       "pot": {
+        "nota": 41,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 41% provisória · opcional",
+        "motivo": "veículo grande (O Tempo) · tema: filme · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "12 h 08"
+       },
+       "local": "Salvador, BA",
+       "localComo": "matéria (sitemap do veículo): parágrafo 4; parágrafo 18",
+       "titulo": "50 anos de 'Dona Flor e Seus Dois Maridos': filme desafiou a ditadura ao misturar tesão e samba",
+       "link": "https://www.otempo.com.br/entretenimento/2026/11/24/50-anos-de-dona-flor-e-seus-dois-maridos-filme-desafiou-a-ditadura-ao-misturar-tesao-e-samba",
+       "veiculo": "O Tempo",
+       "dominio": "otempo.com.br",
+       "publicado": "2026-11-24T16:31",
+       "primeiroVisto": "2026-11-24T17:27",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: matéria (sitemap do veículo): parágrafo 4; parágrafo 18",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: samba (Portugal)"
+      },
+      {
        "id": "1d23d5ecc05d",
        "pot": {
         "nota": 44,
@@ -2387,7 +2486,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "12 h 35"
+        "semPortalHa": "12 h 40"
        },
        "local": "Vitória, ES",
        "localComo": "matéria (RSS do veículo): parágrafo 11 (com UF)",
@@ -2418,7 +2517,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "14 h 06"
+        "semPortalHa": "14 h 11"
        },
        "local": "Sete Lagoas, MG",
        "localComo": "título/resumo: título; resumo",
@@ -2437,68 +2536,6 @@
        "linkDireto": true,
        "tambemEm": [],
        "via": "Google Notícias: sambista"
-      },
-      {
-       "id": "089fca20acf7",
-       "pot": {
-        "nota": 19,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 19% provisória · opcional",
-        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "furo": {
-        "semPortalHa": "14 h 16"
-       },
-       "local": "Prado, BA",
-       "localComo": "título/resumo: título; resumo",
-       "titulo": "Edição Verão do Samba Amigos da Pracinha reune música, alegria e solidariedade no bairro do Prado",
-       "link": "https://www.alagoas24horas.com.br/1776604/edicao-verao-do-samba-amigos-da-pracinha-reune-musica-alegria-e-solidariedade-no-bairro-do-prado/",
-       "veiculo": "Alagoas 24 Horas",
-       "dominio": "alagoas24horas.com.br",
-       "publicado": "2026-11-24T14:18",
-       "primeiroVisto": "2026-11-24T11:36",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade: título/resumo: título; resumo",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: roda de samba"
-      },
-      {
-       "id": "1a6c6001b724",
-       "pot": {
-        "nota": 19,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 19% provisória · opcional",
-        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "furo": {
-        "semPortalHa": "14 h 57"
-       },
-       "local": "Salvador, BA",
-       "localComo": "título/resumo: título; resumo",
-       "titulo": "Samba Eu, Você e Sua Mãe retoma agenda em Salvador após reencontro em casa lotada",
-       "link": "https://aloalobahia.com/alo-alo-agenda/2026/11/24/samba-eu-voce-e-sua-mae-retoma-agenda-em-salvador-apos-reencontro-em-casa-lotada/",
-       "veiculo": "Alô Alô Bahia",
-       "dominio": "aloalobahia.com",
-       "publicado": "2026-11-24T13:36",
-       "primeiroVisto": "2026-11-24T13:39",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "cidade: título/resumo: título; resumo",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: samba (Portugal)"
       }
      ]
     },
@@ -2516,7 +2553,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 12"
+        "semPortalHa": "10 h 17"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "matéria (Bing Notícias (título exato, outro veículo)): país citado \"サンバ\", cidade não citada",
@@ -2550,7 +2587,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "5 h 01"
+        "semPortalHa": "5 h 06"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2583,7 +2620,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 29"
+        "semPortalHa": "11 h 34"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2618,7 +2655,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "17 h 59"
+        "semPortalHa": "18 h 04"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2651,7 +2688,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "21 h 45"
+        "semPortalHa": "21 h 50"
        },
        "local": "Japão (cidade não citada)",
        "localComo": "título escrito em japonês (cidade não citada)",
@@ -2694,7 +2731,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "7 h 03"
+        "semPortalHa": "7 h 08"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -2725,7 +2762,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "9 h 42"
+        "semPortalHa": "9 h 47"
        },
        "local": "São Paulo, SP",
        "localComo": "título/resumo: título (com UF); resumo (com UF)",
@@ -2756,7 +2793,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 18"
+        "semPortalHa": "10 h 23"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (página inicial do veículo): meta geo; parágrafo 1 (com UF)",
@@ -2793,7 +2830,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=61&faixa=opcional&titulo=Belo%2C+Pixote+e+Rodriguinho+se+re%C3%BAnem+para+show+em+SP&noticia=https%3A%2F%2Fabcdoabc.com.br%2Fbelo-pixote-e-rodriguinho-para-show-em-sp%2F&texto=Belo%2C+Pixote+e+Rodriguinho+se+re%C3%BAnem+para+show+em+SP%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Portal+ABC+do+ABC+%C2%B7+2026-11-24+14%3A59+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fabcagora.com.br%2F2026%2F11%2F23%2Fbelo-pixote-rodriguinho-marquinhos-sp%2F%0Ahttps%3A%2F%2Fcadernopop.com.br%2Fsomos-90-reune-belo-pixote-rodriguinho-e-marquinhos-sensacao-no-nubank-parque%2F%0Ahttps%3A%2F%2Fwww.msn.com%2Fpt-br%2Fmusica%2Fnoticias%2Fbelo-pixote-rodriguinho-e-marquinhos-sensa%25C3%25A7%25C3%25A3o-se-re%25C3%25BAnem-em-show-in%25C3%25A9dito-na-onda-de-nostalgia-do-pagode-90%2Far-AA2954Qv",
        "furo": {
-        "semPortalHa": "33 h 41"
+        "semPortalHa": "33 h 46"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (página inicial do veículo): parágrafo 2; descrição da página",
@@ -2964,7 +3001,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "32 h 09"
+        "semPortalHa": "32 h 15"
        },
        "local": "Hortolândia, SP",
        "localComo": "título/resumo: título; resumo",
@@ -2995,7 +3032,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "36 h 01"
+        "semPortalHa": "36 h 06"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (página inicial do veículo): parágrafo 1; descrição da página",
@@ -3026,7 +3063,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "43 h 16"
+        "semPortalHa": "43 h 21"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 9; parágrafo 11",
@@ -3062,7 +3099,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "10 h 32"
+        "semPortalHa": "10 h 37"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"no Rio\"); resumo (\"no Rio\")",
@@ -3095,7 +3132,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "12 h 30"
+        "semPortalHa": "12 h 36"
        },
        "local": "São Gonçalo, RJ",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 3",
@@ -3126,7 +3163,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "24 h 09"
+        "semPortalHa": "24 h 14"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (lugar: madureira); resumo (lugar: madureira)",
@@ -3213,7 +3250,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "42 h 34"
+        "semPortalHa": "42 h 39"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "matéria (link direto): parágrafo 3 (lugar: ramos); parágrafo 7 (lugar: ramos)",
@@ -3249,7 +3286,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "7 h 46"
+        "semPortalHa": "7 h 51"
        },
        "local": "Rio Verde, GO",
        "localComo": "título/resumo: título (com UF); resumo (com UF)",
@@ -3280,7 +3317,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 23"
+        "semPortalHa": "11 h 28"
        },
        "local": "Belo Horizonte, MG",
        "localComo": "título/resumo: título; resumo",
@@ -3311,7 +3348,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "11 h 46"
+        "semPortalHa": "11 h 51"
        },
        "local": "Manaus, AM",
        "localComo": "título/resumo: título; resumo",
@@ -3335,20 +3372,20 @@
      "itens": [
       {
        "primeiroANoticiar": {
-        "veiculo": "Tribuna do Agreste",
-        "hora": "15:02"
+        "veiculo": "Virgula",
+        "hora": "09:10"
        },
        "id": "b38491ea53c9",
        "pot": {
-        "nota": 65,
+        "nota": 68,
         "faixa": "opcional",
         "provisoria": false,
-        "rotulo": "65% · opcional",
-        "motivo": "2 veículos · tema forte: lança · pessoa famosa: Di Propósito"
+        "rotulo": "68% · opcional",
+        "motivo": "3 veículos · tema forte: lança · pessoa famosa: Di Propósito"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=65&faixa=opcional&titulo=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.&noticia=https%3A%2F%2Freportermaceio.com.br%2Fdi-proposito-lanca-novo-bloco-de-feliz-no-simples-2-com-colaboracao-de-diego-e-victor-hugo-em-musica-que-une-pagode-e-sertanejo%2F&texto=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.%0ALocal%3A+Macei%C3%B3%2C+AL+%28pelo+ve%C3%ADculo%29%0AVe%C3%ADculo%3A+Rep%C3%B3rter+Macei%C3%B3+%C2%B7+2026-11-24+15%3A19+%28Bras%C3%ADlia%29",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=68&faixa=opcional&titulo=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.&noticia=https%3A%2F%2Freportermaceio.com.br%2Fdi-proposito-lanca-novo-bloco-de-feliz-no-simples-2-com-colaboracao-de-diego-e-victor-hugo-em-musica-que-une-pagode-e-sertanejo%2F&texto=Di+Prop%C3%B3sito+Lan%C3%A7a+Novo+Bloco+de+%22Feliz+no+Simples+2%22+com+Colabora%C3%A7%C3%A3o+de+Diego+e+Victor+Hugo+em+M%C3%BAsica+que+Une+Pagode+e+Sertanejo.%0ALocal%3A+Macei%C3%B3%2C+AL+%28pelo+ve%C3%ADculo%29%0AVe%C3%ADculo%3A+Rep%C3%B3rter+Macei%C3%B3+%C2%B7+2026-11-24+15%3A19+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fvirgula.me%2Fmusica%2Fgrupo-di-proposito-lanca-terceiro-bloco-do-projeto-feliz-no-simples-2%2F",
        "furo": {
-        "semPortalHa": "13 h 32"
+        "semPortalHa": "43 h 29"
        },
        "local": "Maceió, AL (pelo veículo)",
        "localComo": "cidade do veículo regional (reportermaceio.com.br); a matéria não cita a cidade",
@@ -3358,7 +3395,7 @@
        "dominio": "reportermaceio.com.br",
        "publicado": "2026-11-24T15:19",
        "primeiroVisto": "2026-11-23T09:19",
-       "fontes": 2,
+       "fontes": 3,
        "confirmado": true,
        "quente": false,
        "regiao": "br",
@@ -3366,6 +3403,11 @@
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [
+        {
+         "veiculo": "Virgula",
+         "titulo": "Grupo Di Propósito lança terceiro bloco do projeto \"Feliz no Simples 2\"",
+         "link": "https://virgula.me/musica/grupo-di-proposito-lanca-terceiro-bloco-do-projeto-feliz-no-simples-2/"
+        },
         {
          "veiculo": "Tribuna do Agreste",
          "titulo": "Di Propósito lança “Pena” com Diego e Victor Hugo em novo bloco de “Feliz no Simples 2”",
@@ -3389,7 +3431,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=Jo%C3%A3o+Gomes%2C+Menos+%C3%A9+Mais%2C+Gusttavo+Lima+e+Jorge+%26+Mateus+e+mais+no+ver%C3%A3o+2027+em+Guarapari&noticia=https%3A%2F%2Feshoje.com.br%2Fentretenimento%2F2026%2F11%2Fagenda-verao-2027-em-guarapari%2F&texto=Jo%C3%A3o+Gomes%2C+Menos+%C3%A9+Mais%2C+Gusttavo+Lima+e+Jorge+%26+Mateus+e+mais+no+ver%C3%A3o+2027+em+Guarapari%0ALocal%3A+Guarapari%2C+ES%0AVe%C3%ADculo%3A+ES+Hoje+%C2%B7+2026-11-24+14%3A20+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "43 h 44"
+        "semPortalHa": "43 h 49"
        },
        "local": "Guarapari, ES",
        "localComo": "título/resumo: título; resumo",
@@ -3471,7 +3513,7 @@
        },
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=49&faixa=opcional&titulo=Chrigor+em+Jo%C3%A3o+Pessoa%3A+show+de+pagode+ser%C3%A1+em+20+de+dezembro&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMioAFBVV95cUxONU5TM191Z2QteTJDc1VacG5QaU9WS3NCVkxKYlNVbUpjLUVDX1JZQ3Fzdkg3WTRtSXhRSGp6Yjc1TndZdDlLb0V6dld4Y213VHpBekZyZjZpY3hJb3kyTVR1M3RCSTZMLUdxenJGV3M5WTUxTnJianVndS16SEtiZkF3ejd6eDlEZnQ3TWtiT3UxejZ5WHZpVndDQWtZckl6%3Foc%3D5&texto=Chrigor+em+Jo%C3%A3o+Pessoa%3A+show+de+pagode+ser%C3%A1+em+20+de+dezembro%0ALocal%3A+Jo%C3%A3o+Pessoa%2C+PB%0AVe%C3%ADculo%3A+WSCOM+%C2%B7+2026-11-23+17%3A54+%28Bras%C3%ADlia%29",
        "furo": {
-        "semPortalHa": "36 h"
+        "semPortalHa": "36 h 06"
        },
        "local": "João Pessoa, PB",
        "localComo": "título/resumo: título; resumo",
@@ -3535,7 +3577,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "13 h"
+        "semPortalHa": "13 h 05"
        },
        "local": "Mato Grosso (estado; cidade não citada)",
        "localComo": "estado citado no texto: \"em MT\"",
@@ -3567,7 +3609,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "15 h 11"
+        "semPortalHa": "15 h 17"
        },
        "local": "Criciúma, SC",
        "localComo": "matéria (RSS do veículo): parágrafo 2; descrição da página",
@@ -3598,7 +3640,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "39 h 49"
+        "semPortalHa": "39 h 55"
        },
        "local": "Santos Dumont, MG",
        "localComo": "matéria (página inicial do veículo): parágrafo 2; parágrafo 4",
@@ -3629,7 +3671,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "40 h 23"
+        "semPortalHa": "40 h 28"
        },
        "local": "Uberlândia, MG",
        "localComo": "título/resumo: título; resumo",
@@ -3650,6 +3692,68 @@
        "via": "Google Notícias: pagode em SP"
       },
       {
+       "id": "fec90444f5e8",
+       "pot": {
+        "nota": 16,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 16% provisória · opcional",
+        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "41 h 14"
+       },
+       "local": "Bahia (estado; cidade não citada)",
+       "localComo": "estado citado no texto: \"da bahia\"",
+       "semCidadeMotivo": "matéria lida (9 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
+       "titulo": "Game Music leva força do seu casting exclusivo à Micareta de Feira 2026 com grandes nomes do pagode",
+       "link": "https://gnoticia.com.br/game-music-leva-forca-do-seu-casting-exclusivo-a-micareta-de-feira-2026-com-grandes-nomes-do-pagode/",
+       "veiculo": "Gnoticia",
+       "dominio": "gnoticia.com.br",
+       "publicado": "2026-11-23T11:24",
+       "primeiroVisto": "2026-11-21T08:27",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "sem local no texto, padrão Brasil",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: gravação de DVD/audiovisual"
+      },
+      {
+       "id": "283035fe124d",
+       "pot": {
+        "nota": 44,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 44% provisória · opcional",
+        "motivo": "tema forte: lança · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "furo": {
+        "semPortalHa": "16 h 47"
+       },
+       "local": "Belo Horizonte, MG",
+       "localComo": "título/resumo: título; resumo",
+       "titulo": "[Agenda Funarte MG] Santijor lança projeto audiovisual com show gratuito em Belo Horizonte",
+       "link": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxNNWxfZDNDb1VCYWNiY01KVWhZbjdRYm95TzBNUGhmMEpDTGVzWU8wSk1DNHgzYW05X1NOX2Z3VXpxWmFldlhSeWl4WGNhTjJjQU9pbHA4Sm9VbVBQRVprckxyZzBWWXNkSmNWZS1DNVdaT0dnUFphNTBhU0RfMk84ZWVWNGZEanpFQ1p3Mm5vbEpOYTFKQ1V1M2NMQnRLQS1XSjYySnY3U2NyWDd3VUJ3ZDlDcy1yNGwwM1p5NmlNSENxV0MzSlBxYTFGNHVqaHdyOXVzRWhlX2J4TGxRWndsVVhSVHZJYUtFQnc?oc=5",
+       "veiculo": "Governo Federal",
+       "dominio": "gov.br",
+       "publicado": "2026-11-24T11:51",
+       "primeiroVisto": "2026-11-24T12:16",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "br",
+       "regiaoMotivo": "cidade: título/resumo: título; resumo",
+       "categoria": "Música",
+       "tambemEm": [],
+       "via": "Google Notícias: cultura e editais"
+      },
+      {
        "id": "33a227451428",
        "pot": {
         "nota": 34,
@@ -3660,7 +3764,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "13 h 34"
+        "semPortalHa": "13 h 39"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (14 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -3692,7 +3796,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "44 h 04"
+        "semPortalHa": "44 h 09"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (5 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -3724,7 +3828,7 @@
        },
        "emApuracao": true,
        "furo": {
-        "semPortalHa": "16 h 44"
+        "semPortalHa": "16 h 49"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -3771,62 +3875,6 @@
        "categoria": "Música",
        "tambemEm": [],
        "via": "Google Notícias: pagode"
-      },
-      {
-       "id": "d2f0f709d5bf",
-       "pot": {
-        "nota": 51,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 51% provisória · opcional",
-        "motivo": "veículo grande (R7) · tema forte: record · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "local": "cidade não identificada",
-       "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "titulo": "Novas imagens mostram cantor de pagode com vítima antes de denúncia de estupro – Record",
-       "link": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxPUFV2LXZEdlhQSlRKYUt5NFBSM0s1NW05N1RrZWthUktPWEpZYzU2R2FYRl9OSW1OMXlRbTQ3TjNKaDJvRTRpQ21sTG1ycXF1eEtPUDhFMXYtVUVMZVFrUmVmN0VnX1ZGSHVON2Y5RlV2U3FyNHVJVWlyX2VvZ3g2Wm5ERUNPUE5tOXZXS1hsWVBVSE5NZzBJYVFMR3hiQ0lpdjJGYkd0cEtQRnFyVHcxd2ZuZjZBQ3lTWEd2YUtmdWJKdEk?oc=5",
-       "veiculo": "R7",
-       "dominio": "r7.com",
-       "publicado": "2026-11-23T09:56",
-       "primeiroVisto": "2026-11-23T11:32",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "sem local no texto, padrão Brasil (SP: busca pagode em SP)",
-       "localIncerto": true,
-       "categoria": "Música",
-       "tambemEm": [],
-       "via": "Google Notícias: pagode em SP"
-      },
-      {
-       "id": "128da05377d4",
-       "pot": {
-        "nota": 41,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 41% provisória · opcional",
-        "motivo": "veículo grande (Gshow) · pessoa famosa: Thiaguinho · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "local": "cidade não identificada",
-       "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
-       "titulo": "Carol Peixinho revela por que vai remover tatuagem após 11 anos e fala de planos de casar com Thiaguinho",
-       "link": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxNbDg1WDRDbm1nZlJYcUhNY0J2MmJoT2l4YllCcGZCYmFuRDFJM052bzF2aWppOXU5OFl6T0Naa0gtU0dyRUcyQnpyUHcxcW5FYzJHZDRlQWRDdUJMaDI2N3I2VldfV1Rrb0xzZHU4bThQVkVTaWhnaGU3a2pKdGh5eHhYQWV2QzI5MEpOZHdBdmlaUEp3UnplYi1hMmp3bExObVJHeU9jZFp5TFdGOFJmdWtjY25seWJaVTlVZXRWVG5yS2lTa0Foel9wR25BMlZNWG1famdYZnppckdCT0Fud3pEdmV4S09QNEpILXFpT3psc0NNeEl5OHZTamJ3ZzDSAY4CQVVfeXFMTjB3ODlvVHdXclVZckRCTzNSblVIRzc2THdYd2FJbXVlMkU4eVYzUG9DUzRheDFUcjlDLUp4OG9UQ3pNX0dUQWU5STNkNkhGTE9rSFVoY2pvM19kSkJGTXJXcWZSZmUyZklZOFROdkkxWFRMNW9sMEk1Wjc1RDlTWElCYzN0V3lyY3hIbXBzTjc4SkdBNGQwTDZGWWtDSGt5MGZkU2VFRVc0djNSa1gzaVdEeVBzdmxERVdLbjR5R0JWbVh0ci13ckYxM2xMM2pzLWh3aXd2LUpsOXV3SDFHdmNPRzVXa2hVYkczRWRvYmZrdERlSUNSM3JSWVhVdGNpZUlHb2U4eHFaTEFjQVVn?oc=5",
-       "veiculo": "Gshow",
-       "dominio": "gshow.globo.com",
-       "publicado": "2026-11-23T06:00",
-       "primeiroVisto": "2026-11-23T06:11",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "br",
-       "regiaoMotivo": "sem local no texto, padrão Brasil",
-       "localIncerto": true,
-       "categoria": "Música",
-       "tambemEm": [],
-       "via": "Google Notícias: artistas anunciam"
       }
      ]
     },
@@ -3859,7 +3907,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=28&faixa=opcional&titulo=Santos+Bravos+prometem+m%C3%BAsicas+in%C3%A9ditas+no+Lollapalooza+Brasil&noticia=https%3A%2F%2Fconexaopop.com.br%2Fsantos-bravos-prometem-musicas-ineditas-no-lollapalooza-brasil%2F&texto=Santos+Bravos+prometem+m%C3%BAsicas+in%C3%A9ditas+no+Lollapalooza+Brasil%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Conex%C3%A3o+POP+%C2%B7+2026-11-24+22%3A04+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fportalpopline.com.br%2Fsantos-bravos-lollapalooza-musicas-novas-origami-entrevista%2F",
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "39 h 26"
+        "semPortalHa": "39 h 32"
        },
        "local": "São Paulo, SP",
        "localComo": "mesmo fato em POPLine: matéria (RSS do veículo): parágrafo 2; parágrafo 8",
@@ -3902,7 +3950,7 @@
        "emApuracao": true,
        "djf": "festival: Primavera Sound",
        "furo": {
-        "semPortalHa": "8 h 52"
+        "semPortalHa": "8 h 57"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 3 (lugar: pinheiros); parágrafo 4 (lugar: pinheiros)",
@@ -3934,7 +3982,7 @@
        "emApuracao": true,
        "djf": "festival: Primavera Sound",
        "furo": {
-        "semPortalHa": "9 h 34"
+        "semPortalHa": "9 h 40"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1",
@@ -3969,7 +4017,7 @@
         "rotulo": "62% · opcional",
         "motivo": "veículo grande (Billboard Brasil) · 13 veículos · tema: festival"
        },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=12&nota=62&faixa=opcional&titulo=Primavera+Sound+SP+2026%3A+ousadia+%C3%A9+o+caminho+do+festival&noticia=https%3A%2F%2Fbillboard.com.br%2Fprimavera-sound-sp-2026-ousadia-caminho%2F&texto=Primavera+Sound+SP+2026%3A+ousadia+%C3%A9+o+caminho+do+festival%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Billboard+Brasil+%C2%B7+2026-11-23+12%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fpop-arte%2Fmusica%2Fnoticia%2F2026%2F11%2F25%2Fcomo-e-o-show-atual-do-gorillaz-headliner-do-primavera-sound-sao-paulo-2026.ghtml%0Ahttps%3A%2F%2Fvejasp.abril.com.br%2Fcultura-lazer%2Fprimavera-sound-saiba-como-chegar-e-voltar-do-festival-de-trem-e-metro%2F%0Ahttps%3A%2F%2Fwww.pretessencias.com.br%2Fmusica%2Fprimavera-sound-sao-paulo-divulga-os-horarios-das-apresentacoes-do-line-up-2026%2F",
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=12&nota=62&faixa=opcional&titulo=Primavera+Sound+SP+2026%3A+ousadia+%C3%A9+o+caminho+do+festival&noticia=https%3A%2F%2Fbillboard.com.br%2Fprimavera-sound-sp-2026-ousadia-caminho%2F&texto=Primavera+Sound+SP+2026%3A+ousadia+%C3%A9+o+caminho+do+festival%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Billboard+Brasil+%C2%B7+2026-11-23+12%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fg1.globo.com%2Fpop-arte%2Fmusica%2Fnoticia%2F2026%2F11%2F25%2Fcomo-e-o-show-atual-do-gorillaz-headliner-do-primavera-sound-sao-paulo-2026.ghtml%0Ahttps%3A%2F%2Fwww.radiorock.com.br%2Fnoticias%2Fprimavera-sound-2026-tera-estacao-exclusiva%0Ahttps%3A%2F%2Fvejasp.abril.com.br%2Fcultura-lazer%2Fprimavera-sound-saiba-como-chegar-e-voltar-do-festival-de-trem-e-metro%2F",
        "djf": "festival: Primavera Sound",
        "furo": {
         "antes": "31 h 33",
@@ -3998,6 +4046,11 @@
          "link": "https://g1.globo.com/pop-arte/musica/noticia/2026/11/25/como-e-o-show-atual-do-gorillaz-headliner-do-primavera-sound-sao-paulo-2026.ghtml"
         },
         {
+         "veiculo": "89 A Rádio Rock",
+         "titulo": "Primavera Sound 2026 terá estação exclusiva e Expresso com passaporte de R$ 35",
+         "link": "https://www.radiorock.com.br/noticias/primavera-sound-2026-tera-estacao-exclusiva"
+        },
+        {
          "veiculo": "G1",
          "titulo": "Como é o show atual do Gorillaz, headliner do Primavera Sound São Paulo 2026",
          "link": "https://g1.globo.com/pop-arte/musica/noticia/2026/11/25/como-e-o-show-atual-do-gorillaz-headliner-do-primavera-sound-sao-paulo-2026.ghtml"
@@ -4006,11 +4059,6 @@
          "veiculo": "VEJA SÃO PAULO",
          "titulo": "Primavera Sound: saiba como chegar e voltar do festival de trem e metrô",
          "link": "https://vejasp.abril.com.br/cultura-lazer/primavera-sound-saiba-como-chegar-e-voltar-do-festival-de-trem-e-metro/"
-        },
-        {
-         "veiculo": "Pretessências",
-         "titulo": "Primavera Sound São Paulo divulga os horários das apresentações do line up 2026",
-         "link": "https://www.pretessencias.com.br/musica/primavera-sound-sao-paulo-divulga-os-horarios-das-apresentacoes-do-line-up-2026/"
         }
        ],
        "via": "Google Notícias: festivais 2"
@@ -4141,7 +4189,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=40&faixa=opcional&titulo=Primavera+Sound+S%C3%A3o+Paulo+divulga+hor%C3%A1rios+e+perde+o+Nation+of+Language&noticia=https%3A%2F%2Fratodeshow.com.br%2Fprimavera-sound-sao-paulo-divulga-horarios-e-perde-o-nation-of-language&texto=Primavera+Sound+S%C3%A3o+Paulo+divulga+hor%C3%A1rios+e+perde+o+Nation+of+Language%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Rato+de+Show+%C2%B7+2026-11-23+05%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.pretessencias.com.br%2Fmusica%2Fprimavera-sound-sao-paulo-divulga-os-horarios-das-apresentacoes-do-line-up-2026%2F%0Ahttps%3A%2F%2Fwww.trambicast.com.br%2F2026%2F11%2Fprimavera-sound-2026-horarios-ingressos.html",
        "djf": "festival: Primavera Sound São Paulo",
        "furo": {
-        "semPortalHa": "47 h 34"
+        "semPortalHa": "47 h 39"
        },
        "local": "São Paulo, SP",
        "localComo": "mesmo fato em Trambicast: matéria (página inicial do veículo): parágrafo 9 (lugar: pinheiros); parágrafo 10 (lugar: barra funda)",
@@ -4188,7 +4236,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Lollapalooza+Brasil+2027+destaca+artistas+em+ascens%C3%A3o+e+shows+exclusivos+em+edi%C3%A7%C3%A3o+de+15+anos&noticia=https%3A%2F%2Fcadernopop.com.br%2Flollapalooza-brasil-2027-destaca-artistas-em-ascensao-e-shows-exclusivos-em-sua-edicao-de-15-anos%2F&texto=Lollapalooza+Brasil+2027+destaca+artistas+em+ascens%C3%A3o+e+shows+exclusivos+em+edi%C3%A7%C3%A3o+de+15+anos%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Caderno+Pop+%C2%B7+2026-11-23+15%3A30+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.trambicast.com.br%2F2026%2F11%2Flollapalooza-brasil-2027-atracoes.html",
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "40 h 36"
+        "semPortalHa": "40 h 41"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -4226,7 +4274,7 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "14 h 13"
+        "semPortalHa": "14 h 18"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1; parágrafo 6",
@@ -4258,7 +4306,7 @@
        "emApuracao": true,
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "20 h 17"
+        "semPortalHa": "20 h 23"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -4290,7 +4338,7 @@
        "emApuracao": true,
        "djf": "dj: Marshmello",
        "furo": {
-        "semPortalHa": "28 h 27"
+        "semPortalHa": "28 h 32"
        },
        "local": "Pacaembu, SP",
        "localComo": "título/resumo: título; resumo",
@@ -4322,7 +4370,7 @@
        "emApuracao": true,
        "djf": "dj: DJ Marky",
        "furo": {
-        "semPortalHa": "32 h 38"
+        "semPortalHa": "32 h 44"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (página inicial do veículo): parágrafo 8; parágrafo 10",
@@ -4354,7 +4402,7 @@
        "emApuracao": true,
        "djf": "dj: Marshmello",
        "furo": {
-        "semPortalHa": "37 h 31"
+        "semPortalHa": "37 h 36"
        },
        "local": "São Paulo, SP",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -4425,7 +4473,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=Festival+de+Ver%C3%A3o+do+Rio+ocupa+o+Museu+do+Amanh%C3%A3+de+30%2F12+a+3%2F1+com+Alok%2C+Ivete+e+Pabllo&noticia=https%3A%2F%2Fabihrj.com.br%2Fnoticias%2Ffestival-de-verao-do-rio-ocupa-o-museu-do-amanha-de-30-12-a-3-1-com-alok-ivete-e-pabllo&texto=Festival+de+Ver%C3%A3o+do+Rio+ocupa+o+Museu+do+Amanh%C3%A3+de+30%2F12+a+3%2F1+com+Alok%2C+Ivete+e+Pabllo%0ALocal%3A+Rio+de+Janeiro%2C+RJ%0AVe%C3%ADculo%3A+ABIH-RJ+%C2%B7+2026-11-24+12%3A06+%28Bras%C3%ADlia%29",
        "djf": "festival: Festival de Verão Salvador",
        "furo": {
-        "semPortalHa": "16 h 36"
+        "semPortalHa": "16 h 41"
        },
        "local": "Rio de Janeiro, RJ",
        "localComo": "título/resumo: título (\"do Rio\"); resumo (\"do Rio\")",
@@ -4473,7 +4521,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=6&nota=40&faixa=opcional&titulo=Empres%C3%A1rio+do+KISS+diz+que+%C3%A9+poss%C3%ADvel+que+a+banda+toque+no+Rock+in+Rio&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMipwFBVV95cUxQQkJvWmExbEI3QXhRV1RMT2lJbHdTU09MZmxYQTI5NnFLdEt5ODV6X21QOGtLdGZ3ZDdlWmoxSXFnM0NRdWRHTVRHUDZ3bVZRNFp3dk9hcDd2WGVsSjJvQTdrUGF3MVVvS1JHUUhwVDJSUzVJZUNSYWVxT0lDZllMQmxENGN0ZFRaeTNVdDh0QUktQ1NJSFBvMXRqTmhCcjZrVFlBV3ZVOA%3Foc%3D5&texto=Empres%C3%A1rio+do+KISS+diz+que+%C3%A9+poss%C3%ADvel+que+a+banda+toque+no+Rock+in+Rio%0ALocal%3A+Maracan%C3%A3%2C+PA%0AVe%C3%ADculo%3A+Mundo+Livre+FM+%C2%B7+2026-11-24+13%3A38+%28Bras%C3%ADlia%29&links=https%3A%2F%2Frede98.com.br%2Fentretenimento%2Fmusicas%2Fmesmo-apos-fim-das-turnes-em-2023-kiss-nao-descarta-show-no-rock-in-rio-diz-empresario%2F%0Ahttps%3A%2F%2Figormiranda.com.br%2F2026%2F11%2Fkiss-nao-dispensaria-reuniao-para-tocar-no-rock-in-rio-segundo-empresario%2F%0Ahttps%3A%2F%2Fwww.wikimetal.com.br%2Fkiss-nao-descarta-reuniao-show-no-rock-in-rio%2F",
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "43 h 34"
+        "semPortalHa": "43 h 39"
        },
        "local": "Maracanã, PA",
        "localComo": "mesmo fato em Wikimetal: matéria (RSS do veículo): parágrafo 2",
@@ -4533,7 +4581,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=60&faixa=opcional&titulo=Vintage+Culture+e+Ratier+anunciam+b2b+in%C3%A9dito+na+estreia+do+Surreal+Experience%2C+no+Cear%C3%A1&noticia=https%3A%2F%2Fplaybpm.com.br%2Fnoticias%2Fvintage-culture-b2b-ratier-no-surreal-experience%2F&texto=Vintage+Culture+e+Ratier+anunciam+b2b+in%C3%A9dito+na+estreia+do+Surreal+Experience%2C+no+Cear%C3%A1%0ALocal%3A+Cambori%C3%BA%2C+SC%0AVe%C3%ADculo%3A+Play+BPM+%C2%B7+2026-11-24+15%3A20+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fbillboard.com.br%2Fvintage-culture-renato-ratier-b2b%2F",
        "djf": "dj: Vintage Culture",
        "furo": {
-        "semPortalHa": "16 h 30"
+        "semPortalHa": "16 h 36"
        },
        "local": "Camboriú, SC",
        "localComo": "matéria (RSS do veículo): parágrafo 2 (com UF)",
@@ -4571,7 +4619,7 @@
        "emApuracao": true,
        "djf": "festival: Universo Paralello",
        "furo": {
-        "semPortalHa": "17 h 13"
+        "semPortalHa": "17 h 18"
        },
        "local": "Ituberá, BA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1 (com UF); parágrafo 2 (com UF)",
@@ -4603,7 +4651,7 @@
        "emApuracao": true,
        "djf": "dj: Alok",
        "furo": {
-        "semPortalHa": "36 h 35"
+        "semPortalHa": "36 h 41"
        },
        "local": "Tauá, CE",
        "localComo": "título/resumo: título; resumo",
@@ -4634,7 +4682,7 @@
        "emApuracao": true,
        "djf": "dj: Vintage Culture",
        "furo": {
-        "semPortalHa": "38 h 56"
+        "semPortalHa": "39 h 01"
        },
        "local": "Sinop, MT",
        "localComo": "matéria (RSS do veículo): parágrafo 1",
@@ -4666,7 +4714,7 @@
        "emApuracao": true,
        "djf": "festival: Rock in Rio",
        "furo": {
-        "semPortalHa": "43 h 51"
+        "semPortalHa": "43 h 56"
        },
        "local": "Parintins, AM",
        "localComo": "matéria (página inicial do veículo): parágrafo 14",
@@ -4728,7 +4776,7 @@
        "emApuracao": true,
        "djf": "dj: Keinemusik",
        "furo": {
-        "semPortalHa": "17 h 47"
+        "semPortalHa": "17 h 52"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (14 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -4747,7 +4795,7 @@
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [],
-       "via": "Google Notícias: DJs 4"
+       "via": "Google Notícias: DJs 7"
       },
       {
        "id": "af2f7c399e35",
@@ -4791,7 +4839,7 @@
        "emApuracao": true,
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "34 h 55"
+        "semPortalHa": "35 h"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (5 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -4824,7 +4872,7 @@
        "emApuracao": true,
        "djf": "festival: Primavera Sound",
        "furo": {
-        "semPortalHa": "37 h 16"
+        "semPortalHa": "37 h 21"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (5 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -4857,7 +4905,7 @@
        "emApuracao": true,
        "djf": "festival: Lollapalooza Brasil",
        "furo": {
-        "semPortalHa": "40 h 23"
+        "semPortalHa": "40 h 28"
        },
        "local": "Nacional (sem cidade)",
        "semCidadeMotivo": "matéria lida (18 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -4975,55 +5023,6 @@
      "quentes": [
       {
        "primeiroANoticiar": {
-        "veiculo": "Agitossp",
-        "hora": "14:09"
-       },
-       "id": "ec06c6bd7739",
-       "pot": {
-        "nota": 43,
-        "faixa": "opcional",
-        "provisoria": false,
-        "rotulo": "43% · opcional",
-        "motivo": "3 veículos · tema: tour"
-       },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=43&faixa=opcional&titulo=Armin+van+Buuren+anuncia+a+turn%C3%AA+mundial+%22Armin+Only%22+e+o+%C3%A1lbum+%22AWAKE%22&noticia=https%3A%2F%2Fedmhousenetwork.com%2Farmin-van-buuren-announces-armin-only-world-tour-awake-album%2F&texto=Armin+van+Buuren+anuncia+a+turn%C3%AA+mundial+%22Armin+Only%22+e+o+%C3%A1lbum+%22AWAKE%22%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+EDM+House+Network+%C2%B7+2026-11-24+17%3A46+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.agitossp.com.br%2Farmin-van-buuren-anuncia-o-retorno-do-armin-only-com-o-novo-projeto-awake-em-2027%2F%0Ahttps%3A%2F%2Fwww.edmtunes.com%2F2026%2F11%2F24%2Farmin-van-buuren-armin-only-next-album%2F%3Futm_source%3Drss%26utm_medium%3Drss%26utm_campaign%3Darmin-van-buuren-armin-only-next-album",
-       "djf": "dj: Armin van Buuren",
-       "furo": {
-        "semPortalHa": "14 h 24"
-       },
-       "local": "Exterior (cidade não citada)",
-       "semCidadeMotivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-       "titulo": "Armin van Buuren anuncia a turnê mundial \"Armin Only\" e o álbum \"AWAKE\"",
-       "tituloOriginal": "Armin van Buuren Announces ‘Armin Only’ World Tour & ‘AWAKE’ Album",
-       "traduzido": "traduzido do inglês",
-       "link": "https://edmhousenetwork.com/armin-van-buuren-announces-armin-only-world-tour-awake-album/",
-       "veiculo": "EDM House Network",
-       "dominio": "edmhousenetwork.com",
-       "publicado": "2026-11-24T17:46",
-       "primeiroVisto": "2026-11-24T14:17",
-       "fontes": 3,
-       "confirmado": true,
-       "quente": true,
-       "regiao": "int",
-       "regiaoMotivo": "Internacional: busca DJs (EUA)",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [
-        {
-         "veiculo": "Agitossp",
-         "titulo": "Armin van Buuren anuncia o retorno do Armin Only com o novo projeto “Awake” em 2027",
-         "link": "https://www.agitossp.com.br/armin-van-buuren-anuncia-o-retorno-do-armin-only-com-o-novo-projeto-awake-em-2027/"
-        },
-        {
-         "veiculo": "EDMTunes",
-         "titulo": "Armin van Buuren anuncia a turnê mundial \"Awake\" junto com a data de lançamento do novo álbum",
-         "link": "https://news.google.com/rss/articles/CBMitAFBVV95cUxOUl9rTkpTTGhiZ1FIek1DeXo0SEx1emdFXzNRcExia3h5RV9lTUgxc2haQ0ljZlNucVFzc0R2SkN3RjZqOTVIb3R5UkdDeFZ2LU1MdjBfbGVqYk1TWHU5TnIyU05wMkVIa2JHazI0MVRxVV9TMEd3Tk9jb012WDdCb3RnaEJwSEpGdHNjNWhUblZsSGs4NUoxRzFPQVk0T295cXRqODA4Y1BCTGFoTXZ5b2d2ZXE?oc=5"
-        }
-       ],
-       "via": "Google Notícias: DJs (EUA)"
-      },
-      {
-       "primeiroANoticiar": {
         "veiculo": "EDMTunes",
         "hora": "18:43"
        },
@@ -5038,7 +5037,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=O+Dekmantel+revela+o+lineup+completo+do+Lentekabinet+2027&noticia=https%3A%2F%2Fwww.ravejungle.com%2F2026%2F11%2F25%2Fdekmantel-lentekabinet-2027-lineup%2F&texto=O+Dekmantel+revela+o+lineup+completo+do+Lentekabinet+2027%0ALocal%3A+Amsterd%C3%A3%2C+Holanda%0AVe%C3%ADculo%3A+Rave+Jungle+%C2%B7+2026-11-24+20%3A06+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.edmtunes.com%2F2026%2F11%2F23%2Fdekmantel-s-lentekabinet-2027-unveils-full-lineup-new-stages%2F%3Futm_source%3Drss%26utm_medium%3Drss%26utm_campaign%3Ddekmantel-s-lentekabinet-2027-unveils-full-lineup-new-stages",
        "djf": "festival: Dekmantel",
        "furo": {
-        "semPortalHa": "33 h 50"
+        "semPortalHa": "33 h 56"
        },
        "local": "Amsterdã, Holanda",
        "localComo": "matéria (RSS do veículo): parágrafo 6 (amsterdam); parágrafo 10 (amsterdam)",
@@ -5068,6 +5067,50 @@
       },
       {
        "primeiroANoticiar": {
+        "veiculo": "Agitossp",
+        "hora": "14:09"
+       },
+       "id": "ec06c6bd7739",
+       "pot": {
+        "nota": 37,
+        "faixa": "opcional",
+        "provisoria": false,
+        "rotulo": "37% · opcional",
+        "motivo": "2 veículos · tema: tour"
+       },
+       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=Armin+van+Buuren+anuncia+a+turn%C3%AA+mundial+%22Armin+Only%22+e+o+%C3%A1lbum+%22AWAKE%22&noticia=https%3A%2F%2Fedmhousenetwork.com%2Farmin-van-buuren-announces-armin-only-world-tour-awake-album%2F&texto=Armin+van+Buuren+anuncia+a+turn%C3%AA+mundial+%22Armin+Only%22+e+o+%C3%A1lbum+%22AWAKE%22%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+EDM+House+Network+%C2%B7+2026-11-24+17%3A46+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.agitossp.com.br%2Farmin-van-buuren-anuncia-o-retorno-do-armin-only-com-o-novo-projeto-awake-em-2027%2F",
+       "djf": "dj: Armin van Buuren",
+       "furo": {
+        "semPortalHa": "14 h 29"
+       },
+       "local": "Exterior (cidade não citada)",
+       "semCidadeMotivo": "matéria lida (18 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+       "titulo": "Armin van Buuren anuncia a turnê mundial \"Armin Only\" e o álbum \"AWAKE\"",
+       "tituloOriginal": "Armin van Buuren Announces ‘Armin Only’ World Tour & ‘AWAKE’ Album",
+       "traduzido": "traduzido do inglês",
+       "link": "https://edmhousenetwork.com/armin-van-buuren-announces-armin-only-world-tour-awake-album/",
+       "veiculo": "EDM House Network",
+       "dominio": "edmhousenetwork.com",
+       "publicado": "2026-11-24T17:46",
+       "primeiroVisto": "2026-11-24T14:17",
+       "fontes": 2,
+       "confirmado": true,
+       "quente": true,
+       "regiao": "int",
+       "regiaoMotivo": "Internacional: busca DJs (EUA)",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [
+        {
+         "veiculo": "Agitossp",
+         "titulo": "Armin van Buuren anuncia o retorno do Armin Only com o novo projeto “Awake” em 2027",
+         "link": "https://www.agitossp.com.br/armin-van-buuren-anuncia-o-retorno-do-armin-only-com-o-novo-projeto-awake-em-2027/"
+        }
+       ],
+       "via": "Google Notícias: DJs (EUA)"
+      },
+      {
+       "primeiroANoticiar": {
         "veiculo": "TicketNews",
         "hora": "16:49"
        },
@@ -5082,7 +5125,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=O+Ultra+Music+Festival+anuncia+o+line-up+de+2027+com+Calvin+Harris%2C+Martin+Garrix+e+Dom+Dolla&noticia=https%3A%2F%2Fwww.ticketnews.com%2F2026%2F10%2Fultra-music-festival-announces-2027-lineup-with-calvin-harris-martin-garrix-and-dom-dolla%2F&texto=O+Ultra+Music+Festival+anuncia+o+line-up+de+2027+com+Calvin+Harris%2C+Martin+Garrix+e+Dom+Dolla%0ALocal%3A+Miami%2C+EUA%0AVe%C3%ADculo%3A+TicketNews+%C2%B7+2026-11-24+16%3A49+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fedmidentity.com%2F2026%2F11%2F24%2Fcrssd-festival-spring-2027-lineup%2F",
        "djf": "festival: Ultra Music Festival",
        "furo": {
-        "semPortalHa": "11 h 44"
+        "semPortalHa": "11 h 49"
        },
        "local": "Miami, EUA",
        "localComo": "matéria (busca WordPress do veículo): parágrafo 1 (miami); parágrafo 2 (miami)",
@@ -5111,51 +5154,6 @@
        "via": "Google Notícias: festivais (EUA) 2"
       },
       {
-       "primeiroANoticiar": {
-        "veiculo": "TicketNews",
-        "hora": "16:49"
-       },
-       "id": "79f45793be95",
-       "pot": {
-        "nota": 37,
-        "faixa": "opcional",
-        "provisoria": false,
-        "rotulo": "37% · opcional",
-        "motivo": "2 veículos · tema: lineup"
-       },
-       "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=O+Est%C3%A9reo+Picnic+anuncia+o+lineup+de+2027+com+Travis+Scott%2C+Charli+XCX+e+David+Guetta&noticia=https%3A%2F%2Fwww.ticketnews.com%2F2026%2F10%2Festereo-picnic-announces-2027-lineup-with-travis-scott-charli-xcx-and-david-guetta%2F&texto=O+Est%C3%A9reo+Picnic+anuncia+o+lineup+de+2027+com+Travis+Scott%2C+Charli+XCX+e+David+Guetta%0ALocal%3A+Espanha+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+TicketNews+%C2%B7+2026-11-24+16%3A49+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.thatericalper.com%2F2026%2F11%2F24%2Ftravis-scott-charli-xcx-and-post-malone-lead-massive-tecate-pal-norte-2027-lineup-for-festivals-15th-anniversary%2F",
-       "djf": "dj: David Guetta",
-       "furo": {
-        "semPortalHa": "11 h 45"
-       },
-       "local": "Espanha (cidade não citada)",
-       "localComo": "matéria (busca WordPress do veículo): país citado \"spain\", cidade não citada",
-       "semCidadeMotivo": "matéria lida (8 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-       "titulo": "O Estéreo Picnic anuncia o lineup de 2027 com Travis Scott, Charli XCX e David Guetta",
-       "tituloOriginal": "Estéreo Picnic Announces 2027 Lineup With Travis Scott, Charli XCX and David Guetta",
-       "traduzido": "traduzido do inglês",
-       "link": "https://www.ticketnews.com/2026/10/estereo-picnic-announces-2027-lineup-with-travis-scott-charli-xcx-and-david-guetta/",
-       "veiculo": "TicketNews",
-       "dominio": "ticketnews.com",
-       "publicado": "2026-11-24T16:49",
-       "primeiroVisto": "2026-11-20T22:57",
-       "fontes": 2,
-       "confirmado": true,
-       "quente": true,
-       "regiao": "int",
-       "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"spain\", cidade não citada",
-       "categoria": "Música",
-       "linkDireto": true,
-       "tambemEm": [
-        {
-         "veiculo": "That Eric Alper",
-         "titulo": "Travis Scott, Charli XCX e Post Malone lideram o grande line-up do Tecate Pa’l Norte 2027 para o 15º aniversário do festival",
-         "link": "https://www.thatericalper.com/2026/11/24/travis-scott-charli-xcx-and-post-malone-lead-massive-tecate-pal-norte-2027-lineup-for-festivals-15th-anniversary/"
-        }
-       ],
-       "via": "Google Notícias: DJs (EUA)"
-      },
-      {
        "id": "0a4b12e602e4",
        "pot": {
         "nota": 17,
@@ -5167,7 +5165,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "5 h 18"
+        "semPortalHa": "5 h 23"
        },
        "local": "Reino Unido (cidade não citada)",
        "localComo": "país citado no título: \"england\"",
@@ -5201,7 +5199,7 @@
        "emApuracao": true,
        "djf": "festival: Rolling Loud",
        "furo": {
-        "semPortalHa": "6 h 54"
+        "semPortalHa": "7 h"
        },
        "local": "Índia (cidade não citada)",
        "localComo": "matéria (busca WordPress do veículo): país citado \"india\", cidade não citada",
@@ -5236,7 +5234,7 @@
        "emApuracao": true,
        "djf": "festival: Burning Man",
        "furo": {
-        "semPortalHa": "10 h 44"
+        "semPortalHa": "10 h 49"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "página lida, mas sem texto de matéria acessível (Bing Notícias (título exato, outro veículo))",
@@ -5270,7 +5268,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "11 h 34"
+        "semPortalHa": "11 h 39"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "matéria marcada como paga (isAccessibleForFree=false), não lida",
@@ -5293,7 +5291,7 @@
        "via": "Google Notícias: festivais (EUA) 1"
       },
       {
-       "id": "a7761a391409",
+       "id": "79f45793be95",
        "pot": {
         "nota": 31,
         "faixa": "opcional",
@@ -5302,29 +5300,30 @@
         "motivo": "tema: lineup · nota provisória: só 1 veículo até agora"
        },
        "emApuracao": true,
-       "djf": "festival: Tomorrowland",
+       "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "11 h 59"
+        "semPortalHa": "11 h 50"
        },
-       "local": "Exterior (cidade não citada)",
+       "local": "Espanha (cidade não citada)",
+       "localComo": "matéria (busca WordPress do veículo): país citado \"spain\", cidade não citada",
        "semCidadeMotivo": "matéria lida (8 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-       "titulo": "O Tomorrowland divulga o line-up completo para o festival de estreia na Tailândia",
-       "tituloOriginal": "Tomorrowland Releases Full Lineup for Thailand Debut Festival",
+       "titulo": "O Estéreo Picnic anuncia o lineup de 2027 com Travis Scott, Charli XCX e David Guetta",
+       "tituloOriginal": "Estéreo Picnic Announces 2027 Lineup With Travis Scott, Charli XCX and David Guetta",
        "traduzido": "traduzido do inglês",
-       "link": "https://www.ticketnews.com/2026/06/tomorrowland-releases-full-lineup-for-thailand-debut-festival/",
+       "link": "https://www.ticketnews.com/2026/10/estereo-picnic-announces-2027-lineup-with-travis-scott-charli-xcx-and-david-guetta/",
        "veiculo": "TicketNews",
        "dominio": "ticketnews.com",
-       "publicado": "2026-11-24T16:34",
+       "publicado": "2026-11-24T16:49",
        "primeiroVisto": "2026-11-20T22:57",
        "fontes": 1,
        "confirmado": false,
        "quente": true,
        "regiao": "int",
-       "regiaoMotivo": "Internacional: busca festivais (EUA) 1",
+       "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"spain\", cidade não citada",
        "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [],
-       "via": "Google Notícias: festivais (EUA) 1"
+       "via": "Google Notícias: DJs (EUA)"
       }
      ],
      "itens": [
@@ -5344,7 +5343,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=46&faixa=opcional&titulo=Turn%C3%AA+AD%C3%89LA+PRIMA%3A+o+Coachella+divulga+as+datas+de+2027&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMiWkFVX3lxTE8wYlozVHRFOWVQMDZCa3BtMzQ3bUNIVEZuWGUyZld6d05WNUdwSDFPcE9vUlR0bzBUbFhjemQ4dGdfQzF1Rm1PNVdrd1Z1WXllTDZEVEN2djUwUQ%3Foc%3D5&texto=Turn%C3%AA+AD%C3%89LA+PRIMA%3A+o+Coachella+divulga+as+datas+de+2027%0ALocal%3A+San+Francisco%2C+EUA%0AVe%C3%ADculo%3A+Kazi+Magazine+%C2%B7+2026-11-24+05%3A37+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.rockumweb.com%2Freportes%2F2846%2Fadla-announces-2027-prima-north-american-tour-with-coachella-and-major-us-shows%0Ahttps%3A%2F%2Fwww.thatericalper.com%2F2026%2F11%2F23%2Fadela-announces-2027-prima-tour-with-coachella-debut-and-2-night-toronto-stop%2F",
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "36 h 44"
+        "semPortalHa": "36 h 49"
        },
        "local": "San Francisco, EUA",
        "localComo": "mesmo fato em broadwayworld.com (achado no Bing Notícias): parágrafo 1 (san francisco)",
@@ -5401,7 +5400,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Bebe+Rexha+-+Sad+Girls+Ft.+David+Guetta+%7C+2026+Music+Download&noticia=https%3A%2F%2Fweb.voxtrendy.net%2Fmusic%2Fbebe-rexha-sad-girls-ft-david-guetta%2F&texto=Bebe+Rexha+-+Sad+Girls+Ft.+David+Guetta+%7C+2026+Music+Download%0ALocal%3A+Las+Vegas%2C+EUA%0AVe%C3%ADculo%3A+Voxtrendy+%C2%B7+2026-11-23+21%3A00+%28Bras%C3%ADlia%29",
        "djf": "dj: David Guetta",
        "furo": {
-        "semPortalHa": "47 h 33"
+        "semPortalHa": "47 h 38"
        },
        "local": "Las Vegas, EUA",
        "localComo": "mesmo fato em YouTube: mesmo fato em em.com.br (achado no Bing Notícias): parágrafo 1 (las vegas)",
@@ -5443,7 +5442,7 @@
        "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=5+shows+para+assistir+no+Vale+de+Coachella+neste+fim+de+semana+de+A%C3%A7%C3%A3o+de+Gra%C3%A7as&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMi5gFBVV95cUxNLUZGb2h0VFhrYU9wbHhUbWoyalZjcFFfYm5NdzhUWkhjSTFzY0dELXVuSDNiT1RiREQ1Q2Z0U0U0N2I0ZHNEQXo1bmYxQzFwd0h5UEhmSFNBQ1ZXTGhMbDhDVmdsQVg2VDhPdmFGS1pxN3hxVUJFZFVGQXpObnJtWXNnblFZNlpWOVBINnM3MmVFQ3NCY1FwZ1l4dTAzbUpfbTZEazhRS1hQeUtPdlZ3b0RGRVNCWm0yUmR6YndZS2E5YUFZQVJ5c1FPSHhWYUw2Q2h4dHkweWh0QVgtV1ByRVA4Qlp0UQ%3Foc%3D5&texto=5+shows+para+assistir+no+Vale+de+Coachella+neste+fim+de+semana+de+A%C3%A7%C3%A3o+de+Gra%C3%A7as%0ALocal%3A+cidade+n%C3%A3o+identificada%0AVe%C3%ADculo%3A+The+Desert+Sun+%C2%B7+2026-11-23+15%3A39+%28Bras%C3%ADlia%29",
        "djf": "festival: Coachella",
        "furo": {
-        "semPortalHa": "36 h 54"
+        "semPortalHa": "36 h 59"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -5471,6 +5470,40 @@
        "via": "Google Notícias: festivais (EUA) 2"
       },
       {
+       "id": "a7761a391409",
+       "pot": {
+        "nota": 31,
+        "faixa": "opcional",
+        "provisoria": true,
+        "rotulo": "⏳ 31% provisória · opcional",
+        "motivo": "tema: lineup · nota provisória: só 1 veículo até agora"
+       },
+       "emApuracao": true,
+       "djf": "festival: Tomorrowland",
+       "furo": {
+        "semPortalHa": "12 h 04"
+       },
+       "local": "Exterior (cidade não citada)",
+       "semCidadeMotivo": "matéria lida (8 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
+       "titulo": "O Tomorrowland divulga o line-up completo para o festival de estreia na Tailândia",
+       "tituloOriginal": "Tomorrowland Releases Full Lineup for Thailand Debut Festival",
+       "traduzido": "traduzido do inglês",
+       "link": "https://www.ticketnews.com/2026/06/tomorrowland-releases-full-lineup-for-thailand-debut-festival/",
+       "veiculo": "TicketNews",
+       "dominio": "ticketnews.com",
+       "publicado": "2026-11-24T16:34",
+       "primeiroVisto": "2026-11-20T22:57",
+       "fontes": 1,
+       "confirmado": false,
+       "quente": false,
+       "regiao": "int",
+       "regiaoMotivo": "Internacional: busca festivais (EUA) 1",
+       "categoria": "Música",
+       "linkDireto": true,
+       "tambemEm": [],
+       "via": "Google Notícias: festivais (EUA) 1"
+      },
+      {
        "id": "c5852e027be2",
        "pot": {
         "nota": 31,
@@ -5482,7 +5515,7 @@
        "emApuracao": true,
        "djf": "festival: Primavera Sound",
        "furo": {
-        "semPortalHa": "12 h 12"
+        "semPortalHa": "12 h 18"
        },
        "local": "Barcelona, Espanha",
        "localComo": "título/resumo: título (barcelona); resumo (barcelona)",
@@ -5516,7 +5549,7 @@
        "emApuracao": true,
        "djf": "dj: Martin Garrix",
        "furo": {
-        "semPortalHa": "12 h 25"
+        "semPortalHa": "12 h 30"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -5549,7 +5582,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "13 h 30"
+        "semPortalHa": "13 h 35"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (6 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
@@ -5583,7 +5616,7 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "14 h 08"
+        "semPortalHa": "14 h 13"
        },
        "local": "Las Vegas, EUA",
        "localComo": "título/resumo: título (las vegas); resumo (las vegas)",
@@ -5617,7 +5650,7 @@
        "emApuracao": true,
        "djf": "dj: Kygo",
        "furo": {
-        "semPortalHa": "15 h 36"
+        "semPortalHa": "15 h 41"
        },
        "local": "Montreal, Canadá",
        "localComo": "matéria (página inicial do veículo): parágrafo 1 (montreal); parágrafo 2 (montreal)",
@@ -5651,7 +5684,7 @@
        "emApuracao": true,
        "djf": "festival: Tomorrowland",
        "furo": {
-        "semPortalHa": "15 h 49"
+        "semPortalHa": "15 h 55"
        },
        "local": "Barcelona, Espanha",
        "localComo": "matéria (RSS do veículo): parágrafo 1 (barcelona); parágrafo 4 (barcelona)",
@@ -5685,7 +5718,7 @@
        "emApuracao": true,
        "djf": "festival: Green Valley",
        "furo": {
-        "semPortalHa": "16 h 27"
+        "semPortalHa": "16 h 32"
        },
        "local": "Exterior (cidade não citada)",
        "semCidadeMotivo": "matéria lida (8 parágrafos, página inicial do veículo), nenhuma cidade citada no texto",
@@ -5717,7 +5750,7 @@
        "emApuracao": true,
        "djf": "festival: Primavera Sound",
        "furo": {
-        "semPortalHa": "17 h 52"
+        "semPortalHa": "17 h 57"
        },
        "local": "Toronto, Canadá",
        "localComo": "título/resumo: título (toronto); resumo (toronto)",
@@ -5751,7 +5784,7 @@
        "emApuracao": true,
        "djf": "festival: The Town",
        "furo": {
-        "semPortalHa": "20 h 06"
+        "semPortalHa": "20 h 12"
        },
        "local": "Chicago, EUA",
        "localComo": "título/resumo: resumo (chicago)",
@@ -5784,7 +5817,7 @@
        "emApuracao": true,
        "djf": "dj: Anyma",
        "furo": {
-        "semPortalHa": "21 h 53"
+        "semPortalHa": "21 h 58"
        },
        "local": "cidade não identificada",
        "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -5817,7 +5850,7 @@
        "emApuracao": true,
        "djf": "dj: Anyma",
        "furo": {
-        "semPortalHa": "21 h 59"
+        "semPortalHa": "22 h 04"
        },
        "local": "Índia (cidade não citada)",
        "localComo": "matéria (Bing Notícias (título exato)): país citado \"india\", cidade não citada",
@@ -5836,38 +5869,6 @@
        "regiao": "int",
        "regiaoMotivo": "cidade: matéria (Bing Notícias (título exato)): país citado \"india\", cidade não citada",
        "categoria": "DJ",
-       "linkDireto": true,
-       "tambemEm": [],
-       "via": "Google Notícias: DJs (EUA)"
-      },
-      {
-       "id": "9580fae0e22a",
-       "pot": {
-        "nota": 19,
-        "faixa": "opcional",
-        "provisoria": true,
-        "rotulo": "⏳ 19% provisória · opcional",
-        "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-       },
-       "emApuracao": true,
-       "djf": "dj: John Summit",
-       "furo": {
-        "semPortalHa": "22 h"
-       },
-       "local": "Miami, EUA",
-       "localComo": "matéria (RSS do veículo): parágrafo 1 (miami); parágrafo 5 (miami)",
-       "titulo": "John Summit’s Beloved Track Human Celebrates 5 Years",
-       "link": "https://edmhousenetwork.com/john-summits-beloved-track-human-celebrates-5-years/",
-       "veiculo": "EDM House Network",
-       "dominio": "edmhousenetwork.com",
-       "publicado": "2026-11-24T06:33",
-       "primeiroVisto": "2026-11-24T00:54",
-       "fontes": 1,
-       "confirmado": false,
-       "quente": false,
-       "regiao": "int",
-       "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1 (miami); parágrafo 5 (miami)",
-       "categoria": "Música",
        "linkDireto": true,
        "tambemEm": [],
        "via": "Google Notícias: DJs (EUA)"
@@ -5894,7 +5895,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=4&nota=59&faixa=opcional&titulo=VI+Festival+M%C3%A1rio+de+Andrade+traz+Negra+Li%2C+Rinc%C3%B3n+Sapi%C3%AAncia%2C+Roberta+Campos%2C+N%C3%BAbia%2C+C%C3%A9u%2C+Evinha+e+%C2%A1S%C3%9ABETE%21+ao+centro+de+S%C3%A3o+Paulo&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMisAJBVV95cUxPb3hsYzBOcUZEOE9aSnZla0dHb0lVeVBEb01Xbm9iR2d2dWJXSzFLWGhnUVNpOXNfZWl3VzBnbmpGcndwYlhmaFpFbUpNY2pDRFJYTXBkejVxQVI2M1hRZk1POUEtYkVydG9mdFpvYk56U2F6UjZpVk42S0daYnd2eWF6Vzh4Snh6UnNrNWN0M1RrODdWd1BveGwtcFN3V0VWdDJ5YlhfTlpySEY2WWxBb3QtbnhsN295bFAzd2NUZFNrMGxKV21wY0tPWmNCZ0Z0Wl9hWnJXZHl1TV81OU9tS0Q3bXdZa2xtNi1PczN6VGtCWkw3eE5JenV6UWZvR2ZuaWlDTE1aR1RFSmo2NGlJUjdhTEFRVGl1ODJ0SzNybHdTeTUzSWVNbERiTmozZUJw%3Foc%3D5&texto=VI+Festival+M%C3%A1rio+de+Andrade+traz+Negra+Li%2C+Rinc%C3%B3n+Sapi%C3%AAncia%2C+Roberta+Campos%2C+N%C3%BAbia%2C+C%C3%A9u%2C+Evinha+e+%C2%A1S%C3%9ABETE%21+ao+centro+de+S%C3%A3o+Paulo%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Prefeitura+de+S%C3%A3o+Paulo+%C2%B7+2026-11-24+16%3A42+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fespacodopovo.com.br%2Fnegra-li-rincon-sapiencia-e-luedji-luna-sao-atracoes-de-festival-gratuito-no-centro-de-sp%2F",
      "furo": {
-      "semPortalHa": "16 h 39"
+      "semPortalHa": "16 h 44"
      },
      "local": "São Paulo, SP",
      "localComo": "título/resumo: título; resumo",
@@ -5948,7 +5949,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=43&faixa=opcional&titulo=Marcelo+Falc%C3%A3o+ganha+document%C3%A1rio+sobre+turn%C3%AA+pela+Am%C3%A9rica+do+Norte+no+Canal+Bis%2C+Multishow+e+Globoplay&noticia=https%3A%2F%2Fwww.ouniversodatv.com%2F2026%2F11%2Fmarcelo-falcao-ganha-documentario-sobre.html&texto=Marcelo+Falc%C3%A3o+ganha+document%C3%A1rio+sobre+turn%C3%AA+pela+Am%C3%A9rica+do+Norte+no+Canal+Bis%2C+Multishow+e+Globoplay%0ALocal%3A+S%C3%A3o+Jos%C3%A9+dos+Campos%2C+SP%0AVe%C3%ADculo%3A+O+Universo+da+TV+%C2%B7+2026-11-24+21%3A04+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.rapdab.com.br%2F2026%2F11%2F24%2Fmarcelo-falcao-documentario-viver-mais-leve-que-o-ar%2F%0Ahttps%3A%2F%2Fwww.trambicast.com.br%2F2026%2F11%2Fmarcelo-falcao-especial-viver-mais-leve-que-o-ar.html",
      "furo": {
-      "semPortalHa": "7 h 40"
+      "semPortalHa": "7 h 45"
      },
      "local": "São José dos Campos, SP",
      "localComo": "mesmo fato em Portal Rap Dab: matéria (RSS do veículo): parágrafo 2",
@@ -6041,7 +6042,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=3&nota=53&faixa=opcional&titulo=Batuque+d%E2%80%99Santa+estreia+em+Santa+B%C3%A1rbara+com+show+de+Salgadinho+neste+domingo+%2829%29&noticia=https%3A%2F%2Fsb24horas.com.br%2Fbatuque-dsanta-estreia-em-santa-barbara-com-show-de-salgadinho-neste-domingo-29%2F&texto=Batuque+d%E2%80%99Santa+estreia+em+Santa+B%C3%A1rbara+com+show+de+Salgadinho+neste+domingo+%2829%29%0ALocal%3A+Assunto+geral+%28sem+cidade%29%0AVe%C3%ADculo%3A+SB24HORAS+%C2%B7+2026-11-23+18%3A45+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fnovomomento.com.br%2Fshow-salgadinho-batuque-dsanta-dia-29%2F",
      "furo": {
-      "semPortalHa": "33 h 49"
+      "semPortalHa": "33 h 54"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (11 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -6134,7 +6135,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=25&faixa=opcional&titulo=Liga+Carnaval+SP+divulga+clipes+oficiais+do+Grupo+de+Acesso+1+para+2027&noticia=https%3A%2F%2Fredecidadelive.com.br%2Fliga-carnaval-sp-divulga-clipes-oficiais-do-grupo-de-acesso-1-para-2027%2F&texto=Liga+Carnaval+SP+divulga+clipes+oficiais+do+Grupo+de+Acesso+1+para+2027%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Rede+Cidade+Live+%C2%B7+2026-11-24+20%3A17+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fsrzd.com%2Fblog%2Fcarnaval%2Fsao-paulo%2Fveja-os-clipes-do-grupo-de-acesso-1-do-carnaval-de-sao-paulo-2027%2F",
      "furo": {
-      "semPortalHa": "17 h 46"
+      "semPortalHa": "17 h 51"
      },
      "local": "São Paulo, SP",
      "localComo": "mesmo fato em SRzd: título/resumo: título; resumo",
@@ -6175,7 +6176,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=Ana+Clara+participa+de+show+de+Lucas+Morato+nesta+quarta+%2825%29%2C+em+S%C3%A3o+Paulo&noticia=https%3A%2F%2Fwww.agitossp.com.br%2Fana-clara-participa-de-show-de-lucas-morato-nesta-quarta-25-em-sao-paulo%2F&texto=Ana+Clara+participa+de+show+de+Lucas+Morato+nesta+quarta+%2825%29%2C+em+S%C3%A3o+Paulo%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Agitossp+%C2%B7+2026-11-24+19%3A16+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.irecelider.com.br%2Fmusica360%2Fi%2F2200538e2dfee69029a3cebc84f2ffc2%2Fana-clara-participa-de-show-de-lucas-morato-nesta-quarta-25-em-sao-paulo",
      "furo": {
-      "semPortalHa": "9 h 26"
+      "semPortalHa": "9 h 31"
      },
      "local": "São Paulo, SP",
      "localComo": "título/resumo: título; resumo",
@@ -6242,47 +6243,6 @@
       }
      ],
      "via": "Terra Música"
-    },
-    {
-     "primeiroANoticiar": {
-      "veiculo": "Tribuna do Sertão",
-      "hora": "16:03"
-     },
-     "id": "902b14a9fbe8",
-     "pot": {
-      "nota": 65,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "65% · opcional",
-      "motivo": "2 veículos · tema forte: lança · pessoa famosa: Vitinho"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=65&faixa=opcional&titulo=Vitinho+Lan%C3%A7a+%22Casal+Perfeito%22+com+MC+Livinho+e+Apresenta+Novo+Cap%C3%ADtulo+do+Projeto+%22Intensidade%22+em+Parceria+Musical+Surpreendente&noticia=https%3A%2F%2Freportermaceio.com.br%2Fvitinho-lanca-casal-perfeito-com-mc-livinho-e-apresenta-novo-capitulo-do-projeto-intensidade-em-parceria-musical-surpreendente%2F&texto=Vitinho+Lan%C3%A7a+%22Casal+Perfeito%22+com+MC+Livinho+e+Apresenta+Novo+Cap%C3%ADtulo+do+Projeto+%22Intensidade%22+em+Parceria+Musical+Surpreendente%0ALocal%3A+Macei%C3%B3%2C+AL+%28pelo+ve%C3%ADculo%29%0AVe%C3%ADculo%3A+Rep%C3%B3rter+Macei%C3%B3+%C2%B7+2026-11-24+16%3A05+%28Bras%C3%ADlia%29&links=https%3A%2F%2Ftribunadosertao.com.br%2Fvariedades%2F2026%2F11%2F24%2F1028569-vitinho-lanca-terceiro-volume-de-intensidade-com-participacao-de-mc-livinho",
-     "furo": {
-      "semPortalHa": "12 h 31"
-     },
-     "local": "Maceió, AL (pelo veículo)",
-     "localComo": "cidade do veículo regional (reportermaceio.com.br); a matéria não cita a cidade",
-     "titulo": "Vitinho Lança \"Casal Perfeito\" com MC Livinho e Apresenta Novo Capítulo do Projeto \"Intensidade\" em Parceria Musical Surpreendente",
-     "link": "https://reportermaceio.com.br/vitinho-lanca-casal-perfeito-com-mc-livinho-e-apresenta-novo-capitulo-do-projeto-intensidade-em-parceria-musical-surpreendente/",
-     "veiculo": "Repórter Maceió",
-     "dominio": "reportermaceio.com.br",
-     "publicado": "2026-11-24T16:05",
-     "primeiroVisto": "2026-11-24T16:11",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "Brasil: maceio; RJ: busca pagode no RJ",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "Tribuna do Sertão",
-       "titulo": "Vitinho lança terceiro volume de “Intensidade” com participação de MC Livinho",
-       "link": "https://tribunadosertao.com.br/variedades/2026/11/24/1028569-vitinho-lanca-terceiro-volume-de-intensidade-com-participacao-de-mc-livinho"
-      }
-     ],
-     "via": "Google Notícias: pagode no RJ"
     },
     {
      "primeiroANoticiar": {
@@ -6372,47 +6332,6 @@
     },
     {
      "primeiroANoticiar": {
-      "veiculo": "SouBH",
-      "hora": "12:05"
-     },
-     "id": "3171b408fb82",
-     "pot": {
-      "nota": 37,
-      "faixa": "opcional",
-      "provisoria": false,
-      "rotulo": "37% · opcional",
-      "motivo": "2 veículos · tema: festival"
-     },
-     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=Festival+Som+Clube+2026+ter%C3%A1+show+gratuito+de+Roberta+S%C3%A1+em+BH+neste+domingo&noticia=https%3A%2F%2Fsoubh.uai.com.br%2Fagenda%2Feventos%2Ffestival-som-clube-2026-tera-show-gratuito-de-roberta-sa-em-bh%2F&texto=Festival+Som+Clube+2026+ter%C3%A1+show+gratuito+de+Roberta+S%C3%A1+em+BH+neste+domingo%0ALocal%3A+Belo+Horizonte%2C+MG%0AVe%C3%ADculo%3A+SouBH+%C2%B7+2026-11-24+12%3A05+%28Bras%C3%ADlia%29",
-     "furo": {
-      "semPortalHa": "16 h 29"
-     },
-     "local": "Belo Horizonte, MG",
-     "localComo": "título/resumo: título; resumo",
-     "titulo": "Festival Som Clube 2026 terá show gratuito de Roberta Sá em BH neste domingo",
-     "link": "https://soubh.uai.com.br/agenda/eventos/festival-som-clube-2026-tera-show-gratuito-de-roberta-sa-em-bh/",
-     "veiculo": "SouBH",
-     "dominio": "soubh.uai.com.br",
-     "publicado": "2026-11-24T12:05",
-     "primeiroVisto": "2026-11-24T12:01",
-     "fontes": 2,
-     "confirmado": true,
-     "quente": false,
-     "regiao": "br",
-     "regiaoMotivo": "cidade: título/resumo: título; resumo",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [
-      {
-       "veiculo": "Culturadoria",
-       "titulo": "Festival Som Clube traz Roberta Sá em show gratuito em BH",
-       "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5WT1YwYnphRndqSnJESWpQQkpXaEszSm5HNUtqeU1tWXhJNWdsYXBqMjdGNWJfTUw5T2dGcy1aeFRzRENqTnFrcVRONUtKYTdTWjdnVmtLRXNDN0E1MUw3M2VB?oc=5"
-      }
-     ],
-     "via": "Google Notícias: samba (Portugal)"
-    },
-    {
-     "primeiroANoticiar": {
       "veiculo": "SAPO",
       "hora": "08:00"
      },
@@ -6426,7 +6345,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=50&faixa=opcional&titulo=David+Carreira+%E2%80%98abre+o+cora%C3%A7%C3%A3o%E2%80%99%21+O+momento+em+que+o+cantor+confessa+como+se+sente+ap%C3%B3s+rumores+de+separa%C3%A7%C3%A3o&noticia=https%3A%2F%2Fsapo.pt%2Fartigo%2Fdavid-carreira-abre-o-coracao-o-momento-em-que-o-cantor-confessa-como-se-sente-apos-rumores-de-separacao-6b058e3af92df73836d2df90&texto=David+Carreira+%E2%80%98abre+o+cora%C3%A7%C3%A3o%E2%80%99%21+O+momento+em+que+o+cantor+confessa+como+se+sente+ap%C3%B3s+rumores+de+separa%C3%A7%C3%A3o%0ALocal%3A+Assunto+geral+%28sem+cidade%29%0AVe%C3%ADculo%3A+SAPO+%C2%B7+2026-11-24+08%3A00+%28Bras%C3%ADlia%29",
      "furo": {
-      "semPortalHa": "20 h 34"
+      "semPortalHa": "20 h 39"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (10 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
@@ -6468,7 +6387,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=47&faixa=opcional&titulo=Claudia+Leitte+Lan%C3%A7a+Novo+%C3%81lbum+%27Reimagin%C3%A1rio%27+Preparado+Para+O+Carnaval+2027&noticia=https%3A%2F%2Fmthoje.com.br%2Fcultura%2Fid-731786%2Fclaudia_leitte_lanca_novo_album_e_39reimaginarioe_39_preparado_para_o_carnaval_2027&texto=Claudia+Leitte+Lan%C3%A7a+Novo+%C3%81lbum+%27Reimagin%C3%A1rio%27+Preparado+Para+O+Carnaval+2027%0ALocal%3A+Salvador%2C+BA%0AVe%C3%ADculo%3A+MT+HOJE+%C2%B7+2026-11-24+06%3A39+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fabcagora.com.br%2F2026%2F11%2F23%2Fclaudia-leitte-reimaginario-carnaval%2F",
      "furo": {
-      "semPortalHa": "33 h 55"
+      "semPortalHa": "34 h 01"
      },
      "local": "Salvador, BA",
      "localComo": "matéria (página inicial do veículo): parágrafo 1; descrição da página",
@@ -6551,7 +6470,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Seal+chega+a+S%C3%A3o+Paulo+neste+s%C3%A1bado+com+turn%C3%AA+que+celebra+mais+de+tr%C3%AAs+d%C3%A9cadas+de+carreira&noticia=https%3A%2F%2Fwww.osgarotosdeliverpool.com.br%2F2026%2F11%2Fseal-chega-sao-paulo-neste-sabado-com.html&texto=Seal+chega+a+S%C3%A3o+Paulo+neste+s%C3%A1bado+com+turn%C3%AA+que+celebra+mais+de+tr%C3%AAs+d%C3%A9cadas+de+carreira%0ALocal%3A+S%C3%A3o+Paulo%2C+SP%0AVe%C3%ADculo%3A+Os+Garotos+de+Liverpool+%C2%B7+2026-11-24+00%3A00+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fcadernopop.com.br%2Fseal-chega-a-sao-paulo-neste-sabado-com-turne-que-celebra-mais-de-tres-decadas-de-carreira%2F",
      "furo": {
-      "semPortalHa": "37 h 18"
+      "semPortalHa": "37 h 23"
      },
      "local": "São Paulo, SP",
      "localComo": "título/resumo: título; resumo",
@@ -6579,6 +6498,47 @@
     },
     {
      "primeiroANoticiar": {
+      "veiculo": "bra1.com.br",
+      "hora": "14:38"
+     },
+     "id": "09643ffcd033",
+     "pot": {
+      "nota": 22,
+      "faixa": "opcional",
+      "provisoria": false,
+      "rotulo": "22% · opcional",
+      "motivo": "2 veículos"
+     },
+     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=22&faixa=opcional&titulo=Festa+das+Orqu%C3%ADdeas+2026+ter%C3%A1+shows+e+passeios+gratuitos&noticia=https%3A%2F%2Fabcdoabc.com.br%2Ffesta-das-orquideas-2026-passeios-gratuitos%2F&texto=Festa+das+Orqu%C3%ADdeas+2026+ter%C3%A1+shows+e+passeios+gratuitos%0ALocal%3A+V%C3%A1rzea+Paulista%2C+SP%0AVe%C3%ADculo%3A+Portal+ABC+do+ABC+%C2%B7+2026-11-23+15%3A02+%28Bras%C3%ADlia%29",
+     "furo": {
+      "semPortalHa": "38 h 01"
+     },
+     "local": "Várzea Paulista, SP",
+     "localComo": "matéria (Bing Notícias (título exato)): parágrafo 2; parágrafo 6",
+     "titulo": "Festa das Orquídeas 2026 terá shows e passeios gratuitos",
+     "link": "https://abcdoabc.com.br/festa-das-orquideas-2026-passeios-gratuitos/",
+     "veiculo": "Portal ABC do ABC",
+     "dominio": "abcdoabc.com.br",
+     "publicado": "2026-11-23T15:02",
+     "primeiroVisto": "2026-11-23T15:35",
+     "fontes": 2,
+     "confirmado": true,
+     "quente": false,
+     "regiao": "sp",
+     "regiaoMotivo": "cidade: matéria (Bing Notícias (título exato)): parágrafo 2; parágrafo 6",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [
+      {
+       "veiculo": "bra1.com.br",
+       "titulo": "Festa das Orququídeas 2026 em Várzea Paulista: shows, flores e passeios gratuitos",
+       "link": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOUXRxYV9Tb1h5ODN6NWNqbmtpb2NGQ0Raem9MLXVsdC1zM2tvUE9YcE5hUWFocHpfMFF4WmwxcVJoaGxXTE5XU1NLNU5ieklNVHphVVVvWDVzMGItekZOQ1VHVUhxQTVhcjdvVW5kMEpHaHJNd0ZSV3hENXMzY25vM3d0cVFScGFsTGNhNmVMbEZoRHF4YnZqb1hPSTBaQmJKQlZJOV80alRJZlVFbGxxYWRlUTJPWFB6c0t1WTVn?oc=5"
+      }
+     ],
+     "via": "Google Notícias: sambista"
+    },
+    {
+     "primeiroANoticiar": {
       "veiculo": "BH Eventos",
       "hora": "05:00"
      },
@@ -6592,7 +6552,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Matheus+Brant+celebra+10+anos+de+Assume+que+Gosta+com+show&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMia0FVX3lxTFBuNmJqSXg1N0UzeFN4d29RcU1Tc0VXblJlRnJKbHRMRkZYNlFsZ2U3dHQ4XzQ3Mk5xSTVSUkFOSHJiemItRXFObG9ORXVtRGdGUTJCemlBSThUcm5OYkMyYUUxdW9KazFpR0dV%3Foc%3D5&texto=Matheus+Brant+celebra+10+anos+de+Assume+que+Gosta+com+show%0ALocal%3A+cidade+n%C3%A3o+identificada%0AVe%C3%ADculo%3A+Culturadoria+%C2%B7+2026-11-23+23%3A23+%28Bras%C3%ADlia%29",
      "furo": {
-      "semPortalHa": "47 h 34"
+      "semPortalHa": "47 h 39"
      },
      "local": "cidade não identificada",
      "semCidadeMotivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)",
@@ -6633,7 +6593,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=Empres%C3%A1rio+gasta+cerca+de+R%24+100+mil+com+300+garrafas+de+Chandon+e+distribui+durante+show+de+DJ+em+Sinop%2FMT%3B+Veja+v%C3%ADdeo&noticia=https%3A%2F%2Fnews.google.com%2Frss%2Farticles%2FCBMi7AFBVV95cUxNbEhXTkNPUTExOFYwV3JybHlEeGYyZnp4WWVnc0FlNHY2dnYwdERtZUJvaW5FSzM1VVpIOTZhZjZoRE5XamZiZ1ktX2x2VDFHOGZZT3N4cUlfVmppcGtZZlhFZ3d5Tko0NGF4b3JoTWltaVBNMVpyTTZKWnl3SEtUeUdiTV9kdERwUVVkUkdDQmYwR2hxT2xjeEx4Q3g1a3BQVlRXSldCNTNYcnRkQVBSXzktRnk0MFd1QXc3R3dzSllvZlEwdTdSZll0b3BhcUwtYXRSX240bVN6ODAtS21mTm14T250UXZ1OUlVTA%3Foc%3D5&texto=Empres%C3%A1rio+gasta+cerca+de+R%24+100+mil+com+300+garrafas+de+Chandon+e+distribui+durante+show+de+DJ+em+Sinop%2FMT%3B+Veja+v%C3%ADdeo%0ALocal%3A+Sinop%2C+MT%0AVe%C3%ADculo%3A+Power+Mix+%C2%B7+2026-11-23+09%3A15+%28Bras%C3%ADlia%29",
      "furo": {
-      "semPortalHa": "43 h 28"
+      "semPortalHa": "43 h 33"
      },
      "local": "Sinop, MT",
      "localComo": "título/resumo: título (com UF); resumo (com UF)",
@@ -6727,7 +6687,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "5 h 20"
+      "semPortalHa": "5 h 25"
      },
      "local": "São Paulo, SP",
      "localComo": "matéria (RSS do veículo): parágrafo 1; parágrafo 2",
@@ -6761,7 +6721,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "6 h 39"
+      "semPortalHa": "6 h 45"
      },
      "local": "Santa Mônica, PR",
      "localComo": "matéria (busca WordPress do veículo): parágrafo 1; parágrafo 5",
@@ -6823,7 +6783,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 42"
+      "semPortalHa": "7 h 47"
      },
      "local": "Santos, SP",
      "localComo": "matéria (página inicial do veículo): parágrafo 2 (com UF)",
@@ -6958,6 +6918,38 @@
      "via": "Google Notícias: música lançamento"
     },
     {
+     "id": "a99836b68247",
+     "pot": {
+      "nota": 19,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 19% provisória · opcional",
+      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "9 h 49"
+     },
+     "local": "Rio Grande do Norte (estado; cidade não citada)",
+     "localComo": "estado citado no texto: \"do rio grande do norte\"",
+     "semCidadeMotivo": "matéria lida (9 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+     "titulo": "CASA DA RIBEIRA REÚNE CINEMA E MÚSICA EM PROGRAMAÇÃO GRATUITA NESTA SEMANA",
+     "link": "https://hilnethcorreia.com.br/2026/11/24/casa-da-ribeira-reune-cinema-e-musica-em-programacao-gratuita-nesta-semana/",
+     "veiculo": "Hilneth Correia -",
+     "dominio": "hilnethcorreia.com.br",
+     "publicado": "2026-11-24T18:49",
+     "primeiroVisto": "2026-11-24T16:15",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": true,
+     "regiao": "br",
+     "regiaoMotivo": "sem local no texto, padrão Brasil",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: cultura e editais"
+    },
+    {
      "id": "8905c5418701",
      "pot": {
       "nota": 19,
@@ -6968,7 +6960,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "9 h 53"
+      "semPortalHa": "9 h 59"
      },
      "local": "Assunto geral (sem cidade)",
      "semCidadeMotivo": "matéria lida (18 parágrafos, link direto), nenhuma cidade citada no texto",
@@ -7000,7 +6992,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "10 h 16"
+      "semPortalHa": "10 h 22"
      },
      "local": "São Paulo, SP",
      "localComo": "título/resumo: título; resumo",
@@ -7037,7 +7029,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=37&faixa=opcional&titulo=O+Rock+The+Bells+Festival+amplia+seu+enorme+line-up+para+2026%3B+D-Nice+reflete+sobre+o+momento+de+completar+o+ciclo+com+LL+COOL+J&noticia=https%3A%2F%2Fthesource.com%2F2026%2F11%2F24%2Frock-the-bells-festival-expands-massive-2026-lineup-d-nice-reflects-on-full-circle-moment-with-ll-cool-j%2F%3Futm_source%3Drss%26utm_medium%3Drss%26utm_campaign%3Drock-the-bells-festival-expands-massive-2026-lineup-d-nice-reflects-on-full-circle-moment-with-ll-cool-j&texto=O+Rock+The+Bells+Festival+amplia+seu+enorme+line-up+para+2026%3B+D-Nice+reflete+sobre+o+momento+de+completar+o+ciclo+com+LL+COOL+J%0ALocal%3A+Exterior+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+The+Source+Magazine+%C2%B7+2026-11-25+01%3A09+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.ticketnews.com%2F2026%2F09%2Frock-the-bells-expands-2026-lineup-with-raekwon-and-ghostface-killah%2F",
      "furo": {
-      "semPortalHa": "17 h 05"
+      "semPortalHa": "17 h 10"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (2 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -7122,7 +7114,7 @@
      },
      "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=34&faixa=opcional&titulo=M%C3%A5neskin+prepara+novo+%C3%A1lbum+com+participa%C3%A7%C3%A3o+de+Mina%2C+diz+jornal+italiano&noticia=https%3A%2F%2Flatinpopbrasil.com.br%2Fmaneskin-novo-album-mina-2027%2F&texto=M%C3%A5neskin+prepara+novo+%C3%A1lbum+com+participa%C3%A7%C3%A3o+de+Mina%2C+diz+jornal+italiano%0ALocal%3A+EUA+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+Latin+Pop+Brasil+%C2%B7+2026-11-24+13%3A44+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.radiorock.com.br%2Fnoticias%2Fmaneskin-disco-novo-mina-jornal-italiano",
      "furo": {
-      "semPortalHa": "33 h 05"
+      "semPortalHa": "33 h 10"
      },
      "local": "EUA (cidade não citada)",
      "localComo": "matéria (RSS do veículo): país citado \"estados unidos\", cidade não citada",
@@ -7151,6 +7143,112 @@
      "via": "Google Notícias: festivais 2"
     },
     {
+     "primeiroANoticiar": {
+      "veiculo": "Wikimetal",
+      "hora": "16:30"
+     },
+     "id": "3f28d4b05c8d",
+     "pot": {
+      "nota": 44,
+      "faixa": "opcional",
+      "provisoria": false,
+      "rotulo": "44% · opcional",
+      "motivo": "veículo grande (Billboard Brasil) · 2 veículos · tema: turnê"
+     },
+     "fazerPost": "http://127.0.0.1:4317/fenix-os/painel/direto.html?origem=jornal-musica&fontes=2&nota=44&faixa=opcional&titulo=Dave+Grohl+diz+que+Foo+Fighters+far%C3%A1+pausa+ap%C3%B3s+atual+turn%C3%AA&noticia=https%3A%2F%2Fbillboard.com.br%2Ffoo-fighters-pausa-turne-2027-dave-grohl%2F&texto=Dave+Grohl+diz+que+Foo+Fighters+far%C3%A1+pausa+ap%C3%B3s+atual+turn%C3%AA%0ALocal%3A+EUA+%28cidade+n%C3%A3o+citada%29%0AVe%C3%ADculo%3A+Billboard+Brasil+%C2%B7+2026-11-24+12%3A16+%28Bras%C3%ADlia%29&links=https%3A%2F%2Fwww.wikimetal.com.br%2Ffoo-fighters-pode-sumir-apos-atual-turne-diz-dave-grohl%2F",
+     "furo": {
+      "semPortalHa": "36 h 08"
+     },
+     "local": "EUA (cidade não citada)",
+     "localComo": "matéria (busca WordPress do veículo): país citado \"estados unidos\", cidade não citada",
+     "semCidadeMotivo": "matéria lida (14 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
+     "brasileiroFora": true,
+     "titulo": "Dave Grohl diz que Foo Fighters fará pausa após atual turnê",
+     "link": "https://billboard.com.br/foo-fighters-pausa-turne-2027-dave-grohl/",
+     "veiculo": "Billboard Brasil",
+     "dominio": "billboard.com.br",
+     "publicado": "2026-11-24T12:16",
+     "primeiroVisto": "2026-11-23T14:36",
+     "fontes": 2,
+     "confirmado": true,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"estados unidos\", cidade não citada",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [
+      {
+       "veiculo": "Wikimetal",
+       "titulo": "Foo Fighters podem \"sumir por um tempo\" após a turnê atual, diz Dave Grohl",
+       "link": "https://www.wikimetal.com.br/foo-fighters-pode-sumir-apos-atual-turne-diz-dave-grohl/"
+      }
+     ],
+     "via": "Google Notícias: festivais 1"
+    },
+    {
+     "id": "c51e6608f869",
+     "pot": {
+      "nota": 48,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 48% provisória · opcional",
+      "motivo": "veículo grande (Metrópoles) · tema: show · acabou de sair · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "local": "Londres, Reino Unido",
+     "localComo": "matéria (RSS do veículo): parágrafo 1 (londres)",
+     "brasileiroFora": true,
+     "titulo": "É hoje! Seal encanta brasilienses com show incrível no Estilo Brasil",
+     "link": "https://www.metropoles.com/metropoles-music/hoje-seal",
+     "veiculo": "Metrópoles",
+     "dominio": "metropoles.com",
+     "publicado": "2026-11-25T03:48",
+     "primeiroVisto": "2026-11-25T03:54",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": false,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1 (londres)",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais 1"
+    },
+    {
+     "id": "ce8a304fd55d",
+     "pot": {
+      "nota": 47,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 47% provisória · opcional",
+      "motivo": "tema forte: release · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "1 h 37"
+     },
+     "local": "África do Sul (cidade não citada)",
+     "localComo": "matéria (RSS do veículo): país citado \"south africa\", cidade não citada",
+     "semCidadeMotivo": "matéria lida (12 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
+     "titulo": "BabyDaiz define a data de lançamento do novo álbum \"KINDOKI\"",
+     "tituloOriginal": "BabyDaiz Sets Release Date For New Album ‘KINDOKI’",
+     "traduzido": "traduzido do inglês",
+     "link": "https://sahiphopmag.co.za/2026/11/babydaiz-sets-release-date-for-new-album-kindoki/",
+     "veiculo": "SA Hip Hop Mag",
+     "dominio": "sahiphopmag.co.za",
+     "publicado": "2026-11-25T03:01",
+     "primeiroVisto": "2026-11-24T14:17",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": true,
+     "regiao": "int",
+     "regiaoMotivo": "cidade: matéria (RSS do veículo): país citado \"south africa\", cidade não citada",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: DJs (EUA)"
+    },
+    {
      "id": "839bd2822b86",
      "pot": {
       "nota": 22,
@@ -7161,7 +7259,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "5 h 41"
+      "semPortalHa": "5 h 46"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (10 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -7194,7 +7292,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "6 h 05"
+      "semPortalHa": "6 h 10"
      },
      "local": "Nova York, EUA",
      "localComo": "título/resumo: resumo (new york)",
@@ -7227,7 +7325,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 34"
+      "semPortalHa": "7 h 39"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (5 parágrafos, sitemap do veículo), nenhuma cidade citada no texto",
@@ -7260,7 +7358,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "7 h 37"
+      "semPortalHa": "7 h 42"
      },
      "local": "Manchester, Reino Unido",
      "localComo": "título/resumo: título (manchester); resumo (manchester)",
@@ -7283,6 +7381,38 @@
      "via": "Google Notícias: DJs (EUA)"
     },
     {
+     "id": "97a792da3828",
+     "pot": {
+      "nota": 19,
+      "faixa": "opcional",
+      "provisoria": true,
+      "rotulo": "⏳ 19% provisória · opcional",
+      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+     },
+     "emApuracao": true,
+     "furo": {
+      "semPortalHa": "8 h 13"
+     },
+     "local": "Portugal (cidade não citada)",
+     "localComo": "país citado no título: \"portugal\"",
+     "semCidadeMotivo": "matéria marcada como paga (isAccessibleForFree=false), não lida",
+     "titulo": "Todos os concertos marcados para 2026 e 2027 em Portugal",
+     "link": "https://expresso.pt/blitz/agenda/2026-11-23-todos-os-concertos-marcados-para-2026-e-2027-em-portugal-53436cea",
+     "veiculo": "Expresso",
+     "dominio": "expresso.pt",
+     "publicado": "2026-11-24T20:26",
+     "primeiroVisto": "2026-11-23T06:16",
+     "fontes": 1,
+     "confirmado": false,
+     "quente": true,
+     "regiao": "int",
+     "regiaoMotivo": "Internacional: portugal",
+     "categoria": "Música",
+     "linkDireto": true,
+     "tambemEm": [],
+     "via": "Google Notícias: festivais 1"
+    },
+    {
      "id": "e6a9ea2605e5",
      "pot": {
       "nota": 31,
@@ -7293,7 +7423,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "8 h 14"
+      "semPortalHa": "8 h 20"
      },
      "local": "Irlanda (cidade não citada)",
      "localComo": "matéria (busca WordPress do veículo): país citado \"ireland\", cidade não citada",
@@ -7327,7 +7457,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "8 h 31"
+      "semPortalHa": "8 h 36"
      },
      "local": "Lançamento/assunto sem cidade (pelo título; matéria não aberta)",
      "semCidadeMotivo": "página lida, mas sem texto de matéria acessível (Bing Notícias (título exato, outro veículo))",
@@ -7386,7 +7516,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "10 h 39"
+      "semPortalHa": "10 h 45"
      },
      "local": "Las Vegas, EUA",
      "localComo": "matéria (RSS do veículo): parágrafo 15 (las vegas); parágrafo 16 (las vegas)",
@@ -7417,7 +7547,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "12 h 28"
+      "semPortalHa": "12 h 34"
      },
      "local": "Reino Unido (cidade não citada)",
      "localComo": "matéria (busca WordPress do veículo): país citado \"uk\", cidade não citada",
@@ -7451,7 +7581,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "12 h 52"
+      "semPortalHa": "12 h 57"
      },
      "local": "Exterior (cidade não citada)",
      "semCidadeMotivo": "matéria lida (7 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
@@ -7472,37 +7602,32 @@
      "via": "Google Notícias: festivais (EUA) 1"
     },
     {
-     "id": "2eea5d946ef3",
+     "id": "67524a201533",
      "pot": {
-      "nota": 19,
+      "nota": 41,
       "faixa": "opcional",
       "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
+      "rotulo": "⏳ 41% provisória · opcional",
+      "motivo": "veículo grande (Terra) · tema: show · nota provisória: só 1 veículo até agora"
      },
      "emApuracao": true,
-     "furo": {
-      "semPortalHa": "13 h 46"
-     },
-     "local": "Exterior (cidade não citada)",
-     "semCidadeMotivo": "matéria lida (10 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-     "titulo": "A TIDAL anuncia a proibição de músicas totalmente geradas por IA, citando a proteção dos artistas",
-     "tituloOriginal": "TIDAL Announces Ban on Fully AI-Generated Music, Citing Artist Protection",
-     "traduzido": "traduzido do inglês",
-     "link": "https://www.edmtunes.com/2026/11/24/tidal-announces-ban-on-fully-ai-generated-music-citing-artist-protection/?utm_source=rss&utm_medium=rss&utm_campaign=tidal-announces-ban-on-fully-ai-generated-music-citing-artist-protection",
-     "veiculo": "EDMTunes",
-     "dominio": "edmtunes.com",
-     "publicado": "2026-11-24T14:47",
-     "primeiroVisto": "2026-11-24T14:56",
+     "local": "Londres, Reino Unido",
+     "localComo": "matéria (RSS do veículo): parágrafo 1 (londres); descrição da página (londres)",
+     "titulo": "Petição contra Marilyn Manson em show do Slipknot em Wembley chega a 20 mil assinaturas",
+     "link": "https://www.terra.com.br/diversao/musica/peticao-contra-marilyn-manson-em-show-do-slipknot-em-wembley-chega-a-20-mil-assinaturas,500c18c1723219ba301204f824489638uwmo5cch.html",
+     "veiculo": "Terra",
+     "dominio": "terra.com.br",
+     "publicado": "2026-11-24T14:32",
+     "primeiroVisto": "2026-11-24T14:34",
      "fontes": 1,
      "confirmado": false,
      "quente": false,
      "regiao": "int",
-     "regiaoMotivo": "Internacional: busca DJs (EUA)",
+     "regiaoMotivo": "cidade: matéria (RSS do veículo): parágrafo 1 (londres); descrição da página (londres)",
      "categoria": "Música",
      "linkDireto": true,
      "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
+     "via": "Google Notícias: festivais 1"
     },
     {
      "id": "51e260ca2ba9",
@@ -7515,7 +7640,7 @@
      },
      "emApuracao": true,
      "furo": {
-      "semPortalHa": "14 h 06"
+      "semPortalHa": "14 h 11"
      },
      "local": "Chicago, EUA",
      "localComo": "matéria (link direto): parágrafo 2 (chicago); descrição da página (chicago)",
@@ -7562,139 +7687,6 @@
      "linkDireto": true,
      "tambemEm": [],
      "via": "g1 Pop & Arte"
-    },
-    {
-     "id": "d45e9c5da7a5",
-     "pot": {
-      "nota": 44,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 44% provisória · opcional",
-      "motivo": "tema forte: inédita · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "14 h 54"
-     },
-     "local": "México (cidade não citada)",
-     "localComo": "matéria (RSS do veículo): país citado \"mexico\", cidade não citada",
-     "semCidadeMotivo": "matéria lida (8 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-     "brasileiroFora": true,
-     "titulo": "Luis Miguel se prepara para voltar com música inédita após nove anos",
-     "tituloOriginal": "Luis Miguel prepara retorno à música inédita após nove anos",
-     "traduzido": "traduzido do inglês",
-     "link": "https://latinpopbrasil.com.br/luis-miguel-retorno-musica-inedita-2026/",
-     "veiculo": "Latin Pop Brasil",
-     "dominio": "latinpopbrasil.com.br",
-     "publicado": "2026-11-24T13:39",
-     "primeiroVisto": "2026-11-24T19:50",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "cidade: matéria (RSS do veículo): país citado \"mexico\", cidade não citada",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: música lançamento"
-    },
-    {
-     "id": "5ebb728f6cdb",
-     "pot": {
-      "nota": 19,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 19% provisória · opcional",
-      "motivo": "sem sinal forte ainda · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "15 h 31"
-     },
-     "local": "cidade não identificada",
-     "semCidadeMotivo": "página lida, mas sem texto de matéria acessível (Bing Notícias (título exato, outro veículo))",
-     "titulo": "Melhores desempenhos do futebol feminino do ensino médio de Connecticut nos torneios da CIAC de 2026",
-     "tituloOriginal": "Connecticut high school girls soccer top performances from the 2026 CIAC tournaments",
-     "traduzido": "traduzido do inglês",
-     "link": "https://www.stamfordadvocate.com/gametimect/girls-soccer/article/connecticut-high-school-top-performances-11-24-26-22545941.php",
-     "veiculo": "stamfordadvocate.com",
-     "dominio": "stamfordadvocate.com",
-     "publicado": "2026-11-24T13:02",
-     "primeiroVisto": "2026-11-24T15:10",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "Internacional: busca festivais (EUA) 2",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: festivais (EUA) 2"
-    },
-    {
-     "id": "b7b336b0a2c8",
-     "pot": {
-      "nota": 31,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 31% provisória · opcional",
-      "motivo": "tema: show · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "15 h 46"
-     },
-     "local": "Reino Unido (cidade não citada)",
-     "localComo": "matéria (RSS do veículo): país citado \"uk\", cidade não citada",
-     "semCidadeMotivo": "matéria lida (7 parágrafos, RSS do veículo), nenhuma cidade citada no texto",
-     "titulo": "Alan Fitzpatrick Opens Up About Mental Health & Other Artists Show Support",
-     "link": "https://www.edmtunes.com/2026/11/24/alan-fitzpatrick-mental-health-other-artists-support/?utm_source=rss&utm_medium=rss&utm_campaign=alan-fitzpatrick-mental-health-other-artists-support",
-     "veiculo": "EDMTunes",
-     "dominio": "edmtunes.com",
-     "publicado": "2026-11-24T12:47",
-     "primeiroVisto": "2026-11-24T13:31",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "cidade: matéria (RSS do veículo): país citado \"uk\", cidade não citada",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: DJs (EUA)"
-    },
-    {
-     "id": "3f28d4b05c8d",
-     "pot": {
-      "nota": 41,
-      "faixa": "opcional",
-      "provisoria": true,
-      "rotulo": "⏳ 41% provisória · opcional",
-      "motivo": "veículo grande (Billboard Brasil) · tema: turnê · nota provisória: só 1 veículo até agora"
-     },
-     "emApuracao": true,
-     "furo": {
-      "semPortalHa": "16 h 17"
-     },
-     "local": "EUA (cidade não citada)",
-     "localComo": "matéria (busca WordPress do veículo): país citado \"estados unidos\", cidade não citada",
-     "semCidadeMotivo": "matéria lida (14 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto",
-     "brasileiroFora": true,
-     "titulo": "Dave Grohl diz que Foo Fighters fará pausa após atual turnê",
-     "link": "https://billboard.com.br/foo-fighters-pausa-turne-2027-dave-grohl/",
-     "veiculo": "Billboard Brasil",
-     "dominio": "billboard.com.br",
-     "publicado": "2026-11-24T12:16",
-     "primeiroVisto": "2026-11-23T14:36",
-     "fontes": 1,
-     "confirmado": false,
-     "quente": false,
-     "regiao": "int",
-     "regiaoMotivo": "cidade: matéria (busca WordPress do veículo): país citado \"estados unidos\", cidade não citada",
-     "categoria": "Música",
-     "linkDireto": true,
-     "tambemEm": [],
-     "via": "Google Notícias: festivais 1"
     }
    ]
   }
@@ -7738,12 +7730,6 @@
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Navio Cabaré 2026 abre temporada com Carreta Cabaré e shows a bordo do MSC Divina",
-    "veiculo": "bra1.com.br",
-    "dominio": "bra1.com.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
     "titulo": "O MOGA Caparica Festival está de volta",
     "veiculo": "The Portugal News",
     "dominio": "theportugalnews.com",
@@ -7774,9 +7760,9 @@
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Entre um samba e outro, uma conversa que pode salvar vidas",
-    "veiculo": "Sopa Cultural",
-    "dominio": "sopacultural.com",
+    "titulo": "Viamão recebe três shows nacionais na 20ª Feira Literária e Cultural",
+    "veiculo": "GZH",
+    "dominio": "gauchazh.clicrbs.com.br",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
@@ -7840,21 +7826,9 @@
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
-    "titulo": "Nvidia slips 5%: Boardroom reversal shows who really holds the power",
-    "veiculo": "seekingalpha.com",
-    "dominio": "seekingalpha.com",
-    "motivo": "matéria marcada como paga (isAccessibleForFree=false), não lida"
-   },
-   {
     "titulo": "Após licitação fracassar, Metrô relança disputa pelo anteprojeto da Linha 21-Vinho",
     "veiculo": "Metrô CPTM",
     "dominio": "metrocptm.com.br",
-    "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
-   },
-   {
-    "titulo": "Key facts: State Street Adds 78,631; BlackRock Reports 10.29M Shares",
-    "veiculo": "TradingView",
-    "dominio": "br.tradingview.com",
     "motivo": "link do Google Notícias sem caminho público para o link real (RSS do veículo, WordPress e Bing não acharam)"
    },
    {
@@ -8007,6 +7981,11 @@
     "motivo": "matéria lida (4 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
    },
    {
+    "titulo": "Samba Pop leva alegria e originalidade ao programa Talento Regional",
+    "veiculo": "estadomaior.com.br",
+    "motivo": "matéria lida (6 parágrafos, sitemap do veículo), nenhuma cidade citada no texto"
+   },
+   {
     "titulo": "Batuque d’Santa estreia em Santa Bárbara com show de Salgadinho neste domingo (29)",
     "veiculo": "SB24HORAS",
     "motivo": "matéria lida (11 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
@@ -8075,6 +8054,11 @@
     "titulo": "Cantor de R&B é processado por suposto abuso sexual infantil",
     "veiculo": "Portal POP Mais",
     "motivo": "matéria lida (1 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
+   },
+   {
+    "titulo": "Grupo Di Propósito lança terceiro bloco do projeto \"Feliz no Simples 2\"",
+    "veiculo": "Virgula",
+    "motivo": "matéria lida (8 parágrafos, página inicial do veículo), nenhuma cidade citada no texto"
    },
    {
     "titulo": "Menos é mais: a tendência da maquiagem natural e minimalista",
@@ -8162,11 +8146,6 @@
     "motivo": "matéria lida (5 parágrafos, link direto), nenhuma cidade citada no texto"
    },
    {
-    "titulo": "Rampa, Cassian, Mathame, Project One, Don Diablo e muito mais: 10 lançamentos internacionais para você escutar",
-    "veiculo": "Play BPM",
-    "motivo": "matéria lida (14 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
-   },
-   {
     "titulo": "Diplo revela ‘experiências gays’ que já teve e faz confissão sobre vida amorosa: ‘Nunca descartaria’",
     "veiculo": "Hugo Gloss",
     "motivo": "matéria lida (10 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
@@ -8182,9 +8161,9 @@
     "motivo": "matéria lida (1 parágrafos, sitemap do veículo), nenhuma cidade citada no texto"
    },
    {
-    "titulo": "Aurubis AG: Aurubis expects FY 2026/27 operating earnings before taxes below market expectations due to extended ramp-up of Richmond",
-    "veiculo": "sharewise.com",
-    "motivo": "matéria lida (1 parágrafos, Bing Notícias (título exato, outro veículo)), nenhuma cidade citada no texto"
+    "titulo": "Rampa, Cassian, Mathame, Project One, Don Diablo e muito mais: 10 lançamentos internacionais para você escutar",
+    "veiculo": "Play BPM",
+    "motivo": "matéria lida (14 parágrafos, RSS do veículo), nenhuma cidade citada no texto"
    },
    {
     "titulo": "Lollapalooza Brasil 2027 terá espaço exclusivo para grupos de até 20 pessoas",
@@ -8200,6 +8179,16 @@
     "titulo": "Lollapalooza Brasil 2027: a menos de quatro meses do festival, curadoria reforça seu olhar de vanguarda",
     "veiculo": "djsound.com.br",
     "motivo": "matéria lida (18 parágrafos, busca WordPress do veículo), nenhuma cidade citada no texto"
+   },
+   {
+    "titulo": "7 artistas indicados ao Grammy que passam pelo Brasil em 2027",
+    "veiculo": "Terra",
+    "motivo": "matéria lida (18 parágrafos, Bing Notícias (título exato)), nenhuma cidade citada no texto"
+   },
+   {
+    "titulo": "Foo Fighters pode “sumir por um tempo” após atual turnê, diz Dave Grohl",
+    "veiculo": "Wikimetal",
+    "motivo": "matéria lida (8 parágrafos, página inicial do veículo), nenhuma cidade citada no texto"
    },
    {
     "titulo": "Seu ingresso tá no fim de semana da Mix – Primavera Sound",
