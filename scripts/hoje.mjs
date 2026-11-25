@@ -8,6 +8,7 @@
 import fs from 'node:fs';
 import { createHash, createHmac } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { rotuloCurto } from './ntfy-acoes.mjs';
 const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : null; };
 const AGORA = arg('--agora') ? Date.parse(arg('--agora')) : Date.now();
 const brIso = (ms) => new Date(ms - 3 * 3600e3).toISOString().slice(0, 16);
@@ -83,6 +84,27 @@ export function botoesDatas(h, { CMD = process.env.NTFY_TOPIC_COMANDO || '', ASS
   return [...bt, painel];
 }
 
+/** 25/11 (Jessyca: a mais forte do dia não pode se perder na lista do Painel da noite): aviso próprio com "✅ Post" (comando assinado, 2+ fontes),
+ *  "Abrir na Mesa" e "Ver notícia". Vai só para o agente (canal -mesa, prioridade 1); o agente repassa ao celular apenas se ela ainda não decidiu
+ *  nada sobre a notícia. Sem comando configurado ou sem notícia de 70%+ com 2 fontes, não sai nada. */
+export function avisoTopNoite(h, { TOPIC = process.env.NTFY_TOPIC || '', CMD = process.env.NTFY_TOPIC_COMANDO || '', ASS = process.env.NTFY_ASSINATURA || '', SRV = process.env.NTFY_SERVIDOR || 'https://ntfy.sh' } = {}) {
+  if (!TOPIC || !CMD || !ASS) return null;
+  const i = h.valePostar.flatMap((p) => p.itens).filter((x) => x.fontes >= 2 && /^https?:\/\//.test(x.link || '')).sort((a, b) => b.nota - a.nota || b.fontes - a.fontes)[0];
+  if (!i) return null;
+  const id = createHash('sha1').update(i.link).digest('hex').slice(0, 12), sig = createHmac('sha256', String(ASS)).update(id).digest('hex').slice(0, 32);
+  const fsig = createHmac('sha256', String(ASS)).update(id + '|fontes=' + i.fontes).digest('hex').slice(0, 32);
+  const texto = [i.titulo, 'Veículo: ' + i.veiculo + ' · ' + i.publicado.slice(8, 10) + '/' + i.publicado.slice(5, 7) + ' ' + i.publicado.slice(11, 16), i.motivo].filter(Boolean).join('\n').slice(0, 500);
+  const mesa = 'https://jessyferrari.github.io/jornal-visao-da-fenix/mesa.html#c=' + encodeURIComponent(CMD + '-mesa') + '&a=decidir';
+  return { topic: TOPIC + '-mesa', priority: 1, tags: ['top-noite', 'newspaper'], click: i.link,
+    title: '🏆 A mais forte de hoje ainda sem post: ' + i.titulo.slice(0, 110),
+    message: i.nota + '% · ' + i.fontes + ' veículos · ' + i.veiculo + ' às ' + i.publicado.slice(11, 16) + '\nAinda dá tempo de postar hoje. Toque em Post e escolha o formato.',
+    actions: [
+      { action: 'http', label: rotuloCurto('✅ Post: ', i.titulo), url: SRV.replace(/\/$/, '') + '/' + CMD, method: 'POST', clear: false, body: JSON.stringify({ acao: 'publicar', id, sig, titulo: i.titulo.slice(0, 160), fontes: i.fontes, fsig, nota: i.nota, faixa: i.faixa, link: i.link, links: '', texto }) },
+      { action: 'view', label: 'Abrir na Mesa', url: mesa, clear: false },
+      { action: 'view', label: 'Ver notícia', url: i.link, clear: false },
+    ] };
+}
+
 /** texto do aviso do dia (um só, cabe no limite do ntfy) */
 export function aviso(h, { quando = 'manha' } = {}) {
   const d = [...h.datas.nacionais, ...h.datas.internacionais];
@@ -114,5 +136,8 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     body: JSON.stringify({ topic: TOPIC, title: m.title, message: m.message, click: PAGINA, priority: 2, tags: ['calendar'], icon: 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png',
       actions: botoesDatas(h) }) }).catch((e) => ({ ok: false, status: String(e.message) }));
   console.log('aviso do dia', vez, r.ok ? 'enviado' : 'falhou: ' + r.status);
+  if (r.ok && vez === 'noite') { const t = avisoTopNoite(h);
+    if (t) { await new Promise((z) => setTimeout(z, 1500)); const r2 = await fetch(process.env.NTFY_SERVIDOR || 'https://ntfy.sh/', { method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(20000), body: JSON.stringify({ icon: 'https://jessyferrari.github.io/jornal-visao-da-fenix/assets/icone-ntfy-v2.png', ...t }) }).catch((e) => ({ ok: false, status: String(e.message) }));
+      console.log('mais forte do dia (via agente):', r2.ok ? 'enviada' : 'falhou: ' + r2.status); } else console.log('mais forte do dia: nenhuma com 70%+ e 2 fontes'); }
   if (r.ok) { E[chave] = brIso(AGORA); for (const k of Object.keys(E)) if (k < brIso(AGORA - 7 * 86400e3).slice(0, 10)) delete E[k]; fs.writeFileSync(EF, JSON.stringify(E)); }
 }

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Abrindo a Mesa · Fênix OS</title>
+<link rel="icon" href="favicon-32.png">
+<style>
+:root{--fundo:#0d0b08;--sup:#16130e;--linha:#3a3832;--tinta:#fff8ea;--tinta2:#c9b896;--ouro:#d4af37;--ouro2:#f2d27a;color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;display:grid;place-items:center;background:radial-gradient(120% 80% at 50% 0%,#1d170c 0%,var(--fundo) 60%);color:var(--tinta);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+.c{width:min(92vw,420px);background:linear-gradient(180deg,#1a160f,#120f0a);border:1px solid var(--linha);border-radius:20px;padding:28px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5),inset 0 1px 0 rgba(242,210,122,.08)}
+img{width:56px;height:56px;border-radius:14px}h1{font-size:1.15rem;margin:14px 0 6px;background:linear-gradient(90deg,var(--ouro),var(--ouro2),var(--ouro));-webkit-background-clip:text;background-clip:text;color:transparent}
+p{color:var(--tinta2);margin:0 0 16px}.anel{width:34px;height:34px;margin:6px auto 0;border-radius:50%;border:3px solid var(--linha);border-top-color:var(--ouro);animation:g 1s linear infinite}@keyframes g{to{transform:rotate(360deg)}}
+a.b{display:block;margin-top:10px;padding:12px;border-radius:12px;text-decoration:none;font-weight:700}a.ouro{background:linear-gradient(180deg,var(--ouro2),var(--ouro));color:#0d0b08}a.lin{border:1px solid var(--linha);color:var(--ouro2)}
+</style>
+</head>
+<body>
+<div class="c">
+  <img src="assets/logo-os-512.png" alt="">
+  <h1 id="t">Abrindo a Mesa de Postagem</h1>
+  <p id="m">Procurando o link do Fênix no notebook…</p>
+  <div class="anel" id="anel"></div>
+  <div id="bt"></div>
+</div>
+<script>
+// 25/11: o botão "Abrir na Mesa" dos avisos do jornal chega aqui com o tópico secreto do link vivo (#c=...&a=decidir).
+// O agente publica o link do túnel nesse tópico; esta página lê o último e abre a Mesa na aba pedida. Nenhum segredo fica no código.
+(async () => {
+  const q = new URLSearchParams(location.hash.slice(1)), c = q.get('c') || '', aba = (q.get('a') || 'decidir').replace(/[^\w-]/g, '');
+  const fim = (t, m) => { document.getElementById('anel').remove(); document.getElementById('t').textContent = t; document.getElementById('m').textContent = m;
+    document.getElementById('bt').innerHTML = '<a class="b ouro" href="hoje.html">Abrir o Painel do dia</a><a class="b lin" href="./">Abrir o jornal</a>'; };
+  if (!/^[\w-]{6,80}$/.test(c)) return fim('Link incompleto', 'Abra a Mesa pelo botão da notificação.');
+  try {
+    const r = await fetch('https://ntfy.sh/' + c + '/json?poll=1&since=12h', { cache: 'no-store' });
+    const linhas = (await r.text()).trim().split('\n').map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter((x) => x && x.event === 'message');
+    let url = '';
+    for (const x of linhas.reverse()) { try { const u = JSON.parse(x.message).url; if (/^https:\/\/[^\s"<>]+$/.test(u || '')) { url = u.replace(/\/$/, ''); break; } } catch {} }
+    if (!url) return fim('O Fênix está desligado', 'A Mesa abre quando o Fênix estiver ligado no notebook. Enquanto isso, o Painel do dia mostra tudo o que vale postar.');
+    location.replace(url + '/fenix-os/painel/mesa.html#' + aba);
+  } catch { fim('Sem conexão agora', 'Não consegui ler o link da Mesa. Tente de novo em instantes.'); }
+})();
+</script>
+</body>
+</html>

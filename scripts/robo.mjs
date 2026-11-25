@@ -2,7 +2,7 @@
 import { veiculoDe, veiculosDistintos, mesmoVeiculo } from './veiculo.mjs';   // 20/11: mesmo veículo (g1 = G1, www./m./subdomínio) nunca confirma a si mesmo
 import { limparComparar, nomesPelaCaixa, nomesDoPar } from './titulo-norm.mjs';
 import { aplicarAtalhos } from './atalhos.mjs';
-import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado } from './ntfy-acoes.mjs';
+import { botoesApurar, toqueNoNtfy, confirmadosDeApuracao, podeConfirmar, marcarConfirmado, linkMesa, rotuloCurto } from './ntfy-acoes.mjs';
 import { criarDisjuntor } from './disjuntor.mjs';
 import fs from 'node:fs';
 import { arquivar } from './busca-arquivo.mjs';
@@ -405,7 +405,15 @@ if (!seed) {
   const partes = []; let atual = [], tam = 0;
   for (const i of extra) { const l = '• ' + i.pub.slice(11,16) + ' ' + (i.pot ? (i.pot.nota >= 70 ? '🔥' : '') + i.pot.nota + '%' + (i.pot.provisoria ? ' prov.' : '') + ' · ' : '') + (i.urg ? '🚨 ' : '') + (i.excl && i.excl.tipo !== 'confirmado' ? '⭐ ' : '') + (i.fmt ? iconeFormato(i.fmt) + ' ' : '') + i.title + ' (' + i.src + ', ' + i.pub.slice(11,16) + ')'; if (atual.length && tam + l.length + 1 > 3800) { partes.push(atual); atual = []; tam = 0; } atual.push([i, l]); tam += l.length + 1; }
   if (atual.length) partes.push(atual);
-  for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (pt.some(x => x[0].pot && x[0].pot.nota >= 70) ? ' · ' + pt.filter(x => x[0].pot && x[0].pot.nota >= 70).length + ' vale postar' : '') + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'] });
+  // 25/11 (Jessyca: aviso sem ação não serve): a notícia mais forte de cada resumo ganha o botão "Post" (2+ fontes) ou "Apurar" (1 fonte),
+  // o 2º botão abre a Mesa em Sua decisão (link vivo do Fênix) e o 3º, o jornal
+  const acoesResumo = (pt) => { const nota = x => (x.pot && x.pot.nota) || 0, nf = x => (x.cov && x.cov.n) || 1;
+    const conf = pt.map(x => x[0]).filter(x => nf(x) >= 2).sort((a, b) => nota(b) - nota(a))[0], forte = conf || pt.map(x => x[0]).sort((a, b) => nota(b) - nota(a))[0];
+    const a0 = forte && (botoes(forte).actions || [])[0], acoes = [];
+    if (a0 && a0.action === 'http') acoes.push({ ...a0, label: rotuloCurto(conf ? '✅ Post: ' : '🔎 Apurar: ', forte.title), clear: false });
+    if (CMD) acoes.push({ action: 'view', label: 'Abrir na Mesa', url: linkMesa(CMD, 'decidir'), clear: false });
+    acoes.push(ABRIR); return acoes.slice(0, 3); };
+  for (const [n, pt] of partes.entries()) { const ok = await post({ title: '+' + pt.length + ' notícias novas no Jornal' + (pt.some(x => x[0].pot && x[0].pot.nota >= 70) ? ' · ' + pt.filter(x => x[0].pot && x[0].pot.nota >= 70).length + ' vale postar' : '') + (partes.length > 1 ? ' (' + (n + 1) + '/' + partes.length + ')' : ''), message: pt.map(x => x[1]).join('\n'), click: B, priority: pt.some(x => x[0].urg) ? 4 : 2, tags: ['newspaper'], actions: acoesResumo(pt) });
     if (ok) { enviados++; R.resumo = now; for (const [i] of pt) if (((i.cov && i.cov.n) || 1) < 2) st.apuracao[i.key] = { t: now, titulo: String(i.title).slice(0, 160) }; } else for (const [i] of pt) naoSaiu.add(i.key); }
 }
 // 📈 Subindo agora (17/11): o mesmo fato em 3+ veículos em até 30 min; até 6 por dia (de madrugada só Vale postar, t330), com Sim, publicar (já tem 2+ fontes)

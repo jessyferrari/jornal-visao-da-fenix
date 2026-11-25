@@ -9,6 +9,14 @@ export const JORNAL = 'https://jessyferrari.github.io/jornal-visao-da-fenix';
 export const idDoLink = (l) => createHash('sha1').update(String(l)).digest('hex').slice(0, 12);
 const assinar = (ASS, id) => createHmac('sha256', String(ASS)).update(String(id)).digest('hex').slice(0, 32);
 
+/** 25/11: "Abrir na Mesa" a partir do jornal: a página mesa.html lê o link vivo do Fênix no tópico <comando>-mesa e abre a Mesa na aba pedida */
+export const linkMesa = (CMD, aba = 'decidir') => (CMD ? JORNAL + '/mesa.html#c=' + encodeURIComponent(CMD + '-mesa') + '&a=' + aba : '');
+/** rótulo curto do botão: as primeiras palavras do título, sem pontuação solta no fim */
+export const rotuloCurto = (prefixo, titulo, n = 4) => { let w = String(titulo || '').replace(/^[\s"“'‘]+/, '').split(/\s+/).slice(0, n + 1);
+  w = w.slice(0, w.findIndex((x) => /[,;:.!?]$/.test(x)) + 1 || n).slice(0, n);   // corta na vírgula: "Lula sanciona lei, que" vira "Lula sanciona lei"
+  while (w.length > 2 && /^(d[aeo]s?|em|n[aeo]s?|e|a|o|as|os|que|para|por|com|sem|ao|à|um|uma|contra|sobre|após|entre|sob|até)$/i.test(w[w.length - 1])) w.pop();
+  return prefixo + w.join(' ').replace(/[\s,;:.\-–—"”'’]+$/, ''); };
+
 export function botoesApurar({ link, titulo, texto, pot, origem, id, CMD, ASS, SRV = 'https://ntfy.sh', pagina = JORNAL + '/' }) {
   const ver = { action: 'view', label: 'Ver notícia', url: link || pagina, clear: false };
   if (!CMD || !ASS || !/^https?:\/\//.test(link || '')) return [ver, { action: 'view', label: '🔎 Em apuração', url: pagina, clear: false }];
