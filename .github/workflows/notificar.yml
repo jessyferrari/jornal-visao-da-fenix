@@ -74,6 +74,8 @@ jobs:
       - name: Painel do dia (datas oficiais, o que vale postar por horário, exclusivos) + aviso das 7h e das 19h
         env:
           NTFY_TOPIC: '${{ secrets.NTFY_TOPIC }}'
+          NTFY_TOPIC_COMANDO: '${{ secrets.NTFY_TOPIC_COMANDO }}'
+          NTFY_ASSINATURA: '${{ secrets.NTFY_ASSINATURA }}'
         run: timeout 60 node scripts/hoje.mjs || echo "painel do dia falhou nesta rodada; fica o anterior"
       - name: Imagem de compartilhamento (og) da edição
         run: npm i --no-save --no-audit --no-fund playwright-core@1 >/dev/null && node scripts/og.mjs || echo "og falhou, mantém a anterior"
