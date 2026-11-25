@@ -51,6 +51,9 @@ export function notaPotencial(x) {
   // pessoa famosa
   const pf = titulo.match(FAMOSOS) || (x.famosos && titulo.match(x.famosos));
   c.pessoa = pf ? PESO.pessoa : 0; if (pf) motivo.push('pessoa famosa: ' + pf[0]);
+  // 25/11: tragédia de grande escala (10 ou mais mortos no título) tem o mesmo peso de pessoa famosa: 30 mortos no Egito ficava em 69 (Opcional)
+  const mortos = titulo.match(/(\d{2,})\s+(?:pessoas\s+)?(?:mortos|mortas|vítimas|morreram)/i);
+  if (!pf && mortos && +mortos[1] >= 10) { c.pessoa = PESO.pessoa; motivo.push('tragédia: ' + mortos[1] + ' mortos'); }
   // frescor
   c.frescor = horas === null ? 0 : horas <= 1 ? 10 : horas <= 6 ? 6 : horas <= 24 ? 3 : 0;
   if (horas !== null && horas <= 1) motivo.push('acabou de sair');
