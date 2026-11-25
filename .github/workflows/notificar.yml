@@ -97,6 +97,7 @@ jobs:
           git add referencias.json referencias-estado.json 2>/dev/null || true
           git add perfis.json perfis-estado.json perfis-traducoes.json 2>/dev/null || true
           git add hoje.json hoje-estado.json hoje.html 2>/dev/null || true
+          git add historico-assuntos.json 2>/dev/null || true
           git add -A busca 2>/dev/null || true
           if git diff --cached --quiet; then echo "sem mudança"; exit 0; fi
           git commit -q -m "Edição automática $(TZ=America/Sao_Paulo date '+%d/%m %H:%M') (Brasília)"

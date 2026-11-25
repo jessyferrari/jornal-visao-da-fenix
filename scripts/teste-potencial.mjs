@@ -62,4 +62,17 @@ t('🏄 surf (t339): piso Vale postar; 1 fonte segue provisória; Nazaré sozinh
   }
   for (const t of ['Nazaré Tedesco vira meme', 'Onde assistir a WSL hoje', 'Mavericks vencem na NBA']) assert.doesNotMatch(notaPotencial({ titulo: t, veiculos: ['ge', 'UOL'], ts: A, agora: A }).motivo, /surf/, t);
 });
+
+t('notícia velha ou fato repetido nunca vira Não deixe de postar (25/11)', () => {
+  const now = Date.parse('2026-11-25T18:50:00Z'), hist = [{ t: Date.parse('2026-11-23T15:00:00Z'), titulo: 'Nvidia reintegra Jensen Huang como CEO após pressão de Trump' }];
+  const v = ['g1', 'folha', 'cnn', 'uol', 'bbc'];
+  const rep = notaPotencial({ titulo: 'Nvidia reintegra Jensen Huang após escândalo de espionagem e ações disparam; Trump elogia decisão', veiculos: v, ts: now - 3600e3, agora: now, historico: hist });
+  const des = notaPotencial({ titulo: 'Ações da Nvidia caem 8% um dia depois da volta de Jensen Huang', veiculos: v, ts: now - 1800e3, agora: now, historico: hist });
+  const velha = notaPotencial({ titulo: 'Lula sanciona ajuste fiscal com impacto de R$ 50 bi', veiculos: v, ts: now - 30 * 3600e3, agora: now });
+  const nova = notaPotencial({ titulo: 'Lula sanciona ajuste fiscal com impacto de R$ 50 bi', veiculos: v, ts: now - 1800e3, agora: now, historico: hist });
+  assert.ok(rep.nota <= 59 && /fato já noticiado em 23\/11/.test(rep.motivo), rep.nota + ' ' + rep.motivo);
+  assert.ok(des.nota <= 89 && /desdobramento/.test(des.motivo), String(des.nota));
+  assert.ok(velha.nota <= 69 && /dia\(s\) atrás/.test(velha.motivo), String(velha.nota));
+  assert.ok(nova.nota >= 70 && !/já noticiado|desdobramento/.test(nova.motivo), String(nova.nota));
+});
 console.log('TODOS OS TESTES PASSARAM: ' + ok);

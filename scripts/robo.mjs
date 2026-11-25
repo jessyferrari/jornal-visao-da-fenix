@@ -187,7 +187,12 @@ for (const i of all) {
   i.cov = { n: br.length + ext.length, br, ext }; if (i.cov.n >= 2 && (!br.length || !ext.length)) i.cov.cego = !br.length ? 'Ponto cego: só a imprensa estrangeira cobriu' : 'Ponto cego: só a imprensa brasileira cobriu';
 }
 // 📊 nota de potencial de postagem (17/11): assunto, veículos, repetição, pessoa e frescor (scripts/potencial.mjs)
-for (const i of all) { const srcs = [i, ...i.grp]; i.pot = notaPotencial({ titulo: i.title, resumo: i.sum, veiculos: [...new Set(srcs.map(x => x.src))], ts: Math.min(...srcs.map(x => x.ts).filter(Boolean)), agora: now }); }
+// 25/11: histórico de 7 dias de tudo que o jornal leu (historico-assuntos.json): a nota compara cada notícia com o que já saiu antes
+const HISTF = 'historico-assuntos.json', HIST = (() => { try { return JSON.parse(fs.readFileSync(HISTF, 'utf8')); } catch { return []; } })().filter((x) => x && now - x.t < 7 * 86400e3);
+if (!HIST.length) try { for (const v of Object.values(JSON.parse(fs.readFileSync('notificadas.json', 'utf8')).apuracao || {})) if (v && v.titulo && v.t) HIST.push({ t: v.t, titulo: v.titulo }); } catch {}   // 1ª rodada: começa com o que já foi avisado
+for (const i of all) { const srcs = [i, ...i.grp]; i.pot = notaPotencial({ titulo: i.title, resumo: i.sum, veiculos: [...new Set(srcs.map(x => x.src))], ts: Math.min(...srcs.map(x => x.ts).filter(Boolean)), agora: now, historico: HIST }); }
+{ const ja = new Set(HIST.map((x) => x.titulo)); for (const i of all) { const t0 = Math.min(...[i, ...i.grp].map(x => x.ts).filter(Boolean)) || now; if (i.title && !ja.has(i.title)) { HIST.push({ t: Math.min(t0, now), titulo: String(i.title).slice(0, 200) }); ja.add(i.title); } }
+  try { fs.writeFileSync(HISTF, JSON.stringify(HIST.sort((a, b) => a.t - b.t).slice(-8000))); } catch {} }
 for (const i of all) i.fmt = estudarFormato(i);   // 🎯 17/11: o jornal estuda a notícia e sugere Imagem, Carrossel ou Vídeo
 // ===== ⭐ Possível exclusivo / ✅ Confirmado depois (17/11): só a palavra do próprio site + a contagem real dos veículos lidos =====
 const EXF = 'exclusivos-estado.json', EX = (() => { try { return JSON.parse(fs.readFileSync(EXF, 'utf8')); } catch { return {}; } })();
