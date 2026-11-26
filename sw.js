@@ -1,5 +1,5 @@
 /* Service worker Visão da Fênix: network-first para HTML/JS/CSS; cache só como fallback offline. */
-const CACHE = 'jvf-202611260124';
+const CACHE = 'jvf-202611260129';
 const PRE = ['./fonts.css', './logo.webp', './logo.png', './manifest.webmanifest', './index.html', './app.js', './edicao.json'];
 
 self.addEventListener('install', (e) => {
